@@ -14,6 +14,8 @@ gem "jekyll", "3.5.2"
 gem 'puma'
 gem 'rack-jekyll'
 
+gem "minima"
+
 # If you have any plugins, put them here!
 group :jekyll_plugins do
 	gem "jekyll-seo-tag"
