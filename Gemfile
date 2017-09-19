@@ -13,8 +13,9 @@ gem "jekyll", "3.5.2"
 # Server for Heroku
 gem 'puma'
 gem 'rack-jekyll'
+gem 'rack-rewrite'
 
-gem "minima"
+# gem "minima"
 
 require 'rbconfig'
 gem 'tzinfo-data' if RbConfig::CONFIG['target_os'] =~ /mswin|mingw|cygwin/i
