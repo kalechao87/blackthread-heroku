@@ -1,18 +1,19 @@
 require 'sinatra'
 
 before do
-  cache_control :public, :max_age => 31557600
-end
-
-get '/' do
-  send_file(File.join(settings.public, 'index.html'), :disposition => nil)
+  cache_control :public_folder, :max_age => 31557600
 end
 
 get '/*' do
-  send_file(File.join(settings.public, params[:splat]), :disposition => nil)
+  file_name = "_site#{request.path_info}/index.html".gsub(%r{\/+},'/')
+  if File.exists?(file_name)
+    File.read(file_name)
+  else
+    raise Sinatra::NotFound
+  end
 end
 
-set :public, Proc.new {File.join(root, '_site')}
+set :public_folder, Proc.new {File.join(root, '_site')}
 disable :static
 
 run Sinatra::Application
