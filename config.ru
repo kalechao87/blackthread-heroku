@@ -10,7 +10,7 @@ require 'rack/contrib/try_static'
 
 use Rack::TryStatic,
   urls: %w[/],
-  root: '_site',
+  root: '',
   try: ['.html', 'index.html', '/index.html'],
   header_rules: [
     [:all, {
