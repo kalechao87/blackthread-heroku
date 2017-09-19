@@ -14,6 +14,7 @@ gem "jekyll", "3.5.2"
 gem 'puma'
 gem 'rack-jekyll'
 gem 'rack-rewrite'
+gem 'rack-contrib'
 
 # gem "minima"
 
