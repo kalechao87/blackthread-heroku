@@ -17,6 +17,7 @@ gem "jekyll", "3.5.2"
 # gem 'rack-contrib'
 
 gem "passenger"
+gem "sinatra-base"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 require 'rbconfig'
