@@ -1,10 +1,10 @@
 # require 'rack/jekyll'
-require 'rack/rewrite'
+# require 'rack/rewrite'
 require 'rack/contrib/try_static'
 
-use Rack::Rewrite do
-  rewrite "/", "/index.html"
-end
+# use Rack::Rewrite do
+#   rewrite "/", "/index.html"
+# end
 
 # run Rack::Jekyll.new
 
