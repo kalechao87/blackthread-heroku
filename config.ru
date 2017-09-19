@@ -43,7 +43,7 @@ require 'rack/contrib/try_static'
 
 app = Rack::Builder.new do
   use Rack::TryStatic,
-    root: 'build',
+    root: '/',
     urls: %w[/],
     try: ['.html', 'index.html', '/index.html']
 
