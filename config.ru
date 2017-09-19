@@ -8,9 +8,9 @@ before do
 end
 
 # remove all trailing slashes
-get %r{(/.*)\/$} do
-  redirect "#{params[:captures].first}"
-end
+# get %r{(/.*)\/$} do
+#   redirect "#{params[:captures].first}"
+# end
 
 # serve the jekyll site from the _site folder
 get '/*' do
