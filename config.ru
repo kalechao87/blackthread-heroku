@@ -1,18 +1,18 @@
-# require 'rack/jekyll'
-# require 'rack/rewrite'
+require 'sinatra'
 
-# use Rack::Rewrite do
-#   rewrite "/", "/index.html"
-# end
-
-# run Rack::Jekyll.new
-
-require 'sinatra/base'
-
-class MyApp < Sinatra::Base
-  get '/' do
-    "Hello, Phusion Passenger #{PhusionPassenger::VERSION_STRING}!"
-  end
+before do
+  cache_control :public, :max_age => 31557600
 end
 
-run MyApp
+get '/' do
+  send_file(File.join(settings.public, 'index.html'), :disposition => nil)
+end
+
+get '/*' do
+  send_file(File.join(settings.public, params[:splat]), :disposition => nil)
+end
+
+set :public, Proc.new {File.join(root, '_site')}
+disable :static
+
+run Sinatra::Application
