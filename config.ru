@@ -43,12 +43,12 @@ require 'rack/contrib/try_static'
 
 app = Rack::Builder.new do
   use Rack::TryStatic,
-    root: '/app/_site',
+    root: '/',
     urls: %w[/],
     try: ['.html', 'index.html', '/index.html']
 
   run lambda{ |env|
-    four_oh_four_page = File.expand_path("/app/_site/404.html", __FILE__)
+    four_oh_four_page = File.expand_path("/404.html", __FILE__)
     [ 404, { 'Content-Type'  => 'text/html'}, [ File.read(four_oh_four_page) ]]
   }
 end
