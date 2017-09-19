@@ -1,0 +1,61 @@
+/* ==========================================================================
+   SINGLE PAGE/POST
+   ========================================================================== */
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+header,
+footer {
+  flex: none; /* 2 */
+}
+
+#main {
+  display: flex;
+  flex: 1 0 auto; /* 2 */
+  flex-direction: column;
+}
+
+#content {
+  flex: 1;
+  margin: 1em;
+}
+
+#sidebar-left {
+  order: -1;
+}
+
+#sidebar-left,
+#sidebar-right {
+
+  padding-left: 1em;
+  padding-top: 1em;
+
+}
+
+#sidebar-left:empty,
+#sidebar-right:empty {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+
+  #main {
+    flex-direction: row;
+  }
+
+  #content {
+    flex: 1;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #sidebar-left,
+  #sidebar-right {
+    flex: 0 0 12em;
+  }
+}

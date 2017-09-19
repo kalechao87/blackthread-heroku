@@ -1,0 +1,11 @@
+
+
+USE cameras:
+
+				scene.traverse( function ( sceneChild ) {
+					if ( sceneChild.type === 'PerspectiveCamera' ) {
+						camera = sceneChild;
+						camera.aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
+						camera.updateProjectionMatrix();
+					}
+				} );

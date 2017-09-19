@@ -1,0 +1,33 @@
+---
+---
+
+<!doctype html>
+<html lang="{{ site.locale | slice: 0,2 | default: " en " }}" class="no-js">
+
+<head>
+	{% include head.html %}
+</head>
+
+	<body id="splash-body">
+		<!--<div id="breakpoint">
+
+			</div>-->
+
+		{% if page.loadingOverlay %}
+			{% include loading_overlay %}
+		{% endif %}
+
+		{% include browser-upgrade.html %}
+		{% include masthead.html %}
+
+		<div id="splash-canvas-container">
+			<canvas id="splash-canvas"></canvas>
+		</div>
+
+		{% include scripts.html %}
+
+	</body>
+
+</html>
+
+

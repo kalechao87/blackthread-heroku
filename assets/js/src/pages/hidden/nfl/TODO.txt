@@ -1,0 +1,3 @@
+- stitching some animations together
+- go over camera control
+- go over animation transitions

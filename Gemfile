@@ -16,6 +16,9 @@ gem 'rack-jekyll'
 
 gem "minima"
 
+require 'rbconfig'
+gem 'tzinfo-data' if RbConfig::CONFIG['target_os'] =~ /mswin|mingw|cygwin/i
+
 # If you have any plugins, put them here!
 group :jekyll_plugins do
 	gem "jekyll-seo-tag"

@@ -1,0 +1,50 @@
+@import 'default';
+@import "page";
+
+#splash-body,
+#splash-canvas-container,
+#splash-canvas {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
+
+#splash-body {
+    a {
+        text-decoration: none;
+    }
+}
+
+.splash-link {
+    position: absolute;
+    z-index: 1;
+}
+
+#about {
+    top: 10%;
+    left: 0%;
+}
+
+#contact {
+    top: 10%;
+    left: 10%;
+}
+
+#tutorials {
+    top: 10%;
+    left: 20%;
+}
+
+#work {
+    top: 10%;
+    left: 30%;
+}
+
+#experiments {
+    top: 10%;
+    left: 40%;
+}

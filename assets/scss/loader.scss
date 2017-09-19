@@ -1,0 +1,258 @@
+@import 'default';
+@import "page";
+
+#loader-container {
+  display: flex;
+	position: relative;
+  height: 90vh;
+  padding-top: 2em;
+}
+
+#loader-container:fullscreen {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+}
+
+#loader-canvas {
+  position: absolute;
+  z-index: 1;
+
+}
+
+
+#loading-overlay {
+  position: absolute;
+  z-index: 3;
+  text-align:center;
+  border: 1px solid #062f4f;
+  background: rgb( 240,183,161 );
+  background: radial-gradient(ellipse at center, rgba(84,84,84,1) 1%,rgba(38,37,33,1) 100%,rgba(191,110,78,1) 100%);
+}
+
+#loading-bar {
+	position: absolute;
+  left: 50%;
+	top: 50%;
+  max-width: 70%;
+  min-width: 50%;
+	transform: translate3d( -50%,-50%,0 );
+
+	border-radius: 60px;
+	overflow: hidden;
+	background-color: #eef1f3;
+
+	span {
+		display: block;
+	}
+}
+
+.bar {
+  background-color: #eef1f3;
+}
+
+#progress {
+	background-color: #75b800;
+	padding: 5px;
+	color: #fff;
+	width: 5px;
+}
+
+#screenshot-controls {
+  input {
+    width: 10em;
+    color: black;
+  }
+}
+
+#file-upload-form{
+  position: absolute;
+  left: 50%;
+	top: 40%;
+ 	width: 90%;
+	transform: translate3d( -50%,-50%,0 );
+  text-align: center;
+}
+
+#file-upload-button {
+  max-width: 70%;
+  min-width: 50%;
+}
+
+#controls {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 96%;
+  height: 96%;
+  margin: 2%;
+
+  color: black;
+
+  span {
+    color: black;
+    display: block;
+  }
+
+  a {
+    text-decoration: none;
+    transform: translate( -50%, 50% );
+  }
+
+  // disable pointer events for controls overlay
+  pointer-events: none;
+
+  a, span, input, select {
+    transition: all 2s ease-in-out;
+    // renable for sub elements
+    pointer-events: all;
+  }
+}
+
+
+#grid-controls {
+  position: relative;
+  float: left;
+  max-width: 50%;
+
+  span {
+    float: right;
+  }
+
+  input[type=range] {
+    float: left;
+    width: 75%;
+    margin-top: 0.4em;
+  }
+
+}
+
+#lighting-controls {
+  position: relative;
+  float: right;
+  max-width: 50%;
+}
+
+#lighting-slider {
+  position: relative;
+  float: right;
+  width: 88%;
+  margin-top: 0.5em;
+  left: 0.5em;
+}
+
+#light-symbol{
+  float: left;
+}
+
+#playback-control {
+  position: absolute;
+  top: 20%;
+  left: 16%
+}
+
+#animation-clips {
+  position: absolute;
+  left: 0;
+  width: 15%;
+  color: black;
+}
+
+#play-button, #pause-button {
+  margin-left: 50%;
+}
+
+#animation-controls {
+  position: absolute;
+  width: 90%;
+  bottom: 1.5em;
+}
+
+#right-buttons{
+  position: absolute;
+  width: 3em;
+  right: 0;
+  bottom: 0.5em;
+}
+
+#toggle-background {
+  float: left;
+}
+
+#fullscreen-button {
+  float: right;
+}
+
+#animation-slider {
+  position: absolute;
+  right: 0;
+  width: 80%;
+  margin-top: 1em;
+}
+
+.loader-slider {
+  padding: 0;
+  margin: 0;
+  color: black;
+  background-color: white;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0px 0px 1px 0px grey;
+
+}
+
+#loader-choice-form {
+  position: relative;
+  top: 20%;
+
+  button {
+
+    color: black;
+
+  }
+}
+
+input[type=range] {
+  height: 3px;
+  background-color: rgb(66, 66, 66);
+  background-image: linear-gradient(rgb(66, 66, 66), #cfcfcf);
+  background-size: 0 100%;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+}
+input[type=range]::-moz-range-track {
+    box-shadow: none;
+    border: none;
+    background: transparent;
+}
+input[type=range]::-moz-focus-outer {
+    border: 0;
+}
+input[type=range]::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+    border: 0;
+    background: #545454;
+    border-radius: 100%;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.1);
+    -webkit-appearance: none;
+}
+input[type=range]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 0;
+    background: #545454;
+    border-radius: 100%;
+    box-shadow: 0 0 1px 0 rgba(0,0,0,0.1);
+}

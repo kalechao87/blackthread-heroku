@@ -1,0 +1,249 @@
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+
+
+/*
+   Navigation list
+   ========================================================================== */
+
+   .nav__list {
+
+    input[type="checkbox"],
+    label {
+      display: none;
+    }
+
+    @include breakpoint(max-width ($x-large - 1px)) {
+
+      label {
+        position: relative;
+        display: inline-block;
+        z-index: 20;
+        transition: 0.2s ease-in;
+        cursor: pointer;
+      }
+
+      /* selected*/
+      input:checked + label {
+        color: white;
+        background-color: mix(white, #000, 20%);
+
+        &:before,
+        &:after {
+          background-color: #fff;
+        }
+      }
+
+      input:checked + label:hover:after {
+        transform: rotate(0);
+      }
+
+      ul {
+        margin-bottom: 1em;
+      }
+
+      a {
+        display: block;
+        padding: 0.25em 0;
+
+        @include breakpoint($x-large) {
+          padding-top: 0.125em;
+          padding-bottom: 0.125em;
+        }
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .nav__list .nav__items {
+    margin: 0;
+    font-size: 1em;
+
+    a {
+      color: inherit;
+
+      &:hover {
+        text-decoration: underline;
+        color: $background-color;
+        font-weight: bold;
+        background: $primary-color;
+        border-radius: $border-radius;
+      }
+    }
+
+    .active {
+      margin-left: -0.5em;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      color: $background-color;
+      font-weight: bold;
+      background: $primary-color;
+      border-radius: $border-radius;
+    }
+
+    @include breakpoint(max-width ($x-large - 1px)) {
+      position: relative;
+      max-height: 0;
+      opacity: 0%;
+      overflow: hidden;
+      z-index: 10;
+      transition: 0.3s ease-in;
+      transform: translate(0, 10%);
+    }
+  }
+
+  @include breakpoint(max-width ($x-large - 1px)) {
+    .nav__list input:checked ~ .nav__items {
+      transition: 0.5s ease-in;
+      max-height: 9999px; // exaggerate max-height to accommodate tall lists
+      overflow: visible;
+      opacity: 1;
+      margin-top: 1em;
+      transform: translate(0, 0);
+    }
+  }
+
+  .nav__title {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    font-family: $sans-serif;
+    font-size: $type-size-5;
+    font-weight: bold;
+  }
+
+  .nav__sub-title {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    font-family: $sans-serif;
+    font-size: $type-size-6;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid $border-color;
+  }
+
+
+/*
+   Table of contents navigation
+   ========================================================================== */
+
+.toc {
+  font-family: $sans-serif;
+  color: $gray;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: #fff;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+
+  .nav__title {
+    color: #fff;
+    font-size: $type-size-6;
+    background: $primary-color;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+}
+
+.toc__menu {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  list-style: none;
+  font-size: 0.8rem;
+
+  a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: $gray;
+    font-size: $type-size-7;
+    font-weight: bold;
+    line-height: 1.5;
+    border-bottom: 1px solid $border-color;
+
+    &:hover {
+      color: #000;
+      background: $lighter-gray;
+    }
+  }
+
+  > li:last-child {
+    a {
+      border-bottom: none;
+    }
+  }
+
+  li ul > li a {
+    padding-left: 1.75rem;
+    font-weight: normal;
+  }
+
+  /* hide sub sub links on small screens*/
+  li > ul li {
+    display: none;
+
+    @include breakpoint($medium) {
+      display: block;
+    }
+  }
+}
+
+
+/*
+   Navicons
+   ========================================================================== */
+
+  .navicon {
+  position: relative;
+  display: block;
+  width: $navicon-width;
+  height: $navicon-height;
+  background: $text-color;
+  margin: 1em;
+  transition: 0.3s;
+
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    background: $text-color;
+    width: $navicon-width;
+    height: $navicon-height;
+    background: #fff;
+    transition: 0.3s;
+  }
+
+  &:before {
+    top: (-2 * $navicon-height);
+  }
+
+  &:after {
+    bottom: (-2 * $navicon-height);
+  }
+}
+
+.close .navicon {
+  /* hide the middle line*/
+  background: transparent;
+
+  /* overlay the lines by setting both their top values to 0*/
+  &:before, &:after{
+    transform-origin: 50% 50%;
+    top: 0;
+    width: $navicon-width;
+  }
+
+  /* rotate the lines to form the x shape*/
+  &:before{
+    transform: rotate3d(0,0,1,45deg);
+  }
+  &:after{
+    transform: rotate3d(0,0,1,-45deg);
+  }
+}

@@ -1,0 +1,193 @@
+---
+layout: standard
+title: "Three.js loader / converter"
+excerpt: "Test models for use with three.js, and convert them to native three.js JSON format"
+categories: work
+permalink: /experiments/loader/
+comments: true
+js:
+  loader
+css:
+  loader
+vendor-js:
+  [ "/zip/inflate.min" ]
+---
+
+<div id="loader-container">
+  <canvas id="loader-canvas" class="fill"></canvas>
+
+  <div id="loading-overlay" class="fill">
+
+    <div id="file-upload-form">
+      Upload json, fbx, obj, gltf, glb or dae files and associated textures in jpg, png, gif, bmp or dds format.
+      </br>
+      </br>
+      <input id="file-upload-input" type="file" name="files[]" multiple="" class="hide">
+      <input type="submit" class="" value="Upload Files" id="file-upload-button"/>
+    </div>
+
+    <div id="loading-bar" class="hide">
+      <span id="bar">
+        <span id="progress"></span>
+      </span>
+    </div>
+
+  </div>
+
+  <div id="controls">
+
+    <div id="grid-controls">
+      <input id="grid-slider" type="range" min="0" max="50" step="2" value="0" class="loader-slider"/>
+      <span class="fa fa-lg fa-th" aria-hidden="true"></span>
+    </div>
+
+    <div id="lighting-controls">
+      <span id="light-symbol" class="fa fa-lg fa-lightbulb-o" aria-hidden="true"></span>
+      <input id="lighting-slider" type="range" min="0" max="8" step="0.1" value="0" class="loader-slider"/>
+    </div>
+
+    <div id="animation-controls" class="hide">
+
+      <select id="animation-clips">
+        <option value="static">Static Pose</option>
+      </select>
+
+      <a href="#" id="playback-control">
+        <span id="play-button" class="fa fa-lg fa-play-circle hide" aria-hidden="true"></span>
+        <span id="pause-button" class="fa fa-lg fa-pause-circle" aria-hidden="true"></span>
+      </a>
+
+      <input id="animation-slider" type="range" min="0" max="100" value="0" class="loader-slider"/>
+
+    </div>
+
+    <div id="right-buttons">
+
+      <a href="#" id="toggle-background">
+        <span class="fa fa-lg fa-cog" aria-hidden="true"></span>
+      </a>
+
+      <a href="#" id="fullscreen-button">
+        <span class="fa fa-lg fa-arrows-alt" aria-hidden="true"></span>
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="info">
+
+  <div class="hide reveal-on-load">
+    <br><button id="reset">Reset</button><button id="export">Export as JSON</button><button id="export-anims">Export animation(s) as JSON</button>
+    <div id="screenshot-controls">
+      <h3>Take a screenshot</h3>
+      <span>Width: </span><input id="screenshot-width" type="number" min="2" value="800" max="8192">
+      <span>Height: </span><input id="screenshot-height" type="number" min="2" value="600" max="8192">
+      <button id="screenshot-button" alt="Opens screenshot in new window"> <span class="fa fa-lg fa-camera" aria-hidden="true"></span></button>
+    </div>
+
+    <div id="model-info">
+      <h3>Model Info</h3>
+      <p>Faces: <span id="faces"></span> Vertices: <span id="vertices"></span></p>
+      <p>Note that this is the number of faces / vertices as rendered by three.js, which may
+        be different from the numbers reported in modelling programs. This is especially true if the model
+        has quads (4-sided polygons) or higher, as these are automatically subdivided into triangles on load.
+      </p>
+      <div id="load-info">
+
+      </div>
+    </div>
+
+  </div>
+
+  <div id="error-overlay" class="hide notice--info">
+    <h2>The following error(s) and warning(s) occurred:</h2>
+    <div id="error-messages"></div>
+  </div>
+
+  <h3>About</h3>
+
+  <p>
+    Test your models directly with the loaders from three.js version <span class="three-rev"></span>, and convert them to
+    the native three.js JSON format.
+  </p>
+  <p>
+    You can load either single files with embedded textures, or multiple files of any supported format with associated textures.
+  </p>
+
+  <p>
+    All loaded object are logged to the console.
+  </p>
+
+  <div id="demos" class="hide-on-load">
+    <h3>Demos</h3>
+    <p>
+      <a href="#" id="demo-fbx">Multiple FBX models (nurbs curves and skinned Xsi man)</a><br>
+      <a href="#" id="demo-gltf">GLTF</a><br>
+      <a href="#" id="demo-json-geo">JSON - Geometry</a><br>
+      <a href="#" id="demo-json-buffer">JSON - BufferGeometry</a><br>
+      <a href="#" id="demo-json-scene">JSON - Scene</a><br>
+      <a href="#" id="demo-collada">Collada (DAE)</a><br>
+      <a href="#" id="demo-obj">OBJ + MTL with DDS textures</a><br>
+    </p>
+  </div>
+
+  <h3>Controls</h3>
+  <p>Left mouse / touch: Rotate camera</p>
+  <p>Middle mouse / Pinch: zoom</p>
+  <p>Right mouse / Two finger touch: Pan camera</p>
+
+  <h3>Exporting as JSON</h3>
+  <p>
+    Loaded models can be exported to native three.js JSON format - this uses the built in
+    three.js exporter, which has certain limitations (may not export animations for skinned meshes for example).
+    JSON format is very fast to load, at the expense of larger file size.
+  </p>
+  <p>
+    You can also export the animations only as JSON. This is useful for example if you are exporting as FBX, which only supports a single animation.
+    You can output one FBX for each animation (walk, jump, idle etc.), then use this to save the animations separately.
+
+    Note that this doesn't work properly if you have loaded multiple models.
+  </p>
+
+  <h3>Grid</h3>
+  <p>Each grid line is one unit - use this to get check the scale of your models.</p>
+
+  <h3>Cameras / lights</h3>
+  <p>
+    Any lights / cameras that are loaded are ignored (for now), although they should be
+    included in the exported JSON file.
+  </p>
+
+  <h3>Currently supported formats</h3>
+
+  <p>
+    Three.js native JSON format: Complete scene, or a file containing a geometry or buffer geometry.
+    Files containing only geometries or buffer geometries will be rendered in wireframe.
+  </p>
+
+  <p>
+    FBX: Binary higher than version 6.1 and ASCII higher than version 7.0.<br>
+    Note that the FBX loader has two fixes applied that the default three.js loader does not have.
+    See
+    <a href="https://github.com/mrdoob/three.js/issues/11895">here</a>
+    and
+    <a href="https://github.com/mrdoob/three.js/issues/11911">here</a>
+    for details. Hopefully these will be added the the loader in the next release.
+  </p>
+
+  <p>
+    GLTF: .gltf or .glb files, as well as any associated .bin, .frag, .vert and texture files.
+    Note that .bin, .frag, .vert files are GLTF V1 only. GLTF V2 will have single .gltf or .glb file and associated textures.
+  </p>
+
+  <p>OBJ: Uses THREE.OBJLoader2. Load any number of .obj and .mtl files and their associated textures.</p>
+
+  <p>DAE: Uses THREE.ColladaLoader2.</p>
+
+  <h3>Supported texture formats</h3>
+
+  <p>JPG, PNG, GIF, BMP, DDS (TGA support forthcoming).</p>
+
+</div>

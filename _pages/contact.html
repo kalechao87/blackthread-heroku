@@ -1,0 +1,22 @@
+---
+layout: standard
+title: Get in Touch
+excerpt: "Get in touch - I'd love to hear from you and I'll get back to you shortly"
+permalink: /contact/
+---
+
+<h1 class="text-center">Contact me</h1>
+
+<h3 class="text-center">
+  Ideas, feedback, suggestions or projects you would like to work on with me? <br>
+  Get in touch here and I'll get back to you shortly.
+</h3>
+
+<br>
+
+<form action="/php/mail.php" method="POST">
+    <input name="name" type="text" class="contact-form" placeholder="Name" required/>
+    <input name="email" type="email" class="contact-form" placeholder="Email" required/>
+    <textarea name="message" class="contact-form" placeholder="Message" required></textarea>
+    <input type="submit" value="Send">
+</form>

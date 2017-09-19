@@ -1,0 +1,24 @@
+---
+---
+
+
+<!doctype html>
+<html>
+  <head>
+    {% include head.html %}
+  </head>
+
+  <body>
+    {% if page.redirection %}
+			<script>
+				window.location.assign( '{{page.redirection}}');
+			</script>
+
+      <h1>Redirecting you to {{page.redirection}}</h1>
+
+      Please click <a href="{{page.redirection}}">here</a>
+		  if it doesn't work for some reason.
+		{% endif %}
+
+  </body>
+</html>

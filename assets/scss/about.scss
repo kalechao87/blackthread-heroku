@@ -1,0 +1,44 @@
+@import 'default';
+@import "page";
+
+#about-me {
+  position: relative;
+  float: left;
+  width: 50%;
+  margin-left: 5%;
+}
+
+#profile-img {
+  float: left;
+  width: 40vmin;
+  height: 40vmin;
+}
+
+.flip-container {
+  perspective:1200;
+  transition:all 0.6s;
+  transform-style:preserve-3d;
+}
+.flip-container:hover {
+  -webkit-transform:rotateY(180deg);
+  -moz-transform:rotateY(180deg);
+}
+
+.front, .back {
+  backface-visibility:hidden;
+}
+.back {
+  z-index:800;
+  transform:rotateY(-180deg);
+}
+
+.flip-container img {
+  vertical-align:middle;
+  display:inline-block;
+  line-height:1.4;
+}
+.cont {
+  position: absolute;
+  border-radius:50%;
+  border: 3px solid $dark-blue;
+}

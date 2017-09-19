@@ -1,0 +1,25 @@
+{% if page.latex %}
+  <script async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endif %}
+
+{% if page.vendor-js %}
+  {% for file in page.vendor-js %}
+    <script async src='/assets/js/vendor{{ file }}.js'></script>
+  {% endfor %}
+{% endif %}
+
+{% if jekyll.environment == "production" %}
+  {% assign build_dir = site.baseurl | append: '/assets/js/build-min/' %}
+{% else %}
+  {% assign build_dir = site.baseurl | append:'/assets/js/build/' %}
+{% endif %}
+
+{% if page.js %}
+  {% for file in page.js %}
+  <script async src="{{ build_dir }}{{ file }}.js"></script>
+  {% endfor %}
+{% else %}
+  <script async src="{{ build_dir }}main.js"></script>
+{% endif %}
+
+{% include comments-script.html %}

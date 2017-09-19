@@ -1,0 +1,18 @@
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+      <nav class="masthead__menu">
+        <button class="toggle-links hidden"></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="{{ '/' | absolute_url }}">{{ site.title }}</a></li>
+          {% for link in site.data.navigation.masthead %}
+            {% if link.url contains 'http' %}
+              {% assign domain = '' %}
+            {% else %}
+              {% assign domain = site.url | append: site.baseurl %}
+            {% endif %}
+            <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+  </div>
+</div>

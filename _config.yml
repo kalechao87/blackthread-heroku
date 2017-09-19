@@ -1,32 +1,74 @@
 # Welcome to Jekyll!
 #
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
+# This config file is meant for settings that affect your entire site, values
+# which you are expected to set up once and rarely need to edit after that.
 # For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+# `jekyll serve`. If you change this file, please restart the server process.
 
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
-title: Your awesome title
-email: your-email@example.com
-description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+# Site Settings
 
-# Build settings
-markdown: kramdown
-theme: minima
+livereload               : true     # You no longer need to include --livereload
+locale                   : "en"
+title                    : "Black Thread Design"
+title_separator          : "-"
+name                     : "Lewy Blue"
+description              : "Home page of the Black Thread Design Agency - tutorials, web experiments, WebGL and more"
+url                      : "https://www.blackthreaddesign.com" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+baseurl                  : ""
+repository               : "looeee/blackthreaddesign.com" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+teaser                   : "/assets/images/default-teaser.jpg"  # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+breadcrumbs              : false # true, false (default)
+words_per_minute         : 200
+default_keywords         : "WebGL, three.js, JavaScript, ES6"
+comments:
+  provider               : "disqus" # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "custom"
+  disqus:
+    shortname            : "www-blackthreaddesign-com" # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+#  discourse:
+#    server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
+
+# SEO Related
+google_site_verification :
+bing_site_verification   :
+alexa_site_verification  :
+yandex_site_verification :
+
+# Social Sharing
+twitter:
+  username               : "looeeeb"
+facebook:
+  username               : "lewy.blue"
+  app_id                 : "103246253626280"
+#  publisher              :
+og_image                 : /assets/images/default-teaser.jpg # Open Graph/Twitter default site image
+# For specifying social profiles
+# - https://developers.google.com/structured-data/customize/social-profiles
+#social:
+#  type                   : # Person or Organization (defaults to Person)
+#  name                   : Lewy Blue # If the user or organization name differs from the site's name
+#  links: [ facebook, twitter, linkin, github ]# An array of links to social media profiles
+
+# Analytics
+analytics:
+  provider               : "google-universal" # false (default), "google", "google-universal", "custom"
+  google:
+    tracking_id          : "UA-92568054-1"
+
+# Site Author
+author:
+  name             : "Lewy Blue"
+  avatar           : "/assets/images/about/portrait-512.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  bio              : "WebGL and JavaScript expert from the west coast of Ireland."
+  location         : "South east Asia, currently."
+  email            : "looeee@gmail.com"
+  codepen          : "looeee"
+  facebook         : "lewy.blue"
+  github           : "looeee"
+  instagram        : "lewy.blue"
+  linkedin         : "lewy-blue-30b9b193"
+  stackoverflow    : "1401930/looeee" # "123456/username" (the last part of your profile url, e.g. https://stackoverflow.com/users/123456/username)
+  twitter          : "@looeeeb"
+
 
 # Reading Files
 include:
@@ -67,8 +109,88 @@ exclude_from_watch:
   - assets/js/src
   - assets/scss
 
+
+# Conversion
+# markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
+
+
+# Markdown Processing
+# kramdown:
+#   input: GFM
+#   hard_wrap: false
+#   auto_ids: true
+#   footnote_nr: 1
+#   entity_output: as_char
+#   toc_levels: 1..6
+#   smart_quotes: lsquo,rsquo,ldquo,rdquo
+#   enable_coderay: false
+
+# Outputting
+permalink: /:collection/:title
+#paginate: 5 # amount of posts to show
+#paginate_path: /page:num/
+timezone: Europe/Dublin # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+
 # Plugins
 plugins:
   - jekyll-sitemap
   - jekyll-gist
   - jemoji
+
+# mimic GitHub Pages with --safe
+whitelist:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
+  - jemoji
+
+
+collections:
+  tutorials:
+    output: true
+    permalink: /:collection/:title
+  work:
+    output: true
+    permalink: /:collection/:title
+  experiments:
+    output: true
+    permalink: /:collection/:title
+  blog:
+    output: true
+    permalink: /:collection/:title
+
+defaults:
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: standard
+  # _tutorials
+  - scope:
+      path: "/tutorials"
+      type: tutorials
+    values:
+      layout: standard
+      comments: true
+      sidebar:
+       nav: "tutorials"
+  # _work
+  - scope:
+      path: "/work"
+      type: work
+    values:
+      layout: standard
+      comments: true
+  # _experiments
+  - scope:
+      path: "/experiments"
+      type: experiments
+    values:
+      layout: standard
+      comments: true

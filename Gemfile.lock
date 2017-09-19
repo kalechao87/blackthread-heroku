@@ -92,6 +92,8 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2017.2)
+      tzinfo (>= 1.0.0)
 
 PLATFORMS
   x86-mingw32
@@ -106,6 +108,7 @@ DEPENDENCIES
   minima
   puma
   rack-jekyll
+  tzinfo-data
 
 BUNDLED WITH
    1.15.4

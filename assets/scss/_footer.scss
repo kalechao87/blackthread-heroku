@@ -1,0 +1,36 @@
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+footer {
+
+  padding: 2em;
+
+  color: mix(#fff, $gray, 25%);
+  background-color: $lighter-gray;
+  border: 2px solid darkgrey;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .fa {
+    color: mix(#fff, $gray, 25%);
+  }
+}
+
+.footer-copyright {
+  font-family: $global-font-family;
+  font-size: $type-size-7;
+}
+
+.footer-social {
+  font-family: $sans-serif-narrow;
+  font-size: $type-size-6;
+  font-weight: bold;
+  text-transform: uppercase;
+}
