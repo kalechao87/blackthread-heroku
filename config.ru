@@ -1,12 +1,12 @@
-require 'rack/jekyll'
+# require 'rack/jekyll'
 # require 'rack/rewrite'
-# require 'rack/contrib/try_static'
+require 'rack/contrib/try_static'
 
 # use Rack::Rewrite do
 #   rewrite "/", "/index.html"
 # end
 
-run Rack::Jekyll.new
+# run Rack::Jekyll.new
 
 # use Rack::TryStatic,
 #   urls: %w[/],
@@ -36,3 +36,21 @@ run Rack::Jekyll.new
 #   run lambda { |env|
 #     [404, { 'Content-Type' => 'text/html' }, File.open('build/404.html', File::RDONLY)]
 #   }
+
+
+
+# app = Rack::Builder.app do
+
+app = Rack::Builder.new do
+  use Rack::TryStatic,
+    root: 'build',
+    urls: %w[/],
+    try: ['.html', 'index.html', '/index.html']
+
+  run lambda{ |env|
+    four_oh_four_page = File.expand_path("../build/404.html", __FILE__)
+    [ 404, { 'Content-Type'  => 'text/html'}, [ File.read(four_oh_four_page) ]]
+  }
+end
+
+run app
