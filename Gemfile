@@ -1,3 +1,5 @@
+require 'rbconfig'
+
 source "https://rubygems.org"
 
 # Hello! This is where you manage which Jekyll version is used to run.
@@ -10,18 +12,13 @@ source "https://rubygems.org"
 # Happy Jekylling!
 gem "jekyll", "3.5.2"
 
-# Server for Heroku
-# gem 'puma'
-# gem 'rack-jekyll'
-# gem 'rack-rewrite'
-# gem 'rack-contrib'
+# server for heroku
 
-gem "passenger"
-gem "sinatra"
-# gem "sinatra-base"
+gem "passenger" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
+gem "sinatra" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-require 'rbconfig'
+
 gem 'tzinfo-data' if RbConfig::CONFIG['target_os'] =~ /mswin|mingw|cygwin/i
 
 # If you have any plugins, put them here!

@@ -61,6 +61,7 @@ GEM
     mini_portile2 (2.2.0)
     minitest (5.10.3)
     multipart-post (2.0.0)
+    mustermann (1.0.1)
     nokogiri (1.8.0-x86-mingw32)
       mini_portile2 (~> 2.2.0)
     octokit (4.7.0)
@@ -72,6 +73,8 @@ GEM
       forwardable-extended (~> 2.6)
     public_suffix (3.0.0)
     rack (2.0.3)
+    rack-protection (2.0.0)
+      rack
     rake (12.1.0)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
@@ -86,7 +89,13 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
+    sinatra (2.0.0)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.0)
+      tilt (~> 2.0)
     thread_safe (0.3.6)
+    tilt (2.0.8)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     tzinfo-data (1.2017.2)
@@ -103,6 +112,7 @@ DEPENDENCIES
   jekyll-sitemap
   jemoji
   passenger
+  sinatra
   tzinfo-data
 
 BUNDLED WITH
