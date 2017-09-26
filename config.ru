@@ -1,4 +1,7 @@
+require 'acme_challenge'
 require 'sinatra'
+
+use AcmeChallenge, ENV['ACME_CHALLENGE'] if ENV['ACME_CHALLENGE']
 
 set :public_dir, Proc.new { File.join(root, "_site") }
 set :views, Proc.new { File.join(File.dirname(__FILE__), "views") }
