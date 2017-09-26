@@ -20,7 +20,6 @@ gem "sinatra" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
 gem 'acme_challenge'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-
 gem 'tzinfo-data' if RbConfig::CONFIG['target_os'] =~ /mswin|mingw|cygwin/i
 
 # If you have any plugins, put them here!
