@@ -8,10 +8,10 @@ import initLightBox from 'utilities/init/initLightBox.js';
 import initNav from 'utilities/init/initNav.js';
 import initSmoothScroll from 'utilities/init/initSmoothScroll.js';
 import initVideos from 'utilities/init/initVideos.js';
-import initLoadingOverlay from 'utilities/init/initLoadingOverlay.js';
+// import initLoadingOverlay from 'utilities/init/initLoadingOverlay.js';
 
 // Set up loading overlay
-initLoadingOverlay();
+// initLoadingOverlay();
 
 // Initialise layout and other things
 initNav();

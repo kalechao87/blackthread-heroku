@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const useLoadingManager = true;
+// const useLoadingManager = true;
 
 const fadeLoader = () => {
   const loadingOverlay = document.querySelector( '#loadingOverlay' );

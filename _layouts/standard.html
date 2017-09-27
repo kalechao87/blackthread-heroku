@@ -9,9 +9,7 @@
   </head>
 
   <body class="{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
-    <!--<div id="breakpoint">
 
-    </div>-->
     {% if page.loadingOverlay %}{% include loading_overlay %}{% endif %}
     {% include browser-upgrade.html %}
     {% include masthead.html %}

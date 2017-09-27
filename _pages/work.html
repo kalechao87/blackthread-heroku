@@ -10,10 +10,9 @@ excerpt: "A collection of recent projects completed at Black Thread Design."
 {% for category in group_names %}
 
 	  {% assign posts = group_items[forloop.index0] %}
-		<div class="grid__wrapper">
+
 	  {% for post in posts %}
-	    {% include archive-single.html type="grid" %}
+	    {% include archive-single.html %}
 	  {% endfor %}
-		</div>
 
 {% endfor %}

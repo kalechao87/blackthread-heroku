@@ -10,31 +10,19 @@
   {% assign title = post.title %}
 {% endif %}
 
-<div class="{{ include.type | default: "list" }}__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-		<h2 class="archive__item-title" itemprop="headline">
-      {% if post.link %}
-        <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | absolute_url }}"><span class="fa fa-link" aria-hidden="true" title="permalink"></span><span class="sr-only">Permalink</span></a>
-      {% else %}
-        <a href="{{ post.url | absolute_url }}">{{ title }}</a>
-      {% endif %}
-    </h2>
-		{% if post.read_time %}
-      <p class="page__meta"><span class="fa fa-clock-o" aria-hidden="true"></span> {% include read-time.html %}</p>
-    {% endif %}
-    {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 160 }}</p>{% endif %}
-    {% if include.type == "grid" and teaser %}
-      <div class="archive__item-teaser">
-        <img src=
-          {% if teaser contains "://" %}
-            "{{ teaser }}"
-          {% else %}
-            "{{ teaser | absolute_url }}"
-          {% endif %}
-          alt="">
-      </div>
-    {% endif %}
 
-    
-  </article>
-</div>
+<article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+  <h2 class="archive__item-title" itemprop="headline">
+    {% if post.link %}
+      <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | absolute_url }}"><span class="fa fa-link" aria-hidden="true" title="permalink"></span><span class="sr-only">Permalink</span></a>
+    {% else %}
+      <a href="{{ post.url | absolute_url }}">{{ title }}</a>
+    {% endif %}
+  </h2>
+  {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 160 }}</p>{% endif %}
+  {% if teaser %}
+    <div class="archive__item-teaser" style="background-image: url('{{teaser}}');"></div>
+  {% endif %}
+
+
+</article>
