@@ -13,7 +13,7 @@ source "https://rubygems.org"
 gem "jekyll", "3.5.2"
 
 # server for heroku
-gem "passenger" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
+# gem "passenger" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
 gem "sinatra" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
 
 # letsencrypt
