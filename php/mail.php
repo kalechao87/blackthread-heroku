@@ -25,7 +25,7 @@ Message: $message
 ";
 
 /* Send the message using mail() function */
-mail( $myemail, $subject, $emailContent, $mailheader ) or die("Error!");
+mail( $myemail, $subject, $emailContent, $mailheader ) or die("Sorry, the mailing server encounter and error :( \n Please email directly to looeee@gmail.com");
 
 /* Redirect visitor to the thank you page */
 header('Location: /thanks.html');
