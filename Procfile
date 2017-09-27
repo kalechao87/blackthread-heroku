@@ -1,1 +1,1 @@
-web: bundle exec passenger start -p $PORT --max-pool-size 3
+web: vendor/bin/heroku-php-nginx /_site
