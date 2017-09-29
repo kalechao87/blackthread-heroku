@@ -26,11 +26,12 @@ class Simulation {
 
   load() {
 
-    const naoPromise = loaders.fbxLoader( '/assets/models/robot_dance/base.fbx' ).then( ( object ) => {
+    const naoPromise = loaders.fbxLoader( '/assets/models/robot_dance/nao_on_stage.fbx' ).then( ( object ) => {
 
-      this.nao = object;
+      this.stage = object.children[0];
+      this.nao = object.children[1];
 
-      console.log( object )
+      console.log( this.stage, this.nao );
 
     } );
 
@@ -46,7 +47,7 @@ class Simulation {
     Promise.all( this.loadingPromises ).then(
       () => {
 
-        baseApp.add( this.nao );
+        baseApp.add( this.stage, this.nao );
 
         baseApp.play();
 

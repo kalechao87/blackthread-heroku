@@ -75,6 +75,7 @@ include:
   - .htaccess
   - _pages
 exclude:
+  - cert
   - vendor
   - .bundle
   - assets/js/src
@@ -96,10 +97,17 @@ exclude:
   - "*.BAK"
   - "*.txt"
   - "*.scss"
+  - "*.conf"
+  - "*.sh"
+  - "*.bak"
+  - "*.pem"
   - node_modules
   - package.json
   - Procfile
   - Rakefile
+  - heroku.conf.php
+  - composer.json
+  - nginx.conf
   - README
   - tmp
 keep_files:

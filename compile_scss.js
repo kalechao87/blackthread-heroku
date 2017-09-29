@@ -37,7 +37,8 @@ const un = ( htmlFilesArray, css, outputFile ) => {
 
 
     console.log( 'Writing file: ' + outputFile );
-    writeFile( outputFile, output )
+    writeFile( outputFile, output );
+    console.log( 'Done.');
 
   } );
 };
@@ -47,6 +48,7 @@ const cleanCSS = ( css, outputFile ) => {
   // for now skipping uncss
   console.log( 'Writing file: ' + outputFile );
   writeFile( outputFile, css );
+  console.log( 'Done.');
 
 
   // const pages = outputFile.slice( 0, -4 );
