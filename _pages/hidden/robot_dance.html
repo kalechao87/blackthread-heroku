@@ -18,24 +18,24 @@ vendor-js:
   <div id="left-panel">
     <div id="movement-controls">
       <h4>Head</h4>
-      <span>Pitch: </span><input id="head-pitch" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
-      <span>Yaw: </span><input id="head-yaw" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
+      <span>Pitch: </span><input id="head-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Yaw: </span><input id="head-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
 
       <h4>Left Shoulder</h4>
-      <span>Pitch: </span><input id="l-shoulder-pitch" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
-      <span>Yaw: </span><input id="l-shoulder-yaw" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
+      <span>Pitch: </span><input id="l-shoulder-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Yaw: </span><input id="l-shoulder-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
 
-      <h4></h4>Right Shoulder</h4>
-      <span>Pitch: </span><input id="r-shoulder-pitch" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
-      <span>Yaw: </span><input id="r-shoulder-yaw" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
+      <h4>Right Shoulder</h4>
+      <span>Pitch: </span><input id="r-shoulder-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Yaw: </span><input id="r-shoulder-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
 
       <h4>Left Elbow</h4>
-      <span>Pitch: </span><input id="l-elbow-pitch" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
-      <span>Yaw: </span><input id="l-elbow-yaw" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
+      <span>Pitch: </span><input id="l-elbow-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Yaw: </span><input id="l-elbow-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
 
       <h4>Right Elbow</h4>
-      <span>Pitch: </span><input id="r-elbow-pitch" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
-      <span>Yaw: </span><input id="r-elbow-yaw" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
+      <span>Pitch: </span><input id="r-elbow-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Yaw: </span><input id="r-elbow-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
 
     </div>
 
@@ -71,9 +71,10 @@ vendor-js:
     <div id="dance-controls">
 
       <h3>Create Dance</h3>
-      <h4>Framerate</h4>
-      <input id="framerate" type="range" min="0.1" max="10" step="0.1" value="5" class="slider" />
+      <span>Framerate</span>
+      <input id="framerate" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" /><br>
 
+      <span>Advanced Controls </span><input id="advanced-control-enable" type="checkbox">
     </div>
 
     <div id="music-controls">
