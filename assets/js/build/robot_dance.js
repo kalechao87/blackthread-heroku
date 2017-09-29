@@ -10969,10 +10969,7 @@ Object.assign( WebGLRenderTarget.prototype, EventDispatcher.prototype, {
 } );
 
 /**
- * @author mikael emtinger / http://gomo.se/
- * @author alteredq / http://alteredqualia.com/
- * @author WestLangley / http://github.com/WestLangley
- * @author bhouston / http://clara.io
+ * @author alteredq / http://alteredqualia.com
  */
 
 function Quaternion( x, y, z, w ) {
@@ -22137,6 +22134,8 @@ Object.assign( BufferAttribute.prototype, {
 
 } );
 
+//
+
 function Uint16BufferAttribute( array, itemSize ) {
 
 	BufferAttribute.call( this, new Uint16Array( array ), itemSize );
@@ -22166,10 +22165,6 @@ function Float32BufferAttribute( array, itemSize ) {
 Float32BufferAttribute.prototype = Object.create( BufferAttribute.prototype );
 Float32BufferAttribute.prototype.constructor = Float32BufferAttribute;
 
-
-/**
- * @author mrdoob / http://mrdoob.com/
- */
 
 function DirectGeometry() {
 
@@ -33653,7 +33648,7 @@ Group.prototype = Object.assign( Object.create( Object3D.prototype ), {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com/
  */
 
 function CompressedTexture( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding ) {
@@ -33681,8 +33676,8 @@ CompressedTexture.prototype.constructor = CompressedTexture;
 CompressedTexture.prototype.isCompressedTexture = true;
 
 /**
- * @author mrdoob / http://mrdoob.com/
- * @author Mugen87 / https://github.com/Mugen87
+ * @author Matt DesLauriers / @mattdesl
+ * @author atix / arthursilber.de
  */
 
 function WireframeGeometry( geometry ) {
@@ -45349,7 +45344,10 @@ Object.assign( StereoCamera.prototype, {
 } );
 
 /**
- * @author mrdoob / http://mrdoob.com/
+ * Camera for rendering cube maps
+ *	- renders scene into axis-aligned cube
+ *
+ * @author alteredq / http://alteredqualia.com/
  */
 
 function AudioListener() {
@@ -49319,8 +49317,7 @@ Object.assign( Cylindrical.prototype, {
 } );
 
 /**
- * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
+ * @author alteredq / http://alteredqualia.com/
  */
 
 function VertexNormalsHelper( object, size, hex, linewidth ) {
@@ -49676,7 +49673,6 @@ SkeletonHelper.prototype.onBeforeRender = function () {
 /**
  * @author alteredq / http://alteredqualia.com/
  * @author mrdoob / http://mrdoob.com/
- * @author Mugen87 / https://github.com/Mugen87
  */
 
 function HemisphereLightHelper( light, size, color ) {
@@ -49760,7 +49756,6 @@ HemisphereLightHelper.prototype.update = function () {
 
 /**
  * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
  */
 
 function FaceNormalsHelper( object, size, hex, linewidth ) {
@@ -50254,18 +50249,6 @@ BoxHelper.prototype.setFromObject = function ( object ) {
 
 /**
  * @author WestLangley / http://github.com/WestLangley
- * @author zz85 / http://github.com/zz85
- * @author bhouston / http://clara.io
- *
- * Creates an arrow for visualizing directions
- *
- * Parameters:
- *  dir - Vector3
- *  origin - Vector3
- *  length - Number
- *  color - color in hex value
- *  headLength - Number
- *  headWidth - Number
  */
 
 var lineGeometry;
@@ -50363,26 +50346,9 @@ ArrowHelper.prototype.setColor = function ( color ) {
 };
 
 /**
- * @author zz85 https://github.com/zz85
- *
- * Centripetal CatmullRom Curve - which is useful for avoiding
- * cusps and self-intersections in non-uniform catmull rom curves.
- * http://www.cemyuksel.com/research/catmullrom_param/catmullrom.pdf
- *
- * curve.type accepts centripetal(default), chordal and catmullrom
- * curve.tension is used for catmullrom which defaults to 0.5
+ * @author sroucheray / http://sroucheray.org/
+ * @author mrdoob / http://mrdoob.com/
  */
-
-
-/*
-Based on an optimized c++ solution in
- - http://stackoverflow.com/questions/9489736/catmull-rom-curve-with-no-cusps-and-no-self-intersections/
- - http://ideone.com/NoEbVM
-
-This CubicPoly class could be used for reusing some variables and calculations,
-but for three.js curve use, it could be possible inlined and flatten into a single function call
-which can be placed in CurveUtils.
-*/
 
 function CubicPoly() {
 
@@ -50539,10 +50505,6 @@ CatmullRomCurve3.prototype.getPoint = function ( t ) {
 
 };
 
-/**
- * @author alteredq / http://alteredqualia.com/
- */
-
 var SceneUtils = {
 
 	createMultiMaterialObject: function ( geometry, materials ) {
@@ -50578,7 +50540,9 @@ var SceneUtils = {
 
 };
 
-//
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
 
 Curve.create = function ( construct, getPoint ) {
 
@@ -50625,13 +50589,12 @@ Object.assign( Spline.prototype, {
 
 } );
 
+//
 SkeletonHelper.prototype.update = function () {
 
 	console.error( 'THREE.SkeletonHelper: update() no longer needs to be called.' );
 
 };
-
-//
 
 Object.assign( Box2.prototype, {
 
@@ -51707,6 +51670,8 @@ AudioAnalyser.prototype.getData = function () {
 
 };
 
+//
+
 var ImageUtils = {
 
 	crossOrigin: undefined,
@@ -51754,6 +51719,8 @@ var ImageUtils = {
 	}
 
 };
+
+//
 
 /**
  * @author Lewy Blue / https://github.com/looeee
@@ -51876,21 +51843,6 @@ function Time() {
     this.paused = true;
   };
 }
-
-/**
- * @author qiao / https://github.com/qiao
- * @author mrdoob / http://mrdoob.com
- * @author alteredq / http://alteredqualia.com/
- * @author WestLangley / http://github.com/WestLangley
- * @author erich666 / http://erichaines.com
- */
-
-// This set of controls performs orbiting, dollying (zooming), and panning.
-// Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
-//
-//    Orbit - left mouse / touch: one finger move
-//    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
-//    Pan - right mouse, or arrow keys / touch: three finger swipe
 
 function OrbitControls(object, domElement) {
 
@@ -52718,11 +52670,6 @@ function OrbitControls(object, domElement) {
 OrbitControls.prototype = Object.create(EventDispatcher.prototype);
 OrbitControls.prototype.constructor = OrbitControls;
 
-/**
- * @author Lewy Blue / https://github.com/looeee
- *
- */
-
 var _canvas = void 0;
 var _scene = void 0;
 var _camera = void 0;
@@ -53208,42 +53155,77 @@ var LightingSetup = function () {
   return LightingSetup;
 }();
 
-// The App is instantiated here - all per frame and resize call backs are also defined here ONLY
-var baseApp = new App(HTMLControl.canvas);
-baseApp.renderer.setClearColor(0xf7f7f7, 1.0);
+// The App  object is setup  here and then returned
+// - all per frame and resize call backs are also defined here ONLY
+var AppManager = function () {
+  function AppManager() {
+    classCallCheck(this, AppManager);
 
-// Put any per frame calculations here
-baseApp.onUpdate = function () {
 
-  // use this.delta for timings here
+    this.app = new App(HTMLControl.canvas);
+    this.app.renderer.setClearColor(0xf7f7f7, 1.0);
 
-};
+    // Put any per frame calculations here
+    this.app.onUpdate = function () {
 
-// put any per resize calculations here
-baseApp.onWindowResize = function () {};
+      // use this.delta for timings here
 
-baseApp.add = function (object) {
+    };
 
-  baseApp.scene.add(object);
-};
+    // put any per resize calculations here
+    this.app.onWindowResize = function () {};
 
-baseApp.scene.fog = new Fog(0xf7f7f7, 1500, 10000);
+    this.addGround();
 
-baseApp.initControls();
+    this.lighting = new LightingSetup(this.app);
 
-var lighting = new LightingSetup(baseApp);
+    this.initCamera();
+    this.initControls();
 
-/**
- * @author renej
- * NURBS utils
- *
- * See NURBSCurve and NURBSSurface.
- *
- **/
+    this.app.scene.fog = new Fog(0xf7f7f7, 600, this.app.camera.far);
 
-/**************************************************************
- *	NURBS Utils
- **************************************************************/
+    return this.app;
+  }
+
+  AppManager.prototype.addGround = function addGround() {
+
+    var geometry = new PlaneBufferGeometry(20000, 20000);
+    var material = new MeshPhongMaterial({ color: 0xb0b0b0, shininess: 0.1 });
+    var ground = new Mesh(geometry, material);
+    ground.position.set(0, -25, 0);
+    ground.rotation.x = -Math.PI / 2;
+
+    this.app.scene.add(ground);
+  };
+
+  AppManager.prototype.initCamera = function initCamera() {
+
+    this.app.camera.far = 800;
+    this.app.camera.fov = 30;
+    this.app.camera.position.set(0, -100, 200);
+    this.app.camera.updateProjectionMatrix();
+  };
+
+  AppManager.prototype.initControls = function initControls() {
+
+    this.app.initControls();
+
+    // vertical rotation limits
+    this.app.controls.minPolarAngle = Math.PI * 0.1; // upper
+    this.app.controls.maxPolarAngle = Math.PI * 0.45; // lower
+
+    this.app.controls.minDistance = 100;
+    this.app.controls.maxDistance = 400;
+
+    // horizontal rotation limits
+    this.app.controls.minAzimuthAngle = -Math.PI * 0.5;
+    this.app.controls.maxAzimuthAngle = Math.PI * 0.5;
+  };
+
+  return AppManager;
+}();
+
+var appManager = new AppManager();
 
 var NURBSUtils = {
 
@@ -53638,20 +53620,6 @@ var NURBSUtils = {
 
 };
 
-/**
- * @author renej
- * NURBS curve object
- *
- * Derives from Curve, overriding getPoint and getTangent.
- *
- * Implementation is based on (x, y [, z=0 [, w=1]]) control points with w=weight.
- *
- **/
-
-/**************************************************************
- *	NURBS curve
- **************************************************************/
-
 function NURBSCurve(degree, knots /* array of reals */, controlPoints /* array of Vector(2|3|4) */, startKnot /* index in knots */, endKnot /* index in knots */) {
 
 	Curve.call(this);
@@ -53699,33 +53667,6 @@ NURBSCurve.prototype.getTangent = function (t) {
 	return tangent;
 };
 
-/**
- * @author Kyle-Larson https://github.com/Kyle-Larson
- * @author Takahiro https://github.com/takahirox
- *
- * Loader loads FBX file and generates Group representing FBX scene.
- * Requires FBX file to be >= 7.0 and in ASCII or to be any version in Binary format.
- *
- * Supports:
- * 	Mesh Generation (Positional Data)
- * 	Normal Data (Per Vertex Drawing Instance)
- *  UV Data (Per Vertex Drawing Instance)
- *  Skinning
- *  Animation
- * 	- Separated Animations based on stacks.
- * 	- Skeletal & Non-Skeletal Animations
- *  NURBS (Open, Closed and Periodic forms)
- *
- * Needs Support:
- * 	Indexed Buffers
- * 	PreRotation support.
- */
-
-/**
- * Generates a loader for loading FBX files from URL and parsing into
- * a THREE.Group.
- * @param {THREE.LoadingManager} manager - Loading Manager for loader to use.
- */
 function FBXLoader(manager) {
 
   this.manager = manager !== undefined ? manager : DefaultLoadingManager;
@@ -58339,10 +58280,6 @@ function slice(a, b, from, to) {
   return a;
 }
 
-/**
- * @author bhouston / http://clara.io/
- */
-
 function AnimationLoader(manager) {
 
     this.manager = manager !== undefined ? manager : DefaultLoadingManager;
@@ -58495,7 +58432,48 @@ var Loaders = function Loaders() {
 
 var loaders = new Loaders();
 
-// import animationControls from './animationControls.js';
+function invertMirroredFBX(object) {
+
+          object.traverse(function (child) {
+
+                    if (child instanceof Mesh) {
+
+                              if (child.matrixWorld.determinant() < 0) {
+
+                                        var l = child.geometry.attributes.position.array.length;
+
+                                        for (var i = 0; i < l; i += 9) {
+
+                                                  // reverse winding order
+                                                  var tempX = child.geometry.attributes.position.array[i];
+                                                  var tempY = child.geometry.attributes.position.array[i + 1];
+                                                  var tempZ = child.geometry.attributes.position.array[i + 2];
+
+                                                  child.geometry.attributes.position.array[i] = child.geometry.attributes.position.array[i + 6];
+                                                  child.geometry.attributes.position.array[i + 1] = child.geometry.attributes.position.array[i + 7];
+                                                  child.geometry.attributes.position.array[i + 2] = child.geometry.attributes.position.array[i + 8];
+
+                                                  child.geometry.attributes.position.array[i + 6] = tempX;
+                                                  child.geometry.attributes.position.array[i + 7] = tempY;
+                                                  child.geometry.attributes.position.array[i + 8] = tempZ;
+
+                                                  // switch vertex normals
+                                                  var tempNX = child.geometry.attributes.normal.array[i];
+                                                  var tempNY = child.geometry.attributes.normal.array[i + 1];
+                                                  var tempNZ = child.geometry.attributes.normal.array[i + 2];
+
+                                                  child.geometry.attributes.normal.array[i] = child.geometry.attributes.normal.array[i + 6];
+                                                  child.geometry.attributes.normal.array[i + 1] = child.geometry.attributes.normal.array[i + 7];
+                                                  child.geometry.attributes.normal.array[i + 2] = child.geometry.attributes.normal.array[i + 8];
+
+                                                  child.geometry.attributes.normal.array[i + 6] = tempNX;
+                                                  child.geometry.attributes.normal.array[i + 7] = tempNY;
+                                                  child.geometry.attributes.normal.array[i + 8] = tempNZ;
+                                        }
+                              }
+                    }
+          });
+}
 
 var Simulation = function () {
   function Simulation() {
@@ -58524,7 +58502,9 @@ var Simulation = function () {
       _this.stage = object.children[0];
       _this.nao = object.children[1];
 
-      console.log(_this.stage, _this.nao);
+      invertMirroredFBX(_this.nao);
+
+      _this.sceneCentre = new Box3().setFromObject(object).getCenter();
     });
 
     var stagePromise = Promise.resolve();
@@ -58537,9 +58517,15 @@ var Simulation = function () {
 
     Promise.all(this.loadingPromises).then(function () {
 
-      baseApp.add(_this2.stage, _this2.nao);
+      // console.log( this.stage, this.nao );
 
-      baseApp.play();
+      appManager.scene.add(_this2.stage);
+      appManager.scene.add(_this2.nao);
+
+      appManager.controls.target.copy(_this2.sceneCentre);
+      appManager.controls.update();
+
+      appManager.play();
     });
   };
 

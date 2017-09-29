@@ -324,9 +324,14 @@ b, i, strong, em, blockquote, p, q, span, figure, img, h1, h2, header, input, a,
    ========================================================================== */
 
    ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
+
+  // *:hover::-webkit-scrollbar {
+  //   width: 12px;
+  //   height: 12px;
+  // }
 
   ::-webkit-scrollbar-track-piece {
     background-color: #fff;

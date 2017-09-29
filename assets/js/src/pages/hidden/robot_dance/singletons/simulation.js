@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 
-import baseApp from './baseApp.js';
+import appManager from './appManager.js';
 import loaders from './loaders.js';
 // import animationControls from './animationControls.js';
+
+import invertMirroredFBX from '../utilities/invertMirroredFBX.js';
 
 class Simulation {
 
@@ -31,7 +33,9 @@ class Simulation {
       this.stage = object.children[0];
       this.nao = object.children[1];
 
-      console.log( this.stage, this.nao );
+      invertMirroredFBX( this.nao );
+
+      this.sceneCentre = new THREE.Box3().setFromObject( object ).getCenter();
 
     } );
 
@@ -47,9 +51,15 @@ class Simulation {
     Promise.all( this.loadingPromises ).then(
       () => {
 
-        baseApp.add( this.stage, this.nao );
+        // console.log( this.stage, this.nao );
 
-        baseApp.play();
+        appManager.scene.add( this.stage );
+        appManager.scene.add( this.nao );
+
+        appManager.controls.target.copy( this.sceneCentre );
+        appManager.controls.update();
+
+        appManager.play();
 
       },
     );
