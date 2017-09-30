@@ -52,7 +52,7 @@ function App( canvas ) {
 
     if ( _camera.type !== 'PerspectiveCamera' ) {
 
-      console.warn( 'THREE.APP: AutoResize only works with PerspectiveCamera' );
+      console.warn( 'THREE.App: AutoResize only works with PerspectiveCamera' );
       return;
 
     }

@@ -16,35 +16,36 @@ vendor-js:
 <div id="container">
 
   <div id="left-panel">
-    <div id="movement-controls">
+    <div id="movement-controls" class="controls-section">
       <h4>Head</h4>
-      <span>Pitch: </span><input id="head-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
-      <span>Yaw: </span><input id="head-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Pitch: </span><input id="head-pitch" type="number" min="-60" max="60" step="1" value="0" class="number-input" disabled />
+      <span>Yaw: </span><input id="head-yaw" type="number" min="-30" max="30" step="1" value="0" class="number-input" disabled />
 
       <h4>Left Shoulder</h4>
-      <span>Pitch: </span><input id="l-shoulder-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
-      <span>Yaw: </span><input id="l-shoulder-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Pitch: </span><input id="l-shoulder-pitch" type="number" min="-40" max="60" step="1" value="0" class="number-input" disabled />
+      <span>Yaw: </span><input id="l-shoulder-yaw" type="number" min="0" max="60" step="1" value="0" class="number-input" disabled />
 
       <h4>Right Shoulder</h4>
-      <span>Pitch: </span><input id="r-shoulder-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
-      <span>Yaw: </span><input id="r-shoulder-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Pitch: </span><input id="r-shoulder-pitch" type="number" min="-40" max="60" step="1" value="0" class="number-input" disabled />
+      <span>Yaw: </span><input id="r-shoulder-yaw" type="number" min="0" max="60" step="1" value="0" class="number-input" disabled />
 
       <h4>Left Elbow</h4>
-      <span>Pitch: </span><input id="l-elbow-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
-      <span>Yaw: </span><input id="l-elbow-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Pitch: </span><input id="l-elbow-pitch" type="number" min="0" max="60" step="1" value="0" class="number-input" disabled />
+      <span>Yaw: </span><input id="l-elbow-yaw" type="number" min="-60" max="60" step="1" value="0" class="number-input" disabled />
 
       <h4>Right Elbow</h4>
-      <span>Pitch: </span><input id="r-elbow-pitch" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
-      <span>Yaw: </span><input id="r-elbow-yaw" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" />
+      <span>Pitch: </span><input id="r-elbow-pitch" type="number" min="0" max="60" step="1" value="0" class="number-input" disabled />
+      <span>Yaw: </span><input id="r-elbow-yaw" type="number" min="-60" max="60" step="1" value="0" class="number-input" disabled />
 
     </div>
 
-    <div id="frame-controls">
+    <div id="frame-controls" class="controls-section">
       <h3>Frames</h3>
 
-      <button id="create-frame">Create Frame</button>
+      <button id="create-frame-button">Create</button>
+      <!-- <button id="create-frame">Delete Selected</button> -->
 
-      <select name="frames" multiple>
+      <select id="frames" multiple>
         <option value="frame-1">Frame-1</option>
         <option value="frame-2">Frame-2</option>
         <option value="frame-3">Frame-3</option>
@@ -52,51 +53,96 @@ vendor-js:
       </select>
     </div>
 
-
-    <div id="group-controls">
+    <div id="group-controls" class="controls-section">
 
       <h3>Groups</h3>
 
-      <button id="create-frame">Create Group</button>
+      <button id="create-group-button">Create</button>
+      <!-- <button id="create-group">Delete Selected</button> -->
 
-      <select name="groups" multiple>
+      <select id="groups" multiple>
         <option value="group-1">Group-1</option>
         <option value="group-2">Group-2</option>
         <option value="group-3">Group-3</option>
         <option value="group-4">Group-4</option>
       </select>
 
+      <div id="selected-group-details">
+
+        <h5>Selected Group</h5>
+
+        <button id="add-frames-to-group-button">Add Frame</button>
+        <!-- <button id="create-group">Remove Frames</button> -->
+
+        <select id="frames-in-group" multiple>
+          <option value="frame-1">Frame-1</option>
+          <option value="frame-1">Frame-1</option>
+          <option value="frame-2">Frame-2</option>
+          <option value="frame-4">Frame-4</option>
+        </select>
+
+      </div>
+
     </div>
 
-    <div id="dance-controls">
+    <div id="dance-controls" class="controls-section">
 
       <h3>Create Dance</h3>
+      <button>Add Group(s)</button>
+      <button>Add Frame(s)</button>
+      <button>Remove Selected</button>
+
+      <select id="dance-details" multiple>
+        <option value="frame-1">Frame-1</option>
+        <option value="group-1">Group-1</option>
+        <option value="frame-2">Frame-2</option>
+        <option value="group-4">Group-4</option>
+      </select>
+
       <span>Framerate</span>
       <input id="framerate" type="number" min="0.1" max="10" step="0.1" value="5" class="number-input" /><br>
+      <span>Advanced Controls </span><input id="advanced-control-enable" type="checkbox"><br>
 
-      <span>Advanced Controls </span><input id="advanced-control-enable" type="checkbox">
+      <div id="advanced-controls" class="hide">
+        Advanced controls go here!
+      </div>
+      <button id="play">Dance!</button>
+      <button id="reset">Reset</button>
+
     </div>
 
-    <div id="music-controls">
+    <div id="music-controls" class="controls-section">
 
       <h3>Music</h3>
 
+      <span>Start music with dance</span><input type="checkbox" id="start-music-with-dance">
+
       <button>Upload MP3</button>
 
-      <select name="music">
+      <select id="music-select">
         <option value="track-1">Track-1</option>
         <option value="track-2">Track-2</option>
         <option value="track-3">Track-3</option>
         <option value="track-4">Track-4</option>
       </select>
 
-    </div>
+      <button id="play-music">Play</button>
+      <input id="track-position-slider" type="range" min="0" max="100" step="0.1" value="0" class="slider" /><br>
 
+    </div>
 
     <div id="file-controls">
       <h3>Save and Load</h3>
-      <button>Save Dance</button>
-      <button>Load Dance</button>
+      <button id="save-dance">Save Dance</button>
+      <button id="load-dance">Load Dance</button>
+
+      <select id="premade-examples">
+        <option value="dance-1">Dance-1</option>
+        <option value="dance-2">Dance-2</option>
+        <option value="dance-3">Dance-3</option>
+        <option value="dance-4">Dance-4</option>
+      </select>
+
     </div>
 
   </div>

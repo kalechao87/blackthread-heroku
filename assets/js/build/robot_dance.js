@@ -51722,128 +51722,6 @@ var ImageUtils = {
 
 //
 
-/**
- * @author Lewy Blue / https://github.com/looeee
- */
-
-function Time() {
-
-  // Keep track of time when pause() was called
-  var _pauseTime = void 0;
-
-  // Keep track of time when delta was last checked
-  var _lastDelta = 0;
-
-  // Hold the time when start() was called
-  // There is no point in exposing this as it's essentially a random number
-  // and will be different depending on whether performance.now or Date.now is used
-  var _startTime = 0;
-
-  this.running = false;
-  this.paused = false;
-
-  // The scale at which the time is passing. This can be used for slow motion effects.
-  var _timeScale = 1.0;
-  // Keep track of scaled time across scale changes
-  var _totalTimeAtLastScaleChange = 0;
-  var _timeAtLastScaleChange = 0;
-
-  Object.defineProperties(this, {
-
-    now: {
-      get: function () {
-
-        return (performance || Date).now();
-      }
-    },
-
-    timeScale: {
-      get: function () {
-
-        return _timeScale;
-      },
-      set: function (value) {
-
-        _totalTimeAtLastScaleChange = this.totalTime;
-        _timeAtLastScaleChange = this.now;
-        _timeScale = value;
-      }
-    },
-
-    unscaledTotalTime: {
-      get: function () {
-
-        return this.running ? this.now - _startTime : 0;
-      }
-    },
-
-    totalTime: {
-      get: function () {
-
-        var diff = (this.now - _timeAtLastScaleChange) * this.timeScale;
-
-        return this.running ? _totalTimeAtLastScaleChange + diff : 0;
-      }
-    },
-
-    // Unscaled time since delta was last checked
-    unscaledDelta: {
-      get: function () {
-
-        var diff = this.now - _lastDelta;
-        _lastDelta = this.now;
-
-        return diff;
-      }
-    },
-
-    // Scaled time since delta was last checked
-    delta: {
-      get: function () {
-
-        return this.unscaledDelta * this.timeScale;
-      }
-    }
-
-  });
-
-  this.start = function () {
-
-    if (this.paused) {
-
-      var diff = this.now - _pauseTime;
-
-      _startTime += diff;
-      _lastDelta += diff;
-      _timeAtLastScaleChange += diff;
-    } else if (!this.running) {
-
-      _startTime = _lastDelta = _timeAtLastScaleChange = this.now;
-
-      _totalTimeAtLastScaleChange = 0;
-    }
-
-    this.running = true;
-    this.paused = false;
-  };
-
-  // Reset and stop clock
-  this.stop = function () {
-
-    _startTime = 0;
-    _totalTimeAtLastScaleChange = 0;
-
-    this.running = false;
-  };
-
-  this.pause = function () {
-
-    _pauseTime = this.now;
-
-    this.paused = true;
-  };
-}
-
 function OrbitControls(object, domElement) {
 
 	this.object = object;
@@ -52670,6 +52548,128 @@ function OrbitControls(object, domElement) {
 OrbitControls.prototype = Object.create(EventDispatcher.prototype);
 OrbitControls.prototype.constructor = OrbitControls;
 
+/**
+ * @author Lewy Blue / https://github.com/looeee
+ */
+
+function Time() {
+
+  // Keep track of time when pause() was called
+  var _pauseTime = void 0;
+
+  // Keep track of time when delta was last checked
+  var _lastDelta = 0;
+
+  // Hold the time when start() was called
+  // There is no point in exposing this as it's essentially a random number
+  // and will be different depending on whether performance.now or Date.now is used
+  var _startTime = 0;
+
+  this.running = false;
+  this.paused = false;
+
+  // The scale at which the time is passing. This can be used for slow motion effects.
+  var _timeScale = 1.0;
+  // Keep track of scaled time across scale changes
+  var _totalTimeAtLastScaleChange = 0;
+  var _timeAtLastScaleChange = 0;
+
+  Object.defineProperties(this, {
+
+    now: {
+      get: function () {
+
+        return (performance || Date).now();
+      }
+    },
+
+    timeScale: {
+      get: function () {
+
+        return _timeScale;
+      },
+      set: function (value) {
+
+        _totalTimeAtLastScaleChange = this.totalTime;
+        _timeAtLastScaleChange = this.now;
+        _timeScale = value;
+      }
+    },
+
+    unscaledTotalTime: {
+      get: function () {
+
+        return this.running ? this.now - _startTime : 0;
+      }
+    },
+
+    totalTime: {
+      get: function () {
+
+        var diff = (this.now - _timeAtLastScaleChange) * this.timeScale;
+
+        return this.running ? _totalTimeAtLastScaleChange + diff : 0;
+      }
+    },
+
+    // Unscaled time since delta was last checked
+    unscaledDelta: {
+      get: function () {
+
+        var diff = this.now - _lastDelta;
+        _lastDelta = this.now;
+
+        return diff;
+      }
+    },
+
+    // Scaled time since delta was last checked
+    delta: {
+      get: function () {
+
+        return this.unscaledDelta * this.timeScale;
+      }
+    }
+
+  });
+
+  this.start = function () {
+
+    if (this.paused) {
+
+      var diff = this.now - _pauseTime;
+
+      _startTime += diff;
+      _lastDelta += diff;
+      _timeAtLastScaleChange += diff;
+    } else if (!this.running) {
+
+      _startTime = _lastDelta = _timeAtLastScaleChange = this.now;
+
+      _totalTimeAtLastScaleChange = 0;
+    }
+
+    this.running = true;
+    this.paused = false;
+  };
+
+  // Reset and stop clock
+  this.stop = function () {
+
+    _startTime = 0;
+    _totalTimeAtLastScaleChange = 0;
+
+    this.running = false;
+  };
+
+  this.pause = function () {
+
+    _pauseTime = this.now;
+
+    this.paused = true;
+  };
+}
+
 var _canvas = void 0;
 var _scene = void 0;
 var _camera = void 0;
@@ -52713,7 +52713,7 @@ function App(canvas) {
 
     if (_camera.type !== 'PerspectiveCamera') {
 
-      console.warn('THREE.APP: AutoResize only works with PerspectiveCamera');
+      console.warn('THREE.App: AutoResize only works with PerspectiveCamera');
       return;
     }
 
@@ -53068,6 +53068,24 @@ var classCallCheck = function (instance, Constructor) {
   }
 };
 
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
 var canvas = document.querySelector('#canvas');
 var container = document.querySelector('#container');
 
@@ -53077,6 +53095,53 @@ var loading = {
   revealOnLoad: document.querySelectorAll('.reveal-on-load'),
   hideOnLoad: document.querySelectorAll('.hide-on-load'),
   progress: document.querySelector('#progress')
+};
+
+var controls = {
+  movement: {
+    head: {
+      pitch: document.querySelector('#head-pitch'),
+      yaw: document.querySelector('#head-yaw')
+    },
+    leftShoulder: {
+      pitch: document.querySelector('#l-shoulder-pitch'),
+      yaw: document.querySelector('#l-shoulder-yaw')
+    },
+    rightShoulder: {
+      pitch: document.querySelector('#r-shoulder-pitch'),
+      yaw: document.querySelector('#r-shoulder-yaw')
+    },
+    leftElbow: {
+      pitch: document.querySelector('#l-elbow-pitch'),
+      yaw: document.querySelector('#l-elbow-yaw')
+    },
+    rightElbow: {
+      pitch: document.querySelector('#r-elbow-pitch'),
+      yaw: document.querySelector('#r-elbow-yaw')
+    }
+  },
+  frames: {
+    createButton: document.querySelector('#create-frame-button')
+
+  },
+  groups: {
+    createButton: document.querySelector('#create-group-button')
+  },
+  dance: {
+    framerate: document.querySelector('#framerate'),
+    showAdvancedControls: document.querySelector('#advanced-control-enable')
+  },
+  music: {
+    startWithDanceCheckbox: document.querySelector('#start-music-with-dance'),
+    selection: document.querySelector('#music-select'),
+    playButton: document.querySelector('#play-music'),
+    positionSlider: document.querySelector('#track-position-slider')
+  },
+  file: {
+    saveDanceButton: document.querySelector('#save-dance'),
+    loadDanceButton: document.querySelector('#load-dance'),
+    examples: document.querySelector('#premade-examples')
+  }
 };
 
 var HTMLControl = function () {
@@ -53104,6 +53169,19 @@ var HTMLControl = function () {
 
       loading.revealOnLoad[_i].classList.remove('hide');
     }
+
+    this.setMovementControlsDisabledState(false);
+  };
+
+  HTMLControl.setMovementControlsDisabledState = function setMovementControlsDisabledState(bool) {
+
+    controls.movement.head.pitch.disabled = bool;
+
+    for (var key in controls.movement) {
+
+      controls.movement[key].pitch.disabled = bool;
+      controls.movement[key].yaw.disabled = bool;
+    }
   };
 
   return HTMLControl;
@@ -53112,118 +53190,29 @@ var HTMLControl = function () {
 HTMLControl.canvas = canvas;
 HTMLControl.container = container;
 HTMLControl.loading = loading;
-
-var LightingSetup = function () {
-  function LightingSetup(app) {
-    classCallCheck(this, LightingSetup);
-
-
-    this.app = app;
-
-    this.initLights();
-  }
-
-  LightingSetup.prototype.initLights = function initLights() {
-
-    var ambientLight = new AmbientLight(0xffffff, 0.3);
-    this.app.scene.add(ambientLight);
-
-    // ****  METHOD 1:   3 POINT LIGHTING ***************************
-    // Traditional 3 point light setup - slightly more expensive due to
-    // two extra lights
-
-    var backLight = new DirectionalLight(0xffffff, 0.4);
-    backLight.position.set(130, 200, 150);
-
-    var keyLight = new DirectionalLight(0xffffff, 0.4);
-    keyLight.position.set(100, 50, 0);
-
-    var fillLight = new DirectionalLight(0xffffff, 0.4);
-    fillLight.position.set(75, 75, 50);
-
-    this.app.scene.add(backLight, keyLight, fillLight);
-
-    // ****  METHOD 2:   CAMERA LIGHT ***********************************
-    // Visually similar to 3 point lighting, but cheaper as only two lights
-    // are needed
-
-    // this.pointLight = new THREE.PointLight( 0xffffff, 0.5, 0, 0 );
-    // this.app.camera.add( this.pointLight );
-    // this.app.scene.add( this.app.camera );
-  };
-
-  return LightingSetup;
-}();
+HTMLControl.controls = controls;
 
 // The App  object is setup  here and then returned
 // - all per frame and resize call backs are also defined here ONLY
-var AppManager = function () {
-  function AppManager() {
-    classCallCheck(this, AppManager);
+var AppManager = function AppManager() {
+  classCallCheck(this, AppManager);
 
 
-    this.app = new App(HTMLControl.canvas);
-    this.app.renderer.setClearColor(0xf7f7f7, 1.0);
+  this.app = new App(HTMLControl.canvas);
+  this.app.renderer.setClearColor(0xf7f7f7, 1.0);
 
-    // Put any per frame calculations here
-    this.app.onUpdate = function () {
+  // Put any per frame calculations here
+  this.app.onUpdate = function () {
 
-      // use this.delta for timings here
+    // use this.delta for timings here
 
-    };
-
-    // put any per resize calculations here
-    this.app.onWindowResize = function () {};
-
-    this.addGround();
-
-    this.lighting = new LightingSetup(this.app);
-
-    this.initCamera();
-    this.initControls();
-
-    this.app.scene.fog = new Fog(0xf7f7f7, 600, this.app.camera.far);
-
-    return this.app;
-  }
-
-  AppManager.prototype.addGround = function addGround() {
-
-    var geometry = new PlaneBufferGeometry(20000, 20000);
-    var material = new MeshPhongMaterial({ color: 0xb0b0b0, shininess: 0.1 });
-    var ground = new Mesh(geometry, material);
-    ground.position.set(0, -25, 0);
-    ground.rotation.x = -Math.PI / 2;
-
-    this.app.scene.add(ground);
   };
 
-  AppManager.prototype.initCamera = function initCamera() {
+  // put any per resize calculations here
+  this.app.onWindowResize = function () {};
 
-    this.app.camera.far = 800;
-    this.app.camera.fov = 30;
-    this.app.camera.position.set(0, -100, 200);
-    this.app.camera.updateProjectionMatrix();
-  };
-
-  AppManager.prototype.initControls = function initControls() {
-
-    this.app.initControls();
-
-    // vertical rotation limits
-    this.app.controls.minPolarAngle = Math.PI * 0.1; // upper
-    this.app.controls.maxPolarAngle = Math.PI * 0.45; // lower
-
-    this.app.controls.minDistance = 100;
-    this.app.controls.maxDistance = 400;
-
-    // horizontal rotation limits
-    this.app.controls.minAzimuthAngle = -Math.PI * 0.5;
-    this.app.controls.maxAzimuthAngle = Math.PI * 0.5;
-  };
-
-  return AppManager;
-}();
+  return this.app;
+};
 
 var appManager = new AppManager();
 
@@ -53675,21 +53664,19 @@ function FBXLoader(manager) {
 Object.assign(FBXLoader.prototype, {
 
   /**
-   * Loads an ASCII/Binary FBX file from URL and parses into a THREE.Group.
-   * THREE.Group will have an animations property of AnimationClips
-   * of the different animations exported with the FBX.
-   * @param {string} url - URL of the FBX file.
-   * @param {function(THREE.Group):void} onLoad - Callback for when FBX file is loaded and parsed.
-   * @param {function(ProgressEvent):void} onProgress - Callback fired periodically when file is being retrieved from server.
-   * @param {function(Event):void} onError - Callback fired when error occurs (Currently only with retrieving file, not with parsing errors).
-   */
+    * Loads an ASCII/Binary FBX file from URL and parses into a THREE.Group.
+    * THREE.Group will have an animations property of AnimationClips
+    * of the different animations exported with the FBX.
+    * @param {string} url - URL of the FBX file.
+    * @param {function(THREE.Group):void} onLoad - Callback for when FBX file is loaded and parsed.
+    * @param {function(ProgressEvent):void} onProgress - Callback fired periodically when file is being retrieved from server.
+    * @param {function(Event):void} onError - Callback fired when error occurs (Currently only with retrieving file, not with parsing errors).
+    */
   load: function (url, onLoad, onProgress, onError) {
 
     var self = this;
 
-    var resourceDirectory = url.split(/[\\\/]/);
-    resourceDirectory.pop();
-    resourceDirectory = resourceDirectory.join('/') + '/';
+    var resourceDirectory = Loader.prototype.extractUrlBase(url);
 
     var loader = new FileLoader(this.manager);
     loader.setResponseType('arraybuffer');
@@ -53714,13 +53701,13 @@ Object.assign(FBXLoader.prototype, {
 
 
   /**
-   * Parses an ASCII/Binary FBX file and returns a THREE.Group.
-   * THREE.Group will have an animations property of AnimationClips
-   * of the different animations within the FBX file.
-   * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
-   * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
-   * @returns {THREE.Group}
-   */
+    * Parses an ASCII/Binary FBX file and returns a THREE.Group.
+    * THREE.Group will have an animations property of AnimationClips
+    * of the different animations within the FBX file.
+    * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
+    * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
+    * @returns {THREE.Group}
+    */
   parse: function (FBXBuffer, resourceDirectory) {
 
     var FBXTree = void 0;
@@ -53734,12 +53721,12 @@ Object.assign(FBXLoader.prototype, {
 
       if (!isFbxFormatASCII(FBXText)) {
 
-        throw new Error('FBXLoader: Unknown format.');
+        throw new Error('THREE.FBXLoader: Unknown format.');
       }
 
       if (getFbxVersion(FBXText) < 7000) {
 
-        throw new Error('FBXLoader: FBX version not supported, FileVersion: ' + getFbxVersion(FBXText));
+        throw new Error('THREE.FBXLoader: FBX version not supported, FileVersion: ' + getFbxVersion(FBXText));
       }
 
       FBXTree = new TextParser().parse(FBXText);
@@ -53760,22 +53747,22 @@ Object.assign(FBXLoader.prototype, {
 });
 
 /**
- * Parses map of relationships between objects.
- * @param {{Connections: { properties: { connections: [number, number, string][]}}}} FBXTree
- * @returns {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
- */
+  * Parses map of relationships between objects.
+  * @param {{Connections: { properties: { connections: [number, number, string][]}}}} FBXTree
+  * @returns {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
+  */
 function parseConnections(FBXTree) {
 
   /**
-   * @type {Map<number, { parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
-   */
+    * @type {Map<number, { parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
+    */
   var connectionMap = new Map();
 
   if ('Connections' in FBXTree) {
 
     /**
-     * @type {[number, number, string][]}
-     */
+      * @type {[number, number, string][]}
+      */
     var connectionArray = FBXTree.Connections.properties.connections;
     for (var connectionArrayIndex = 0, connectionArrayLength = connectionArray.length; connectionArrayIndex < connectionArrayLength; ++connectionArrayIndex) {
 
@@ -53809,15 +53796,15 @@ function parseConnections(FBXTree) {
 }
 
 /**
- * Parses map of images referenced in FBXTree.
- * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
- * @returns {Map<number, string(image blob URL)>}
- */
+  * Parses map of images referenced in FBXTree.
+  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
+  * @returns {Map<number, string(image blob/data URL)>}
+  */
 function parseImages(FBXTree) {
 
   /**
-   * @type {Map<number, string(image blob URL)>}
-   */
+    * @type {Map<number, string(image blob/data URL)>}
+    */
   var imageMap = new Map();
 
   if ('Video' in FBXTree.Objects.subNodes) {
@@ -53841,13 +53828,12 @@ function parseImages(FBXTree) {
 }
 
 /**
- * @param {videoNode} videoNode - Node to get texture image information from.
- * @returns {string} - image blob URL
- */
+  * @param {videoNode} videoNode - Node to get texture image information from.
+  * @returns {string} - image blob/data URL
+  */
 function parseImage(videoNode) {
 
-  var buffer = videoNode.properties.Content;
-  var array = new Uint8Array(buffer);
+  var content = videoNode.properties.Content;
   var fileName = videoNode.properties.RelativeFilename || videoNode.properties.Filename;
   var extension = fileName.slice(fileName.lastIndexOf('.') + 1).toLowerCase();
 
@@ -53882,22 +53868,28 @@ function parseImage(videoNode) {
 
   }
 
+  if (typeof content === 'string') {
+
+    return 'data:' + type + ';base64,' + content;
+  }
+
+  var array = new Uint8Array(content);
   return window.URL.createObjectURL(new Blob([array], { type: type }));
 }
 
 /**
- * Parses map of textures referenced in FBXTree.
- * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
- * @param {THREE.TextureLoader} loader
- * @param {Map<number, string(image blob URL)>} imageMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {Map<number, THREE.Texture>}
- */
+  * Parses map of textures referenced in FBXTree.
+  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
+  * @param {THREE.TextureLoader} loader
+  * @param {Map<number, string(image blob/data URL)>} imageMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {Map<number, THREE.Texture>}
+  */
 function parseTextures(FBXTree, loader, imageMap, connections) {
 
   /**
-   * @type {Map<number, THREE.Texture>}
-   */
+    * @type {Map<number, THREE.Texture>}
+    */
   var textureMap = new Map();
 
   if ('Texture' in FBXTree.Objects.subNodes) {
@@ -53914,13 +53906,12 @@ function parseTextures(FBXTree, loader, imageMap, connections) {
 }
 
 /**
- * @param {textureNode} textureNode - Node to get texture information from.
- * @param {THREE.TextureLoader} loader
- * @param {Map<number, string(image blob URL)>} imageMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {THREE.Texture}
- */
-
+  * @param {textureNode} textureNode - Node to get texture information from.
+  * @param {THREE.TextureLoader} loader
+  * @param {Map<number, string(image blob/data URL)>} imageMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {THREE.Texture}
+  */
 function parseTexture(textureNode, loader, imageMap, connections) {
 
   var FBX_ID = textureNode.id;
@@ -53958,16 +53949,15 @@ function parseTexture(textureNode, loader, imageMap, connections) {
 
   var currentPath = loader.path;
 
-  if (fileName.indexOf('blob:') === 0) {
+  if (fileName.indexOf('blob:') === 0 || fileName.indexOf('data:') === 0) {
 
     loader.setPath(undefined);
   }
 
   /**
-   * @type {THREE.Texture}
-   */
+    * @type {THREE.Texture}
+    */
   var texture = loader.load(fileName);
-
   texture.name = name;
   texture.FBX_ID = FBX_ID;
 
@@ -53989,12 +53979,12 @@ function parseTexture(textureNode, loader, imageMap, connections) {
 }
 
 /**
- * Parses map of Material information.
- * @param {{Objects: {subNodes: {Material: Object.<number, FBXMaterialNode>}}}} FBXTree
- * @param {Map<number, THREE.Texture>} textureMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {Map<number, THREE.Material>}
- */
+  * Parses map of Material information.
+  * @param {{Objects: {subNodes: {Material: Object.<number, FBXMaterialNode>}}}} FBXTree
+  * @param {Map<number, THREE.Texture>} textureMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {Map<number, THREE.Material>}
+  */
 function parseMaterials(FBXTree, textureMap, connections) {
 
   var materialMap = new Map();
@@ -54005,7 +53995,6 @@ function parseMaterials(FBXTree, textureMap, connections) {
     for (var nodeID in materialNodes) {
 
       var material = parseMaterial(materialNodes[nodeID], textureMap, connections);
-      // materialMap.set( parseInt( nodeID ), material );
       if (material !== null) materialMap.set(parseInt(nodeID), material);
     }
   }
@@ -54014,12 +54003,12 @@ function parseMaterials(FBXTree, textureMap, connections) {
 }
 
 /**
- * Takes information from Material node and returns a generated THREE.Material
- * @param {FBXMaterialNode} materialNode
- * @param {Map<number, THREE.Texture>} textureMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {THREE.Material}
- */
+  * Takes information from Material node and returns a generated THREE.Material
+  * @param {FBXMaterialNode} materialNode
+  * @param {Map<number, THREE.Texture>} textureMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {THREE.Material}
+  */
 function parseMaterial(materialNode, textureMap, connections) {
 
   var FBX_ID = materialNode.id;
@@ -54064,21 +54053,25 @@ function parseMaterial(materialNode, textureMap, connections) {
 }
 
 /**
- * @typedef {{Diffuse: FBXVector3, Specular: FBXVector3, Shininess: FBXValue, Emissive: FBXVector3, EmissiveFactor: FBXValue, Opacity: FBXValue}} FBXMaterialProperties
- */
+  * @typedef {{Diffuse: FBXVector3, Specular: FBXVector3, Shininess: FBXValue, Emissive: FBXVector3, EmissiveFactor: FBXValue, Opacity: FBXValue}} FBXMaterialProperties
+  */
 /**
- * @typedef {{color: THREE.Color=, specular: THREE.Color=, shininess: number=, emissive: THREE.Color=, emissiveIntensity: number=, opacity: number=, transparent: boolean=, map: THREE.Texture=}} THREEMaterialParameterPack
- */
+  * @typedef {{color: THREE.Color=, specular: THREE.Color=, shininess: number=, emissive: THREE.Color=, emissiveIntensity: number=, opacity: number=, transparent: boolean=, map: THREE.Texture=}} THREEMaterialParameterPack
+  */
 /**
- * @param {FBXMaterialProperties} properties
- * @param {Map<number, THREE.Texture>} textureMap
- * @param {{ID: number, relationship: string}[]} childrenRelationships
- * @returns {THREEMaterialParameterPack}
- */
+  * @param {FBXMaterialProperties} properties
+  * @param {Map<number, THREE.Texture>} textureMap
+  * @param {{ID: number, relationship: string}[]} childrenRelationships
+  * @returns {THREEMaterialParameterPack}
+  */
 function parseParameters(properties, textureMap, childrenRelationships) {
 
   var parameters = {};
 
+  if (properties.BumpFactor) {
+
+    parameters.bumpScale = parseFloat(properties.BumpFactor.value);
+  }
   if (properties.Diffuse) {
 
     parameters.color = parseColor(properties.Diffuse);
@@ -54097,7 +54090,7 @@ function parseParameters(properties, textureMap, childrenRelationships) {
   }
   if (properties.EmissiveFactor) {
 
-    parameters.emissiveIntensity = properties.EmissiveFactor.value;
+    parameters.emissiveIntensity = parseFloat(properties.EmissiveFactor.value);
   }
   if (properties.Opacity) {
 
@@ -54131,20 +54124,12 @@ function parseParameters(properties, textureMap, childrenRelationships) {
         parameters.normalMap = textureMap.get(relationship.ID);
         break;
 
-      case ' "EmissiveColor':
-      case 'EmissiveColor':
-        parameters.emissiveMap = textureMap.get(relationship.ID);
-        break;
-
-      case ' "SpecularColor':
-      case 'SpecularColor':
-        parameters.specularMap = textureMap.get(relationship.ID);
-        break;
-
-      case ' "AmbientColor':
       case 'AmbientColor':
+      case 'EmissiveColor':
+      case ' "AmbientColor':
+      case ' "EmissiveColor':
       default:
-        console.warn('Unknown texture application of type ' + type + ', skipping texture');
+        console.warn('THREE.FBXLoader: Unknown texture application of type %s, skipping texture.', type);
         break;
 
     }
@@ -54154,11 +54139,11 @@ function parseParameters(properties, textureMap, childrenRelationships) {
 }
 
 /**
- * Generates map of Skeleton-like objects for use later when generating and binding skeletons.
- * @param {{Objects: {subNodes: {Deformer: Object.<number, FBXSubDeformerNode>}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>}
- */
+  * Generates map of Skeleton-like objects for use later when generating and binding skeletons.
+  * @param {{Objects: {subNodes: {Deformer: Object.<number, FBXSubDeformerNode>}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>}
+  */
 function parseDeformers(FBXTree, connections) {
 
   var deformers = {};
@@ -54186,11 +54171,11 @@ function parseDeformers(FBXTree, connections) {
 }
 
 /**
- * Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections and an object containing SubDeformer nodes.
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} connections
- * @param {Object.<number, FBXSubDeformerNode>} DeformerNodes
- * @returns {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}}
- */
+  * Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections and an object containing SubDeformer nodes.
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} connections
+  * @param {Object.<number, FBXSubDeformerNode>} DeformerNodes
+  * @returns {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}}
+  */
 function parseSkeleton(connections, DeformerNodes) {
 
   var subDeformers = {};
@@ -54228,12 +54213,12 @@ function parseSkeleton(connections, DeformerNodes) {
 }
 
 /**
- * Generates Buffer geometries from geometry information in FBXTree, and generates map of THREE.BufferGeometries
- * @param {{Objects: {subNodes: {Geometry: Object.<number, FBXGeometryNode}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
- * @returns {Map<number, THREE.BufferGeometry>}
- */
+  * Generates Buffer geometries from geometry information in FBXTree, and generates map of THREE.BufferGeometries
+  * @param {{Objects: {subNodes: {Geometry: Object.<number, FBXGeometryNode}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
+  * @returns {Map<number, THREE.BufferGeometry>}
+  */
 function parseGeometries(FBXTree, connections, deformers) {
 
   var geometryMap = new Map();
@@ -54254,12 +54239,12 @@ function parseGeometries(FBXTree, connections, deformers) {
 }
 
 /**
- * Generates BufferGeometry from FBXGeometryNode.
- * @param {FBXGeometryNode} geometryNode
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers
- * @returns {THREE.BufferGeometry}
- */
+  * Generates BufferGeometry from FBXGeometryNode.
+  * @param {FBXGeometryNode} geometryNode
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers
+  * @returns {THREE.BufferGeometry}
+  */
 function parseGeometry(geometryNode, relationships, deformers) {
 
   switch (geometryNode.attrType) {
@@ -54276,12 +54261,12 @@ function parseGeometry(geometryNode, relationships, deformers) {
 }
 
 /**
- * Specialty function for parsing Mesh based Geometry Nodes.
- * @param {FBXGeometryNode} geometryNode
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships - Object representing relationships between specific geometry node and other nodes.
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers - Map object of deformers and subDeformers by ID.
- * @returns {THREE.BufferGeometry}
- */
+  * Specialty function for parsing Mesh based Geometry Nodes.
+  * @param {FBXGeometryNode} geometryNode
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships - Object representing relationships between specific geometry node and other nodes.
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers - Map object of deformers and subDeformers by ID.
+  * @returns {THREE.BufferGeometry}
+  */
 function parseMeshGeometry(geometryNode, relationships, deformers) {
 
   for (var i = 0; i < relationships.children.length; ++i) {
@@ -54294,9 +54279,9 @@ function parseMeshGeometry(geometryNode, relationships, deformers) {
 }
 
 /**
- * @param {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}} deformer - Skeleton representation for geometry instance.
- * @returns {THREE.BufferGeometry}
- */
+  * @param {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}} deformer - Skeleton representation for geometry instance.
+  * @returns {THREE.BufferGeometry}
+  */
 function genGeometry(geometryNode, deformer) {
 
   var geometry = new Geometry$1();
@@ -54315,7 +54300,13 @@ function genGeometry(geometryNode, deformer) {
 
   if (subNodes.LayerElementUV) {
 
-    var uvInfo = getUVs(subNodes.LayerElementUV[0]);
+    var uvInfo = [];
+    var i = 0;
+    while (subNodes.LayerElementUV[i]) {
+
+      uvInfo.push(getUVs(subNodes.LayerElementUV[i]));
+      i++;
+    }
   }
 
   if (subNodes.LayerElementColor) {
@@ -54394,7 +54385,7 @@ function genGeometry(geometryNode, deformer) {
 
         if (!displayedWeightsWarning) {
 
-          console.warn('FBXLoader: Vertex has more than 4 skinning weights assigned to vertex.  Deleting additional weights.');
+          console.warn('THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights.');
           displayedWeightsWarning = true;
         }
 
@@ -54441,7 +54432,12 @@ function genGeometry(geometryNode, deformer) {
 
     if (uvInfo) {
 
-      vertex.uv.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, uvInfo));
+      var uvTemp = new Vector2();
+
+      for (var i = 0; i < uvInfo.length; i++) {
+
+        vertex.uv.push(uvTemp.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, uvInfo[i])));
+      }
     }
 
     if (colorInfo) {
@@ -54476,8 +54472,8 @@ function genGeometry(geometryNode, deformer) {
   }
 
   /**
-   * @type {{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-   */
+    * @type {{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
+    */
   var bufferInfo = geometry.flattenToBuffers();
 
   var geo = new BufferGeometry();
@@ -54488,10 +54484,20 @@ function genGeometry(geometryNode, deformer) {
 
     geo.addAttribute('normal', new Float32BufferAttribute(bufferInfo.normalBuffer, 3));
   }
-  if (bufferInfo.uvBuffer.length > 0) {
+  if (bufferInfo.uvBuffers.length > 0) {
 
-    geo.addAttribute('uv', new Float32BufferAttribute(bufferInfo.uvBuffer, 2));
+    for (var i = 0; i < bufferInfo.uvBuffers.length; i++) {
+
+      var name = 'uv' + (i + 1).toString();
+      if (i == 0) {
+
+        name = 'uv';
+      }
+
+      geo.addAttribute(name, new Float32BufferAttribute(bufferInfo.uvBuffers[i], 2));
+    }
   }
+
   if (subNodes.LayerElementColor) {
 
     geo.addAttribute('color', new Float32BufferAttribute(bufferInfo.colorBuffer, 3));
@@ -54527,10 +54533,10 @@ function genGeometry(geometryNode, deformer) {
 }
 
 /**
- * Parses normal information for geometry.
- * @param {FBXGeometryNode} geometryNode
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses normal information for geometry.
+  * @param {FBXGeometryNode} geometryNode
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getNormals(NormalNode) {
 
   var mappingType = NormalNode.properties.MappingInformationType;
@@ -54558,10 +54564,10 @@ function getNormals(NormalNode) {
 }
 
 /**
- * Parses UV information for geometry.
- * @param {FBXGeometryNode} geometryNode
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses UV information for geometry.
+  * @param {FBXGeometryNode} geometryNode
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getUVs(UVNode) {
 
   var mappingType = UVNode.properties.MappingInformationType;
@@ -54583,10 +54589,10 @@ function getUVs(UVNode) {
 }
 
 /**
- * Parses Vertex Color information for geometry.
- * @param {FBXGeometryNode} geometryNode
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses Vertex Color information for geometry.
+  * @param {FBXGeometryNode} geometryNode
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getColors(ColorNode) {
 
   var mappingType = ColorNode.properties.MappingInformationType;
@@ -54608,10 +54614,10 @@ function getColors(ColorNode) {
 }
 
 /**
- * Parses material application information for geometry.
- * @param {FBXGeometryNode}
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses material application information for geometry.
+  * @param {FBXGeometryNode}
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getMaterials(MaterialNode) {
 
   var mappingType = MaterialNode.properties.MappingInformationType;
@@ -54650,13 +54656,13 @@ function getMaterials(MaterialNode) {
 }
 
 /**
- * Function uses the infoObject and given indices to return value array of object.
- * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
- * @param {number} polygonIndex - Index of polygon in geometry.
- * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
- * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
- * @returns {number[]}
- */
+  * Function uses the infoObject and given indices to return value array of object.
+  * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+  * @param {number} polygonIndex - Index of polygon in geometry.
+  * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+  * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+  * @returns {number[]}
+  */
 
 var dataArray = [];
 
@@ -54665,13 +54671,13 @@ var GetData = {
   ByPolygonVertex: {
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonVertexIndex * infoObject.dataSize;
@@ -54683,13 +54689,13 @@ var GetData = {
 
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonVertexIndex];
@@ -54704,13 +54710,13 @@ var GetData = {
   ByPolygon: {
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonIndex * infoObject.dataSize;
@@ -54722,13 +54728,13 @@ var GetData = {
 
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonIndex];
@@ -54754,13 +54760,13 @@ var GetData = {
   AllSame: {
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = infoObject.indices[0] * infoObject.dataSize;
@@ -54779,16 +54785,16 @@ function getData(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 }
 
 /**
- * Specialty function for parsing NurbsCurve based Geometry Nodes.
- * @param {FBXGeometryNode} geometryNode
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
- * @returns {THREE.BufferGeometry}
- */
+  * Specialty function for parsing NurbsCurve based Geometry Nodes.
+  * @param {FBXGeometryNode} geometryNode
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
+  * @returns {THREE.BufferGeometry}
+  */
 function parseNurbsGeometry(geometryNode) {
 
   if (NURBSCurve === undefined) {
 
-    console.error('THREE.FBXLoader relies on NURBSCurve for any nurbs present in the model.  Nurbs will show up as empty geometry.');
+    console.error('THREE.FBXLoader: The loader relies on THREE.NURBSCurve for any nurbs present in the model. Nurbs will show up as empty geometry.');
     return new BufferGeometry();
   }
 
@@ -54796,7 +54802,7 @@ function parseNurbsGeometry(geometryNode) {
 
   if (isNaN(order)) {
 
-    console.error('FBXLoader: Invalid Order ' + geometryNode.properties.Order + ' given for geometry ID: ' + geometryNode.id);
+    console.error('THREE.FBXLoader: Invalid Order %s given for geometry ID: %s', geometryNode.properties.Order, geometryNode.id);
     return new BufferGeometry();
   }
 
@@ -54845,14 +54851,14 @@ function parseNurbsGeometry(geometryNode) {
 }
 
 /**
- * Finally generates Scene graph and Scene graph Objects.
- * @param {{Objects: {subNodes: {Model: Object.<number, FBXModelNode>}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
- * @param {Map<number, THREE.BufferGeometry>} geometryMap
- * @param {Map<number, THREE.Material>} materialMap
- * @returns {THREE.Group}
- */
+  * Finally generates Scene graph and Scene graph Objects.
+  * @param {{Objects: {subNodes: {Model: Object.<number, FBXModelNode>}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
+  * @param {Map<number, THREE.BufferGeometry>} geometryMap
+  * @param {Map<number, THREE.Material>} materialMap
+  * @returns {THREE.Group}
+  */
 function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
   var sceneGraph = new Group();
@@ -54860,13 +54866,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   var ModelNode = FBXTree.Objects.subNodes.Model;
 
   /**
-   * @type {Array.<THREE.Object3D>}
-   */
+    * @type {Array.<THREE.Object3D>}
+    */
   var modelArray = [];
 
   /**
-   * @type {Map.<number, THREE.Object3D>}
-   */
+    * @type {Map.<number, THREE.Object3D>}
+    */
   var modelMap = new Map();
 
   for (var nodeID in ModelNode) {
@@ -54901,20 +54907,226 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
       switch (node.attrType) {
 
+        case 'Camera':
+          /* ***********
+          * Supported camera types:
+          * PerspectiveCamera
+          * OrthographicCamera
+          ************** */
+          var cameraAttribute;
+
+          for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
+
+            var childID = conns.children[childrenIndex].ID;
+
+            var attr = FBXTree.Objects.subNodes.NodeAttribute[childID];
+
+            if (attr !== undefined && attr.properties !== undefined) {
+
+              cameraAttribute = attr.properties;
+            }
+          }
+
+          if (cameraAttribute === undefined) {
+
+            model = new Object3D();
+          } else {
+
+            var type = 0;
+            if (cameraAttribute.CameraProjectionType !== undefined && (cameraAttribute.CameraProjectionType.value === '1' || cameraAttribute.CameraProjectionType.value === 1)) {
+
+              type = 1;
+            }
+
+            var nearClippingPlane = 1;
+            if (cameraAttribute.NearPlane !== undefined) {
+
+              nearClippingPlane = cameraAttribute.NearPlane.value / 1000;
+            }
+
+            var farClippingPlane = 1000;
+            if (cameraAttribute.FarPlane !== undefined) {
+
+              farClippingPlane = cameraAttribute.FarPlane.value / 1000;
+            }
+
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+
+            if (cameraAttribute.AspectWidth !== undefined && cameraAttribute.AspectHeight !== undefined) {
+
+              width = parseFloat(cameraAttribute.AspectWidth.value);
+              height = parseFloat(cameraAttribute.AspectHeight.value);
+            }
+
+            var aspect = width / height;
+
+            var fov = 45;
+            if (cameraAttribute.FieldOfView !== undefined) {
+
+              fov = parseFloat(cameraAttribute.FieldOfView.value);
+            }
+
+            switch (type) {
+
+              case '0': // Perspective
+              case 0:
+                model = new PerspectiveCamera(fov, aspect, nearClippingPlane, farClippingPlane);
+                break;
+
+              case '1': // Orthographic
+              case 1:
+                model = new OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, nearClippingPlane, farClippingPlane);
+                break;
+
+              default:
+                console.warn('THREE.FBXLoader: Unknown camera type ' + type + '.');
+                model = new Object3D();
+                break;
+
+            }
+          }
+
+          break;
+
+        case 'Light':
+          /* ***********
+          * Supported light types:
+          * DirectionalLight
+          * PointLight
+          * SpotLight
+          ************** */
+
+          var lightAttribute;
+
+          for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
+
+            var childID = conns.children[childrenIndex].ID;
+
+            var attr = FBXTree.Objects.subNodes.NodeAttribute[childID];
+
+            if (attr !== undefined && attr.properties !== undefined) {
+
+              lightAttribute = attr.properties;
+            }
+          }
+
+          if (lightAttribute === undefined) {
+
+            model = new Object3D();
+          } else {
+
+            var type;
+
+            // LightType can be undefined for Point lights
+            if (lightAttribute.LightType === undefined) {
+
+              type = 0;
+            } else {
+
+              type = lightAttribute.LightType.value;
+            }
+
+            var color = 0xffffff;
+
+            if (lightAttribute.Color !== undefined) {
+
+              var temp = lightAttribute.Color.value.split(',');
+
+              var r = parseFloat(temp[0]);
+              var g = parseFloat(temp[1]);
+              var b = parseFloat(temp[1]);
+
+              color = new Color(r, g, b);
+            }
+
+            var intensity = lightAttribute.Intensity === undefined ? 1 : lightAttribute.Intensity.value / 100;
+
+            // light disabled
+            if (lightAttribute.CastLightOnObject !== undefined && (lightAttribute.CastLightOnObject.value === '0' || lightAttribute.CastLightOnObject.value === 0)) {
+
+              intensity = 0;
+            }
+
+            var distance = 0;
+            if (lightAttribute.FarAttenuationEnd !== undefined) {
+
+              if (lightAttribute.EnableFarAttenuation !== undefined && (lightAttribute.EnableFarAttenuation.value === '0' || lightAttribute.EnableFarAttenuation.value === 0)) {
+
+                distance = 0;
+              } else {
+
+                distance = lightAttribute.FarAttenuationEnd.value / 1000;
+              }
+            }
+
+            // TODO
+            // could be calculated linearly from FarAttenuationStart to FarAttenuationEnd?
+            var decay = 1;
+
+            switch (type) {
+
+              case '0': // Point
+              case 0:
+                model = new PointLight(color, intensity, distance, decay);
+                break;
+
+              case '1': // Directional
+              case 1:
+                model = new DirectionalLight(color, intensity);
+                break;
+
+              case '2': // Spot
+              case 2:
+                var angle = Math.PI / 3;
+
+                if (lightAttribute.InnerAngle !== undefined) {
+
+                  angle = _Math.degToRad(lightAttribute.InnerAngle.value);
+                }
+
+                var penumbra = 0;
+                if (lightAttribute.OuterAngle !== undefined) {
+
+                  // TODO: this is not correct - FBX calculates outer and inner angle in degrees
+                  // with OuterAngle > InnerAngle && OuterAngle <= Math.PI
+                  // while three.js uses a penumbra between (0, 1) to attenuate the inner angle
+                  penumbra = _Math.degToRad(lightAttribute.OuterAngle.value);
+                  penumbra = Math.max(penumbra, 1);
+                }
+
+                model = new SpotLight(color, intensity, distance, angle, penumbra, decay);
+                break;
+
+              default:
+                console.warn('THREE.FBXLoader: Unknown light type ' + lightAttribute.LightType.value + ', defaulting to a THREE.PointLight.');
+                model = new PointLight(color, intensity);
+                break;
+
+            }
+
+            if (lightAttribute.CastShadows !== undefined && (lightAttribute.CastShadows.value === '1' || lightAttribute.CastShadows.value === 1)) {
+
+              model.castShadow = true;
+            }
+          }
+
+          break;
+
         case 'Mesh':
           /**
-           * @type {?THREE.BufferGeometry}
-           */
+            * @type {?THREE.BufferGeometry}
+            */
           var geometry = null;
 
           /**
-           * @type {THREE.MultiMaterial|THREE.Material}
-           */
+            * @type {THREE.MultiMaterial|THREE.Material}
+            */
           var material = null;
 
           /**
-           * @type {Array.<THREE.Material>}
-           */
+            * @type {Array.<THREE.Material>}
+            */
           var materials = [];
 
           for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
@@ -55014,12 +55226,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
     if ('Lcl_Scaling' in node.properties) {
 
-      var scaleFactor = parseFloatArray(node.properties.Lcl_Scaling.value);
-
-      model.scale.fromArray(scaleFactor);
-
-      // original line
-      // model.scale.fromArray( parseFloatArray( node.properties.Lcl_Scaling.value ) );
+      model.scale.fromArray(parseFloatArray(node.properties.Lcl_Scaling.value));
     }
 
     if ('PreRotation' in node.properties) {
@@ -55031,19 +55238,52 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
       model.rotation.setFromQuaternion(preRotations, 'ZYX');
     }
 
-    // https://github.com/mrdoob/three.js/issues/11895
+    // allow transformed pivots - see https://github.com/mrdoob/three.js/issues/11895
     if ('GeometricTranslation' in node.properties) {
-      (function () {
 
-        var array = node.properties.GeometricTranslation.value;
-        model.traverse(function (child) {
+      var array = node.properties.GeometricTranslation.value;
 
-          if (child.geometry) {
+      model.traverse(function (child) {
 
-            child.geometry.translate(array[0], array[1], array[2]);
+        if (child.geometry) {
+
+          child.geometry.translate(array[0], array[1], array[2]);
+        }
+      });
+    }
+
+    if ('LookAtProperty' in node.properties) {
+
+      var conns = connections.get(model.FBX_ID);
+
+      for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
+
+        var child = conns.children[childrenIndex];
+
+        if (child.relationship === 'LookAtProperty' || child.relationship === ' "LookAtProperty') {
+
+          var lookAtTarget = FBXTree.Objects.subNodes.Model[child.ID];
+
+          if ('Lcl_Translation' in lookAtTarget.properties) {
+
+            var pos = lookAtTarget.properties.Lcl_Translation.value.split(',').map(function (val) {
+
+              return parseFloat(val);
+            });
+
+            // DirectionalLight, SpotLight
+            if (model.target !== undefined) {
+
+              model.target.position.set(pos[0], pos[1], pos[2]);
+              sceneGraph.add(model.target);
+            } else {
+              // Cameras and other Object3Ds
+
+              model.lookAt(new Vector3(pos[0], pos[1], pos[2]));
+            }
           }
-        });
-      })();
+        }
+      }
     }
 
     var conns = connections.get(model.FBX_ID);
@@ -55104,8 +55344,8 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
       var subDeformerIndex = subDeformer.index;
 
       /**
-       * @type {THREE.Bone}
-       */
+        * @type {THREE.Bone}
+        */
       var bone = deformer.bones[subDeformerIndex];
       if (!worldMatrices.has(bone.FBX_ID)) {
 
@@ -55159,14 +55399,29 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
   addAnimations(sceneGraph, animations);
 
+  // Parse ambient color - if it's not set to black (default), create an ambient light
+  if ('GlobalSettings' in FBXTree && 'AmbientColor' in FBXTree.GlobalSettings.properties) {
+
+    var ambientColor = FBXTree.GlobalSettings.properties.AmbientColor.value;
+    var r = ambientColor[0];
+    var g = ambientColor[1];
+    var b = ambientColor[2];
+
+    if (r !== 0 || g !== 0 || b !== 0) {
+
+      var color = new Color(r, g, b);
+      sceneGraph.add(new AmbientLight(color, 1));
+    }
+  }
+
   return sceneGraph;
 }
 
 /**
- * Parses animation information from FBXTree and generates an AnimationInfoObject.
- * @param {{Objects: {subNodes: {AnimationCurveNode: any, AnimationCurve: any, AnimationLayer: any, AnimationStack: any}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- */
+  * Parses animation information from FBXTree and generates an AnimationInfoObject.
+  * @param {{Objects: {subNodes: {AnimationCurveNode: any, AnimationCurve: any, AnimationLayer: any, AnimationStack: any}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  */
 function parseAnimations(FBXTree, connections, sceneGraph) {
 
   var rawNodes = FBXTree.Objects.subNodes.AnimationCurveNode;
@@ -55175,373 +55430,373 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   var rawStacks = FBXTree.Objects.subNodes.AnimationStack;
 
   /**
-   * @type {{
-  		 curves: Map<number, {
-  		 T: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			};
-  		},
-  			R: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			};
-  		},
-  			S: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			};
-  		}
-  		}>,
-  		layers: Map<number, {
-  		T: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			},
-  		},
-  		R: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			},
-  		},
-  		S: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			},
-  		}
-  		}[]>,
-  		stacks: Map<number, {
-  			name: string,
-  			layers: {
-  			T: {
-  				id: number;
-  				attr: string;
-  				internalID: number;
-  				attrX: boolean;
-  				attrY: boolean;
-  				attrZ: boolean;
-  				containerBoneID: number;
-  				containerID: number;
-  				curves: {
-  					x: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					y: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					z: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  				};
-  			};
-  			R: {
-  				id: number;
-  				attr: string;
-  				internalID: number;
-  				attrX: boolean;
-  				attrY: boolean;
-  				attrZ: boolean;
-  				containerBoneID: number;
-  				containerID: number;
-  				curves: {
-  					x: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					y: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					z: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  				};
-  			};
-  			S: {
-  				id: number;
-  				attr: string;
-  				internalID: number;
-  				attrX: boolean;
-  				attrY: boolean;
-  				attrZ: boolean;
-  				containerBoneID: number;
-  				containerID: number;
-  				curves: {
-  					x: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					y: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					z: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  				};
-  			};
-  		}[][],
-  		length: number,
-  		frames: number }>,
-  		length: number,
-  		fps: number,
-  		frames: number
-  	}}
-  	*/
+    * @type {{
+        curves: Map<number, {
+        T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      },
+        R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      },
+        S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      }
+      }>,
+      layers: Map<number, {
+      T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      }
+      }[]>,
+      stacks: Map<number, {
+        name: string,
+        layers: {
+        T: {
+          id: number;
+          attr: string;
+          internalID: number;
+          attrX: boolean;
+          attrY: boolean;
+          attrZ: boolean;
+          containerBoneID: number;
+          containerID: number;
+          curves: {
+            x: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            y: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            z: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+          };
+        };
+        R: {
+          id: number;
+          attr: string;
+          internalID: number;
+          attrX: boolean;
+          attrY: boolean;
+          attrZ: boolean;
+          containerBoneID: number;
+          containerID: number;
+          curves: {
+            x: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            y: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            z: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+          };
+        };
+        S: {
+          id: number;
+          attr: string;
+          internalID: number;
+          attrX: boolean;
+          attrY: boolean;
+          attrZ: boolean;
+          containerBoneID: number;
+          containerID: number;
+          curves: {
+            x: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            y: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            z: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+          };
+        };
+      }[][],
+      length: number,
+      frames: number }>,
+      length: number,
+      fps: number,
+      frames: number
+    }}
+    */
   var returnObject = {
     curves: new Map(),
     layers: {},
@@ -55552,17 +55807,17 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   };
 
   /**
-   * @type {Array.<{
-  		id: number;
-  		attr: string;
-  		internalID: number;
-  		attrX: boolean;
-  		attrY: boolean;
-  		attrZ: boolean;
-  		containerBoneID: number;
-  		containerID: number;
-  	}>}
-  	*/
+    * @type {Array.<{
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+    }>}
+    */
   var animationCurveNodes = [];
   for (var nodeID in rawNodes) {
 
@@ -55574,46 +55829,46 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   }
 
   /**
-   * @type {Map.<number, {
-  		id: number,
-  		attr: string,
-  		internalID: number,
-  		attrX: boolean,
-  		attrY: boolean,
-  		attrZ: boolean,
-  		containerBoneID: number,
-  		containerID: number,
-  		curves: {
-  			x: {
-  				version: any,
-  				id: number,
-  				internalID: number,
-  				times: number[],
-  				values: number[],
-  				attrFlag: number[],
-  				attrData: number[],
-  			},
-  			y: {
-  				version: any,
-  				id: number,
-  				internalID: number,
-  				times: number[],
-  				values: number[],
-  				attrFlag: number[],
-  				attrData: number[],
-  			},
-  			z: {
-  				version: any,
-  				id: number,
-  				internalID: number,
-  				times: number[],
-  				values: number[],
-  				attrFlag: number[],
-  				attrData: number[],
-  			}
-  		}
-  	}>}
-  	*/
+    * @type {Map.<number, {
+      id: number,
+      attr: string,
+      internalID: number,
+      attrX: boolean,
+      attrY: boolean,
+      attrZ: boolean,
+      containerBoneID: number,
+      containerID: number,
+      curves: {
+        x: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+        },
+        y: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+        },
+        z: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+        }
+      }
+    }>}
+    */
   var tmpMap = new Map();
   for (var animationCurveNodeIndex = 0; animationCurveNodeIndex < animationCurveNodes.length; ++animationCurveNodeIndex) {
 
@@ -55625,16 +55880,16 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   }
 
   /**
-   * @type {{
-  		version: any,
-  		id: number,
-  		internalID: number,
-  		times: number[],
-  		values: number[],
-  		attrFlag: number[],
-  		attrData: number[],
-  	}[]}
-  	*/
+    * @type {{
+      version: any,
+      id: number,
+      internalID: number,
+      times: number[],
+      values: number[],
+      attrFlag: number[],
+      attrData: number[],
+    }[]}
+    */
   var animationCurves = [];
   for (nodeID in rawCurves) {
 
@@ -55739,126 +55994,126 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   for (var nodeID in rawLayers) {
 
     /**
-     * @type {{
-    	T: {
-    		id: number;
-    		attr: string;
-    		internalID: number;
-    		attrX: boolean;
-    		attrY: boolean;
-    		attrZ: boolean;
-    		containerBoneID: number;
-    		containerID: number;
-    		curves: {
-    			x: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			y: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			z: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    		},
-    	},
-    	R: {
-    		id: number;
-    		attr: string;
-    		internalID: number;
-    		attrX: boolean;
-    		attrY: boolean;
-    		attrZ: boolean;
-    		containerBoneID: number;
-    		containerID: number;
-    		curves: {
-    			x: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			y: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			z: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    		},
-    	},
-    	S: {
-    		id: number;
-    		attr: string;
-    		internalID: number;
-    		attrX: boolean;
-    		attrY: boolean;
-    		attrZ: boolean;
-    		containerBoneID: number;
-    		containerID: number;
-    		curves: {
-    			x: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			y: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			z: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    		},
-    	}
-    	}[]}
-    	*/
+      * @type {{
+      T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      }
+      }[]}
+      */
     var layer = [];
     var children = connections.get(parseInt(nodeID)).children;
 
@@ -55927,54 +56182,54 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
 }
 
 /**
- * @param {Object} FBXTree
- * @param {{id: number, attrName: string, properties: Object<string, any>}} animationCurveNode
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @param {{skeleton: {bones: {FBX_ID: number}[]}}} sceneGraph
- */
+  * @param {Object} FBXTree
+  * @param {{id: number, attrName: string, properties: Object<string, any>}} animationCurveNode
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @param {{skeleton: {bones: {FBX_ID: number}[]}}} sceneGraph
+  */
 function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph) {
 
   var rawModels = FBXTree.Objects.subNodes.Model;
 
   var returnObject = {
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     id: animationCurveNode.id,
 
     /**
-     * @type {string}
-     */
+      * @type {string}
+      */
     attr: animationCurveNode.attrName,
 
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     internalID: animationCurveNode.id,
 
     /**
-     * @type {boolean}
-     */
+      * @type {boolean}
+      */
     attrX: false,
 
     /**
-     * @type {boolean}
-     */
+      * @type {boolean}
+      */
     attrY: false,
 
     /**
-     * @type {boolean}
-     */
+      * @type {boolean}
+      */
     attrZ: false,
 
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     containerBoneID: -1,
 
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     containerID: -1,
 
     curves: {
@@ -55984,8 +56239,8 @@ function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph
     },
 
     /**
-     * @type {number[]}
-     */
+      * @type {number[]}
+      */
     preRotations: null
   };
 
@@ -56037,8 +56292,8 @@ function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph
 }
 
 /**
- * @param {{id: number, subNodes: {KeyTime: {properties: {a: string}}, KeyValueFloat: {properties: {a: string}}, KeyAttrFlags: {properties: {a: string}}, KeyAttrDataFloat: {properties: {a: string}}}}} animationCurve
- */
+  * @param {{id: number, subNodes: {KeyTime: {properties: {a: string}}, KeyValueFloat: {properties: {a: string}}, KeyAttrFlags: {properties: {a: string}}, KeyAttrDataFloat: {properties: {a: string}}}}} animationCurve
+  */
 function parseAnimationCurve(animationCurve) {
 
   return {
@@ -56054,128 +56309,128 @@ function parseAnimationCurve(animationCurve) {
 }
 
 /**
- * Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
- * than the max or min respectively.
- * @param {{
-			T: {
-					id: number,
-					attr: string,
-					internalID: number,
-					attrX: boolean,
-					attrY: boolean,
-					attrZ: boolean,
-					containerBoneID: number,
-					containerID: number,
-					curves: {
-							x: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							y: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							z: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-					},
-			},
-			R: {
-					id: number,
-					attr: string,
-					internalID: number,
-					attrX: boolean,
-					attrY: boolean,
-					attrZ: boolean,
-					containerBoneID: number,
-					containerID: number,
-					curves: {
-							x: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							y: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							z: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-					},
-			},
-			S: {
-					id: number,
-					attr: string,
-					internalID: number,
-					attrX: boolean,
-					attrY: boolean,
-					attrZ: boolean,
-					containerBoneID: number,
-					containerID: number,
-					curves: {
-							x: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							y: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							z: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-					},
-			},
-	}} layer
-	*/
+  * Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
+  * than the max or min respectively.
+  * @param {{
+      T: {
+          id: number,
+          attr: string,
+          internalID: number,
+          attrX: boolean,
+          attrY: boolean,
+          attrZ: boolean,
+          containerBoneID: number,
+          containerID: number,
+          curves: {
+              x: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              y: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              z: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+          },
+      },
+      R: {
+          id: number,
+          attr: string,
+          internalID: number,
+          attrX: boolean,
+          attrY: boolean,
+          attrZ: boolean,
+          containerBoneID: number,
+          containerID: number,
+          curves: {
+              x: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              y: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              z: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+          },
+      },
+      S: {
+          id: number,
+          attr: string,
+          internalID: number,
+          attrX: boolean,
+          attrY: boolean,
+          attrZ: boolean,
+          containerBoneID: number,
+          containerID: number,
+          curves: {
+              x: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              y: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              z: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+          },
+      },
+  }} layer
+  */
 function getCurveNodeMaxMinTimeStamps(layer, timestamps) {
 
   if (layer.R) {
@@ -56193,38 +56448,38 @@ function getCurveNodeMaxMinTimeStamps(layer, timestamps) {
 }
 
 /**
- * Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
- * exceeds the maximum or minimum.
- * @param {{
-			x: {
-					version: any,
-					id: number,
-					internalID: number,
-					times: number[],
-					values: number[],
-					attrFlag: number[],
-					attrData: number[],
-			},
-			y: {
-					version: any,
-					id: number,
-					internalID: number,
-					times: number[],
-					values: number[],
-					attrFlag: number[],
-					attrData: number[],
-			},
-			z: {
-					version: any,
-					id: number,
-					internalID: number,
-					times: number[],
-					values: number[],
-					attrFlag: number[],
-					attrData: number[],
-			}
-	}} curve
-	*/
+  * Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
+  * exceeds the maximum or minimum.
+  * @param {{
+      x: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+      },
+      y: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+      },
+      z: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+      }
+  }} curve
+  */
 function getCurveMaxMinTimeStamp(curve, timestamps) {
 
   if (curve.x) {
@@ -56242,9 +56497,9 @@ function getCurveMaxMinTimeStamp(curve, timestamps) {
 }
 
 /**
- * Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
- * @param {{times: number[]}} axis
- */
+  * Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
+  * @param {{times: number[]}} axis
+  */
 function getCurveAxisMaxMinTimeStamps(axis, timestamps) {
 
   timestamps.max = axis.times[axis.times.length - 1] > timestamps.max ? axis.times[axis.times.length - 1] : timestamps.max;
@@ -56252,375 +56507,375 @@ function getCurveAxisMaxMinTimeStamps(axis, timestamps) {
 }
 
 /**
- * @param {{
-	curves: Map<number, {
-		T: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		R: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		S: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-	}>;
-	layers: Map<number, {
-		T: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		R: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		S: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-	}[]>;
-	stacks: Map<number, {
-		name: string;
-		layers: {
-			T: {
-				id: number;
-				attr: string;
-				internalID: number;
-				attrX: boolean;
-				attrY: boolean;
-				attrZ: boolean;
-				containerBoneID: number;
-				containerID: number;
-				curves: {
-					x: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					y: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					z: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-				};
-			};
-			R: {
-				id: number;
-				attr: string;
-				internalID: number;
-				attrX: boolean;
-				attrY: boolean;
-				attrZ: boolean;
-				containerBoneID: number;
-				containerID: number;
-				curves: {
-					x: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					y: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					z: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-				};
-			};
-			S: {
-				id: number;
-				attr: string;
-				internalID: number;
-				attrX: boolean;
-				attrY: boolean;
-				attrZ: boolean;
-				containerBoneID: number;
-				containerID: number;
-				curves: {
-					x: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					y: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					z: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-				};
-			};
-		}[][];
-		length: number;
-		frames: number;
-	}>;
-	length: number;
-	fps: number;
-	frames: number;
+  * @param {{
+  curves: Map<number, {
+    T: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    R: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    S: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+  }>;
+  layers: Map<number, {
+    T: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    R: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    S: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+  }[]>;
+  stacks: Map<number, {
+    name: string;
+    layers: {
+      T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      };
+      R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      };
+      S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      };
+    }[][];
+    length: number;
+    frames: number;
+  }>;
+  length: number;
+  fps: number;
+  frames: number;
 }} animations,
-	* @param {{skeleton: { bones: THREE.Bone[]}}} group
-	*/
+  * @param {{skeleton: { bones: THREE.Bone[]}}} group
+  */
 function addAnimations(group, animations) {
 
   if (group.animations === undefined) {
@@ -56635,22 +56890,22 @@ function addAnimations(group, animations) {
     var stack = stacks[key];
 
     /**
-     * @type {{
-     * name: string,
-     * fps: number,
-     * length: number,
-     * hierarchy: Array.<{
-     * 	parent: number,
-     * 	name: string,
-     * 	keys: Array.<{
-     * 		time: number,
-     * 		pos: Array.<number>,
-     * 		rot: Array.<number>,
-     * 		scl: Array.<number>
-     * 	}>
-     * }>
-     * }}
-     */
+      * @type {{
+      * name: string,
+      * fps: number,
+      * length: number,
+      * hierarchy: Array.<{
+      * 	parent: number,
+      * 	name: string,
+      * 	keys: Array.<{
+      * 		time: number,
+      * 		pos: Array.<number>,
+      * 		rot: Array.<number>,
+      * 		scl: Array.<number>
+      * 	}>
+      * }>
+      * }}
+      */
     var animationData = {
       name: stack.name,
       fps: 30,
@@ -56701,8 +56956,8 @@ var euler = new Euler();
 var quaternion = new Quaternion();
 
 /**
- * @param {THREE.Bone} bone
- */
+  * @param {THREE.Bone} bone
+  */
 function generateKey(animations, animationNode, bone, frame) {
 
   var key = {
@@ -56738,8 +56993,8 @@ function generateKey(animations, animationNode, bone, frame) {
   } catch (error) {
 
     // Curve is not fully plotted.
-    console.log(bone);
-    console.log(error);
+    console.log('THREE.FBXLoader: ', bone);
+    console.log('THREE.FBXLoader: ', error);
   }
 
   return key;
@@ -56781,45 +57036,45 @@ function isKeyExistOnFrame(curve, frame) {
 }
 
 /**
- * An instance of a Vertex with data for drawing vertices to the screen.
- * @constructor
- */
+  * An instance of a Vertex with data for drawing vertices to the screen.
+  * @constructor
+  */
 function Vertex$1() {
 
   /**
-   * Position of the vertex.
-   * @type {THREE.Vector3}
-   */
+    * Position of the vertex.
+    * @type {THREE.Vector3}
+    */
   this.position = new Vector3();
 
   /**
-   * Normal of the vertex
-   * @type {THREE.Vector3}
-   */
+    * Normal of the vertex
+    * @type {THREE.Vector3}
+    */
   this.normal = new Vector3();
 
   /**
-   * UV coordinates of the vertex.
-   * @type {THREE.Vector2}
-   */
-  this.uv = new Vector2();
+    * Array of UV coordinates of the vertex.
+    * @type {Array of THREE.Vector2}
+    */
+  this.uv = [];
 
   /**
-   * Color of the vertex
-   * @type {THREE.Vector3}
-   */
+    * Color of the vertex
+    * @type {THREE.Vector3}
+    */
   this.color = new Vector3();
 
   /**
-   * Indices of the bones vertex is influenced by.
-   * @type {THREE.Vector4}
-   */
+    * Indices of the bones vertex is influenced by.
+    * @type {THREE.Vector4}
+    */
   this.skinIndices = new Vector4(0, 0, 0, 0);
 
   /**
-   * Weights that each bone influences the vertex.
-   * @type {THREE.Vector4}
-   */
+    * Weights that each bone influences the vertex.
+    * @type {THREE.Vector4}
+    */
   this.skinWeights = new Vector4(0, 0, 0, 0);
 }
 
@@ -56836,11 +57091,14 @@ Object.assign(Vertex$1.prototype, {
 
     return returnVar;
   },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
+  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
 
     this.position.toArray(vertexBuffer, vertexBuffer.length);
     this.normal.toArray(normalBuffer, normalBuffer.length);
-    this.uv.toArray(uvBuffer, uvBuffer.length);
+    for (var i = 0; i < this.uv.length; i++) {
+
+      this.uv[i].toArray(uvBuffers[i], uvBuffers[i].length);
+    }
     this.color.toArray(colorBuffer, colorBuffer.length);
     this.skinIndices.toArray(skinIndexBuffer, skinIndexBuffer.length);
     this.skinWeights.toArray(skinWeightBuffer, skinWeightBuffer.length);
@@ -56848,13 +57106,13 @@ Object.assign(Vertex$1.prototype, {
 });
 
 /**
- * @constructor
- */
+  * @constructor
+  */
 function Triangle$1() {
 
   /**
-   * @type {{position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}
-   */
+    * @type {{position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}
+    */
   this.vertices = [];
 }
 
@@ -56870,25 +57128,25 @@ Object.assign(Triangle$1.prototype, {
 
     return returnVar;
   },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
+  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
 
     var vertices = this.vertices;
 
     for (var i = 0, l = vertices.length; i < l; ++i) {
 
-      vertices[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer);
+      vertices[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer);
     }
   }
 });
 
 /**
- * @constructor
- */
+  * @constructor
+  */
 function Face() {
 
   /**
-   * @type {{vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[]}
-   */
+    * @type {{vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[]}
+    */
   this.triangles = [];
   this.materialIndex = 0;
 }
@@ -56918,62 +57176,65 @@ Object.assign(Face.prototype, {
       this.triangles.push(triangle);
     }
   },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer) {
+  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer) {
 
     var triangles = this.triangles;
     var materialIndex = this.materialIndex;
 
     for (var i = 0, l = triangles.length; i < l; ++i) {
 
-      triangles[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer);
+      triangles[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer);
       append(materialIndexBuffer, [materialIndex, materialIndex, materialIndex]);
     }
   }
 });
 
 /**
- * @constructor
- */
+  * @constructor
+  */
 function Geometry$1() {
 
   /**
-   * @type {{triangles: {vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[], materialIndex: number}[]}
-   */
+    * @type {{triangles: {vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: Array of THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[], materialIndex: number}[]}
+    */
   this.faces = [];
 
   /**
-   * @type {{}|THREE.Skeleton}
-   */
+    * @type {{}|THREE.Skeleton}
+    */
   this.skeleton = null;
 }
 
 Object.assign(Geometry$1.prototype, {
 
   /**
-   * @returns	{{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-   */
+    * @returns	{{vertexBuffer: number[], normalBuffer: number[], uvBuffers: Array of number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
+    */
   flattenToBuffers: function () {
 
     var vertexBuffer = [];
     var normalBuffer = [];
-    var uvBuffer = [];
+    var uvBuffers = [];
     var colorBuffer = [];
     var skinIndexBuffer = [];
     var skinWeightBuffer = [];
-
     var materialIndexBuffer = [];
 
     var faces = this.faces;
 
-    for (var i = 0, l = faces.length; i < l; ++i) {
+    for (var i = 0; i < faces[0].triangles[0].vertices[0].uv.length; i++) {
 
-      faces[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer);
+      uvBuffers.push([]);
+    }
+
+    for (var i = 0, l = faces.length; i < l; ++i) {
+      faces[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer);
     }
 
     return {
       vertexBuffer: vertexBuffer,
       normalBuffer: normalBuffer,
-      uvBuffer: uvBuffer,
+      uvBuffers: uvBuffers,
       colorBuffer: colorBuffer,
       skinIndexBuffer: skinIndexBuffer,
       skinWeightBuffer: skinWeightBuffer,
@@ -57025,29 +57286,33 @@ Object.assign(TextParser.prototype, {
 
     var split = text.split('\n');
 
-    for (var line in split) {
+    for (var lineNum = 0, lineLength = split.length; lineNum < lineLength; lineNum++) {
 
-      var l = split[line];
+      var l = split[lineNum];
 
-      // short cut
+      // skip comment line
       if (l.match(/^[\s\t]*;/)) {
 
         continue;
-      } // skip comment line
+      }
+
+      // skip empty line
       if (l.match(/^[\s\t]*$/)) {
 
         continue;
-      } // skip empty line
+      }
 
       // beginning of node
       var beginningOfNodeExp = new RegExp('^\\t{' + this.currentIndent + '}(\\w+):(.*){', '');
       var match = l.match(beginningOfNodeExp);
+
       if (match) {
 
         var nodeName = match[1].trim().replace(/^"/, '').replace(/"$/, '');
         var nodeAttrs = match[2].split(',');
 
         for (var i = 0, l = nodeAttrs.length; i < l; i++) {
+
           nodeAttrs[i] = nodeAttrs[i].trim().replace(/^"/, '').replace(/"$/, '');
         }
 
@@ -57058,10 +57323,19 @@ Object.assign(TextParser.prototype, {
       // node's property
       var propExp = new RegExp('^\\t{' + this.currentIndent + '}(\\w+):[\\s\\t\\r\\n](.*)');
       var match = l.match(propExp);
+
       if (match) {
 
         var propName = match[1].replace(/^"/, '').replace(/"$/, '').trim();
         var propValue = match[2].replace(/^"/, '').replace(/"$/, '').trim();
+
+        // for special case: base64 image data follows "Content: ," line
+        //	Content: ,
+        //	 "iVB..."
+        if (propName === 'Content' && propValue === ',') {
+
+          propValue = split[++lineNum].replace(/"/g, '').trim();
+        }
 
         this.parseNodeProperty(l, propName, propValue);
         continue;
@@ -57069,6 +57343,7 @@ Object.assign(TextParser.prototype, {
 
       // end of node
       var endOfNodeExp = new RegExp('^\\t{' + (this.currentIndent - 1) + '}}');
+
       if (l.match(endOfNodeExp)) {
 
         this.nodeEnd();
@@ -57186,7 +57461,7 @@ Object.assign(TextParser.prototype, {
     var parentName = currentNode.name;
 
     // special case parent node's is like "Properties70"
-    // these chilren nodes must treat with careful
+    // these children nodes must treat with careful
     if (parentName !== undefined) {
 
       var propMatch = parentName.match(/Properties(\d)+/);
@@ -57198,7 +57473,7 @@ Object.assign(TextParser.prototype, {
     }
 
     // special case Connections
-    if (propName == 'C') {
+    if (propName === 'C') {
 
       var connProps = propValue.split(',').slice(1);
       var from = parseInt(connProps[0]);
@@ -57217,7 +57492,7 @@ Object.assign(TextParser.prototype, {
     }
 
     // special case Connections
-    if (propName == 'Node') {
+    if (propName === 'Node') {
 
       var id = parseInt(propValue);
       currentNode.properties.id = id;
@@ -57265,6 +57540,7 @@ Object.assign(TextParser.prototype, {
     var props = propValue.split('",');
 
     for (var i = 0, l = props.length; i < l; i++) {
+
       props[i] = props[i].trim().replace(/^\"/, '').replace(/\s/, '_');
     }
 
@@ -57276,7 +57552,7 @@ Object.assign(TextParser.prototype, {
 
     /*
     if ( innerPropValue === undefined ) {
-    	innerPropValue = props[3];
+      innerPropValue = props[3];
     }
     */
 
@@ -57332,10 +57608,10 @@ function BinaryParser() {}
 Object.assign(BinaryParser.prototype, {
 
   /**
-   * Parses binary data and builds FBXTree as much compatible as possible with the one built by TextParser.
-   * @param {ArrayBuffer} buffer
-   * @returns {THREE.FBXTree}
-   */
+    * Parses binary data and builds FBXTree as much compatible as possible with the one built by TextParser.
+    * @param {ArrayBuffer} buffer
+    * @returns {THREE.FBXTree}
+    */
   parse: function (buffer) {
 
     var reader = new BinaryReader(buffer);
@@ -57343,7 +57619,7 @@ Object.assign(BinaryParser.prototype, {
 
     var version = reader.getUint32();
 
-    console.log('FBX binary version: ' + version);
+    console.log('THREE.FBXLoader: FBX binary version: ' + version);
 
     var allNodes = new FBXTree();
 
@@ -57358,16 +57634,16 @@ Object.assign(BinaryParser.prototype, {
 
 
   /**
-   * Checks if reader has reached the end of content.
-   * @param {BinaryReader} reader
-   * @returns {boolean}
-   */
+    * Checks if reader has reached the end of content.
+    * @param {BinaryReader} reader
+    * @returns {boolean}
+    */
   endOfContent: function (reader) {
 
     // footer size: 160bytes + 16-byte alignment padding
     // - 16bytes: magic
     // - padding til 16-byte alignment (at least 1byte?)
-    //   (seems like some exporters embed fixed 15bytes?)
+    //   (seems like some exporters embed fixed 15 or 16bytes?)
     // - 4bytes: magic
     // - 4bytes: version
     // - 120bytes: zero
@@ -57377,17 +57653,17 @@ Object.assign(BinaryParser.prototype, {
       return (reader.getOffset() + 160 + 16 & ~0xf) >= reader.size();
     }
 
-    return reader.getOffset() + 160 + 15 >= reader.size();
+    return reader.getOffset() + 160 + 16 >= reader.size();
   },
 
 
   /**
-   * Parses Node as much compatible as possible with the one parsed by TextParser
-   * TODO: could be optimized more?
-   * @param {BinaryReader} reader
-   * @param {number} version
-   * @returns {Object} - Returns an Object as node, or null if NULL-record.
-   */
+    * Parses Node as much compatible as possible with the one parsed by TextParser
+    * TODO: could be optimized more?
+    * @param {BinaryReader} reader
+    * @param {number} version
+    * @returns {Object} - Returns an Object as node, or null if NULL-record.
+    */
   parseNode: function (reader, version) {
 
     // The first three data sizes depends on version.
@@ -57644,10 +57920,10 @@ Object.assign(BinaryParser.prototype, {
 
         if (window.Zlib === undefined) {
 
-          throw new Error('FBXLoader: Import inflate.min.js from https://github.com/imaya/zlib.js');
+          throw new Error('THREE.FBXLoader: External library Inflate.min.js required, obtain or import from https://github.com/imaya/zlib.js');
         }
 
-        var inflate = new Zlib.Inflate(new Uint8Array(reader.getArrayBuffer(compressedLength)));
+        var inflate = new Zlib.Inflate(new Uint8Array(reader.getArrayBuffer(compressedLength))); // eslint-disable-line no-undef
         var reader2 = new BinaryReader(inflate.decompress().buffer);
 
         switch (type) {
@@ -57678,7 +57954,7 @@ Object.assign(BinaryParser.prototype, {
         return reader.getArrayBuffer(length);
 
       default:
-        console.error('FBX contains an unknown property type ' + type);
+        throw new Error('THREE.FBXLoader: Unknown property type ' + type);
 
     }
   }
@@ -57963,6 +58239,9 @@ Object.assign(BinaryReader.prototype, {
       s += String.fromCharCode(value);
     }
 
+    // Manage UTF8 encoding
+    s = decodeURIComponent(escape(s));
+
     this.skip(size);
 
     return s;
@@ -58081,9 +58360,9 @@ Object.assign(FBXTree.prototype, {
 });
 
 /**
- * @param {ArrayBuffer} buffer
- * @returns {boolean}
- */
+  * @param {ArrayBuffer} buffer
+  * @returns {boolean}
+  */
 function isFbxFormatBinary(buffer) {
 
   var CORRECT = 'Kaydara FBX Binary  \0';
@@ -58092,8 +58371,8 @@ function isFbxFormatBinary(buffer) {
 }
 
 /**
- * @returns {boolean}
- */
+  * @returns {boolean}
+  */
 function isFbxFormatASCII(text) {
 
   var CORRECT = ['K', 'a', 'y', 'd', 'a', 'r', 'a', '\\', 'F', 'B', 'X', '\\', 'B', 'i', 'n', 'a', 'r', 'y', '\\', '\\'];
@@ -58111,7 +58390,7 @@ function isFbxFormatASCII(text) {
   for (var i = 0; i < CORRECT.length; ++i) {
 
     var num = read(1);
-    if (num == CORRECT[i]) {
+    if (num === CORRECT[i]) {
 
       return false;
     }
@@ -58121,8 +58400,8 @@ function isFbxFormatASCII(text) {
 }
 
 /**
- * @returns {number}
- */
+  * @returns {number}
+  */
 function getFbxVersion(text) {
 
   var versionRegExp = /FBXVersion: (\d+)/;
@@ -58132,14 +58411,14 @@ function getFbxVersion(text) {
     var version = parseInt(match[1]);
     return version;
   }
-  throw new Error('FBXLoader: Cannot find the version number for the file given.');
+  throw new Error('THREE.FBXLoader: Cannot find the version number for the file given.');
 }
 
 /**
- * Converts FBX ticks into real time seconds.
- * @param {number} time - FBX tick timestamp to convert.
- * @returns {number} - FBX tick in real world time.
- */
+  * Converts FBX ticks into real time seconds.
+  * @param {number} time - FBX tick timestamp to convert.
+  * @returns {number} - FBX tick in real world time.
+  */
 function convertFBXTimeToSeconds(time) {
 
   // Constant is FBX ticks per second.
@@ -58147,12 +58426,12 @@ function convertFBXTimeToSeconds(time) {
 }
 
 /**
- * Parses comma separated list of float numbers and returns them in an array.
- * @example
- * // Returns [ 5.6, 9.4, 2.5, 1.4 ]
- * parseFloatArray( "5.6,9.4,2.5,1.4" )
- * @returns {number[]}
- */
+  * Parses comma separated list of float numbers and returns them in an array.
+  * @example
+  * // Returns [ 5.6, 9.4, 2.5, 1.4 ]
+  * parseFloatArray( "5.6,9.4,2.5,1.4" )
+  * @returns {number[]}
+  */
 function parseFloatArray(string) {
 
   var array = string.split(',');
@@ -58166,12 +58445,12 @@ function parseFloatArray(string) {
 }
 
 /**
- * Parses comma separated list of int numbers and returns them in an array.
- * @example
- * // Returns [ 5, 8, 2, 3 ]
- * parseFloatArray( "5,8,2,3" )
- * @returns {number[]}
- */
+  * Parses comma separated list of int numbers and returns them in an array.
+  * @example
+  * // Returns [ 5, 8, 2, 3 ]
+  * parseFloatArray( "5,8,2,3" )
+  * @returns {number[]}
+  */
 function parseIntArray(string) {
 
   var array = string.split(',');
@@ -58185,20 +58464,20 @@ function parseIntArray(string) {
 }
 
 /**
- * Parses Vector3 property from FBXTree.  Property is given as .value.x, .value.y, etc.
- * @param {FBXVector3} property - Property to parse as Vector3.
- * @returns {THREE.Vector3}
- */
+  * Parses Vector3 property from FBXTree.  Property is given as .value.x, .value.y, etc.
+  * @param {FBXVector3} property - Property to parse as Vector3.
+  * @returns {THREE.Vector3}
+  */
 function parseVector3(property) {
 
   return new Vector3().fromArray(property.value);
 }
 
 /**
- * Parses Color property from FBXTree.  Property is given as .value.x, .value.y, etc.
- * @param {FBXVector3} property - Property to parse as Color.
- * @returns {THREE.Color}
- */
+  * Parses Color property from FBXTree.  Property is given as .value.x, .value.y, etc.
+  * @param {FBXVector3} property - Property to parse as Color.
+  * @returns {THREE.Color}
+  */
 function parseColor(property) {
 
   return new Color().fromArray(property.value);
@@ -58210,12 +58489,12 @@ function parseMatrixArray(floatString) {
 }
 
 /**
- * Converts ArrayBuffer to String.
- * @param {ArrayBuffer} buffer
- * @param {number} from
- * @param {number} to
- * @returns {String}
- */
+  * Converts ArrayBuffer to String.
+  * @param {ArrayBuffer} buffer
+  * @param {number} from
+  * @param {number} to
+  * @returns {String}
+  */
 function convertArrayBufferToString(buffer, from, to) {
 
   if (from === undefined) from = 0;
@@ -58239,10 +58518,10 @@ function convertArrayBufferToString(buffer, from, to) {
 }
 
 /**
- * Converts number from degrees into radians.
- * @param {number} value
- * @returns {number}
- */
+  * Converts number from degrees into radians.
+  * @param {number} value
+  * @returns {number}
+  */
 function degreeToRadian(value) {
 
   return value * DEG2RAD;
@@ -58475,6 +58754,622 @@ function invertMirroredFBX(object) {
           });
 }
 
+var index$2 = createCommonjsModule(function (module) {
+/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/** Used as the `TypeError` message for "Functions" methods. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * Gets the timestamp of the number of milliseconds that have elapsed since
+ * the Unix epoch (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Date
+ * @returns {number} Returns the timestamp.
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => Logs the number of milliseconds it took for the deferred invocation.
+ */
+var now = function() {
+  return root.Date.now();
+};
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed `func` invocations and a `flush` method to immediately invoke them.
+ * Provide `options` to indicate whether `func` should be invoked on the
+ * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+ * with the last arguments provided to the debounced function. Subsequent
+ * calls to the debounced function return the result of the last `func`
+ * invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', debounced);
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel);
+ */
+function debounce(func, wait, options) {
+  var lastArgs,
+      lastThis,
+      maxWait,
+      result,
+      timerId,
+      lastCallTime,
+      lastInvokeTime = 0,
+      leading = false,
+      maxing = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  wait = toNumber(wait) || 0;
+  if (isObject(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs,
+        thisArg = lastThis;
+
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        result = wait - timeSinceLastCall;
+
+    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+  }
+
+  function timerExpired() {
+    var time = now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(now());
+  }
+
+  function debounced() {
+    var time = now(),
+        isInvoking = shouldInvoke(time);
+
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  return debounced;
+}
+
+/**
+ * Creates a throttled function that only invokes `func` at most once per
+ * every `wait` milliseconds. The throttled function comes with a `cancel`
+ * method to cancel delayed `func` invocations and a `flush` method to
+ * immediately invoke them. Provide `options` to indicate whether `func`
+ * should be invoked on the leading and/or trailing edge of the `wait`
+ * timeout. The `func` is invoked with the last arguments provided to the
+ * throttled function. Subsequent calls to the throttled function return the
+ * result of the last `func` invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the throttled function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.throttle` and `_.debounce`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to throttle.
+ * @param {number} [wait=0] The number of milliseconds to throttle invocations to.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=true]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new throttled function.
+ * @example
+ *
+ * // Avoid excessively updating the position while scrolling.
+ * jQuery(window).on('scroll', _.throttle(updatePosition, 100));
+ *
+ * // Invoke `renewToken` when the click event is fired, but not more than once every 5 minutes.
+ * var throttled = _.throttle(renewToken, 300000, { 'trailing': false });
+ * jQuery(element).on('click', throttled);
+ *
+ * // Cancel the trailing throttled invocation.
+ * jQuery(window).on('popstate', throttled.cancel);
+ */
+function throttle(func, wait, options) {
+  var leading = true,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  if (isObject(options)) {
+    leading = 'leading' in options ? !!options.leading : leading;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+  return debounce(func, wait, {
+    'leading': leading,
+    'maxWait': wait,
+    'trailing': trailing
+  });
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && objectToString.call(value) == symbolTag);
+}
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+module.exports = throttle;
+});
+
+var throttle = interopDefault(index$2);
+
+var RobotManualControl = function () {
+      function RobotManualControl(robot) {
+            classCallCheck(this, RobotManualControl);
+
+
+            this.enabled = true;
+
+            this.robot = robot;
+
+            this.initMoveableParts();
+            this.initEventListeners();
+      }
+
+      RobotManualControl.prototype.initMoveableParts = function initMoveableParts() {
+
+            this.head = this.robot.getObjectByName('headControl'); // or 'neck'
+
+            this.leftShoulder = this.robot.getObjectByName('shoulderControlLeft'); // or Lshoulder_joint
+            this.rightShoulder = this.robot.getObjectByName('shoulderControlRight'); // or Rshoulder_joint
+
+            this.leftElbow = this.robot.getObjectByName('elbowControlLeft');
+            this.rightElbow = this.robot.getObjectByName('elbowControlRight');
+      };
+
+      RobotManualControl.prototype.initEventListeners = function initEventListeners() {
+            var _this = this;
+
+            var headPitchOffset = this.head.rotation.z;
+            var headYawOffset = this.head.rotation.x;
+
+            var xAxis = new Vector3(1, 0, 0);
+            var yAxis = new Vector3(0, 1, 0);
+            var zAxis = new Vector3(0, 0, 1);
+
+            HTMLControl.controls.movement.head.pitch.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(-e.target.value);
+
+                  _this.head.rotation.z = headPitchOffset + value;
+            }, false), 250);
+
+            HTMLControl.controls.movement.head.yaw.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(e.target.value);
+
+                  _this.head.rotation.x = headYawOffset + value;
+            }, false), 250);
+
+            var leftShoulderPitchPrevVal = 0;
+            var leftShoulderYawPrevVal = 0;
+
+            HTMLControl.controls.movement.leftShoulder.pitch.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(-e.target.value);
+
+                  _this.leftShoulder.rotateOnAxis(zAxis, leftShoulderPitchPrevVal - value);
+
+                  leftShoulderPitchPrevVal = value;
+            }, false), 250);
+
+            HTMLControl.controls.movement.leftShoulder.yaw.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(-e.target.value);
+
+                  _this.leftShoulder.rotateOnAxis(yAxis, leftShoulderYawPrevVal - value);
+
+                  leftShoulderYawPrevVal = value;
+            }, false), 250);
+
+            var rightShoulderPitchPrevVal = 0;
+            var rightShoulderYawPrevVal = 0;
+
+            HTMLControl.controls.movement.rightShoulder.pitch.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(-e.target.value);
+
+                  _this.rightShoulder.rotateOnAxis(zAxis, rightShoulderPitchPrevVal - value);
+
+                  rightShoulderPitchPrevVal = value;
+            }, false), 250);
+
+            HTMLControl.controls.movement.rightShoulder.yaw.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(e.target.value);
+
+                  _this.rightShoulder.rotateOnAxis(yAxis, rightShoulderYawPrevVal - value);
+
+                  rightShoulderYawPrevVal = value;
+            }, false), 250);
+
+            HTMLControl.controls.movement.leftElbow.pitch.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(-e.target.value);
+
+                  _this.leftElbow.rotation.y = value;
+            }, false), 250);
+
+            var leftElbowPitchPrevVal = 0;
+            var leftElbowYawPrevVal = 0;
+
+            HTMLControl.controls.movement.leftElbow.pitch.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(-e.target.value);
+
+                  _this.leftElbow.rotateOnAxis(zAxis, leftElbowPitchPrevVal - value);
+
+                  leftElbowPitchPrevVal = value;
+            }, false), 250);
+
+            HTMLControl.controls.movement.leftElbow.yaw.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(e.target.value);
+
+                  _this.leftElbow.rotateOnAxis(xAxis, leftElbowYawPrevVal - value);
+
+                  leftElbowYawPrevVal = value;
+            }, false), 250);
+
+            var rightElbowPitchPrevVal = 0;
+            var rightElbowYawPrevVal = 0;
+
+            HTMLControl.controls.movement.rightElbow.pitch.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(-e.target.value);
+
+                  _this.rightElbow.rotateOnAxis(yAxis, rightElbowPitchPrevVal - value);
+
+                  rightElbowPitchPrevVal = value;
+            }, false), 250);
+
+            HTMLControl.controls.movement.rightElbow.yaw.addEventListener('input', throttle(function (e) {
+
+                  e.preventDefault();
+
+                  var value = _Math.degToRad(e.target.value);
+
+                  _this.rightElbow.rotateOnAxis(xAxis, rightElbowYawPrevVal - value);
+
+                  rightElbowYawPrevVal = value;
+            }, false), 250);
+      };
+
+      createClass(RobotManualControl, null, [{
+            key: 'enabled',
+            set: function (bool) {
+
+                  HTMLControl.setMovementControlsDisabledState(bool);
+            }
+      }]);
+      return RobotManualControl;
+}();
+
 var Simulation = function () {
   function Simulation() {
     classCallCheck(this, Simulation);
@@ -58497,17 +59392,28 @@ var Simulation = function () {
   Simulation.prototype.load = function load() {
     var _this = this;
 
-    var naoPromise = loaders.fbxLoader('/assets/models/robot_dance/nao_on_stage.fbx').then(function (object) {
+    var stagePromise = loaders.fbxLoader('/assets/models/robot_dance/stage_camera_lights.fbx').then(function (object) {
 
-      _this.stage = object.children[0];
-      _this.nao = object.children[1];
+      // console.log( object );
+      _this.stage = object.getObjectByName('Stage');
+      _this.camera = object.getObjectByName('Camera');
+      _this.spotlightStageRightLow = object.getObjectByName('Spotstage_right_low');
+      _this.spotlightStageLeftLow = object.getObjectByName('Spotstage_right_low');
+      _this.spotlightStageCenterHigh = object.getObjectByName('Spotstage_center_high');
 
-      invertMirroredFBX(_this.nao);
+      _this.soundSourceLeft = object.getObjectByName('Stage Left Sound');
+      _this.soundSourceRight = object.getObjectByName('Stage Right Sound');
 
       _this.sceneCentre = new Box3().setFromObject(object).getCenter();
+      // this.sceneCentre = object.getObjectByName( 'sceneCenter' ).position.clone();
     });
 
-    var stagePromise = Promise.resolve();
+    var naoPromise = loaders.fbxLoader('/assets/models/robot_dance/nao.fbx').then(function (object) {
+
+      _this.nao = object;
+
+      invertMirroredFBX(_this.nao);
+    });
 
     this.loadingPromises.push(naoPromise, stagePromise);
   };
@@ -58517,16 +59423,88 @@ var Simulation = function () {
 
     Promise.all(this.loadingPromises).then(function () {
 
-      // console.log( this.stage, this.nao );
-
       appManager.scene.add(_this2.stage);
       appManager.scene.add(_this2.nao);
 
-      appManager.controls.target.copy(_this2.sceneCentre);
-      appManager.controls.update();
+      _this2.initBackground();
+      _this2.initLighting();
+      _this2.initCamera();
+      _this2.initControls();
+
+      _this2.robotManualControl = new RobotManualControl(_this2.nao);
 
       appManager.play();
     });
+  };
+
+  Simulation.prototype.initLighting = function initLighting() {
+
+    var ambientLight = new AmbientLight(0xffffff, 0.3);
+    appManager.scene.add(ambientLight);
+
+    this.spotlightStageRightLow.distance = 200;
+    this.spotlightStageLeftLow.distance = 200;
+    this.spotlightStageCenterHigh.distance = 200;
+
+    // this.spotlightStageRightLow.intensity = 2;
+    // this.spotlightStageLeftLow.intensity = 2;
+    // this.spotlightStageCenterHigh.intensity = 2;
+
+    this.spotlightStageRightLow.penumbra = 0.25;
+    this.spotlightStageLeftLow.penumbra = 0.25;
+    this.spotlightStageCenterHigh.penumbra = 0.25;
+
+    // console.log( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
+    appManager.scene.add(this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh);
+  };
+
+  Simulation.prototype.initCamera = function initCamera() {
+
+    // console.log( this.camera )
+
+    // appManager.camera = this.camera;
+    appManager.camera.far = 800;
+    appManager.camera.fov = 35;
+    appManager.camera.position.set(0, 0, 200);
+    appManager.camera.updateProjectionMatrix();
+  };
+
+  Simulation.prototype.initControls = function initControls() {
+
+    appManager.controls = new OrbitControls(appManager.camera, appManager.canvas);
+
+    // appManager.controls.object = this.camera;
+
+    // vertical rotation limits
+    appManager.controls.minPolarAngle = Math.PI * 0.1; // upper
+    appManager.controls.maxPolarAngle = Math.PI * 0.45; // lower
+
+    appManager.controls.minDistance = 100;
+    appManager.controls.maxDistance = 400;
+
+    // horizontal rotation limits
+    appManager.controls.minAzimuthAngle = -Math.PI * 0.5;
+    appManager.controls.maxAzimuthAngle = Math.PI * 0.5;
+
+    appManager.controls.enableDamping = true;
+    appManager.controls.dampingFactor = 0.2;
+
+    // console.log( this.sceneCentre )
+    appManager.controls.target.copy(this.sceneCentre);
+    appManager.controls.update();
+  };
+
+  Simulation.prototype.initBackground = function initBackground() {
+
+    appManager.scene.fog = new Fog(0xf7f7f7, 600, appManager.camera.far);
+
+    var geometry = new PlaneBufferGeometry(20000, 20000);
+    var material = new MeshPhongMaterial({ color: 0xb0b0b0, shininess: 0.1 });
+    var ground = new Mesh(geometry, material);
+    ground.position.set(0, -25, 0);
+    ground.rotation.x = -Math.PI / 2;
+
+    appManager.scene.add(ground);
   };
 
   return Simulation;
