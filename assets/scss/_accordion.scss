@@ -1,0 +1,106 @@
+
+.accordion {
+  min-height: 0;
+  width: 100%;
+  display: inline-block;
+  background-color: grey;
+
+  h2 {
+    margin: 0.5em;
+    padding: 0.5em;
+    color: black;
+  }
+  div, ul li i:before, ul li i:after {
+    transition: all 0.25s ease-in-out;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul li {
+    border-bottom: 1px solid $dark-blue;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+  ul li:last-of-type {
+    padding-bottom: 0;
+  }
+  ul li i {
+    position: absolute;
+    transform: translate(-2em, 0);
+    right: 0;
+    margin-top: 1em;
+  }
+  ul li i:before, ul li i:after {
+    content: "";
+    position: absolute;
+    background-color: black;
+    width: 3px;
+    height: 9px;
+
+  }
+  ul li i:before {
+    transform: translate(-2px, 0) rotate(45deg);
+  }
+  ul li i:after {
+    transform: translate(2px, 0) rotate(-45deg);
+  }
+  ul li input[type=checkbox] {
+    position: absolute;
+    cursor: pointer;
+    width: 95%;
+    height: 4em;
+    opacity: 0;
+    transform: translate(-50%, -10%);
+  }
+  ul li input[type=checkbox]:checked ~ div {
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    transform: translate(0, 50%);
+  }
+  ul li input[type=checkbox]:checked ~ i:before {
+    transform: translate(2px, 0) rotate(45deg);
+  }
+  ul li input[type=checkbox]:checked ~ i:after {
+    transform: translate(-2px, 0) rotate(-45deg);
+  }
+}
+
+.accordion-section {
+  width: 97.5%;
+  margin-left: 1.25%;
+  margin-bottom: 0.25em;
+  background-color: $light-gray;
+  color: black;
+  box-shadow: 1px 1px 2px 0px $dark-gray inset;
+}
+
+/*
+<div class="accordion">
+  <h1>Accordion</h1>
+  <ul>
+    <li>
+      <input type="checkbox" checked>
+      <i></i>
+      <h2>Heading 1</h2>
+      <div><p>Contents 1.</p></div>
+    </li>
+    <li>
+      <input type="checkbox" checked>
+      <i></i>
+      <h2>Heading 2</h2>
+      <div><p>Contents 2.</p></div>
+    </li>
+    <li>
+      <input type="checkbox" checked>
+      <i></i>
+      <h2>Heading 3</h2>
+      <div><p>Contents 2.</p></div>
+    </li>
+  </ul>
+</div>
+*/

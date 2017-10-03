@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import HTMLControl from '../classes/HTMLControl.js';
+import HTMLControl from './HTMLControl.js';
 
 const loadingManager = new THREE.LoadingManager();
 

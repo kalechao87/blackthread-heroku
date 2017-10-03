@@ -34,6 +34,28 @@ const promisifyLoader = loader =>
 
   } );
 
+
+  // const loadingManager = new THREE.LoadingManager(); // or THREE.DefaultLoadingManager
+
+  // const promisifyLoader = loader =>
+  //   url => new Promise( ( resolve, reject ) => {
+
+  //     loader.load( url, resolve, loadingManager.onProgress, reject );
+
+  //   } );
+
+  // const objectLoader = promisifyLoader( new THREE.ObjectLoader( loadingManager ) );
+
+  // objectLoader( file ).then( ( object ) => {
+
+  //   console.log( object );
+
+  // } ).catch( ( err ) => {
+
+  //  console.log( err );
+
+  // } );
+
 export default class Loaders {
 
   constructor() {

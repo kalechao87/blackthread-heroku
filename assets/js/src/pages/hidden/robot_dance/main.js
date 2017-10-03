@@ -1,24 +1,52 @@
 import * as THREE from 'three';
 
+import App from 'App/App.js';
 import OrbitControls from 'modules/OrbitControls.module.js';
 
-import appManager from './appManager.js';
 import loaders from './loaders.js';
 // import animationControls from './animationControls.js';
+import RobotManualControl from './RobotManualControl.js';
+import HTMLControl from './HTMLControl.js';
 
-import invertMirroredFBX from '../utilities/invertMirroredFBX.js';
+import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
-import RobotManualControl from '../classes/RobotManualControl.js';
 
-class Simulation {
+// Set up THREE caching
+THREE.Cache.enabled = true;
+
+
+class Main {
 
   constructor() {
 
-    this.preLoad();
+    // this.init();
 
-    this.load();
+    // this.preLoad();
 
-    this.postLoad();
+    // this.load();
+
+    // this.postLoad();
+
+    HTMLControl.loading.overlay.classList.add('hide');
+
+  }
+
+  init() {
+
+    this.app = new App( HTMLControl.canvas );
+    this.app.renderer.setClearColor( 0xf7f7f7, 1.0 );
+
+    // Put any per frame calculations here
+    this.app.onUpdate = function () {
+
+      // use this.delta for timings here
+
+    };
+
+    // put any per resize calculations here
+    this.app.onWindowResize = function () {
+
+    };
 
   }
 
@@ -67,8 +95,8 @@ class Simulation {
     Promise.all( this.loadingPromises ).then(
       () => {
 
-        appManager.scene.add( this.stage );
-        appManager.scene.add( this.nao );
+        this.app.scene.add( this.stage );
+        this.app.scene.add( this.nao );
 
         this.initBackground();
         this.initLighting();
@@ -77,7 +105,7 @@ class Simulation {
 
         this.robotManualControl = new RobotManualControl( this.nao );
 
-        appManager.play();
+        this.app.play();
 
       } );
 
@@ -86,7 +114,7 @@ class Simulation {
   initLighting() {
 
     const ambientLight = new THREE.AmbientLight( 0xffffff, 0.3 );
-    appManager.scene.add( ambientLight );
+    this.app.scene.add( ambientLight );
 
     this.spotlightStageRightLow.distance = 200;
     this.spotlightStageLeftLow.distance = 200;
@@ -101,7 +129,7 @@ class Simulation {
     this.spotlightStageCenterHigh.penumbra = 0.25;
 
     // console.log( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
-    appManager.scene.add( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
+    this.app.scene.add( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
 
   }
 
@@ -109,44 +137,44 @@ class Simulation {
 
     // console.log( this.camera )
 
-    // appManager.camera = this.camera;
-    appManager.camera.far = 800;
-    appManager.camera.fov = 35;
-    appManager.camera.position.set( 0, 0, 200 );
-    appManager.camera.updateProjectionMatrix();
+    // this.app.camera = this.camera;
+    this.app.camera.far = 800;
+    this.app.camera.fov = 35;
+    this.app.camera.position.set( 0, 0, 200 );
+    this.app.camera.updateProjectionMatrix();
 
   }
 
   initControls() {
 
-    appManager.controls = new OrbitControls( appManager.camera, appManager.canvas );
+    this.app.controls = new OrbitControls( this.app.camera, this.app.canvas );
 
-    // appManager.controls.object = this.camera;
+    // this.app.controls.object = this.camera;
 
     // vertical rotation limits
-    appManager.controls.minPolarAngle = Math.PI * 0.1; // upper
-    appManager.controls.maxPolarAngle = Math.PI * 0.45; // lower
+    this.app.controls.minPolarAngle = Math.PI * 0.1; // upper
+    this.app.controls.maxPolarAngle = Math.PI * 0.45; // lower
 
-    appManager.controls.minDistance = 100;
-    appManager.controls.maxDistance = 400;
+    this.app.controls.minDistance = 100;
+    this.app.controls.maxDistance = 400;
 
     // horizontal rotation limits
-    appManager.controls.minAzimuthAngle = -Math.PI * 0.5;
-    appManager.controls.maxAzimuthAngle = Math.PI * 0.5;
+    this.app.controls.minAzimuthAngle = -Math.PI * 0.5;
+    this.app.controls.maxAzimuthAngle = Math.PI * 0.5;
 
-    appManager.controls.enableDamping = true;
-    appManager.controls.dampingFactor = 0.2;
+    this.app.controls.enableDamping = true;
+    this.app.controls.dampingFactor = 0.2;
 
     // console.log( this.sceneCentre )
-    appManager.controls.target.copy( this.sceneCentre );
-    appManager.controls.update();
+    this.app.controls.target.copy( this.sceneCentre );
+    this.app.controls.update();
 
   }
 
 
   initBackground() {
 
-    appManager.scene.fog = new THREE.Fog( 0xf7f7f7, 600, appManager.camera.far );
+    this.app.scene.fog = new THREE.Fog( 0xf7f7f7, 600, this.app.camera.far );
 
     const geometry = new THREE.PlaneBufferGeometry( 20000, 20000 );
     const material = new THREE.MeshPhongMaterial( { color: 0xb0b0b0, shininess: 0.1 } );
@@ -154,10 +182,10 @@ class Simulation {
     ground.position.set( 0, -25, 0 );
     ground.rotation.x = -Math.PI / 2;
 
-    appManager.scene.add( ground );
+    this.app.scene.add( ground );
 
   }
 
 }
 
-export default new Simulation();
+export default new Main();

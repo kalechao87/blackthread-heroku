@@ -51722,6 +51722,128 @@ var ImageUtils = {
 
 //
 
+/**
+ * @author Lewy Blue / https://github.com/looeee
+ */
+
+function Time() {
+
+  // Keep track of time when pause() was called
+  var _pauseTime = void 0;
+
+  // Keep track of time when delta was last checked
+  var _lastDelta = 0;
+
+  // Hold the time when start() was called
+  // There is no point in exposing this as it's essentially a random number
+  // and will be different depending on whether performance.now or Date.now is used
+  var _startTime = 0;
+
+  this.running = false;
+  this.paused = false;
+
+  // The scale at which the time is passing. This can be used for slow motion effects.
+  var _timeScale = 1.0;
+  // Keep track of scaled time across scale changes
+  var _totalTimeAtLastScaleChange = 0;
+  var _timeAtLastScaleChange = 0;
+
+  Object.defineProperties(this, {
+
+    now: {
+      get: function () {
+
+        return (performance || Date).now();
+      }
+    },
+
+    timeScale: {
+      get: function () {
+
+        return _timeScale;
+      },
+      set: function (value) {
+
+        _totalTimeAtLastScaleChange = this.totalTime;
+        _timeAtLastScaleChange = this.now;
+        _timeScale = value;
+      }
+    },
+
+    unscaledTotalTime: {
+      get: function () {
+
+        return this.running ? this.now - _startTime : 0;
+      }
+    },
+
+    totalTime: {
+      get: function () {
+
+        var diff = (this.now - _timeAtLastScaleChange) * this.timeScale;
+
+        return this.running ? _totalTimeAtLastScaleChange + diff : 0;
+      }
+    },
+
+    // Unscaled time since delta was last checked
+    unscaledDelta: {
+      get: function () {
+
+        var diff = this.now - _lastDelta;
+        _lastDelta = this.now;
+
+        return diff;
+      }
+    },
+
+    // Scaled time since delta was last checked
+    delta: {
+      get: function () {
+
+        return this.unscaledDelta * this.timeScale;
+      }
+    }
+
+  });
+
+  this.start = function () {
+
+    if (this.paused) {
+
+      var diff = this.now - _pauseTime;
+
+      _startTime += diff;
+      _lastDelta += diff;
+      _timeAtLastScaleChange += diff;
+    } else if (!this.running) {
+
+      _startTime = _lastDelta = _timeAtLastScaleChange = this.now;
+
+      _totalTimeAtLastScaleChange = 0;
+    }
+
+    this.running = true;
+    this.paused = false;
+  };
+
+  // Reset and stop clock
+  this.stop = function () {
+
+    _startTime = 0;
+    _totalTimeAtLastScaleChange = 0;
+
+    this.running = false;
+  };
+
+  this.pause = function () {
+
+    _pauseTime = this.now;
+
+    this.paused = true;
+  };
+}
+
 function OrbitControls(object, domElement) {
 
 	this.object = object;
@@ -52548,128 +52670,6 @@ function OrbitControls(object, domElement) {
 OrbitControls.prototype = Object.create(EventDispatcher.prototype);
 OrbitControls.prototype.constructor = OrbitControls;
 
-/**
- * @author Lewy Blue / https://github.com/looeee
- */
-
-function Time() {
-
-  // Keep track of time when pause() was called
-  var _pauseTime = void 0;
-
-  // Keep track of time when delta was last checked
-  var _lastDelta = 0;
-
-  // Hold the time when start() was called
-  // There is no point in exposing this as it's essentially a random number
-  // and will be different depending on whether performance.now or Date.now is used
-  var _startTime = 0;
-
-  this.running = false;
-  this.paused = false;
-
-  // The scale at which the time is passing. This can be used for slow motion effects.
-  var _timeScale = 1.0;
-  // Keep track of scaled time across scale changes
-  var _totalTimeAtLastScaleChange = 0;
-  var _timeAtLastScaleChange = 0;
-
-  Object.defineProperties(this, {
-
-    now: {
-      get: function () {
-
-        return (performance || Date).now();
-      }
-    },
-
-    timeScale: {
-      get: function () {
-
-        return _timeScale;
-      },
-      set: function (value) {
-
-        _totalTimeAtLastScaleChange = this.totalTime;
-        _timeAtLastScaleChange = this.now;
-        _timeScale = value;
-      }
-    },
-
-    unscaledTotalTime: {
-      get: function () {
-
-        return this.running ? this.now - _startTime : 0;
-      }
-    },
-
-    totalTime: {
-      get: function () {
-
-        var diff = (this.now - _timeAtLastScaleChange) * this.timeScale;
-
-        return this.running ? _totalTimeAtLastScaleChange + diff : 0;
-      }
-    },
-
-    // Unscaled time since delta was last checked
-    unscaledDelta: {
-      get: function () {
-
-        var diff = this.now - _lastDelta;
-        _lastDelta = this.now;
-
-        return diff;
-      }
-    },
-
-    // Scaled time since delta was last checked
-    delta: {
-      get: function () {
-
-        return this.unscaledDelta * this.timeScale;
-      }
-    }
-
-  });
-
-  this.start = function () {
-
-    if (this.paused) {
-
-      var diff = this.now - _pauseTime;
-
-      _startTime += diff;
-      _lastDelta += diff;
-      _timeAtLastScaleChange += diff;
-    } else if (!this.running) {
-
-      _startTime = _lastDelta = _timeAtLastScaleChange = this.now;
-
-      _totalTimeAtLastScaleChange = 0;
-    }
-
-    this.running = true;
-    this.paused = false;
-  };
-
-  // Reset and stop clock
-  this.stop = function () {
-
-    _startTime = 0;
-    _totalTimeAtLastScaleChange = 0;
-
-    this.running = false;
-  };
-
-  this.pause = function () {
-
-    _pauseTime = this.now;
-
-    this.paused = true;
-  };
-}
-
 var _canvas = void 0;
 var _scene = void 0;
 var _camera = void 0;
@@ -52948,273 +52948,6 @@ function App(canvas) {
     return img;
   };
 }
-
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
-  }
-
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-var canvas = document.querySelector('#canvas');
-var container = document.querySelector('#container');
-
-var loading = {
-  bar: document.querySelector('#loading-bar'),
-  overlay: document.querySelector('#loading-overlay'),
-  revealOnLoad: document.querySelectorAll('.reveal-on-load'),
-  hideOnLoad: document.querySelectorAll('.hide-on-load'),
-  progress: document.querySelector('#progress')
-};
-
-var controls = {
-  movement: {
-    head: {
-      pitch: document.querySelector('#head-pitch'),
-      yaw: document.querySelector('#head-yaw')
-    },
-    leftShoulder: {
-      pitch: document.querySelector('#l-shoulder-pitch'),
-      yaw: document.querySelector('#l-shoulder-yaw')
-    },
-    rightShoulder: {
-      pitch: document.querySelector('#r-shoulder-pitch'),
-      yaw: document.querySelector('#r-shoulder-yaw')
-    },
-    leftElbow: {
-      pitch: document.querySelector('#l-elbow-pitch'),
-      yaw: document.querySelector('#l-elbow-yaw')
-    },
-    rightElbow: {
-      pitch: document.querySelector('#r-elbow-pitch'),
-      yaw: document.querySelector('#r-elbow-yaw')
-    }
-  },
-  frames: {
-    createButton: document.querySelector('#create-frame-button')
-
-  },
-  groups: {
-    createButton: document.querySelector('#create-group-button')
-  },
-  dance: {
-    framerate: document.querySelector('#framerate'),
-    showAdvancedControls: document.querySelector('#advanced-control-enable')
-  },
-  music: {
-    startWithDanceCheckbox: document.querySelector('#start-music-with-dance'),
-    selection: document.querySelector('#music-select'),
-    playButton: document.querySelector('#play-music'),
-    positionSlider: document.querySelector('#track-position-slider')
-  },
-  file: {
-    saveDanceButton: document.querySelector('#save-dance'),
-    loadDanceButton: document.querySelector('#load-dance'),
-    examples: document.querySelector('#premade-examples')
-  }
-};
-
-var HTMLControl = function () {
-  function HTMLControl() {
-    classCallCheck(this, HTMLControl);
-  }
-
-  HTMLControl.setInitialState = function setInitialState() {};
-
-  HTMLControl.setOnLoadStartState = function setOnLoadStartState() {
-
-    loading.bar.classList.remove('hide');
-  };
-
-  HTMLControl.setOnLoadEndState = function setOnLoadEndState() {
-
-    loading.overlay.classList.add('hide');
-
-    for (var i = 0; i < loading.hideOnLoad.length; i++) {
-
-      loading.hideOnLoad[i].classList.add('hide');
-    }
-
-    for (var _i = 0; _i < loading.revealOnLoad.length; _i++) {
-
-      loading.revealOnLoad[_i].classList.remove('hide');
-    }
-
-    this.setMovementControlsDisabledState(false);
-  };
-
-  HTMLControl.setMovementControlsDisabledState = function setMovementControlsDisabledState(bool) {
-
-    controls.movement.head.pitch.disabled = bool;
-
-    for (var key in controls.movement) {
-
-      controls.movement[key].pitch.disabled = bool;
-      controls.movement[key].yaw.disabled = bool;
-    }
-  };
-
-  return HTMLControl;
-}();
-
-HTMLControl.canvas = canvas;
-HTMLControl.container = container;
-HTMLControl.loading = loading;
-HTMLControl.controls = controls;
-
-// The App  object is setup  here and then returned
-// - all per frame and resize call backs are also defined here ONLY
-var AppManager = function AppManager() {
-  classCallCheck(this, AppManager);
-
-
-  this.app = new App(HTMLControl.canvas);
-  this.app.renderer.setClearColor(0xf7f7f7, 1.0);
-
-  // Put any per frame calculations here
-  this.app.onUpdate = function () {
-
-    // use this.delta for timings here
-
-  };
-
-  // put any per resize calculations here
-  this.app.onWindowResize = function () {};
-
-  return this.app;
-};
-
-var appManager = new AppManager();
 
 var NURBSUtils = {
 
@@ -58587,6 +58320,249 @@ Object.assign(AnimationLoader.prototype, {
     }
 });
 
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+var canvas = document.querySelector('#canvas');
+var container = document.querySelector('#container');
+
+var loading = {
+  bar: document.querySelector('#loading-bar'),
+  overlay: document.querySelector('#loading-overlay'),
+  revealOnLoad: document.querySelectorAll('.reveal-on-load'),
+  hideOnLoad: document.querySelectorAll('.hide-on-load'),
+  progress: document.querySelector('#progress')
+};
+
+var controls = {
+  movement: {
+    head: {
+      pitch: document.querySelector('#head-pitch'),
+      yaw: document.querySelector('#head-yaw')
+    },
+    leftShoulder: {
+      pitch: document.querySelector('#l-shoulder-pitch'),
+      yaw: document.querySelector('#l-shoulder-yaw')
+    },
+    rightShoulder: {
+      pitch: document.querySelector('#r-shoulder-pitch'),
+      yaw: document.querySelector('#r-shoulder-yaw')
+    },
+    leftElbow: {
+      pitch: document.querySelector('#l-elbow-pitch'),
+      yaw: document.querySelector('#l-elbow-yaw')
+    },
+    rightElbow: {
+      pitch: document.querySelector('#r-elbow-pitch'),
+      yaw: document.querySelector('#r-elbow-yaw')
+    }
+  },
+  frames: {
+    createButton: document.querySelector('#create-frame-button')
+
+  },
+  groups: {
+    createButton: document.querySelector('#create-group-button')
+  },
+  dance: {
+    framerate: document.querySelector('#framerate'),
+    showAdvancedControls: document.querySelector('#advanced-control-enable')
+  },
+  music: {
+    startWithDanceCheckbox: document.querySelector('#start-music-with-dance'),
+    selection: document.querySelector('#music-select'),
+    playButton: document.querySelector('#play-music'),
+    positionSlider: document.querySelector('#track-position-slider')
+  },
+  file: {
+    saveDanceButton: document.querySelector('#save-dance'),
+    loadDanceButton: document.querySelector('#load-dance'),
+    examples: document.querySelector('#premade-examples')
+  }
+};
+
+var HTMLControl = function () {
+  function HTMLControl() {
+    classCallCheck(this, HTMLControl);
+  }
+
+  HTMLControl.setInitialState = function setInitialState() {};
+
+  HTMLControl.setOnLoadStartState = function setOnLoadStartState() {
+
+    loading.bar.classList.remove('hide');
+  };
+
+  HTMLControl.setOnLoadEndState = function setOnLoadEndState() {
+
+    loading.overlay.classList.add('hide');
+
+    for (var i = 0; i < loading.hideOnLoad.length; i++) {
+
+      loading.hideOnLoad[i].classList.add('hide');
+    }
+
+    for (var _i = 0; _i < loading.revealOnLoad.length; _i++) {
+
+      loading.revealOnLoad[_i].classList.remove('hide');
+    }
+
+    this.setMovementControlsDisabledState(false);
+  };
+
+  HTMLControl.setMovementControlsDisabledState = function setMovementControlsDisabledState(bool) {
+
+    controls.movement.head.pitch.disabled = bool;
+
+    for (var key in controls.movement) {
+
+      controls.movement[key].pitch.disabled = bool;
+      controls.movement[key].yaw.disabled = bool;
+    }
+  };
+
+  return HTMLControl;
+}();
+
+HTMLControl.canvas = canvas;
+HTMLControl.container = container;
+HTMLControl.loading = loading;
+HTMLControl.controls = controls;
+
 var loadingManager = new LoadingManager();
 
 var percentComplete = 0;
@@ -58710,49 +58686,6 @@ var Loaders = function Loaders() {
 };
 
 var loaders = new Loaders();
-
-function invertMirroredFBX(object) {
-
-          object.traverse(function (child) {
-
-                    if (child instanceof Mesh) {
-
-                              if (child.matrixWorld.determinant() < 0) {
-
-                                        var l = child.geometry.attributes.position.array.length;
-
-                                        for (var i = 0; i < l; i += 9) {
-
-                                                  // reverse winding order
-                                                  var tempX = child.geometry.attributes.position.array[i];
-                                                  var tempY = child.geometry.attributes.position.array[i + 1];
-                                                  var tempZ = child.geometry.attributes.position.array[i + 2];
-
-                                                  child.geometry.attributes.position.array[i] = child.geometry.attributes.position.array[i + 6];
-                                                  child.geometry.attributes.position.array[i + 1] = child.geometry.attributes.position.array[i + 7];
-                                                  child.geometry.attributes.position.array[i + 2] = child.geometry.attributes.position.array[i + 8];
-
-                                                  child.geometry.attributes.position.array[i + 6] = tempX;
-                                                  child.geometry.attributes.position.array[i + 7] = tempY;
-                                                  child.geometry.attributes.position.array[i + 8] = tempZ;
-
-                                                  // switch vertex normals
-                                                  var tempNX = child.geometry.attributes.normal.array[i];
-                                                  var tempNY = child.geometry.attributes.normal.array[i + 1];
-                                                  var tempNZ = child.geometry.attributes.normal.array[i + 2];
-
-                                                  child.geometry.attributes.normal.array[i] = child.geometry.attributes.normal.array[i + 6];
-                                                  child.geometry.attributes.normal.array[i + 1] = child.geometry.attributes.normal.array[i + 7];
-                                                  child.geometry.attributes.normal.array[i + 2] = child.geometry.attributes.normal.array[i + 8];
-
-                                                  child.geometry.attributes.normal.array[i + 6] = tempNX;
-                                                  child.geometry.attributes.normal.array[i + 7] = tempNY;
-                                                  child.geometry.attributes.normal.array[i + 8] = tempNZ;
-                                        }
-                              }
-                    }
-          });
-}
 
 var index$2 = createCommonjsModule(function (module) {
 /**
@@ -59370,26 +59303,90 @@ var RobotManualControl = function () {
       return RobotManualControl;
 }();
 
-var Simulation = function () {
-  function Simulation() {
-    classCallCheck(this, Simulation);
+function invertMirroredFBX(object) {
+
+          object.traverse(function (child) {
+
+                    if (child instanceof Mesh) {
+
+                              if (child.matrixWorld.determinant() < 0) {
+
+                                        var l = child.geometry.attributes.position.array.length;
+
+                                        for (var i = 0; i < l; i += 9) {
+
+                                                  // reverse winding order
+                                                  var tempX = child.geometry.attributes.position.array[i];
+                                                  var tempY = child.geometry.attributes.position.array[i + 1];
+                                                  var tempZ = child.geometry.attributes.position.array[i + 2];
+
+                                                  child.geometry.attributes.position.array[i] = child.geometry.attributes.position.array[i + 6];
+                                                  child.geometry.attributes.position.array[i + 1] = child.geometry.attributes.position.array[i + 7];
+                                                  child.geometry.attributes.position.array[i + 2] = child.geometry.attributes.position.array[i + 8];
+
+                                                  child.geometry.attributes.position.array[i + 6] = tempX;
+                                                  child.geometry.attributes.position.array[i + 7] = tempY;
+                                                  child.geometry.attributes.position.array[i + 8] = tempZ;
+
+                                                  // switch vertex normals
+                                                  var tempNX = child.geometry.attributes.normal.array[i];
+                                                  var tempNY = child.geometry.attributes.normal.array[i + 1];
+                                                  var tempNZ = child.geometry.attributes.normal.array[i + 2];
+
+                                                  child.geometry.attributes.normal.array[i] = child.geometry.attributes.normal.array[i + 6];
+                                                  child.geometry.attributes.normal.array[i + 1] = child.geometry.attributes.normal.array[i + 7];
+                                                  child.geometry.attributes.normal.array[i + 2] = child.geometry.attributes.normal.array[i + 8];
+
+                                                  child.geometry.attributes.normal.array[i + 6] = tempNX;
+                                                  child.geometry.attributes.normal.array[i + 7] = tempNY;
+                                                  child.geometry.attributes.normal.array[i + 8] = tempNZ;
+                                        }
+                              }
+                    }
+          });
+}
+
+// import animationControls from './animationControls.js';
+var Main = function () {
+  function Main() {
+    classCallCheck(this, Main);
 
 
-    this.preLoad();
+    // this.init();
 
-    this.load();
+    // this.preLoad();
 
-    this.postLoad();
+    // this.load();
+
+    // this.postLoad();
+
+    HTMLControl.loading.overlay.classList.add('hide');
   }
 
-  Simulation.prototype.preLoad = function preLoad() {
+  Main.prototype.init = function init() {
+
+    this.app = new App(HTMLControl.canvas);
+    this.app.renderer.setClearColor(0xf7f7f7, 1.0);
+
+    // Put any per frame calculations here
+    this.app.onUpdate = function () {
+
+      // use this.delta for timings here
+
+    };
+
+    // put any per resize calculations here
+    this.app.onWindowResize = function () {};
+  };
+
+  Main.prototype.preLoad = function preLoad() {
 
     this.animations = {};
 
     this.loadingPromises = [];
   };
 
-  Simulation.prototype.load = function load() {
+  Main.prototype.load = function load() {
     var _this = this;
 
     var stagePromise = loaders.fbxLoader('/assets/models/robot_dance/stage_camera_lights.fbx').then(function (object) {
@@ -59418,13 +59415,13 @@ var Simulation = function () {
     this.loadingPromises.push(naoPromise, stagePromise);
   };
 
-  Simulation.prototype.postLoad = function postLoad() {
+  Main.prototype.postLoad = function postLoad() {
     var _this2 = this;
 
     Promise.all(this.loadingPromises).then(function () {
 
-      appManager.scene.add(_this2.stage);
-      appManager.scene.add(_this2.nao);
+      _this2.app.scene.add(_this2.stage);
+      _this2.app.scene.add(_this2.nao);
 
       _this2.initBackground();
       _this2.initLighting();
@@ -59433,14 +59430,14 @@ var Simulation = function () {
 
       _this2.robotManualControl = new RobotManualControl(_this2.nao);
 
-      appManager.play();
+      _this2.app.play();
     });
   };
 
-  Simulation.prototype.initLighting = function initLighting() {
+  Main.prototype.initLighting = function initLighting() {
 
     var ambientLight = new AmbientLight(0xffffff, 0.3);
-    appManager.scene.add(ambientLight);
+    this.app.scene.add(ambientLight);
 
     this.spotlightStageRightLow.distance = 200;
     this.spotlightStageLeftLow.distance = 200;
@@ -59455,48 +59452,48 @@ var Simulation = function () {
     this.spotlightStageCenterHigh.penumbra = 0.25;
 
     // console.log( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
-    appManager.scene.add(this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh);
+    this.app.scene.add(this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh);
   };
 
-  Simulation.prototype.initCamera = function initCamera() {
+  Main.prototype.initCamera = function initCamera() {
 
     // console.log( this.camera )
 
-    // appManager.camera = this.camera;
-    appManager.camera.far = 800;
-    appManager.camera.fov = 35;
-    appManager.camera.position.set(0, 0, 200);
-    appManager.camera.updateProjectionMatrix();
+    // this.app.camera = this.camera;
+    this.app.camera.far = 800;
+    this.app.camera.fov = 35;
+    this.app.camera.position.set(0, 0, 200);
+    this.app.camera.updateProjectionMatrix();
   };
 
-  Simulation.prototype.initControls = function initControls() {
+  Main.prototype.initControls = function initControls() {
 
-    appManager.controls = new OrbitControls(appManager.camera, appManager.canvas);
+    this.app.controls = new OrbitControls(this.app.camera, this.app.canvas);
 
-    // appManager.controls.object = this.camera;
+    // this.app.controls.object = this.camera;
 
     // vertical rotation limits
-    appManager.controls.minPolarAngle = Math.PI * 0.1; // upper
-    appManager.controls.maxPolarAngle = Math.PI * 0.45; // lower
+    this.app.controls.minPolarAngle = Math.PI * 0.1; // upper
+    this.app.controls.maxPolarAngle = Math.PI * 0.45; // lower
 
-    appManager.controls.minDistance = 100;
-    appManager.controls.maxDistance = 400;
+    this.app.controls.minDistance = 100;
+    this.app.controls.maxDistance = 400;
 
     // horizontal rotation limits
-    appManager.controls.minAzimuthAngle = -Math.PI * 0.5;
-    appManager.controls.maxAzimuthAngle = Math.PI * 0.5;
+    this.app.controls.minAzimuthAngle = -Math.PI * 0.5;
+    this.app.controls.maxAzimuthAngle = Math.PI * 0.5;
 
-    appManager.controls.enableDamping = true;
-    appManager.controls.dampingFactor = 0.2;
+    this.app.controls.enableDamping = true;
+    this.app.controls.dampingFactor = 0.2;
 
     // console.log( this.sceneCentre )
-    appManager.controls.target.copy(this.sceneCentre);
-    appManager.controls.update();
+    this.app.controls.target.copy(this.sceneCentre);
+    this.app.controls.update();
   };
 
-  Simulation.prototype.initBackground = function initBackground() {
+  Main.prototype.initBackground = function initBackground() {
 
-    appManager.scene.fog = new Fog(0xf7f7f7, 600, appManager.camera.far);
+    this.app.scene.fog = new Fog(0xf7f7f7, 600, this.app.camera.far);
 
     var geometry = new PlaneBufferGeometry(20000, 20000);
     var material = new MeshPhongMaterial({ color: 0xb0b0b0, shininess: 0.1 });
@@ -59504,12 +59501,12 @@ var Simulation = function () {
     ground.position.set(0, -25, 0);
     ground.rotation.x = -Math.PI / 2;
 
-    appManager.scene.add(ground);
+    this.app.scene.add(ground);
   };
 
-  return Simulation;
+  return Main;
 }();
 
-new Simulation();
+new Main();
 
 }());
