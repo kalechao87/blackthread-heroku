@@ -5,12 +5,12 @@ import OrbitControls from 'modules/OrbitControls.module.js';
 
 import loaders from './loaders.js';
 // import animationControls from './animationControls.js';
-import RobotManualControl from './RobotManualControl.js';
+
 import HTMLControl from './HTMLControl.js';
 
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
-import './Frames.js';
+import Frames from './Frames.js';
 
 // Set up THREE caching
 THREE.Cache.enabled = true;
@@ -20,15 +20,16 @@ class Main {
 
   constructor() {
 
-    // this.init();
+    this.init();
 
-    // this.preLoad();
+    this.preLoad();
 
-    // this.load();
+    this.load();
 
-    // this.postLoad();
+    this.postLoad();
 
-    HTMLControl.loading.overlay.classList.add( 'hide' );
+    // For testing
+    // HTMLControl.loading.overlay.classList.add( 'hide' );
 
   }
 
@@ -104,7 +105,7 @@ class Main {
         this.initCamera();
         this.initControls();
 
-        this.robotManualControl = new RobotManualControl( this.nao );
+        this.frames = new Frames( this.nao );
 
         this.app.play();
 

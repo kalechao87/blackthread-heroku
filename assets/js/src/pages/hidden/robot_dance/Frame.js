@@ -17,32 +17,39 @@ export default class Frame {
 
   }
 
+  set selected( bool ) {
+
+    if ( bool === true ) this.row.style.backgroundColor = 'aliceBlue';
+    else this.row.style.backgroundColor = 'initial';
+
+  }
+
   initConstraints() {
 
-    this.headPitchMin = -30;
-    this.headPitchMax = 30;
+    this.headPitchMin = -60;
+    this.headPitchMax = 60;
     this.headYawMin = -30;
     this.headYawMax = 30;
 
-    this.leftShoulderPitchMin = -30;
-    this.leftShoulderPitchMax = 30;
-    this.leftShoulderYawMin = -30;
-    this.leftShoulderYawMax = 30;
+    this.leftShoulderPitchMin = -40;
+    this.leftShoulderPitchMax = 60;
+    this.leftShoulderYawMin = 0;
+    this.leftShoulderYawMax = 60;
 
-    this.rightShoulderPitchMin = -30;
-    this.rightShoulderPitchMax = 30;
-    this.rightShoulderYawMin = -30;
-    this.rightShoulderYawMax = 30;
+    this.rightShoulderPitchMin = -40;
+    this.rightShoulderPitchMax = 60;
+    this.rightShoulderYawMin = 0;
+    this.rightShoulderYawMax = 60;
 
-    this.leftElbowPitchMin = -30;
-    this.leftElbowPitchMax = 30;
-    this.leftElbowYawMin = -30;
-    this.leftElbowYawMax = 30;
+    this.leftElbowPitchMin = 0;
+    this.leftElbowPitchMax = 60;
+    this.leftElbowYawMin = -60;
+    this.leftElbowYawMax = 60;
 
-    this.rightElbowPitchMin = -30;
-    this.rightElbowPitchMax = 30;
-    this.rightElbowYawMin = -30;
-    this.rightElbowYawMax = 30;
+    this.rightElbowPitchMin = 0;
+    this.rightElbowPitchMax = 60;
+    this.rightElbowYawMin = -60;
+    this.rightElbowYawMax = 60;
 
   }
 

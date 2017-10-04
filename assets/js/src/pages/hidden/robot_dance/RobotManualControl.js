@@ -16,6 +16,12 @@ export default class RobotManualControl {
 
   }
 
+  setFrame( frame ) {
+
+    console.log( frame )
+
+  }
+
   initMoveableParts() {
 
     this.head = this.robot.getObjectByName( 'headControl' ); // or 'neck'

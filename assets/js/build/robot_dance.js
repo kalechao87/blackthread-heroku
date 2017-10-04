@@ -58688,6 +58688,202 @@ var Loaders = function Loaders() {
 
 var loaders = new Loaders();
 
+function invertMirroredFBX(object) {
+
+          object.traverse(function (child) {
+
+                    if (child instanceof Mesh) {
+
+                              if (child.matrixWorld.determinant() < 0) {
+
+                                        var l = child.geometry.attributes.position.array.length;
+
+                                        for (var i = 0; i < l; i += 9) {
+
+                                                  // reverse winding order
+                                                  var tempX = child.geometry.attributes.position.array[i];
+                                                  var tempY = child.geometry.attributes.position.array[i + 1];
+                                                  var tempZ = child.geometry.attributes.position.array[i + 2];
+
+                                                  child.geometry.attributes.position.array[i] = child.geometry.attributes.position.array[i + 6];
+                                                  child.geometry.attributes.position.array[i + 1] = child.geometry.attributes.position.array[i + 7];
+                                                  child.geometry.attributes.position.array[i + 2] = child.geometry.attributes.position.array[i + 8];
+
+                                                  child.geometry.attributes.position.array[i + 6] = tempX;
+                                                  child.geometry.attributes.position.array[i + 7] = tempY;
+                                                  child.geometry.attributes.position.array[i + 8] = tempZ;
+
+                                                  // switch vertex normals
+                                                  var tempNX = child.geometry.attributes.normal.array[i];
+                                                  var tempNY = child.geometry.attributes.normal.array[i + 1];
+                                                  var tempNZ = child.geometry.attributes.normal.array[i + 2];
+
+                                                  child.geometry.attributes.normal.array[i] = child.geometry.attributes.normal.array[i + 6];
+                                                  child.geometry.attributes.normal.array[i + 1] = child.geometry.attributes.normal.array[i + 7];
+                                                  child.geometry.attributes.normal.array[i + 2] = child.geometry.attributes.normal.array[i + 8];
+
+                                                  child.geometry.attributes.normal.array[i + 6] = tempNX;
+                                                  child.geometry.attributes.normal.array[i + 7] = tempNY;
+                                                  child.geometry.attributes.normal.array[i + 8] = tempNZ;
+                                        }
+                              }
+                    }
+          });
+}
+
+var frames = HTMLControl.controls.frames.table;
+
+var Frame = function () {
+    function Frame(num) {
+        classCallCheck(this, Frame);
+
+
+        this.num = num;
+
+        this.initConstraints();
+
+        this.initTableRow();
+
+        this.initDeleteButton();
+    }
+
+    Frame.prototype.initConstraints = function initConstraints() {
+
+        this.headPitchMin = -60;
+        this.headPitchMax = 60;
+        this.headYawMin = -30;
+        this.headYawMax = 30;
+
+        this.leftShoulderPitchMin = -40;
+        this.leftShoulderPitchMax = 60;
+        this.leftShoulderYawMin = 0;
+        this.leftShoulderYawMax = 60;
+
+        this.rightShoulderPitchMin = -40;
+        this.rightShoulderPitchMax = 60;
+        this.rightShoulderYawMin = 0;
+        this.rightShoulderYawMax = 60;
+
+        this.leftElbowPitchMin = 0;
+        this.leftElbowPitchMax = 60;
+        this.leftElbowYawMin = -60;
+        this.leftElbowYawMax = 60;
+
+        this.rightElbowPitchMin = 0;
+        this.rightElbowPitchMax = 60;
+        this.rightElbowYawMin = -60;
+        this.rightElbowYawMax = 60;
+    };
+
+    Frame.prototype.initTableRow = function initTableRow() {
+
+        this.row = document.createElement('tr');
+        this.row.id = 'fr-' + this.num;
+
+        var nameCell = document.createElement('td');
+        this.row.appendChild(nameCell);
+        nameCell.innerHTML = this.num;
+
+        var headCell = document.createElement('td');
+        this.row.appendChild(headCell);
+        this.headPitch = this.createInput(headCell, this.headPitchMin, this.headPitchMax, 'head', 'pitch');
+        this.headYaw = this.createInput(headCell, this.headYawMin, this.headYawMax, 'head', 'yaw');
+
+        var leftShoulderCell = document.createElement('td');
+        this.row.appendChild(leftShoulderCell);
+        this.leftShoulderPitch = this.createInput(leftShoulderCell, this.leftShoulderPitchMin, this.headPitchMax, 'leftShoulder', 'pitch');
+        this.leftShoulderYaw = this.createInput(leftShoulderCell, this.leftShoulderYawMin, this.headYawMax, 'leftShoulder', 'yaw');
+
+        var rightShoulderCell = document.createElement('td');
+        this.row.appendChild(rightShoulderCell);
+        this.rightShoulderPitch = this.createInput(rightShoulderCell, this.rightShoulderPitchMin, this.headPitchMax, 'rightShoulder', 'pitch');
+        this.rightShoulderYaw = this.createInput(rightShoulderCell, this.rightShoulderYawMin, this.headYawMax, 'rightShoulder', 'yaw');
+
+        var leftElbowCell = document.createElement('td');
+        this.row.appendChild(leftElbowCell);
+        this.leftElbowPitch = this.createInput(leftElbowCell, this.leftElbowPitchMin, this.headPitchMax, 'leftElbow', 'pitch');
+        this.leftElbowYaw = this.createInput(leftElbowCell, this.leftElbowYawMin, this.headYawMax, 'leftElbow', 'yaw');
+
+        var rightElbowCell = document.createElement('td');
+        this.row.appendChild(rightElbowCell);
+        this.rightElbowPitch = this.createInput(rightElbowCell, this.rightElbowPitchMin, this.headPitchMax, 'rightElbow', 'pitch');
+        this.rightElbowYaw = this.createInput(rightElbowCell, this.rightElbowYawMin, this.headYawMax, 'rightElbow', 'yaw');
+    };
+
+    Frame.prototype.createInput = function createInput(cell, min, max, name, type) {
+
+        var span = document.createElement('span');
+        span.innerHTML = type[0].toUpperCase() + type.substr(1, type.length) + ': ';
+
+        var input = document.createElement('input');
+        input.id = 'fr-' + this.num + '-' + name + '-' + type;
+        input.type = 'number';
+        input.min = min;
+        input.max = max;
+        input.value = 0;
+
+        span.appendChild(input);
+        cell.appendChild(span);
+
+        return input;
+    };
+
+    Frame.prototype.initDeleteButton = function initDeleteButton() {
+        var _this = this;
+
+        var deleteButtonCell = document.createElement('td');
+        this.deleteButton = document.createElement('button');
+        this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+        deleteButtonCell.appendChild(this.deleteButton);
+        this.row.appendChild(deleteButtonCell);
+
+        var removeRow = function (e) {
+
+            e.preventDefault();
+            frames.removeChild(_this.row);
+
+            _this.deleteButton.removeEventListener('click', removeRow);
+        };
+
+        this.deleteButton.addEventListener('click', removeRow);
+    };
+
+    createClass(Frame, [{
+        key: 'selected',
+        set: function (bool) {
+
+            if (bool === true) this.row.style.backgroundColor = 'aliceBlue';else this.row.style.backgroundColor = 'initial';
+        }
+    }]);
+    return Frame;
+}();
+
+/*
+<td id="fr-1">1</td>
+<td>
+  <span style="display: inline-block;">appendChild <input id="fr-1-head-pitch" type="number"></span>
+  <span style="display: inline-block;">Yaw: <input id="fr-1-head-yaw" type="number"></span>
+</td>
+<td>
+  <span style="display: inline-block;">Pitch: <input type="number"></span>
+  <span style="display: inline-block;">Yaw: <input type="number"></span>
+</td>
+<td>
+  <span style="display: inline-block;">Pitch: <input type="number"></span>
+  <span style="display: inline-block;">Yaw: <input type="number"></span>
+</td>
+<td>
+  <span style="display: inline-block;">Pitch: <input type="number"></span>
+  <span style="display: inline-block;">Yaw: <input type="number"></span>
+</td>
+<td>
+  <span style="display: inline-block;">Pitch: <input type="number"></span>
+  <span style="display: inline-block;">Yaw: <input type="number"></span>
+</td>
+<td><button><span class="fa fa-lg fa-trash-o" aria-hidden="true"></span></button></td>
+
+*/
+
 var index$2 = createCommonjsModule(function (module) {
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -59145,6 +59341,11 @@ var RobotManualControl = function () {
             this.initEventListeners();
       }
 
+      RobotManualControl.prototype.setFrame = function setFrame(frame) {
+
+            console.log(frame);
+      };
+
       RobotManualControl.prototype.initMoveableParts = function initMoveableParts() {
 
             this.head = this.robot.getObjectByName('headControl'); // or 'neck'
@@ -59304,199 +59505,68 @@ var RobotManualControl = function () {
       return RobotManualControl;
 }();
 
-function invertMirroredFBX(object) {
-
-          object.traverse(function (child) {
-
-                    if (child instanceof Mesh) {
-
-                              if (child.matrixWorld.determinant() < 0) {
-
-                                        var l = child.geometry.attributes.position.array.length;
-
-                                        for (var i = 0; i < l; i += 9) {
-
-                                                  // reverse winding order
-                                                  var tempX = child.geometry.attributes.position.array[i];
-                                                  var tempY = child.geometry.attributes.position.array[i + 1];
-                                                  var tempZ = child.geometry.attributes.position.array[i + 2];
-
-                                                  child.geometry.attributes.position.array[i] = child.geometry.attributes.position.array[i + 6];
-                                                  child.geometry.attributes.position.array[i + 1] = child.geometry.attributes.position.array[i + 7];
-                                                  child.geometry.attributes.position.array[i + 2] = child.geometry.attributes.position.array[i + 8];
-
-                                                  child.geometry.attributes.position.array[i + 6] = tempX;
-                                                  child.geometry.attributes.position.array[i + 7] = tempY;
-                                                  child.geometry.attributes.position.array[i + 8] = tempZ;
-
-                                                  // switch vertex normals
-                                                  var tempNX = child.geometry.attributes.normal.array[i];
-                                                  var tempNY = child.geometry.attributes.normal.array[i + 1];
-                                                  var tempNZ = child.geometry.attributes.normal.array[i + 2];
-
-                                                  child.geometry.attributes.normal.array[i] = child.geometry.attributes.normal.array[i + 6];
-                                                  child.geometry.attributes.normal.array[i + 1] = child.geometry.attributes.normal.array[i + 7];
-                                                  child.geometry.attributes.normal.array[i + 2] = child.geometry.attributes.normal.array[i + 8];
-
-                                                  child.geometry.attributes.normal.array[i + 6] = tempNX;
-                                                  child.geometry.attributes.normal.array[i + 7] = tempNY;
-                                                  child.geometry.attributes.normal.array[i + 8] = tempNZ;
-                                        }
-                              }
-                    }
-          });
-}
-
-var frames$1 = HTMLControl.controls.frames.table;
-
-var Frame = function () {
-    function Frame(num) {
-        classCallCheck(this, Frame);
+var Frames = function () {
+      function Frames(robot) {
+            classCallCheck(this, Frames);
 
 
-        this.num = num;
+            this.robotManualControl = new RobotManualControl(robot);
 
-        this.initConstraints();
+            this.currentFrameNum = 0;
+            this.frames = [];
 
-        this.initTableRow();
+            this.framesTable = HTMLControl.controls.frames.table;
+            this.newFrameButton = HTMLControl.controls.frames.createButton;
+            this.initNewFrameButton();
+      }
 
-        this.initDeleteButton();
-    }
+      Frames.prototype.initNewFrameButton = function initNewFrameButton() {
+            var _this = this;
 
-    Frame.prototype.initConstraints = function initConstraints() {
+            this.newFrameButton.addEventListener('click', function (e) {
 
-        this.headPitchMin = -30;
-        this.headPitchMax = 30;
-        this.headYawMin = -30;
-        this.headYawMax = 30;
+                  e.preventDefault();
 
-        this.leftShoulderPitchMin = -30;
-        this.leftShoulderPitchMax = 30;
-        this.leftShoulderYawMin = -30;
-        this.leftShoulderYawMax = 30;
+                  var frame = new Frame(_this.currentFrameNum++);
 
-        this.rightShoulderPitchMin = -30;
-        this.rightShoulderPitchMax = 30;
-        this.rightShoulderYawMin = -30;
-        this.rightShoulderYawMax = 30;
+                  _this.frames.push(frame);
 
-        this.leftElbowPitchMin = -30;
-        this.leftElbowPitchMax = 30;
-        this.leftElbowYawMin = -30;
-        this.leftElbowYawMax = 30;
+                  _this.framesTable.appendChild(frame.row);
 
-        this.rightElbowPitchMin = -30;
-        this.rightElbowPitchMax = 30;
-        this.rightElbowYawMin = -30;
-        this.rightElbowYawMax = 30;
-    };
+                  frame.row.addEventListener('click', function (evt) {
 
-    Frame.prototype.initTableRow = function initTableRow() {
+                        evt.preventDefault();
 
-        this.row = document.createElement('tr');
-        this.row.id = 'fr-' + this.num;
+                        frame.selected = true;
 
-        var nameCell = document.createElement('td');
-        this.row.appendChild(nameCell);
-        nameCell.innerHTML = this.num;
+                        _this.robotManualControl.setFrame(frame);
 
-        var headCell = document.createElement('td');
-        this.row.appendChild(headCell);
-        this.headPitch = this.createInput(headCell, this.headPitchMin, this.headPitchMax, 'head', 'pitch');
-        this.headYaw = this.createInput(headCell, this.headYawMin, this.headYawMax, 'head', 'yaw');
+                        _this.frames.forEach(function (f) {
 
-        var leftShoulderCell = document.createElement('td');
-        this.row.appendChild(leftShoulderCell);
-        this.leftShoulderPitch = this.createInput(leftShoulderCell, this.leftShoulderPitchMin, this.headPitchMax, 'leftShoulder', 'pitch');
-        this.leftShoulderYaw = this.createInput(leftShoulderCell, this.leftShoulderYawMin, this.headYawMax, 'leftShoulder', 'yaw');
+                              if (f.num !== frame.num) f.selected = false;
+                        });
+                  });
+            });
+      };
 
-        var rightShoulderCell = document.createElement('td');
-        this.row.appendChild(rightShoulderCell);
-        this.rightShoulderPitch = this.createInput(rightShoulderCell, this.rightShoulderPitchMin, this.headPitchMax, 'rightShoulder', 'pitch');
-        this.rightShoulderYaw = this.createInput(rightShoulderCell, this.rightShoulderYawMin, this.headYawMax, 'rightShoulder', 'yaw');
-
-        var leftElbowCell = document.createElement('td');
-        this.row.appendChild(leftElbowCell);
-        this.leftElbowPitch = this.createInput(leftElbowCell, this.leftElbowPitchMin, this.headPitchMax, 'leftElbow', 'pitch');
-        this.leftElbowYaw = this.createInput(leftElbowCell, this.leftElbowYawMin, this.headYawMax, 'leftElbow', 'yaw');
-
-        var rightElbowCell = document.createElement('td');
-        this.row.appendChild(rightElbowCell);
-        this.rightElbowPitch = this.createInput(rightElbowCell, this.rightElbowPitchMin, this.headPitchMax, 'rightElbow', 'pitch');
-        this.rightElbowYaw = this.createInput(rightElbowCell, this.rightElbowYawMin, this.headYawMax, 'rightElbow', 'yaw');
-    };
-
-    Frame.prototype.createInput = function createInput(cell, min, max, name, type) {
-
-        var span = document.createElement('span');
-        span.innerHTML = type[0].toUpperCase() + type.substr(1, type.length) + ': ';
-
-        var input = document.createElement('input');
-        input.id = 'fr-' + this.num + '-' + name + '-' + type;
-        input.type = 'number';
-        input.min = min;
-        input.max = max;
-        input.value = 0;
-
-        span.appendChild(input);
-        cell.appendChild(span);
-
-        return input;
-    };
-
-    Frame.prototype.initDeleteButton = function initDeleteButton() {
-        var _this = this;
-
-        var deleteButtonCell = document.createElement('td');
-        this.deleteButton = document.createElement('button');
-        this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-        deleteButtonCell.appendChild(this.deleteButton);
-        this.row.appendChild(deleteButtonCell);
-
-        var removeRow = function (e) {
-
-            e.preventDefault();
-            frames$1.removeChild(_this.row);
-
-            _this.deleteButton.removeEventListener('click', removeRow);
-        };
-
-        this.deleteButton.addEventListener('click', removeRow);
-    };
-
-    return Frame;
+      return Frames;
 }();
-
-var num = 0;
-
-var framesTable = HTMLControl.controls.frames.table;
-var newFrameButton = HTMLControl.controls.frames.createButton;
-
-var frames = {};
-
-newFrameButton.addEventListener('click', function () {
-
-  frames[num] = new Frame(num);
-
-  framesTable.appendChild(frames[num].row);
-
-  num++;
-});
 
 var Main = function () {
   function Main() {
     classCallCheck(this, Main);
 
 
-    // this.init();
+    this.init();
 
-    // this.preLoad();
+    this.preLoad();
 
-    // this.load();
+    this.load();
 
-    // this.postLoad();
+    this.postLoad();
 
-    HTMLControl.loading.overlay.classList.add('hide');
+    // For testing
+    // HTMLControl.loading.overlay.classList.add( 'hide' );
   }
 
   Main.prototype.init = function init() {
@@ -59564,7 +59634,7 @@ var Main = function () {
       _this2.initCamera();
       _this2.initControls();
 
-      _this2.robotManualControl = new RobotManualControl(_this2.nao);
+      _this2.frames = new Frames(_this2.nao);
 
       _this2.app.play();
     });

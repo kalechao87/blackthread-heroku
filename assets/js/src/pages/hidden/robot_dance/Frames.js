@@ -1,20 +1,53 @@
 import HTMLControl from './HTMLControl.js';
 import Frame from './Frame.js';
+import RobotManualControl from './RobotManualControl.js';
 
-let num = 0;
+export default class Frames {
 
-const framesTable = HTMLControl.controls.frames.table;
-const newFrameButton = HTMLControl.controls.frames.createButton;
+  constructor( robot ) {
 
-const frames = {};
+    this.robotManualControl = new RobotManualControl( robot );
 
+    this.currentFrameNum = 0;
+    this.frames = [];
 
-newFrameButton.addEventListener( 'click', () => {
+    this.framesTable = HTMLControl.controls.frames.table;
+    this.newFrameButton = HTMLControl.controls.frames.createButton;
+    this.initNewFrameButton();
 
-  frames[ num ] = new Frame( num );
+  }
 
-  framesTable.appendChild( frames[ num ].row );
+  initNewFrameButton() {
 
-  num ++;
+    this.newFrameButton.addEventListener( 'click', ( e ) => {
 
-} );
+      e.preventDefault();
+
+      const frame = new Frame( this.currentFrameNum ++  );
+
+      this.frames.push( frame );
+
+      this.framesTable.appendChild( frame.row );
+
+      frame.row.addEventListener( 'click', ( evt ) => {
+
+        evt.preventDefault();
+
+        frame.selected = true;
+
+        this.robotManualControl.setFrame( frame );
+
+        this.frames.forEach( ( f ) => {
+
+          if ( f.num !== frame.num ) f.selected = false;
+
+        } );
+
+      } );
+
+    } );
+
+  }
+
+}
+

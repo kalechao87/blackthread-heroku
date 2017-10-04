@@ -103,13 +103,14 @@
 
   tr {
     box-shadow: 0px 0px 1px 0px black;
+    user-select: none;
   }
 
 
   tbody{
-    tr:hover{
-      background-color: aliceblue;
-    }
+    // tr:hover{
+    //   background-color: aliceblue;
+    // }
   }
 
   td {
