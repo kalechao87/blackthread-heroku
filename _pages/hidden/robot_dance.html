@@ -39,20 +39,6 @@ vendor-js:
 
     </div>
 
-    <div id="frame-controls" class="controls-section">
-      <h3>Frames</h3>
-
-      <button id="create-frame-button">Create</button>
-      <!-- <button id="create-frame">Delete Selected</button> -->
-
-      <select id="frames" multiple>
-        <option value="frame-1">Frame-1</option>
-        <option value="frame-2">Frame-2</option>
-        <option value="frame-3">Frame-3</option>
-        <option value="frame-4">Frame-4</option>
-      </select>
-    </div>
-
     <div id="group-controls" class="controls-section">
 
       <h3>Groups</h3>
@@ -155,10 +141,25 @@ vendor-js:
       <ul>
 
         <li>
-          <input type="checkbox" checked>
+          <input type="checkbox">
           <i></i>
           <h2>Frames</h2>
-          <div class="accordion-section"><p>Contents 1.</p></div>
+          <div class="accordion-section">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Head</th>
+                  <th>Left Shoulder</th>
+                  <th>Right Shoulder</th>
+                  <th>Left Elbow</th>
+                  <th>Right Elbow</th>
+                  <th><button id="create-frame-button">New</button></th>
+                </tr>
+              </thead>
+              <tbody id="frames"> </tbody>
+            </table>
+          </div>
         </li>
 
         <li>

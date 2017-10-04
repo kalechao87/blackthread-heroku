@@ -58492,6 +58492,7 @@ var controls = {
     }
   },
   frames: {
+    table: document.querySelector('#frames'),
     createButton: document.querySelector('#create-frame-button')
 
   },
@@ -59346,7 +59347,142 @@ function invertMirroredFBX(object) {
           });
 }
 
-// import animationControls from './animationControls.js';
+var frames$1 = HTMLControl.controls.frames.table;
+
+var Frame = function () {
+    function Frame(num) {
+        classCallCheck(this, Frame);
+
+
+        this.num = num;
+
+        this.initConstraints();
+
+        this.initTableRow();
+
+        this.initDeleteButton();
+    }
+
+    Frame.prototype.initConstraints = function initConstraints() {
+
+        this.headPitchMin = -30;
+        this.headPitchMax = 30;
+        this.headYawMin = -30;
+        this.headYawMax = 30;
+
+        this.leftShoulderPitchMin = -30;
+        this.leftShoulderPitchMax = 30;
+        this.leftShoulderYawMin = -30;
+        this.leftShoulderYawMax = 30;
+
+        this.rightShoulderPitchMin = -30;
+        this.rightShoulderPitchMax = 30;
+        this.rightShoulderYawMin = -30;
+        this.rightShoulderYawMax = 30;
+
+        this.leftElbowPitchMin = -30;
+        this.leftElbowPitchMax = 30;
+        this.leftElbowYawMin = -30;
+        this.leftElbowYawMax = 30;
+
+        this.rightElbowPitchMin = -30;
+        this.rightElbowPitchMax = 30;
+        this.rightElbowYawMin = -30;
+        this.rightElbowYawMax = 30;
+    };
+
+    Frame.prototype.initTableRow = function initTableRow() {
+
+        this.row = document.createElement('tr');
+        this.row.id = 'fr-' + this.num;
+
+        var nameCell = document.createElement('td');
+        this.row.appendChild(nameCell);
+        nameCell.innerHTML = this.num;
+
+        var headCell = document.createElement('td');
+        this.row.appendChild(headCell);
+        this.headPitch = this.createInput(headCell, this.headPitchMin, this.headPitchMax, 'head', 'pitch');
+        this.headYaw = this.createInput(headCell, this.headYawMin, this.headYawMax, 'head', 'yaw');
+
+        var leftShoulderCell = document.createElement('td');
+        this.row.appendChild(leftShoulderCell);
+        this.leftShoulderPitch = this.createInput(leftShoulderCell, this.leftShoulderPitchMin, this.headPitchMax, 'leftShoulder', 'pitch');
+        this.leftShoulderYaw = this.createInput(leftShoulderCell, this.leftShoulderYawMin, this.headYawMax, 'leftShoulder', 'yaw');
+
+        var rightShoulderCell = document.createElement('td');
+        this.row.appendChild(rightShoulderCell);
+        this.rightShoulderPitch = this.createInput(rightShoulderCell, this.rightShoulderPitchMin, this.headPitchMax, 'rightShoulder', 'pitch');
+        this.rightShoulderYaw = this.createInput(rightShoulderCell, this.rightShoulderYawMin, this.headYawMax, 'rightShoulder', 'yaw');
+
+        var leftElbowCell = document.createElement('td');
+        this.row.appendChild(leftElbowCell);
+        this.leftElbowPitch = this.createInput(leftElbowCell, this.leftElbowPitchMin, this.headPitchMax, 'leftElbow', 'pitch');
+        this.leftElbowYaw = this.createInput(leftElbowCell, this.leftElbowYawMin, this.headYawMax, 'leftElbow', 'yaw');
+
+        var rightElbowCell = document.createElement('td');
+        this.row.appendChild(rightElbowCell);
+        this.rightElbowPitch = this.createInput(rightElbowCell, this.rightElbowPitchMin, this.headPitchMax, 'rightElbow', 'pitch');
+        this.rightElbowYaw = this.createInput(rightElbowCell, this.rightElbowYawMin, this.headYawMax, 'rightElbow', 'yaw');
+    };
+
+    Frame.prototype.createInput = function createInput(cell, min, max, name, type) {
+
+        var span = document.createElement('span');
+        span.innerHTML = type[0].toUpperCase() + type.substr(1, type.length) + ': ';
+
+        var input = document.createElement('input');
+        input.id = 'fr-' + this.num + '-' + name + '-' + type;
+        input.type = 'number';
+        input.min = min;
+        input.max = max;
+        input.value = 0;
+
+        span.appendChild(input);
+        cell.appendChild(span);
+
+        return input;
+    };
+
+    Frame.prototype.initDeleteButton = function initDeleteButton() {
+        var _this = this;
+
+        var deleteButtonCell = document.createElement('td');
+        this.deleteButton = document.createElement('button');
+        this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+        deleteButtonCell.appendChild(this.deleteButton);
+        this.row.appendChild(deleteButtonCell);
+
+        var removeRow = function (e) {
+
+            e.preventDefault();
+            frames$1.removeChild(_this.row);
+
+            _this.deleteButton.removeEventListener('click', removeRow);
+        };
+
+        this.deleteButton.addEventListener('click', removeRow);
+    };
+
+    return Frame;
+}();
+
+var num = 0;
+
+var framesTable = HTMLControl.controls.frames.table;
+var newFrameButton = HTMLControl.controls.frames.createButton;
+
+var frames = {};
+
+newFrameButton.addEventListener('click', function () {
+
+  frames[num] = new Frame(num);
+
+  framesTable.appendChild(frames[num].row);
+
+  num++;
+});
+
 var Main = function () {
   function Main() {
     classCallCheck(this, Main);

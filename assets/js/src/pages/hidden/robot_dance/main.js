@@ -10,6 +10,7 @@ import HTMLControl from './HTMLControl.js';
 
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
+import './Frames.js';
 
 // Set up THREE caching
 THREE.Cache.enabled = true;
@@ -27,7 +28,7 @@ class Main {
 
     // this.postLoad();
 
-    HTMLControl.loading.overlay.classList.add('hide');
+    HTMLControl.loading.overlay.classList.add( 'hide' );
 
   }
 

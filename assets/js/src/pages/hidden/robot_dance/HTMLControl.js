@@ -33,6 +33,7 @@ const controls = {
     },
   },
   frames: {
+    table: document.querySelector( '#frames' ),
     createButton: document.querySelector( '#create-frame-button' ),
 
   },
