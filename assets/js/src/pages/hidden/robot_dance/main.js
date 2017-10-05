@@ -163,7 +163,7 @@ class Main {
     this.app.controls.minPolarAngle = Math.PI * 0.1; // upper
     this.app.controls.maxPolarAngle = Math.PI * 0.45; // lower
 
-    this.app.controls.minDistance = 100;
+    this.app.controls.minDistance = 60;
     this.app.controls.maxDistance = 400;
 
     // horizontal rotation limits

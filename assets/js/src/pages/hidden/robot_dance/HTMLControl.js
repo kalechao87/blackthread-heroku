@@ -24,7 +24,8 @@ const controls = {
     showAdvancedControls: document.querySelector( '#advanced-control-enable' ),
   },
   music: {
-    upload: document.querySelector( '#upload-mp3' ),
+    uploadMP3Button: document.querySelector( '#upload-mp3-button' ),
+    uploadMP3Input: document.querySelector( '#upload-mp3-input' ),
     tracks: document.querySelector( '#loaded-tracks' ),
     play: document.querySelector( '#play-music' ),
     positionSlider: document.querySelector( '#track-position-slider' ),
