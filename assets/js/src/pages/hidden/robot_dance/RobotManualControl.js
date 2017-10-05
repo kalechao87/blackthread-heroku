@@ -175,7 +175,7 @@ export default class RobotManualControl {
 
         const value = THREE.Math.degToRad( e.target.value );
 
-        this.leftElbow.rotateOnAxis( xAxis, leftElbowYawPrevVal - value );
+        this.leftElbow.rotateOnAxis( zAxis, leftElbowYawPrevVal - value );
 
         leftElbowYawPrevVal = value;
 
@@ -200,7 +200,7 @@ export default class RobotManualControl {
 
         const value = THREE.Math.degToRad( e.target.value );
 
-        this.rightElbow.rotateOnAxis( xAxis, rightElbowYawPrevVal - value );
+        this.rightElbow.rotateOnAxis( zAxis, rightElbowYawPrevVal - value );
 
         rightElbowYawPrevVal = value;
 

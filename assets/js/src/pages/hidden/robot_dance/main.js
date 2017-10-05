@@ -126,7 +126,11 @@ class Main {
 
     this.spotlightStageRightLow.distance = 200;
     this.spotlightStageLeftLow.distance = 200;
-    this.spotlightStageCenterHigh.distance = 200;
+    this.spotlightStageCenterHigh.distance = 400;
+
+    // this.spotlightStageRightLow.position.y = 0;
+    // this.spotlightStageLeftLow.position.y = 0;
+    // this.spotlightStageCenterHigh.position.y = 200;
 
     // this.spotlightStageRightLow.intensity = 2;
     // this.spotlightStageLeftLow.intensity = 2;
