@@ -57,10 +57,7 @@
     transform: translate(-50%, -10%);
   }
   ul li input[type=checkbox]:checked ~ div {
-    margin-top: 0;
-    max-height: 0;
-    opacity: 0;
-    transform: translate(0, 50%);
+    display: none;
   }
   ul li input[type=checkbox]:checked ~ i:before {
     transform: translate(2px, 0) rotate(45deg);
@@ -73,7 +70,7 @@
 .accordion-section {
   width: 97.5%;
   margin-left: 1.25%;
-  margin-bottom: 0.25em;
+  margin-bottom: 0.5em;
   background-color: $light-gray;
   color: black;
   box-shadow: 1px 1px 2px 0px $dark-gray inset;

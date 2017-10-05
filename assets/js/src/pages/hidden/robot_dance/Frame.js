@@ -130,29 +130,3 @@ export default class Frame {
   }
 
 }
-
-/*
-<td id="fr-1">1</td>
-<td>
-  <span style="display: inline-block;">appendChild <input id="fr-1-head-pitch" type="number"></span>
-  <span style="display: inline-block;">Yaw: <input id="fr-1-head-yaw" type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td><button><span class="fa fa-lg fa-trash-o" aria-hidden="true"></span></button></td>
-
-*/

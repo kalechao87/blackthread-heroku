@@ -58469,34 +58469,13 @@ var loading = {
 };
 
 var controls = {
-  movement: {
-    head: {
-      pitch: document.querySelector('#head-pitch'),
-      yaw: document.querySelector('#head-yaw')
-    },
-    leftShoulder: {
-      pitch: document.querySelector('#l-shoulder-pitch'),
-      yaw: document.querySelector('#l-shoulder-yaw')
-    },
-    rightShoulder: {
-      pitch: document.querySelector('#r-shoulder-pitch'),
-      yaw: document.querySelector('#r-shoulder-yaw')
-    },
-    leftElbow: {
-      pitch: document.querySelector('#l-elbow-pitch'),
-      yaw: document.querySelector('#l-elbow-yaw')
-    },
-    rightElbow: {
-      pitch: document.querySelector('#r-elbow-pitch'),
-      yaw: document.querySelector('#r-elbow-yaw')
-    }
-  },
   frames: {
     table: document.querySelector('#frames'),
     createButton: document.querySelector('#create-frame-button')
 
   },
   groups: {
+    table: document.querySelector('#groups'),
     createButton: document.querySelector('#create-group-button')
   },
   dance: {
@@ -58504,9 +58483,9 @@ var controls = {
     showAdvancedControls: document.querySelector('#advanced-control-enable')
   },
   music: {
-    startWithDanceCheckbox: document.querySelector('#start-music-with-dance'),
-    selection: document.querySelector('#music-select'),
-    playButton: document.querySelector('#play-music'),
+    upload: document.querySelector('#upload-mp3'),
+    tracks: document.querySelector('#loaded-tracks'),
+    play: document.querySelector('#play-music'),
     positionSlider: document.querySelector('#track-position-slider')
   },
   file: {
@@ -58540,19 +58519,6 @@ var HTMLControl = function () {
     for (var _i = 0; _i < loading.revealOnLoad.length; _i++) {
 
       loading.revealOnLoad[_i].classList.remove('hide');
-    }
-
-    this.setMovementControlsDisabledState(false);
-  };
-
-  HTMLControl.setMovementControlsDisabledState = function setMovementControlsDisabledState(bool) {
-
-    controls.movement.head.pitch.disabled = bool;
-
-    for (var key in controls.movement) {
-
-      controls.movement[key].pitch.disabled = bool;
-      controls.movement[key].yaw.disabled = bool;
     }
   };
 
@@ -58619,6 +58585,7 @@ var jsonLoader = null;
 var animationLoader = null;
 var fbxLoader = null;
 var textureLoader = null;
+var audioLoader = null;
 
 var defaultReject = function (err) {
   console.log(err);
@@ -58681,6 +58648,13 @@ var Loaders = function Loaders() {
         fbxLoader = promisifyLoader(new FBXLoader(loadingManager));
       }
       return fbxLoader;
+    },
+
+    get audioLoader() {
+      if (audioLoader === null) {
+        audioLoader = promisifyLoader(new AudioLoader(loadingManager));
+      }
+      return audioLoader;
     }
 
   };
@@ -58858,651 +58832,215 @@ var Frame = function () {
     return Frame;
 }();
 
-/*
-<td id="fr-1">1</td>
-<td>
-  <span style="display: inline-block;">appendChild <input id="fr-1-head-pitch" type="number"></span>
-  <span style="display: inline-block;">Yaw: <input id="fr-1-head-yaw" type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td>
-  <span style="display: inline-block;">Pitch: <input type="number"></span>
-  <span style="display: inline-block;">Yaw: <input type="number"></span>
-</td>
-<td><button><span class="fa fa-lg fa-trash-o" aria-hidden="true"></span></button></td>
-
-*/
-
-var index$2 = createCommonjsModule(function (module) {
-/**
- * lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="npm" -o ./`
- * Copyright jQuery Foundation and other contributors <https://jquery.org/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/** Used as the `TypeError` message for "Functions" methods. */
-var FUNC_ERROR_TEXT = 'Expected a function';
-
-/** Used as references for various `Number` constants. */
-var NAN = 0 / 0;
-
-/** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
-
-/** Used to match leading and trailing whitespace. */
-var reTrim = /^\s+|\s+$/g;
-
-/** Used to detect bad signed hexadecimal string values. */
-var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-/** Used to detect binary string values. */
-var reIsBinary = /^0b[01]+$/i;
-
-/** Used to detect octal string values. */
-var reIsOctal = /^0o[0-7]+$/i;
-
-/** Built-in method references without a dependency on `root`. */
-var freeParseInt = parseInt;
-
-/** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString = objectProto.toString;
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeMax = Math.max,
-    nativeMin = Math.min;
-
-/**
- * Gets the timestamp of the number of milliseconds that have elapsed since
- * the Unix epoch (1 January 1970 00:00:00 UTC).
- *
- * @static
- * @memberOf _
- * @since 2.4.0
- * @category Date
- * @returns {number} Returns the timestamp.
- * @example
- *
- * _.defer(function(stamp) {
- *   console.log(_.now() - stamp);
- * }, _.now());
- * // => Logs the number of milliseconds it took for the deferred invocation.
- */
-var now = function() {
-  return root.Date.now();
-};
-
-/**
- * Creates a debounced function that delays invoking `func` until after `wait`
- * milliseconds have elapsed since the last time the debounced function was
- * invoked. The debounced function comes with a `cancel` method to cancel
- * delayed `func` invocations and a `flush` method to immediately invoke them.
- * Provide `options` to indicate whether `func` should be invoked on the
- * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
- * with the last arguments provided to the debounced function. Subsequent
- * calls to the debounced function return the result of the last `func`
- * invocation.
- *
- * **Note:** If `leading` and `trailing` options are `true`, `func` is
- * invoked on the trailing edge of the timeout only if the debounced function
- * is invoked more than once during the `wait` timeout.
- *
- * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
- * until to the next tick, similar to `setTimeout` with a timeout of `0`.
- *
- * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
- * for details over the differences between `_.debounce` and `_.throttle`.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Function
- * @param {Function} func The function to debounce.
- * @param {number} [wait=0] The number of milliseconds to delay.
- * @param {Object} [options={}] The options object.
- * @param {boolean} [options.leading=false]
- *  Specify invoking on the leading edge of the timeout.
- * @param {number} [options.maxWait]
- *  The maximum time `func` is allowed to be delayed before it's invoked.
- * @param {boolean} [options.trailing=true]
- *  Specify invoking on the trailing edge of the timeout.
- * @returns {Function} Returns the new debounced function.
- * @example
- *
- * // Avoid costly calculations while the window size is in flux.
- * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
- *
- * // Invoke `sendMail` when clicked, debouncing subsequent calls.
- * jQuery(element).on('click', _.debounce(sendMail, 300, {
- *   'leading': true,
- *   'trailing': false
- * }));
- *
- * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
- * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
- * var source = new EventSource('/stream');
- * jQuery(source).on('message', debounced);
- *
- * // Cancel the trailing debounced invocation.
- * jQuery(window).on('popstate', debounced.cancel);
- */
-function debounce(func, wait, options) {
-  var lastArgs,
-      lastThis,
-      maxWait,
-      result,
-      timerId,
-      lastCallTime,
-      lastInvokeTime = 0,
-      leading = false,
-      maxing = false,
-      trailing = true;
-
-  if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  wait = toNumber(wait) || 0;
-  if (isObject(options)) {
-    leading = !!options.leading;
-    maxing = 'maxWait' in options;
-    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
-  }
-
-  function invokeFunc(time) {
-    var args = lastArgs,
-        thisArg = lastThis;
-
-    lastArgs = lastThis = undefined;
-    lastInvokeTime = time;
-    result = func.apply(thisArg, args);
-    return result;
-  }
-
-  function leadingEdge(time) {
-    // Reset any `maxWait` timer.
-    lastInvokeTime = time;
-    // Start the timer for the trailing edge.
-    timerId = setTimeout(timerExpired, wait);
-    // Invoke the leading edge.
-    return leading ? invokeFunc(time) : result;
-  }
-
-  function remainingWait(time) {
-    var timeSinceLastCall = time - lastCallTime,
-        timeSinceLastInvoke = time - lastInvokeTime,
-        result = wait - timeSinceLastCall;
-
-    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
-  }
-
-  function shouldInvoke(time) {
-    var timeSinceLastCall = time - lastCallTime,
-        timeSinceLastInvoke = time - lastInvokeTime;
-
-    // Either this is the first call, activity has stopped and we're at the
-    // trailing edge, the system time has gone backwards and we're treating
-    // it as the trailing edge, or we've hit the `maxWait` limit.
-    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
-      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
-  }
-
-  function timerExpired() {
-    var time = now();
-    if (shouldInvoke(time)) {
-      return trailingEdge(time);
-    }
-    // Restart the timer.
-    timerId = setTimeout(timerExpired, remainingWait(time));
-  }
-
-  function trailingEdge(time) {
-    timerId = undefined;
-
-    // Only invoke if we have `lastArgs` which means `func` has been
-    // debounced at least once.
-    if (trailing && lastArgs) {
-      return invokeFunc(time);
-    }
-    lastArgs = lastThis = undefined;
-    return result;
-  }
-
-  function cancel() {
-    if (timerId !== undefined) {
-      clearTimeout(timerId);
-    }
-    lastInvokeTime = 0;
-    lastArgs = lastCallTime = lastThis = timerId = undefined;
-  }
-
-  function flush() {
-    return timerId === undefined ? result : trailingEdge(now());
-  }
-
-  function debounced() {
-    var time = now(),
-        isInvoking = shouldInvoke(time);
-
-    lastArgs = arguments;
-    lastThis = this;
-    lastCallTime = time;
-
-    if (isInvoking) {
-      if (timerId === undefined) {
-        return leadingEdge(lastCallTime);
-      }
-      if (maxing) {
-        // Handle invocations in a tight loop.
-        timerId = setTimeout(timerExpired, wait);
-        return invokeFunc(lastCallTime);
-      }
-    }
-    if (timerId === undefined) {
-      timerId = setTimeout(timerExpired, wait);
-    }
-    return result;
-  }
-  debounced.cancel = cancel;
-  debounced.flush = flush;
-  return debounced;
-}
-
-/**
- * Creates a throttled function that only invokes `func` at most once per
- * every `wait` milliseconds. The throttled function comes with a `cancel`
- * method to cancel delayed `func` invocations and a `flush` method to
- * immediately invoke them. Provide `options` to indicate whether `func`
- * should be invoked on the leading and/or trailing edge of the `wait`
- * timeout. The `func` is invoked with the last arguments provided to the
- * throttled function. Subsequent calls to the throttled function return the
- * result of the last `func` invocation.
- *
- * **Note:** If `leading` and `trailing` options are `true`, `func` is
- * invoked on the trailing edge of the timeout only if the throttled function
- * is invoked more than once during the `wait` timeout.
- *
- * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
- * until to the next tick, similar to `setTimeout` with a timeout of `0`.
- *
- * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
- * for details over the differences between `_.throttle` and `_.debounce`.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Function
- * @param {Function} func The function to throttle.
- * @param {number} [wait=0] The number of milliseconds to throttle invocations to.
- * @param {Object} [options={}] The options object.
- * @param {boolean} [options.leading=true]
- *  Specify invoking on the leading edge of the timeout.
- * @param {boolean} [options.trailing=true]
- *  Specify invoking on the trailing edge of the timeout.
- * @returns {Function} Returns the new throttled function.
- * @example
- *
- * // Avoid excessively updating the position while scrolling.
- * jQuery(window).on('scroll', _.throttle(updatePosition, 100));
- *
- * // Invoke `renewToken` when the click event is fired, but not more than once every 5 minutes.
- * var throttled = _.throttle(renewToken, 300000, { 'trailing': false });
- * jQuery(element).on('click', throttled);
- *
- * // Cancel the trailing throttled invocation.
- * jQuery(window).on('popstate', throttled.cancel);
- */
-function throttle(func, wait, options) {
-  var leading = true,
-      trailing = true;
-
-  if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  if (isObject(options)) {
-    leading = 'leading' in options ? !!options.leading : leading;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
-  }
-  return debounce(func, wait, {
-    'leading': leading,
-    'maxWait': wait,
-    'trailing': trailing
-  });
-}
-
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' ||
-    (isObjectLike(value) && objectToString.call(value) == symbolTag);
-}
-
-/**
- * Converts `value` to a number.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to process.
- * @returns {number} Returns the number.
- * @example
- *
- * _.toNumber(3.2);
- * // => 3.2
- *
- * _.toNumber(Number.MIN_VALUE);
- * // => 5e-324
- *
- * _.toNumber(Infinity);
- * // => Infinity
- *
- * _.toNumber('3.2');
- * // => 3.2
- */
-function toNumber(value) {
-  if (typeof value == 'number') {
-    return value;
-  }
-  if (isSymbol(value)) {
-    return NAN;
-  }
-  if (isObject(value)) {
-    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-    value = isObject(other) ? (other + '') : other;
-  }
-  if (typeof value != 'string') {
-    return value === 0 ? value : +value;
-  }
-  value = value.replace(reTrim, '');
-  var isBinary = reIsBinary.test(value);
-  return (isBinary || reIsOctal.test(value))
-    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-    : (reIsBadHex.test(value) ? NAN : +value);
-}
-
-module.exports = throttle;
-});
-
-var throttle = interopDefault(index$2);
-
 var RobotManualControl = function () {
-      function RobotManualControl(robot) {
-            classCallCheck(this, RobotManualControl);
+        function RobotManualControl(robot) {
+                classCallCheck(this, RobotManualControl);
 
 
-            this.enabled = true;
+                this.robot = robot;
+                this.frame = null;
 
-            this.robot = robot;
+                this.initMoveableParts();
+                this.initControlFunctions();
+        }
 
-            this.initMoveableParts();
-            this.initEventListeners();
-      }
+        RobotManualControl.prototype.setFrame = function setFrame(frame) {
 
-      RobotManualControl.prototype.setFrame = function setFrame(frame) {
+                if (this.frame !== null) this.removeEventListeners(this.frame);
 
-            console.log(frame);
-      };
+                this.frame = frame;
+                this.setupEventListeners(this.frame);
+        };
 
-      RobotManualControl.prototype.initMoveableParts = function initMoveableParts() {
+        RobotManualControl.prototype.setupEventListeners = function setupEventListeners(frame) {
 
-            this.head = this.robot.getObjectByName('headControl'); // or 'neck'
+                frame.headPitch.addEventListener('input', this.controlFunctions.headPitch);
+                frame.headYaw.addEventListener('input', this.controlFunctions.headYaw);
 
-            this.leftShoulder = this.robot.getObjectByName('shoulderControlLeft'); // or Lshoulder_joint
-            this.rightShoulder = this.robot.getObjectByName('shoulderControlRight'); // or Rshoulder_joint
+                frame.leftShoulderPitch.addEventListener('input', this.controlFunctions.leftShoulderPitch);
+                frame.leftShoulderYaw.addEventListener('input', this.controlFunctions.leftShoulderYaw);
 
-            this.leftElbow = this.robot.getObjectByName('elbowControlLeft');
-            this.rightElbow = this.robot.getObjectByName('elbowControlRight');
-      };
+                frame.rightShoulderPitch.addEventListener('input', this.controlFunctions.rightShoulderPitch);
+                frame.rightShoulderYaw.addEventListener('input', this.controlFunctions.rightShoulderYaw);
 
-      RobotManualControl.prototype.initEventListeners = function initEventListeners() {
-            var _this = this;
+                frame.leftElbowPitch.addEventListener('input', this.controlFunctions.leftElbowPitch);
+                frame.leftElbowYaw.addEventListener('input', this.controlFunctions.leftElbowYaw);
 
-            var headPitchOffset = this.head.rotation.z;
-            var headYawOffset = this.head.rotation.x;
+                frame.rightElbowPitch.addEventListener('input', this.controlFunctions.rightElbowPitch);
+                frame.rightElbowYaw.addEventListener('input', this.controlFunctions.rightElbowYaw);
+        };
 
-            var xAxis = new Vector3(1, 0, 0);
-            var yAxis = new Vector3(0, 1, 0);
-            var zAxis = new Vector3(0, 0, 1);
+        RobotManualControl.prototype.removeEventListeners = function removeEventListeners(frame) {
 
-            HTMLControl.controls.movement.head.pitch.addEventListener('input', throttle(function (e) {
+                frame.headPitch.removeEventListener('input', this.controlFunctions.headPitch);
+                frame.headYaw.removeEventListener('input', this.controlFunctions.headYaw);
 
-                  e.preventDefault();
+                frame.leftShoulderPitch.removeEventListener('input', this.controlFunctions.leftShoulderPitch);
+                frame.leftShoulderYaw.removeEventListener('input', this.controlFunctions.leftShoulderYaw);
 
-                  var value = _Math.degToRad(-e.target.value);
+                frame.rightShoulderPitch.removeEventListener('input', this.controlFunctions.rightShoulderPitch);
+                frame.rightShoulderYaw.removeEventListener('input', this.controlFunctions.rightShoulderYaw);
 
-                  _this.head.rotation.z = headPitchOffset + value;
-            }, false), 250);
+                frame.leftElbowPitch.removeEventListener('input', this.controlFunctions.leftElbowPitch);
+                frame.leftElbowYaw.removeEventListener('input', this.controlFunctions.leftElbowYaw);
 
-            HTMLControl.controls.movement.head.yaw.addEventListener('input', throttle(function (e) {
+                frame.rightElbowPitch.removeEventListener('input', this.controlFunctions.rightElbowPitch);
+                frame.rightElbowYaw.removeEventListener('input', this.controlFunctions.rightElbowYaw);
+        };
 
-                  e.preventDefault();
+        RobotManualControl.prototype.initControlFunctions = function initControlFunctions() {
+                var _this = this;
 
-                  var value = _Math.degToRad(e.target.value);
+                var headPitchOffset = this.head.rotation.z;
+                var headYawOffset = this.head.rotation.x;
 
-                  _this.head.rotation.x = headYawOffset + value;
-            }, false), 250);
+                var leftShoulderPitchPrevVal = 0;
+                var leftShoulderYawPrevVal = 0;
 
-            var leftShoulderPitchPrevVal = 0;
-            var leftShoulderYawPrevVal = 0;
+                var rightShoulderPitchPrevVal = 0;
+                var rightShoulderYawPrevVal = 0;
 
-            HTMLControl.controls.movement.leftShoulder.pitch.addEventListener('input', throttle(function (e) {
+                var leftElbowPitchPrevVal = 0;
+                var leftElbowYawPrevVal = 0;
 
-                  e.preventDefault();
+                var rightElbowPitchPrevVal = 0;
+                var rightElbowYawPrevVal = 0;
 
-                  var value = _Math.degToRad(-e.target.value);
+                var xAxis = new Vector3(1, 0, 0);
+                var yAxis = new Vector3(0, 1, 0);
+                var zAxis = new Vector3(0, 0, 1);
 
-                  _this.leftShoulder.rotateOnAxis(zAxis, leftShoulderPitchPrevVal - value);
+                this.controlFunctions = {
+                        headPitch: function (e) {
 
-                  leftShoulderPitchPrevVal = value;
-            }, false), 250);
+                                e.preventDefault();
 
-            HTMLControl.controls.movement.leftShoulder.yaw.addEventListener('input', throttle(function (e) {
+                                _this.frame.row.click();
 
-                  e.preventDefault();
+                                var value = _Math.degToRad(-e.target.value);
 
-                  var value = _Math.degToRad(-e.target.value);
+                                _this.head.rotation.z = headPitchOffset + value;
+                        },
+                        headYaw: function (e) {
 
-                  _this.leftShoulder.rotateOnAxis(yAxis, leftShoulderYawPrevVal - value);
+                                e.preventDefault();
 
-                  leftShoulderYawPrevVal = value;
-            }, false), 250);
+                                _this.frame.row.click();
 
-            var rightShoulderPitchPrevVal = 0;
-            var rightShoulderYawPrevVal = 0;
+                                var value = _Math.degToRad(e.target.value);
 
-            HTMLControl.controls.movement.rightShoulder.pitch.addEventListener('input', throttle(function (e) {
+                                _this.head.rotation.x = headYawOffset + value;
+                        },
+                        leftShoulderPitch: function (e) {
 
-                  e.preventDefault();
+                                e.preventDefault();
 
-                  var value = _Math.degToRad(-e.target.value);
+                                _this.frame.row.click();
 
-                  _this.rightShoulder.rotateOnAxis(zAxis, rightShoulderPitchPrevVal - value);
+                                var value = _Math.degToRad(-e.target.value);
 
-                  rightShoulderPitchPrevVal = value;
-            }, false), 250);
+                                _this.leftShoulder.rotateOnAxis(zAxis, leftShoulderPitchPrevVal - value);
 
-            HTMLControl.controls.movement.rightShoulder.yaw.addEventListener('input', throttle(function (e) {
+                                leftShoulderPitchPrevVal = value;
+                        },
+                        leftShoulderYaw: function (e) {
 
-                  e.preventDefault();
+                                e.preventDefault();
 
-                  var value = _Math.degToRad(e.target.value);
+                                _this.frame.row.click();
 
-                  _this.rightShoulder.rotateOnAxis(yAxis, rightShoulderYawPrevVal - value);
+                                var value = _Math.degToRad(-e.target.value);
 
-                  rightShoulderYawPrevVal = value;
-            }, false), 250);
+                                _this.leftShoulder.rotateOnAxis(yAxis, leftShoulderYawPrevVal - value);
 
-            HTMLControl.controls.movement.leftElbow.pitch.addEventListener('input', throttle(function (e) {
+                                leftShoulderYawPrevVal = value;
+                        },
+                        rightShoulderPitch: function (e) {
 
-                  e.preventDefault();
+                                e.preventDefault();
 
-                  var value = _Math.degToRad(-e.target.value);
+                                _this.frame.row.click();
 
-                  _this.leftElbow.rotation.y = value;
-            }, false), 250);
+                                var value = _Math.degToRad(-e.target.value);
 
-            var leftElbowPitchPrevVal = 0;
-            var leftElbowYawPrevVal = 0;
+                                _this.rightShoulder.rotateOnAxis(zAxis, rightShoulderPitchPrevVal - value);
 
-            HTMLControl.controls.movement.leftElbow.pitch.addEventListener('input', throttle(function (e) {
+                                rightShoulderPitchPrevVal = value;
+                        },
+                        rightShoulderYaw: function (e) {
 
-                  e.preventDefault();
+                                e.preventDefault();
 
-                  var value = _Math.degToRad(-e.target.value);
+                                _this.frame.row.click();
 
-                  _this.leftElbow.rotateOnAxis(zAxis, leftElbowPitchPrevVal - value);
+                                var value = _Math.degToRad(e.target.value);
 
-                  leftElbowPitchPrevVal = value;
-            }, false), 250);
+                                _this.rightShoulder.rotateOnAxis(yAxis, rightShoulderYawPrevVal - value);
 
-            HTMLControl.controls.movement.leftElbow.yaw.addEventListener('input', throttle(function (e) {
+                                rightShoulderYawPrevVal = value;
+                        },
+                        leftElbowPitch: function (e) {
 
-                  e.preventDefault();
+                                e.preventDefault();
 
-                  var value = _Math.degToRad(e.target.value);
+                                _this.frame.row.click();
 
-                  _this.leftElbow.rotateOnAxis(xAxis, leftElbowYawPrevVal - value);
+                                var value = _Math.degToRad(-e.target.value);
 
-                  leftElbowYawPrevVal = value;
-            }, false), 250);
+                                _this.leftElbow.rotateOnAxis(zAxis, leftElbowPitchPrevVal - value);
 
-            var rightElbowPitchPrevVal = 0;
-            var rightElbowYawPrevVal = 0;
+                                leftElbowPitchPrevVal = value;
+                        },
+                        leftElbowYaw: function (e) {
 
-            HTMLControl.controls.movement.rightElbow.pitch.addEventListener('input', throttle(function (e) {
+                                e.preventDefault();
 
-                  e.preventDefault();
+                                _this.frame.row.click();
 
-                  var value = _Math.degToRad(-e.target.value);
+                                var value = _Math.degToRad(e.target.value);
 
-                  _this.rightElbow.rotateOnAxis(yAxis, rightElbowPitchPrevVal - value);
+                                _this.leftElbow.rotateOnAxis(xAxis, leftElbowYawPrevVal - value);
 
-                  rightElbowPitchPrevVal = value;
-            }, false), 250);
+                                leftElbowYawPrevVal = value;
+                        },
+                        rightElbowPitch: function (e) {
 
-            HTMLControl.controls.movement.rightElbow.yaw.addEventListener('input', throttle(function (e) {
+                                e.preventDefault();
 
-                  e.preventDefault();
+                                _this.frame.row.click();
 
-                  var value = _Math.degToRad(e.target.value);
+                                var value = _Math.degToRad(-e.target.value);
 
-                  _this.rightElbow.rotateOnAxis(xAxis, rightElbowYawPrevVal - value);
+                                _this.rightElbow.rotateOnAxis(yAxis, rightElbowPitchPrevVal - value);
 
-                  rightElbowYawPrevVal = value;
-            }, false), 250);
-      };
+                                rightElbowPitchPrevVal = value;
+                        },
+                        rightElbowYaw: function (e) {
+                                e.preventDefault();
 
-      createClass(RobotManualControl, null, [{
-            key: 'enabled',
-            set: function (bool) {
+                                _this.frame.row.click();
 
-                  HTMLControl.setMovementControlsDisabledState(bool);
-            }
-      }]);
-      return RobotManualControl;
+                                var value = _Math.degToRad(e.target.value);
+
+                                _this.rightElbow.rotateOnAxis(xAxis, rightElbowYawPrevVal - value);
+
+                                rightElbowYawPrevVal = value;
+                        }
+                };
+        };
+
+        RobotManualControl.prototype.initMoveableParts = function initMoveableParts() {
+
+                this.head = this.robot.getObjectByName('headControl'); // or 'neck'
+
+                this.leftShoulder = this.robot.getObjectByName('shoulderControlLeft'); // or Lshoulder_joint
+                this.rightShoulder = this.robot.getObjectByName('shoulderControlRight'); // or Rshoulder_joint
+
+                this.leftElbow = this.robot.getObjectByName('elbowControlLeft');
+                this.rightElbow = this.robot.getObjectByName('elbowControlRight');
+        };
+
+        return RobotManualControl;
 }();
 
 var Frames = function () {
@@ -59552,6 +59090,202 @@ var Frames = function () {
       return Frames;
 }();
 
+var groups = HTMLControl.controls.groups.table;
+
+var Group$1 = function () {
+    function Group(num) {
+        classCallCheck(this, Group);
+
+
+        this.num = num;
+
+        this.initTableRow();
+
+        this.initDeleteButton();
+    }
+
+    Group.prototype.initTableRow = function initTableRow() {
+
+        this.row = document.createElement('tr');
+        this.row.id = 'fr-' + this.num;
+
+        var nameCell = document.createElement('td');
+        this.row.appendChild(nameCell);
+        nameCell.innerHTML = this.num;
+
+        var framesCell = document.createElement('td');
+        this.row.appendChild(framesCell);
+        framesCell.innerHTML = 'Frames in Group';
+
+        var loopCell = document.createElement('td');
+        this.row.appendChild(loopCell);
+        loopCell.innerHTML = 'Loop Amount';
+    };
+
+    Group.prototype.initDeleteButton = function initDeleteButton() {
+        var _this = this;
+
+        var deleteButtonCell = document.createElement('td');
+        this.deleteButton = document.createElement('button');
+        this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+        deleteButtonCell.appendChild(this.deleteButton);
+        this.row.appendChild(deleteButtonCell);
+
+        var removeRow = function (e) {
+
+            e.preventDefault();
+            groups.removeChild(_this.row);
+
+            _this.deleteButton.removeEventListener('click', removeRow);
+        };
+
+        this.deleteButton.addEventListener('click', removeRow);
+    };
+
+    createClass(Group, [{
+        key: 'selected',
+        set: function (bool) {
+
+            if (bool === true) this.row.style.backgroundColor = 'aliceBlue';else this.row.style.backgroundColor = 'initial';
+        }
+    }]);
+    return Group;
+}();
+
+var Groups = function () {
+      function Groups() {
+            classCallCheck(this, Groups);
+
+
+            this.currentGroupNum = 0;
+            this.groups = [];
+
+            this.groupsTable = HTMLControl.controls.groups.table;
+            this.newGroupButton = HTMLControl.controls.groups.createButton;
+            this.initNewGroupButton();
+      }
+
+      Groups.prototype.initNewGroupButton = function initNewGroupButton() {
+            var _this = this;
+
+            this.newGroupButton.addEventListener('click', function (e) {
+
+                  e.preventDefault();
+
+                  var group = new Group$1(_this.currentGroupNum++);
+
+                  _this.groups.push(group);
+
+                  _this.groupsTable.appendChild(group.row);
+
+                  group.row.addEventListener('click', function (evt) {
+
+                        evt.preventDefault();
+
+                        group.selected = true;
+
+                        _this.groups.forEach(function (f) {
+
+                              if (f.num !== group.num) f.selected = false;
+                        });
+                  });
+            });
+      };
+
+      return Groups;
+}();
+
+var Audio$1 = function () {
+    function Audio(emitters, camera) {
+        var _this = this;
+
+        classCallCheck(this, Audio);
+
+
+        var listener = new AudioListener();
+        this.audioDirectory = '/assets/audio/robot_dance/';
+
+        camera.add(listener);
+
+        this.sounds = [];
+        this.buffers = {};
+
+        emitters.forEach(function (emitter) {
+
+            var sound = new PositionalAudio(listener);
+            _this.sounds.push(sound);
+            emitter.add(sound);
+        });
+
+        this.initPlayButton();
+
+        this.loadExamples();
+    }
+
+    Audio.prototype.load = function load(file) {
+        var _this2 = this;
+
+        loaders.audioLoader(this.audioDirectory + file).then(function (buffer) {
+
+            _this2.buffers.file = buffer;
+
+            var optionElem = document.createElement('option');
+            optionElem.innerHTML = file.replace(/_/g, ' ').replace('.mp3', '');
+            HTMLControl.controls.music.tracks.appendChild(optionElem);
+        });
+    };
+
+    Audio.prototype.loadExamples = function loadExamples() {
+        var _this3 = this;
+
+        var exampleTrackNames = ['Chinese_Man_Miss_Chang', 'DJ_Kormac_Rainstorm', 'Gramatik_Day_Of_The_So_Called_Glory', 'Lindsey_Stirling_Crystalize'];
+
+        exampleTrackNames.forEach(function (name) {
+
+            _this3.load(name + '.mp3');
+        });
+    };
+
+    Audio.prototype.play = function play() {
+
+        this.sounds.forEach(function (sound) {
+
+            sound.play();
+        });
+    };
+
+    Audio.prototype.pause = function pause() {
+
+        this.sounds.forEach(function (sound) {
+
+            sound.pause();
+        });
+    };
+
+    Audio.prototype.initPlayButton = function initPlayButton() {
+        var _this4 = this;
+
+        HTMLControl.controls.music.play.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            _this4.play();
+        });
+    };
+
+    Audio.prototype.initUploadButton = function initUploadButton() {
+
+        HTMLControl.controls.music.play.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            console.log('click');
+        });
+    };
+
+    return Audio;
+}();
+
 var Main = function () {
   function Main() {
     classCallCheck(this, Main);
@@ -59597,7 +59331,6 @@ var Main = function () {
 
     var stagePromise = loaders.fbxLoader('/assets/models/robot_dance/stage_camera_lights.fbx').then(function (object) {
 
-      // console.log( object );
       _this.stage = object.getObjectByName('Stage');
       _this.camera = object.getObjectByName('Camera');
       _this.spotlightStageRightLow = object.getObjectByName('Spotstage_right_low');
@@ -59635,6 +59368,9 @@ var Main = function () {
       _this2.initControls();
 
       _this2.frames = new Frames(_this2.nao);
+      _this2.groups = new Groups(_this2.nao);
+
+      _this2.audio = new Audio$1([_this2.soundSourceLeft, _this2.soundSourceRight], _this2.app.camera);
 
       _this2.app.play();
     });

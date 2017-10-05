@@ -11,6 +11,10 @@ import HTMLControl from './HTMLControl.js';
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
 import Frames from './Frames.js';
+import Groups from './Groups.js';
+
+import Audio from './Audio.js';
+
 
 // Set up THREE caching
 THREE.Cache.enabled = true;
@@ -64,7 +68,6 @@ class Main {
 
     const stagePromise = loaders.fbxLoader( '/assets/models/robot_dance/stage_camera_lights.fbx' ).then( ( object ) => {
 
-      // console.log( object );
       this.stage = object.getObjectByName( 'Stage' );
       this.camera = object.getObjectByName( 'Camera' );
       this.spotlightStageRightLow = object.getObjectByName( 'Spotstage_right_low' );
@@ -106,6 +109,9 @@ class Main {
         this.initControls();
 
         this.frames = new Frames( this.nao );
+        this.groups = new Groups( this.nao );
+
+        this.audio = new Audio( [this.soundSourceLeft, this.soundSourceRight], this.app.camera );
 
         this.app.play();
 

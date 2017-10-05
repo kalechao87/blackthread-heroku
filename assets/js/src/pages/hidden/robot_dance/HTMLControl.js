@@ -10,34 +10,13 @@ const loading = {
 };
 
 const controls = {
-  movement: {
-    head: {
-      pitch: document.querySelector( '#head-pitch' ),
-      yaw: document.querySelector( '#head-yaw' ),
-    },
-    leftShoulder: {
-      pitch: document.querySelector( '#l-shoulder-pitch' ),
-      yaw: document.querySelector( '#l-shoulder-yaw' ),
-    },
-    rightShoulder: {
-      pitch: document.querySelector( '#r-shoulder-pitch' ),
-      yaw: document.querySelector( '#r-shoulder-yaw' ),
-    },
-    leftElbow: {
-      pitch: document.querySelector( '#l-elbow-pitch' ),
-      yaw: document.querySelector( '#l-elbow-yaw' ),
-    },
-    rightElbow: {
-      pitch: document.querySelector( '#r-elbow-pitch' ),
-      yaw: document.querySelector( '#r-elbow-yaw' ),
-    },
-  },
   frames: {
     table: document.querySelector( '#frames' ),
     createButton: document.querySelector( '#create-frame-button' ),
 
   },
   groups: {
+    table: document.querySelector( '#groups' ),
     createButton: document.querySelector( '#create-group-button' ),
   },
   dance: {
@@ -45,9 +24,9 @@ const controls = {
     showAdvancedControls: document.querySelector( '#advanced-control-enable' ),
   },
   music: {
-    startWithDanceCheckbox: document.querySelector( '#start-music-with-dance' ),
-    selection: document.querySelector( '#music-select' ),
-    playButton: document.querySelector( '#play-music' ),
+    upload: document.querySelector( '#upload-mp3' ),
+    tracks: document.querySelector( '#loaded-tracks' ),
+    play: document.querySelector( '#play-music' ),
     positionSlider: document.querySelector( '#track-position-slider' ),
   },
   file: {
@@ -83,21 +62,6 @@ export default class HTMLControl {
     for ( let i = 0; i < loading.revealOnLoad.length; i++ ) {
 
       loading.revealOnLoad[ i ].classList.remove( 'hide' );
-
-    }
-
-    this.setMovementControlsDisabledState( false );
-
-  }
-
-  static setMovementControlsDisabledState( bool ) {
-
-    controls.movement.head.pitch.disabled = bool;
-
-    for ( const key in controls.movement ) {
-
-      controls.movement[key].pitch.disabled = bool;
-      controls.movement[key].yaw.disabled = bool;
 
     }
 

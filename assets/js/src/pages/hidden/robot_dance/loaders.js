@@ -11,6 +11,7 @@ let jsonLoader = null;
 let animationLoader = null;
 let fbxLoader = null;
 let textureLoader = null;
+let audioLoader = null;
 
 
 const defaultReject = ( err ) => { console.log( err ); };
@@ -69,6 +70,13 @@ class Loaders {
           fbxLoader = promisifyLoader( new FBXLoader( loadingManager ) );
         }
         return fbxLoader;
+      },
+
+      get audioLoader() {
+        if ( audioLoader === null ) {
+          audioLoader = promisifyLoader( new THREE.AudioLoader( loadingManager ) );
+        }
+        return audioLoader;
       },
 
     };
