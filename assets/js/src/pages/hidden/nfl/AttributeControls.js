@@ -1,9 +1,7 @@
 import throttle from 'lodash.throttle';
 import HTMLControl from './HTMLControl.js';
-import cameraControl from './cameraControl.js';
-import sprites from './sprites.js';
 
-class AttributeControls {
+export default class AttributeControls {
 
   constructor() {
 
@@ -47,6 +45,18 @@ class AttributeControls {
   initAnimationControls( controls ) {
 
     this.animationControls = controls;
+
+  }
+
+  initCameraControls( controls ) {
+
+    this.cameraControls = controls;
+
+  }
+
+  initSprites( sprites ) {
+
+    this.sprites = sprites
 
   }
 
@@ -105,9 +115,9 @@ class AttributeControls {
       updateScale();
 
       this.animationControls.playAction( anim );
-      cameraControl.focusDefault();
+      this.cameraControls.focusDefault();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -122,9 +132,9 @@ class AttributeControls {
       if ( e.target.value < 5 ) this.animationControls.playAction( 'catch_to_fall' );
       else this.animationControls.playAction( 'catch_to_roll' );
 
-      cameraControl.focusDynamic();
+      this.cameraControls.focusDynamic();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -147,9 +157,9 @@ class AttributeControls {
       this.animationControls.setTimeScale( timeScale, anim );
       this.animationControls.playAction( anim );
 
-      cameraControl.focusDefault();
+      this.cameraControls.focusDefault();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -164,11 +174,11 @@ class AttributeControls {
       this.animationControls.setTimeScale( 1, anim );
       this.animationControls.playAction( anim );
 
-      cameraControl.setArmTarget( this.dominantHand );
-      cameraControl.focusArms();
+      this.cameraControls.setArmTarget( this.dominantHand );
+      this.cameraControls.focusArms();
 
-      sprites.setArm( this.dominantHand );
-      sprites.hideAllExcept( 'armStrength' );
+      this.sprites.setArm( this.dominantHand );
+      this.sprites.hideAllExcept( 'armStrength' );
 
     };
 
@@ -215,9 +225,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamic();
+      this.cameraControls.focusDynamic();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -231,9 +241,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamicUpper();
+      this.cameraControls.focusDynamicUpper();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -247,9 +257,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamicUpper();
+      this.cameraControls.focusDynamicUpper();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -263,8 +273,8 @@ class AttributeControls {
 
       this.animationControls.playAction( 'offensive_idle' );
 
-      cameraControl.focusDefault();
-      sprites.hideAllExcept( 'armStrength' );
+      this.cameraControls.focusDefault();
+      this.sprites.hideAllExcept( 'armStrength' );
 
     }, 100 ), false );
 
@@ -278,9 +288,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamic();
+      this.cameraControls.focusDynamic();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -294,9 +304,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamic();
+      this.cameraControls.focusDynamic();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -310,9 +320,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamic();
+      this.cameraControls.focusDynamic();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -326,9 +336,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamic();
+      this.cameraControls.focusDynamic();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -342,9 +352,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamic();
+      this.cameraControls.focusDynamic();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -358,9 +368,9 @@ class AttributeControls {
 
       this.animationControls.playAction( 'offensive_idle' );
 
-      cameraControl.focusHead();
+      this.cameraControls.focusHead();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -374,9 +384,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamicUpper();
+      this.cameraControls.focusDynamicUpper();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -390,9 +400,9 @@ class AttributeControls {
 
       this.animationControls.playAction( 'hike' );
 
-      cameraControl.focusDefault();
+      this.cameraControls.focusDefault();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -406,9 +416,9 @@ class AttributeControls {
 
       this.animationControls.playAction( 'hike' );
 
-      cameraControl.focusDefault();
+      this.cameraControls.focusDefault();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -422,9 +432,9 @@ class AttributeControls {
 
       this.animationControls.playAction( 'run' );
 
-      cameraControl.focusUpper();
+      this.cameraControls.focusUpper();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -438,9 +448,9 @@ class AttributeControls {
 
       this.animationControls.playAction( this.passAnim );
 
-      cameraControl.focusDynamicUpper();
+      this.cameraControls.focusDynamicUpper();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -461,9 +471,9 @@ class AttributeControls {
 
       this.animationControls.playAction( 'run' );
 
-      cameraControl.focusDefault();
+      this.cameraControls.focusDefault();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -487,9 +497,9 @@ class AttributeControls {
 
       }
 
-      cameraControl.focusUpper();
+      this.cameraControls.focusUpper();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
@@ -513,14 +523,12 @@ class AttributeControls {
 
       }
 
-      cameraControl.focusDefault();
+      this.cameraControls.focusDefault();
 
-      sprites.hideAll();
+      this.sprites.hideAll();
 
     }, 100 ), false );
 
   }
 
 }
-
-export default new AttributeControls();

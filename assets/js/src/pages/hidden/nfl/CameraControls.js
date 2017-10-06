@@ -1,14 +1,13 @@
-// Control camera targeting and OrbitControl settings
+// Control camera targeting and THREE.OrbitControl settings
 
 import * as THREE from 'three';
-import canvas from '../canvas.js';
 
-class CameraControl {
+export default class CameraControls {
 
-  constructor() {
+  constructor( app ) {
 
-    this.camera = canvas.app.camera;
-    this.controls = canvas.app.controls;
+    this.camera = app.camera;
+    this.controls = app.controls;
 
     this.targetChanged = false;
     this.zoomLevelChanged = false;
@@ -144,26 +143,6 @@ class CameraControl {
 
     this.currentTarget = 'default';
 
-    // const addTargetHelper = ( target, color ) => {
-
-    //   const mat = new THREE.SpriteMaterial( { color } );
-    //   const sprite = new THREE.Sprite( mat );
-    //   sprite.position.copy( target );
-    //   sprite.scale.set( 10, 10, 1 );
-
-    //   canvas.app.scene.add( sprite );
-
-    // };
-
-    // addTargetHelper( this.targets.default, 0xff0000 );
-    // addTargetHelper( this.targets.torso, 0x00ff00 );
-    // addTargetHelper( this.targets.head, 0x0000ff );
-    // console.log( this.targets.head )
-
-    // addTargetHelper( this.targets.rightArm, 0x0000ff );
-    // addTargetHelper( this.targets.leftArm, 0xff0000 );
-
-
   }
 
   updateTarget( delta ) {
@@ -296,7 +275,3 @@ class CameraControl {
   }
 
 }
-
-const cameraControl = new CameraControl();
-
-export default cameraControl;

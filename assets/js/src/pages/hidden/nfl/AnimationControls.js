@@ -1,8 +1,8 @@
+// Uses the three.js animation system described here: https://threejs.org/docs/#manual/introduction/Animation-system
 import * as THREE from 'three';
 
 let mixer;
 const actions = {};
-
 
 function setWeight( action, weight ) {
 
@@ -70,7 +70,7 @@ function prepareCrossFade( startAction, endAction, duration ) {
 }
 
 
-class AnimationControls {
+export default class AnimationControls {
 
   constructor( ) {
 
@@ -203,7 +203,3 @@ class AnimationControls {
   }
 
 }
-
-const animationControls = new AnimationControls();
-
-export default animationControls;
