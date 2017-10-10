@@ -194,6 +194,8 @@ export default class Frame {
     this.headPitchValue = 0;
     this.headYawValue = 0;
 
+    this.headQuaternion = this.robot.headInitialQuaternion.clone();
+
     this.leftShoulderPitchValue = 0;
     this.leftShoulderYawValue = 0;
 
@@ -219,30 +221,32 @@ export default class Frame {
     const zAxis = new THREE.Vector3( 0, 0, 1 );
 
     this.controlFunctions = {
+
       headPitch: ( e ) => {
 
         e.preventDefault();
 
-
         this.headPitchValue = THREE.Math.degToRad( -e.target.value );
 
         this.robot.head.rotation.z = this.headPitchValue;
+
+        this.headQuaternion.copy( this.robot.head.quaternion );
 
       },
       headYaw: ( e ) => {
 
         e.preventDefault();
 
-
         this.headYawValue = THREE.Math.degToRad( e.target.value );
 
         this.robot.head.rotation.x = this.headYawValue;
+
+        this.headQuaternion.copy( this.robot.head.quaternion );
 
       },
       leftShoulderPitch: ( e ) => {
 
         e.preventDefault();
-
 
         const value = THREE.Math.degToRad( -e.target.value );
 
@@ -257,7 +261,6 @@ export default class Frame {
 
         e.preventDefault();
 
-
         const value = THREE.Math.degToRad( -e.target.value );
 
         this.robot.leftShoulder.rotateOnAxis( yAxis, this.leftShoulderYawValue - value );
@@ -271,7 +274,6 @@ export default class Frame {
 
         e.preventDefault();
 
-
         const value = THREE.Math.degToRad( -e.target.value );
 
         this.robot.rightShoulder.rotateOnAxis( zAxis, this.rightShoulderPitchValue - value );
@@ -279,6 +281,7 @@ export default class Frame {
         this.rightShoulderPitchValue = value;
 
         this.rightShoulderQuaternion.copy( this.robot.rightShoulder.quaternion );
+
       },
       rightShoulderYaw: ( e ) => {
 
@@ -298,7 +301,6 @@ export default class Frame {
 
         e.preventDefault();
 
-
         const value = THREE.Math.degToRad( e.target.value );
 
         this.robot.leftElbow.rotateOnAxis( yAxis, this.leftElbowPitchValue - value );
@@ -312,7 +314,6 @@ export default class Frame {
 
         e.preventDefault();
 
-
         const value = THREE.Math.degToRad( -e.target.value );
 
         this.robot.leftElbow.rotateOnAxis( zAxis, this.leftElbowYawValue - value );
@@ -325,7 +326,6 @@ export default class Frame {
       rightElbowPitch: ( e ) => {
 
         e.preventDefault();
-
 
         const value = THREE.Math.degToRad( -e.target.value );
 
@@ -367,16 +367,22 @@ export default class Frame {
     return {
 
       num: this.num,
-      headPitchValue: this.headPitchValue,
-      headYawValue: this.headYawValue,
-      leftShoulderPitchValue: this.leftShoulderPitchValue,
-      leftShoulderYawValue: this.leftShoulderYawValue,
-      leftElbowPitchValue: this.leftElbowPitchValue,
-      leftElbowYawValue: this.leftElbowYawValue,
-      rightShoulderPitchValue: this.rightShoulderPitchValue,
-      rightShoulderYawValue: this.rightShoulderYawValue,
-      rightElbowPitchValue: this.rightElbowPitchValue,
-      rightElbowYawValue: this.rightElbowYawValue,
+      headQuaternion: this.headQuaternion,
+      leftShoulderQuaternion: this.leftShoulderQuaternion,
+      rightShoulderQuaternion: this.rightShoulderQuaternion,
+      leftElbowQuaternion: this.leftElbowQuaternion,
+      rightElbowQuaternion: this.rightElbowQuaternion,
+      // headPitchValue: this.headPitchValue,
+      // headYawValue: this.headYawValue,
+      // leftShoulderPitchValue: this.leftShoulderPitchValue,
+      // leftShoulderYawValue: this.leftShoulderYawValue,
+      // leftElbowPitchValue: this.leftElbowPitchValue,
+      // leftElbowYawValue: this.leftElbowYawValue,
+      // rightShoulderPitchValue: this.rightShoulderPitchValue,
+      // rightShoulderYawValue: this.rightShoulderYawValue,
+      // rightElbowPitchValue: this.rightElbowPitchValue,
+      // rightElbowYawValue: this.rightElbowYawValue,
+
     };
 
   }

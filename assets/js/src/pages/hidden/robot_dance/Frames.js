@@ -31,14 +31,15 @@ export default class Frames {
 
     };
 
+    // slight hack since the model's head is very slightly rotated at the start
+    // so reset that here
+    this.robot.head.rotation.set( 0, 0, 0 );
+
+    this.robot.headInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
     this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
     this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
     this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
     this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
-
-    // slight hack since the model's head is very slightly rotated at the start
-    // so reset that here
-    this.robot.head.rotation.set( 0, 0, 0 );
 
   }
 
@@ -54,13 +55,13 @@ export default class Frames {
 
       this.framesTable.appendChild( frame.row );
 
-      this.selectFrame( frame );
+      this.select( frame );
 
       frame.row.addEventListener( 'click', ( evt ) => {
 
         evt.preventDefault();
 
-        this.selectFrame( frame );
+        this.select( frame );
 
       } );
 
@@ -68,7 +69,7 @@ export default class Frames {
 
   }
 
-  selectFrame( frame ) {
+  select( frame ) {
 
     frame.selected = true;
 

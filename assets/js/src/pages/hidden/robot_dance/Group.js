@@ -15,7 +15,7 @@ export default class Group {
   }
 
   set selected( bool ) {
-
+    console.log( bool )
     if ( bool === true ) this.row.style.backgroundColor = 'aliceBlue';
     else this.row.style.backgroundColor = 'initial';
 

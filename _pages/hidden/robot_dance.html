@@ -37,7 +37,7 @@ vendor-js:
                   <th>Right Shoulder</th>
                   <th>Left Elbow</th>
                   <th>Right Elbow</th>
-                  <th><button id="create-frame-button">New</button></th>
+                  <th><button id="create-frame-button">New Frame</button></th>
                 </tr>
               </thead>
               <tbody id="frames"></tbody>
@@ -56,11 +56,31 @@ vendor-js:
                   <tr>
                     <th>#</th>
                     <th></th>
-                    <th></th>
-                    <th><button id="create-group-button">New</button></th>
+                    <th><button id="create-group-button">New Group</button></th>
                   </tr>
                 </thead>
-                <tbody id="groups"></tbody>
+                <tbody id="groups">
+                  <tr id="fr-2" style="background-color: initial;">
+                    <td>2</td>
+                    <td>
+                      <h5>Frames</h5>
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td>
+                              Frame # 1
+                            </td>
+                            <td>
+                              Loop <input type="number" min="0" step="1"> times
+                            </td>
+                            <td><button><span class="fa fa-lg fa-trash-o" aria-hidden="true"></span></button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                    <td><button><span class="fa fa-lg fa-trash-o" aria-hidden="true"></span></button></td>
+                  </tr>
+                </tbody>
               </table>
           </div>
         </li>

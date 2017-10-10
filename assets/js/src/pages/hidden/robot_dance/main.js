@@ -110,7 +110,7 @@ class Main {
         this.initControls();
 
         this.frames = new Frames( this.nao );
-        this.groups = new Groups( this.nao );
+        this.groups = new Groups( this.frames );
 
         this.audio = new Audio( [this.soundSourceLeft, this.soundSourceRight], this.app.camera );
 

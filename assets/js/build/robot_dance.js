@@ -58876,6 +58876,8 @@ var Frame = function () {
     this.headPitchValue = 0;
     this.headYawValue = 0;
 
+    this.headQuaternion = this.robot.headInitialQuaternion.clone();
+
     this.leftShoulderPitchValue = 0;
     this.leftShoulderYawValue = 0;
 
@@ -58901,6 +58903,7 @@ var Frame = function () {
     var zAxis = new Vector3(0, 0, 1);
 
     this.controlFunctions = {
+
       headPitch: function (e) {
 
         e.preventDefault();
@@ -58908,6 +58911,8 @@ var Frame = function () {
         _this3.headPitchValue = _Math.degToRad(-e.target.value);
 
         _this3.robot.head.rotation.z = _this3.headPitchValue;
+
+        _this3.headQuaternion.copy(_this3.robot.head.quaternion);
       },
       headYaw: function (e) {
 
@@ -58916,6 +58921,8 @@ var Frame = function () {
         _this3.headYawValue = _Math.degToRad(e.target.value);
 
         _this3.robot.head.rotation.x = _this3.headYawValue;
+
+        _this3.headQuaternion.copy(_this3.robot.head.quaternion);
       },
       leftShoulderPitch: function (e) {
 
@@ -59030,16 +59037,22 @@ var Frame = function () {
     return {
 
       num: this.num,
-      headPitchValue: this.headPitchValue,
-      headYawValue: this.headYawValue,
-      leftShoulderPitchValue: this.leftShoulderPitchValue,
-      leftShoulderYawValue: this.leftShoulderYawValue,
-      leftElbowPitchValue: this.leftElbowPitchValue,
-      leftElbowYawValue: this.leftElbowYawValue,
-      rightShoulderPitchValue: this.rightShoulderPitchValue,
-      rightShoulderYawValue: this.rightShoulderYawValue,
-      rightElbowPitchValue: this.rightElbowPitchValue,
-      rightElbowYawValue: this.rightElbowYawValue
+      headQuaternion: this.headQuaternion,
+      leftShoulderQuaternion: this.leftShoulderQuaternion,
+      rightShoulderQuaternion: this.rightShoulderQuaternion,
+      leftElbowQuaternion: this.leftElbowQuaternion,
+      rightElbowQuaternion: this.rightElbowQuaternion
+      // headPitchValue: this.headPitchValue,
+      // headYawValue: this.headYawValue,
+      // leftShoulderPitchValue: this.leftShoulderPitchValue,
+      // leftShoulderYawValue: this.leftShoulderYawValue,
+      // leftElbowPitchValue: this.leftElbowPitchValue,
+      // leftElbowYawValue: this.leftElbowYawValue,
+      // rightShoulderPitchValue: this.rightShoulderPitchValue,
+      // rightShoulderYawValue: this.rightShoulderYawValue,
+      // rightElbowPitchValue: this.rightElbowPitchValue,
+      // rightElbowYawValue: this.rightElbowYawValue,
+
     };
   };
 
@@ -59091,14 +59104,15 @@ var Frames = function () {
 
     };
 
+    // slight hack since the model's head is very slightly rotated at the start
+    // so reset that here
+    this.robot.head.rotation.set(0, 0, 0);
+
+    this.robot.headInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
     this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
     this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
     this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
     this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
-
-    // slight hack since the model's head is very slightly rotated at the start
-    // so reset that here
-    this.robot.head.rotation.set(0, 0, 0);
   };
 
   Frames.prototype.initNewFrameButton = function initNewFrameButton() {
@@ -59114,18 +59128,18 @@ var Frames = function () {
 
       _this.framesTable.appendChild(frame.row);
 
-      _this.selectFrame(frame);
+      _this.select(frame);
 
       frame.row.addEventListener('click', function (evt) {
 
         evt.preventDefault();
 
-        _this.selectFrame(frame);
+        _this.select(frame);
       });
     });
   };
 
-  Frames.prototype.selectFrame = function selectFrame(frame) {
+  Frames.prototype.select = function select(frame) {
 
     frame.selected = true;
 
@@ -59193,7 +59207,7 @@ var Group$1 = function () {
   createClass(Group, [{
     key: 'selected',
     set: function (bool) {
-
+      console.log(bool);
       if (bool === true) this.row.style.backgroundColor = 'aliceBlue';else this.row.style.backgroundColor = 'initial';
     }
   }]);
@@ -59201,9 +59215,11 @@ var Group$1 = function () {
 }();
 
 var Groups = function () {
-  function Groups() {
+  function Groups(frames) {
     classCallCheck(this, Groups);
 
+
+    this.frames = frames;
 
     this.currentGroupNum = 0;
     this.groups = [];
@@ -59226,17 +59242,27 @@ var Groups = function () {
 
       _this.groupsTable.appendChild(group.row);
 
+      _this.select(group);
+
       group.row.addEventListener('click', function (evt) {
 
         evt.preventDefault();
 
-        group.selected = true;
-
-        _this.groups.forEach(function (f) {
-
-          if (f.num !== group.num) f.selected = false;
-        });
+        _this.select(group);
       });
+    });
+  };
+
+  Groups.prototype.select = function select(group) {
+
+    group.selected = true;
+
+    this.groups.forEach(function (g) {
+
+      if (g.num !== group.num) {
+
+        g.selected = false;
+      }
     });
   };
 
@@ -60008,7 +60034,7 @@ var Main = function () {
       _this2.initControls();
 
       _this2.frames = new Frames(_this2.nao);
-      _this2.groups = new Groups(_this2.nao);
+      _this2.groups = new Groups(_this2.frames);
 
       _this2.audio = new Audio$1([_this2.soundSourceLeft, _this2.soundSourceRight], _this2.app.camera);
 

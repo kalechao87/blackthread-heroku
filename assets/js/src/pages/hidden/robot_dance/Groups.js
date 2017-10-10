@@ -3,7 +3,9 @@ import Group from './Group.js';
 
 export default class Groups {
 
-  constructor() {
+  constructor( frames ) {
+
+    this.frames = frames;
 
     this.currentGroupNum = 0;
     this.groups = [];
@@ -20,25 +22,37 @@ export default class Groups {
 
       e.preventDefault();
 
-      const group = new Group( this.currentGroupNum ++  );
+      const group = new Group( this.currentGroupNum ++ );
 
       this.groups.push( group );
 
       this.groupsTable.appendChild( group.row );
 
+      this.select( group );
+
       group.row.addEventListener( 'click', ( evt ) => {
 
         evt.preventDefault();
 
-        group.selected = true;
-
-        this.groups.forEach( ( f ) => {
-
-          if ( f.num !== group.num ) f.selected = false;
-
-        } );
+        this.select( group );
 
       } );
+
+    } );
+
+  }
+
+  select( group ) {
+
+    group.selected = true;
+
+    this.groups.forEach( ( g ) => {
+
+      if ( g.num !== group.num ) {
+
+        g.selected = false;
+
+      }
 
     } );
 
