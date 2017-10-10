@@ -58709,15 +58709,19 @@ function invertMirroredFBX(object) {
 var frames = HTMLControl.controls.frames.table;
 
 var Frame = function () {
-  function Frame(num) {
+  function Frame(num, robot) {
     classCallCheck(this, Frame);
 
+
+    this.robot = robot;
 
     this.num = num;
 
     this.initConstraints();
 
-    this.initTableRow();
+    this.initTableEntry();
+
+    this.initControlFunctions();
 
     this.initDeleteButton();
   }
@@ -58750,7 +58754,7 @@ var Frame = function () {
     this.rightElbowYawMax = 60;
   };
 
-  Frame.prototype.initTableRow = function initTableRow() {
+  Frame.prototype.initTableEntry = function initTableEntry() {
 
     this.row = document.createElement('tr');
     this.row.id = 'fr-' + this.num;
@@ -58786,6 +58790,7 @@ var Frame = function () {
   };
 
   Frame.prototype.createInput = function createInput(cell, min, max, name, type) {
+    var _this = this;
 
     var span = document.createElement('span');
     span.innerHTML = type[0].toUpperCase() + type.substr(1, type.length) + ': ';
@@ -58800,11 +58805,16 @@ var Frame = function () {
     span.appendChild(input);
     cell.appendChild(span);
 
+    input.addEventListener('mousedown', function () {
+
+      _this.row.click();
+    });
+
     return input;
   };
 
   Frame.prototype.initDeleteButton = function initDeleteButton() {
-    var _this = this;
+    var _this2 = this;
 
     var deleteButtonCell = document.createElement('td');
     this.deleteButton = document.createElement('button');
@@ -58812,102 +58822,81 @@ var Frame = function () {
     deleteButtonCell.appendChild(this.deleteButton);
     this.row.appendChild(deleteButtonCell);
 
-    var removeRow = function (e) {
+    var removeFrame = function (e) {
 
       e.preventDefault();
-      frames.removeChild(_this.row);
+      frames.removeChild(_this2.row);
 
-      _this.deleteButton.removeEventListener('click', removeRow);
+      _this2.removeEventListeners();
+      _this2.deleteButton.removeEventListener('click', removeFrame);
     };
 
-    this.deleteButton.addEventListener('click', removeRow);
+    this.deleteButton.addEventListener('click', removeFrame);
   };
 
-  createClass(Frame, [{
-    key: 'selected',
-    set: function (bool) {
+  Frame.prototype.addEventListeners = function addEventListeners() {
 
-      if (bool === true) this.row.style.backgroundColor = 'aliceBlue';else this.row.style.backgroundColor = 'initial';
-    }
-  }]);
-  return Frame;
-}();
+    this.headPitch.addEventListener('input', this.controlFunctions.headPitch);
+    this.headYaw.addEventListener('input', this.controlFunctions.headYaw);
 
-var RobotManualControl = function () {
-  function RobotManualControl(robot) {
-    classCallCheck(this, RobotManualControl);
+    this.leftShoulderPitch.addEventListener('input', this.controlFunctions.leftShoulderPitch);
+    this.leftShoulderYaw.addEventListener('input', this.controlFunctions.leftShoulderYaw);
 
+    this.rightShoulderPitch.addEventListener('input', this.controlFunctions.rightShoulderPitch);
+    this.rightShoulderYaw.addEventListener('input', this.controlFunctions.rightShoulderYaw);
 
-    this.robot = robot;
-    this.frame = null;
+    this.leftElbowPitch.addEventListener('input', this.controlFunctions.leftElbowPitch);
+    this.leftElbowYaw.addEventListener('input', this.controlFunctions.leftElbowYaw);
 
-    this.initMoveableParts();
-    this.initControlFunctions();
-  }
-
-  RobotManualControl.prototype.setFrame = function setFrame(frame) {
-
-    if (this.frame !== null) this.removeEventListeners(this.frame);
-
-    this.frame = frame;
-    this.setupEventListeners(this.frame);
+    this.rightElbowPitch.addEventListener('input', this.controlFunctions.rightElbowPitch);
+    this.rightElbowYaw.addEventListener('input', this.controlFunctions.rightElbowYaw);
   };
 
-  RobotManualControl.prototype.setupEventListeners = function setupEventListeners(frame) {
+  Frame.prototype.removeEventListeners = function removeEventListeners() {
 
-    frame.headPitch.addEventListener('input', this.controlFunctions.headPitch);
-    frame.headYaw.addEventListener('input', this.controlFunctions.headYaw);
+    this.headPitch.removeEventListener('input', this.controlFunctions.headPitch);
+    this.headYaw.removeEventListener('input', this.controlFunctions.headYaw);
 
-    frame.leftShoulderPitch.addEventListener('input', this.controlFunctions.leftShoulderPitch);
-    frame.leftShoulderYaw.addEventListener('input', this.controlFunctions.leftShoulderYaw);
+    this.leftShoulderPitch.removeEventListener('input', this.controlFunctions.leftShoulderPitch);
+    this.leftShoulderYaw.removeEventListener('input', this.controlFunctions.leftShoulderYaw);
 
-    frame.rightShoulderPitch.addEventListener('input', this.controlFunctions.rightShoulderPitch);
-    frame.rightShoulderYaw.addEventListener('input', this.controlFunctions.rightShoulderYaw);
+    this.rightShoulderPitch.removeEventListener('input', this.controlFunctions.rightShoulderPitch);
+    this.rightShoulderYaw.removeEventListener('input', this.controlFunctions.rightShoulderYaw);
 
-    frame.leftElbowPitch.addEventListener('input', this.controlFunctions.leftElbowPitch);
-    frame.leftElbowYaw.addEventListener('input', this.controlFunctions.leftElbowYaw);
+    this.leftElbowPitch.removeEventListener('input', this.controlFunctions.leftElbowPitch);
+    this.leftElbowYaw.removeEventListener('input', this.controlFunctions.leftElbowYaw);
 
-    frame.rightElbowPitch.addEventListener('input', this.controlFunctions.rightElbowPitch);
-    frame.rightElbowYaw.addEventListener('input', this.controlFunctions.rightElbowYaw);
+    this.rightElbowPitch.removeEventListener('input', this.controlFunctions.rightElbowPitch);
+    this.rightElbowYaw.removeEventListener('input', this.controlFunctions.rightElbowYaw);
   };
 
-  RobotManualControl.prototype.removeEventListeners = function removeEventListeners(frame) {
+  Frame.prototype.initControlFunctions = function initControlFunctions() {
+    var _this3 = this;
 
-    frame.headPitch.removeEventListener('input', this.controlFunctions.headPitch);
-    frame.headYaw.removeEventListener('input', this.controlFunctions.headYaw);
+    this.headPitchValue = 0;
+    this.headYawValue = 0;
 
-    frame.leftShoulderPitch.removeEventListener('input', this.controlFunctions.leftShoulderPitch);
-    frame.leftShoulderYaw.removeEventListener('input', this.controlFunctions.leftShoulderYaw);
+    this.leftShoulderPitchValue = 0;
+    this.leftShoulderYawValue = 0;
 
-    frame.rightShoulderPitch.removeEventListener('input', this.controlFunctions.rightShoulderPitch);
-    frame.rightShoulderYaw.removeEventListener('input', this.controlFunctions.rightShoulderYaw);
+    this.leftShoulderQuaternion = this.robot.leftShoulderInitialQuaternion.clone();
 
-    frame.leftElbowPitch.removeEventListener('input', this.controlFunctions.leftElbowPitch);
-    frame.leftElbowYaw.removeEventListener('input', this.controlFunctions.leftElbowYaw);
+    this.rightShoulderPitchValue = 0;
+    this.rightShoulderYawValue = 0;
 
-    frame.rightElbowPitch.removeEventListener('input', this.controlFunctions.rightElbowPitch);
-    frame.rightElbowYaw.removeEventListener('input', this.controlFunctions.rightElbowYaw);
-  };
+    this.rightShoulderQuaternion = this.robot.rightShoulderInitialQuaternion.clone();
 
-  RobotManualControl.prototype.initControlFunctions = function initControlFunctions() {
-    var _this = this;
+    this.leftElbowPitchValue = 0;
+    this.leftElbowYawValue = 0;
 
-    var headPitchOffset = this.head.rotation.z;
-    var headYawOffset = this.head.rotation.x;
+    this.leftElbowQuaternion = this.robot.leftElbowInitialQuaternion.clone();
 
-    var leftShoulderPitchPrevVal = 0;
-    var leftShoulderYawPrevVal = 0;
+    this.rightElbowPitchValue = 0;
+    this.rightElbowYawValue = 0;
 
-    var rightShoulderPitchPrevVal = 0;
-    var rightShoulderYawPrevVal = 0;
+    this.rightElbowQuaternion = this.robot.rightElbowInitialQuaternion.clone();
 
-    var leftElbowPitchPrevVal = 0;
-    var leftElbowYawPrevVal = 0;
-
-    var rightElbowPitchPrevVal = 0;
-    var rightElbowYawPrevVal = 0;
-
-    var xAxis = new Vector3(1, 0, 0);
+    // const xAxis = new THREE.Vector3( 1, 0, 0 );
     var yAxis = new Vector3(0, 1, 0);
     var zAxis = new Vector3(0, 0, 1);
 
@@ -58916,132 +58905,161 @@ var RobotManualControl = function () {
 
         e.preventDefault();
 
-        _this.frame.row.click();
+        _this3.headPitchValue = _Math.degToRad(-e.target.value);
 
-        var value = _Math.degToRad(-e.target.value);
-
-        _this.head.rotation.z = headPitchOffset + value;
+        _this3.robot.head.rotation.z = _this3.headPitchValue;
       },
       headYaw: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
+        _this3.headYawValue = _Math.degToRad(e.target.value);
 
-        var value = _Math.degToRad(e.target.value);
-
-        _this.head.rotation.x = headYawOffset + value;
+        _this3.robot.head.rotation.x = _this3.headYawValue;
       },
       leftShoulderPitch: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
-
         var value = _Math.degToRad(-e.target.value);
 
-        _this.leftShoulder.rotateOnAxis(zAxis, leftShoulderPitchPrevVal - value);
+        _this3.robot.leftShoulder.rotateOnAxis(zAxis, _this3.leftShoulderPitchValue - value);
 
-        leftShoulderPitchPrevVal = value;
+        _this3.leftShoulderPitchValue = value;
+
+        _this3.leftShoulderQuaternion.copy(_this3.robot.leftShoulder.quaternion);
       },
       leftShoulderYaw: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
-
         var value = _Math.degToRad(-e.target.value);
 
-        _this.leftShoulder.rotateOnAxis(yAxis, leftShoulderYawPrevVal - value);
+        _this3.robot.leftShoulder.rotateOnAxis(yAxis, _this3.leftShoulderYawValue - value);
 
-        leftShoulderYawPrevVal = value;
+        _this3.leftShoulderYawValue = value;
+
+        _this3.leftShoulderQuaternion.copy(_this3.robot.leftShoulder.quaternion);
       },
       rightShoulderPitch: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
-
         var value = _Math.degToRad(-e.target.value);
 
-        _this.rightShoulder.rotateOnAxis(zAxis, rightShoulderPitchPrevVal - value);
+        _this3.robot.rightShoulder.rotateOnAxis(zAxis, _this3.rightShoulderPitchValue - value);
 
-        rightShoulderPitchPrevVal = value;
+        _this3.rightShoulderPitchValue = value;
+
+        _this3.rightShoulderQuaternion.copy(_this3.robot.rightShoulder.quaternion);
       },
       rightShoulderYaw: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
-
         var value = _Math.degToRad(e.target.value);
 
-        _this.rightShoulder.rotateOnAxis(yAxis, rightShoulderYawPrevVal - value);
+        _this3.robot.rightShoulder.rotateOnAxis(yAxis, _this3.rightShoulderYawValue - value);
 
-        rightShoulderYawPrevVal = value;
+        _this3.rightShoulderYawValue = value;
+
+        _this3.rightShoulderQuaternion.copy(_this3.robot.rightShoulder.quaternion);
       },
       leftElbowPitch: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
+        var value = _Math.degToRad(e.target.value);
 
-        var value = _Math.degToRad(-e.target.value);
+        _this3.robot.leftElbow.rotateOnAxis(yAxis, _this3.leftElbowPitchValue - value);
 
-        _this.leftElbow.rotateOnAxis(zAxis, leftElbowPitchPrevVal - value);
+        _this3.leftElbowPitchValue = value;
 
-        leftElbowPitchPrevVal = value;
+        _this3.leftElbowQuaternion.copy(_this3.robot.leftElbow.quaternion);
       },
       leftElbowYaw: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
+        var value = _Math.degToRad(-e.target.value);
 
-        var value = _Math.degToRad(e.target.value);
+        _this3.robot.leftElbow.rotateOnAxis(zAxis, _this3.leftElbowYawValue - value);
 
-        _this.leftElbow.rotateOnAxis(zAxis, leftElbowYawPrevVal - value);
+        _this3.leftElbowYawValue = value;
 
-        leftElbowYawPrevVal = value;
+        _this3.leftElbowQuaternion.copy(_this3.robot.leftElbow.quaternion);
       },
       rightElbowPitch: function (e) {
 
         e.preventDefault();
 
-        _this.frame.row.click();
+        var value = _Math.degToRad(-e.target.value);
+
+        _this3.robot.rightElbow.rotateOnAxis(yAxis, _this3.rightElbowPitchValue - value);
+
+        _this3.rightElbowPitchValue = value;
+
+        _this3.rightElbowQuaternion.copy(_this3.robot.rightElbow.quaternion);
+      },
+      rightElbowYaw: function (e) {
+
+        e.preventDefault();
 
         var value = _Math.degToRad(-e.target.value);
 
-        _this.rightElbow.rotateOnAxis(yAxis, rightElbowPitchPrevVal - value);
+        _this3.robot.rightElbow.rotateOnAxis(zAxis, _this3.rightElbowYawValue - value);
 
-        rightElbowPitchPrevVal = value;
-      },
-      rightElbowYaw: function (e) {
-        e.preventDefault();
+        _this3.rightElbowYawValue = value;
 
-        _this.frame.row.click();
-
-        var value = _Math.degToRad(e.target.value);
-
-        _this.rightElbow.rotateOnAxis(zAxis, rightElbowYawPrevVal - value);
-
-        rightElbowYawPrevVal = value;
+        _this3.rightElbowQuaternion.copy(_this3.robot.rightElbow.quaternion);
       }
     };
   };
 
-  RobotManualControl.prototype.initMoveableParts = function initMoveableParts() {
+  Frame.prototype.setRotations = function setRotations() {
 
-    this.head = this.robot.getObjectByName('headControl'); // or 'neck'
-
-    this.leftShoulder = this.robot.getObjectByName('shoulderControlLeft'); // or Lshoulder_joint
-    this.rightShoulder = this.robot.getObjectByName('shoulderControlRight'); // or Rshoulder_joint
-
-    this.leftElbow = this.robot.getObjectByName('elbowControlLeft');
-    this.rightElbow = this.robot.getObjectByName('elbowControlRight');
+    this.robot.head.rotation.set(this.headYawValue, 0, this.headPitchValue);
+    this.robot.leftShoulder.quaternion.copy(this.leftShoulderQuaternion);
+    this.robot.rightShoulder.quaternion.copy(this.rightShoulderQuaternion);
+    this.robot.leftElbow.quaternion.copy(this.leftElbowQuaternion);
+    this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
   };
 
-  return RobotManualControl;
+  Frame.prototype.toJSON = function toJSON() {
+
+    return {
+
+      num: this.num,
+      headPitchValue: this.headPitchValue,
+      headYawValue: this.headYawValue,
+      leftShoulderPitchValue: this.leftShoulderPitchValue,
+      leftShoulderYawValue: this.leftShoulderYawValue,
+      leftElbowPitchValue: this.leftElbowPitchValue,
+      leftElbowYawValue: this.leftElbowYawValue,
+      rightShoulderPitchValue: this.rightShoulderPitchValue,
+      rightShoulderYawValue: this.rightShoulderYawValue,
+      rightElbowPitchValue: this.rightElbowPitchValue,
+      rightElbowYawValue: this.rightElbowYawValue
+    };
+  };
+
+  createClass(Frame, [{
+    key: 'selected',
+    set: function (bool) {
+
+      if (bool === true) {
+
+        this.row.style.backgroundColor = 'aliceBlue';
+        this.setRotations();
+        this.addEventListeners();
+      } else {
+
+        this.row.style.backgroundColor = 'initial';
+        this.removeEventListeners();
+      }
+    }
+  }]);
+  return Frame;
 }();
 
 var Frames = function () {
@@ -59049,7 +59067,7 @@ var Frames = function () {
     classCallCheck(this, Frames);
 
 
-    this.robotManualControl = new RobotManualControl(robot);
+    this.initRobot(robot);
 
     this.currentFrameNum = 0;
     this.frames = [];
@@ -59059,6 +59077,30 @@ var Frames = function () {
     this.initNewFrameButton();
   }
 
+  Frames.prototype.initRobot = function initRobot(robot) {
+
+    this.robot = {
+
+      head: robot.getObjectByName('headControl'),
+
+      leftShoulder: robot.getObjectByName('shoulderControlLeft'),
+      rightShoulder: robot.getObjectByName('shoulderControlRight'),
+
+      leftElbow: robot.getObjectByName('elbowControlLeft'),
+      rightElbow: robot.getObjectByName('elbowControlRight')
+
+    };
+
+    this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
+    this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
+    this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
+    this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
+
+    // slight hack since the model's head is very slightly rotated at the start
+    // so reset that here
+    this.robot.head.rotation.set(0, 0, 0);
+  };
+
   Frames.prototype.initNewFrameButton = function initNewFrameButton() {
     var _this = this;
 
@@ -59066,25 +59108,30 @@ var Frames = function () {
 
       e.preventDefault();
 
-      var frame = new Frame(_this.currentFrameNum++);
+      var frame = new Frame(_this.currentFrameNum++, _this.robot);
 
       _this.frames.push(frame);
 
       _this.framesTable.appendChild(frame.row);
 
+      _this.selectFrame(frame);
+
       frame.row.addEventListener('click', function (evt) {
 
         evt.preventDefault();
 
-        frame.selected = true;
-
-        _this.robotManualControl.setFrame(frame);
-
-        _this.frames.forEach(function (f) {
-
-          if (f.num !== frame.num) f.selected = false;
-        });
+        _this.selectFrame(frame);
       });
+    });
+  };
+
+  Frames.prototype.selectFrame = function selectFrame(frame) {
+
+    frame.selected = true;
+
+    this.frames.forEach(function (f) {
+
+      if (f.num !== frame.num) f.selected = false;
     });
   };
 
