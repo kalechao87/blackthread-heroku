@@ -22,7 +22,7 @@ export default class Groups {
 
       e.preventDefault();
 
-      const group = new Group( this.currentGroupNum ++ );
+      const group = new Group( this.currentGroupNum ++, this.frames );
 
       this.groups.push( group );
 

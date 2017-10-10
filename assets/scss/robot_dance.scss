@@ -185,6 +185,36 @@
 
 }
 
+#groups {
+
+  * {
+
+    text-align: center;
+
+  }
+
+  h4 {
+    display: inline-block;
+    margin: 0.5em;
+    font-size: 1.25em;
+  }
+
+  button {
+    margin: 0.5em;
+  }
+
+}
+
+.add-selected-frame-button {
+
+  float: right;
+
+}
+
+.frames-in-group {
+
+}
+
 
 input[type=range] {
   height: 3px;

@@ -59143,6 +59143,8 @@ var Frames = function () {
 
     frame.selected = true;
 
+    this.selectedFrame = frame.num;
+
     this.frames.forEach(function (f) {
 
       if (f.num !== frame.num) f.selected = false;
@@ -59155,21 +59157,26 @@ var Frames = function () {
 var groups = HTMLControl.controls.groups.table;
 
 var Group$1 = function () {
-  function Group(num) {
+  function Group(num, frames) {
     classCallCheck(this, Group);
 
+
+    this.frames = frames;
+
+    this.containedFrames = [];
 
     this.num = num;
 
     this.initTableRow();
 
     this.initDeleteButton();
+    this.initAddFrameButton();
   }
 
   Group.prototype.initTableRow = function initTableRow() {
 
     this.row = document.createElement('tr');
-    this.row.id = 'fr-' + this.num;
+    this.row.id = 'gr-' + this.num;
 
     var nameCell = document.createElement('td');
     this.row.appendChild(nameCell);
@@ -59177,15 +59184,109 @@ var Group$1 = function () {
 
     var framesCell = document.createElement('td');
     this.row.appendChild(framesCell);
-    framesCell.innerHTML = 'Frames in Group';
+    framesCell.innerHTML = '<h4>Frames</h4>';
 
-    var loopCell = document.createElement('td');
-    this.row.appendChild(loopCell);
-    loopCell.innerHTML = 'Loop Amount';
+    this.addFrameButton = document.createElement('button');
+    this.addFrameButton.classList.add('add-selected-frame-button');
+    this.addFrameButton.innerHTML = 'Add Selected Frame';
+
+    framesCell.appendChild(this.addFrameButton);
+
+    var frameTable = document.createElement('table');
+    this.framesInGroup = document.createElement('tbody');
+    this.framesInGroup.classList.add('frames-in-group');
+
+    frameTable.appendChild(this.framesInGroup);
+    framesCell.appendChild(frameTable);
+  };
+
+  Group.prototype.initAddFrameButton = function initAddFrameButton() {
+    var _this = this;
+
+    var lastAddedFrameNum = null;
+
+    this.addFrameButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      var frameNum = _this.frames.selectedFrame;
+
+      if (frameNum === undefined) return;
+
+      // don't add the same frame consecutively (use loop instead)
+      if (lastAddedFrameNum === frameNum) return;
+
+      lastAddedFrameNum = frameNum;
+
+      var frameDetails = {
+        frame: _this.frames.frames[frameNum],
+        loopAmount: 1
+      };
+
+      _this.containedFrames.push(frameDetails);
+      var framePos = _this.containedFrames.length - 1;
+
+      var frameRow = document.createElement('tr');
+
+      _this.framesInGroup.appendChild(frameRow);
+      var nameCell = document.createElement('td');
+      nameCell.innerHTML = 'Frame #' + frameNum;
+      frameRow.appendChild(nameCell);
+
+      var loopCell = document.createElement('td');
+      loopCell.innerHTML = 'Loop ';
+      frameRow.appendChild(loopCell);
+
+      var loopInput = document.createElement('input');
+      loopCell.appendChild(loopInput);
+      loopInput.type = 'number';
+      loopInput.min = '0';
+      loopInput.value = '1';
+      loopInput.step = '1';
+
+      var text = document.createElement('span');
+      text.style.width = '8em';
+      text.style.textAlign = 'left';
+      text.style.marginLeft = '0.25em';
+      text.innerHTML = ' time';
+      loopCell.appendChild(text);
+
+      loopInput.addEventListener('input', function (evt) {
+
+        evt.preventDefault();
+        var value = parseInt(evt.target.value, 10);
+
+        if (value === 0) frameRow.style.backgroundColor = 'darkgrey';else frameRow.style.backgroundColor = 'initial';
+
+        if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
+
+        frameDetails.loopAmount = value;
+      });
+
+      var deleteCell = document.createElement('td');
+      frameRow.appendChild(deleteCell);
+
+      var deleteButton = document.createElement('button');
+      deleteCell.appendChild(deleteButton);
+      deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+
+      deleteButton.addEventListener('click', function (evt) {
+
+        evt.preventDefault();
+
+        _this.framesInGroup.removeChild(frameRow);
+
+        if (lastAddedFrameNum === frameNum) lastAddedFrameNum = null;
+
+        _this.containedFrames[framePos] = null;
+      });
+
+      // console.log( this.containedFrames )
+    });
   };
 
   Group.prototype.initDeleteButton = function initDeleteButton() {
-    var _this = this;
+    var _this2 = this;
 
     var deleteButtonCell = document.createElement('td');
     this.deleteButton = document.createElement('button');
@@ -59196,9 +59297,9 @@ var Group$1 = function () {
     var removeRow = function (e) {
 
       e.preventDefault();
-      groups.removeChild(_this.row);
+      groups.removeChild(_this2.row);
 
-      _this.deleteButton.removeEventListener('click', removeRow);
+      _this2.deleteButton.removeEventListener('click', removeRow);
     };
 
     this.deleteButton.addEventListener('click', removeRow);
@@ -59207,7 +59308,7 @@ var Group$1 = function () {
   createClass(Group, [{
     key: 'selected',
     set: function (bool) {
-      console.log(bool);
+
       if (bool === true) this.row.style.backgroundColor = 'aliceBlue';else this.row.style.backgroundColor = 'initial';
     }
   }]);
@@ -59236,7 +59337,7 @@ var Groups = function () {
 
       e.preventDefault();
 
-      var group = new Group$1(_this.currentGroupNum++);
+      var group = new Group$1(_this.currentGroupNum++, _this.frames);
 
       _this.groups.push(group);
 

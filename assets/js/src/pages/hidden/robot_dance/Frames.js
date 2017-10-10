@@ -73,6 +73,8 @@ export default class Frames {
 
     frame.selected = true;
 
+    this.selectedFrame = frame.num;
+
     this.frames.forEach( ( f ) => {
 
       if ( f.num !== frame.num ) f.selected = false;
