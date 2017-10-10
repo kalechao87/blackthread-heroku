@@ -3,22 +3,9 @@
 
 #container {
 	display: flex;
-  height: 90vmin;
-  width: 90vmin;
+  height: 90vh;
+
   border: 1px solid #062f4f;
-}
-
-#container:fullscreen {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  left: 0;
-  top: 0;
-}
-
-.masthead:fullscreen, .footer:fullscreen {
-  display: none;
 }
 
 #loading-overlay {
@@ -126,9 +113,9 @@
   background: radial-gradient(ellipse at left, #ffffff 1%, #787878 100%);
   color: black;
 
-  // span {
-  //   float: right;
-  // }
+  * {
+    color: black;
+  }
 
   h2 {
     padding: 0;

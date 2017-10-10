@@ -51490,7 +51490,7 @@ var Main = function () {
 
   Main.prototype.initFog = function initFog() {
 
-    this.app.scene.fog = new Fog(0xf7f7f7, 1500, 10000);
+    this.app.scene.fog = new Fog(0xe7e7e7, 600, this.app.camera.far);
   };
 
   Main.prototype.addGround = function addGround() {
