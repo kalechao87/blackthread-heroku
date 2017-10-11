@@ -1,10 +1,38 @@
 import HTMLControl from './HTMLControl.js';
 
+// saving function taken from three.js editor
+const link = document.createElement( 'a' );
+link.style.display = 'none';
+document.body.appendChild( link ); // Firefox workaround, see #6594
+
+const save = ( blob, filename ) => {
+
+  link.href = URL.createObjectURL( blob );
+  link.download = filename || 'data.json';
+  link.click();
+
+};
+
+const saveString = ( text, filename ) => {
+
+  save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+
+};
+
+const exportAsJSON = ( object ) => {
+
+  const output = JSON.stringify( object, null, '\t' );
+  // output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+
+  saveString( output, 'dance.json' );
+
+};
+
 export default class FileControl {
 
   constructor( frames, groups, dance ) {
 
-    this.frame = frames;
+    this.frames = frames;
     this.groups = groups;
     this.dance = dance;
 
@@ -16,7 +44,18 @@ export default class FileControl {
 
   load( json ) {
 
-    console.log( JSON.stringify( json ) );
+    if ( ! json.metadata || json.metadata.type !== 'Nao Dance File' ) {
+
+      console.error( 'Wrong JSON format - cannot load dance!' );
+      return;
+
+    }
+
+    console.log( json );
+
+    this.frames.fromJSON( json.frames );
+    this.groups.fromJSON( json.groups );
+    this.dance.fromJSON( json.dance );
 
   }
 
@@ -26,7 +65,21 @@ export default class FileControl {
 
       e.preventDefault();
 
-      console.log( 's' );
+      const object = {
+
+        metadata: {
+          type: 'Nao Dance File',
+          generator: 'Blackthread design',
+          version: '1',
+        },
+
+      };
+
+      object.frames = this.frames.toJSON();
+      object.groups = this.groups.toJSON();
+      object.dance = this.dance.toJSON();
+
+      exportAsJSON( object );
 
     } );
 

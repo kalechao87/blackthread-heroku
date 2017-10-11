@@ -137,18 +137,6 @@ export default class Frame {
     deleteButtonCell.appendChild( this.deleteButton );
     this.row.appendChild( deleteButtonCell );
 
-    const removeFrame = ( e ) => {
-
-      e.preventDefault();
-      frames.removeChild( this.row );
-
-      this.removeEventListeners();
-      this.deleteButton.removeEventListener( 'click', removeFrame );
-
-    };
-
-    this.deleteButton.addEventListener( 'click', removeFrame );
-
   }
 
   addEventListeners() {
@@ -362,32 +350,48 @@ export default class Frame {
 
   }
 
-  setDetail( details ) {
+  fromJSON( object ) {
 
-    // TODO
+    // headQuaternion: this.headQuaternion,
+    // leftShoulderQuaternion: this.leftShoulderQuaternion,
+    // rightShoulderQuaternion: this.rightShoulderQuaternion,
+    // leftElbowQuaternion: this.leftElbowQuaternion,
+    // rightElbowQuaternion: this.rightElbowQuaternion,
+    this.num = object.num;
+    this.headPitch.value = this.headPitchValue = object.headPitchValue;
+    this.headYawValue = object.headYawValue;
+    this.leftShoulderPitchValue = object.leftShoulderPitchValue;
+    this.leftShoulderYawValue = object.leftShoulderYawValue;
+    this.leftElbowPitchValue = object.leftElbowPitchValue;
+    this.leftElbowYawValue = object.leftElbowYawValue;
+    this.rightShoulderPitchValue = object.rightShoulderPitchValue;
+    this.rightShoulderYawValue = object.rightShoulderYawValue;
+    this.rightElbowPitchValue = object.rightElbowPitchValue;
+    this.rightElbowYawValue = object.rightElbowYawValue;
 
   }
 
-  getDetails() {
+  toJSON() {
 
     return {
 
+      type: 'frame',
       num: this.num,
       headQuaternion: this.headQuaternion,
       leftShoulderQuaternion: this.leftShoulderQuaternion,
       rightShoulderQuaternion: this.rightShoulderQuaternion,
       leftElbowQuaternion: this.leftElbowQuaternion,
       rightElbowQuaternion: this.rightElbowQuaternion,
-      // headPitchValue: this.headPitchValue,
-      // headYawValue: this.headYawValue,
-      // leftShoulderPitchValue: this.leftShoulderPitchValue,
-      // leftShoulderYawValue: this.leftShoulderYawValue,
-      // leftElbowPitchValue: this.leftElbowPitchValue,
-      // leftElbowYawValue: this.leftElbowYawValue,
-      // rightShoulderPitchValue: this.rightShoulderPitchValue,
-      // rightShoulderYawValue: this.rightShoulderYawValue,
-      // rightElbowPitchValue: this.rightElbowPitchValue,
-      // rightElbowYawValue: this.rightElbowYawValue,
+      headPitchValue: this.headPitchValue,
+      headYawValue: this.headYawValue,
+      leftShoulderPitchValue: this.leftShoulderPitchValue,
+      leftShoulderYawValue: this.leftShoulderYawValue,
+      leftElbowPitchValue: this.leftElbowPitchValue,
+      leftElbowYawValue: this.leftElbowYawValue,
+      rightShoulderPitchValue: this.rightShoulderPitchValue,
+      rightShoulderYawValue: this.rightShoulderYawValue,
+      rightElbowPitchValue: this.rightElbowPitchValue,
+      rightElbowYawValue: this.rightElbowYawValue,
 
     };
 

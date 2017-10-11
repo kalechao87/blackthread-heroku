@@ -56,89 +56,95 @@ export default class Group {
 
   }
 
+  addFrame( frame ) {
+
+    const frameDetails = {
+      frame,
+      loopAmount: 1,
+    };
+
+    this.containedFrames.push( frameDetails );
+    const framePos = this.containedFrames.length - 1;
+
+    const frameRow = document.createElement( 'tr' );
+
+    this.framesInGroup.appendChild( frameRow );
+    const nameCell = document.createElement( 'td' );
+    nameCell.innerHTML = 'Frame #' + frame.num;
+    frameRow.appendChild( nameCell );
+
+    const loopCell = document.createElement( 'td' );
+    loopCell.innerHTML = 'Loop ';
+    frameRow.appendChild( loopCell );
+
+    const loopInput = document.createElement( 'input' );
+    loopCell.appendChild( loopInput );
+    loopInput.type = 'number';
+    loopInput.min = '0';
+    loopInput.value = '1';
+    loopInput.step = '1';
+
+    const text = document.createElement( 'span' );
+    text.style.width = '8em';
+    text.style.textAlign = 'left';
+    text.style.marginLeft = '0.25em';
+    text.innerHTML = ' time';
+    loopCell.appendChild( text );
+
+    loopInput.addEventListener( 'input', ( evt ) => {
+
+      evt.preventDefault();
+      const value = parseInt( evt.target.value, 10 );
+
+      if ( value === 0 ) frameRow.style.backgroundColor = 'darkgrey';
+      else frameRow.style.backgroundColor = 'initial';
+
+      if ( value !== 1 ) text.innerHTML = ' times';
+      else text.nodeValue = text.innerHTML = ' time';
+
+      frameDetails.loopAmount = value;
+
+    } );
+
+    const deleteCell = document.createElement( 'td' );
+    frameRow.appendChild( deleteCell );
+
+    const deleteButton = document.createElement( 'button' );
+    deleteCell.appendChild( deleteButton );
+    deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+
+    deleteButton.addEventListener( 'click', ( evt ) => {
+
+      evt.preventDefault();
+
+      this.framesInGroup.removeChild( frameRow );
+
+      if ( this.lastAddedFrameNum === frame.num ) this.lastAddedFrameNum = null;
+
+      this.containedFrames[ framePos ] = null;
+
+    } );
+
+  }
+
   initAddFrameButton() {
 
-    let lastAddedFrameNum = null;
+    this.lastAddedFrameNum = null;
 
     this.addFrameButton.addEventListener( 'click', ( e ) => {
 
       e.preventDefault();
 
-      const frameNum = this.frames.selectedFrame;
+      const frame = this.frames.selectedFrame;
 
-      if ( frameNum === undefined ) return;
+      if ( frame === undefined ) return;
 
       // don't add the same frame consecutively (use loop instead)
-      if ( lastAddedFrameNum === frameNum ) return;
+      if ( this.lastAddedFrameNum === frame.num ) return;
 
-      lastAddedFrameNum = frameNum;
+      this.lastAddedFrameNum = frame.num;
 
-      const frameDetails = {
-        frame: this.frames.frames[ frameNum ],
-        loopAmount: 1,
-      };
-
-      this.containedFrames.push( frameDetails );
-      const framePos = this.containedFrames.length - 1;
-
-      const frameRow = document.createElement( 'tr' );
-
-      this.framesInGroup.appendChild( frameRow );
-      const nameCell = document.createElement( 'td' );
-      nameCell.innerHTML = 'Frame #' + frameNum;
-      frameRow.appendChild( nameCell );
-
-      const loopCell = document.createElement( 'td' );
-      loopCell.innerHTML = 'Loop ';
-      frameRow.appendChild( loopCell );
-
-      const loopInput = document.createElement( 'input' );
-      loopCell.appendChild( loopInput );
-      loopInput.type = 'number';
-      loopInput.min = '0';
-      loopInput.value = '1';
-      loopInput.step = '1';
-
-      const text = document.createElement( 'span' );
-      text.style.width = '8em';
-      text.style.textAlign = 'left';
-      text.style.marginLeft = '0.25em';
-      text.innerHTML = ' time';
-      loopCell.appendChild( text );
-
-      loopInput.addEventListener( 'input', ( evt ) => {
-
-        evt.preventDefault();
-        const value = parseInt( evt.target.value, 10 );
-
-        if ( value === 0 ) frameRow.style.backgroundColor = 'darkgrey';
-        else frameRow.style.backgroundColor = 'initial';
-
-        if ( value !== 1 ) text.innerHTML = ' times';
-        else text.nodeValue = text.innerHTML = ' time';
-
-        frameDetails.loopAmount = value;
-
-      } );
-
-      const deleteCell = document.createElement( 'td' );
-      frameRow.appendChild( deleteCell );
-
-      const deleteButton = document.createElement( 'button' );
-      deleteCell.appendChild( deleteButton );
-      deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-
-      deleteButton.addEventListener( 'click', ( evt ) => {
-
-        evt.preventDefault();
-
-        this.framesInGroup.removeChild( frameRow );
-
-        if ( lastAddedFrameNum === frameNum ) lastAddedFrameNum = null;
-
-        this.containedFrames[ framePos ] = null;
-
-      } );
+      this.addFrame( frame );
 
     } );
 
@@ -152,28 +158,46 @@ export default class Group {
     deleteButtonCell.appendChild( this.deleteButton );
     this.row.appendChild( deleteButtonCell );
 
-    const removeRow = ( e ) => {
+  }
 
-      e.preventDefault();
-      groups.removeChild( this.row );
+  reset() {
 
-      this.deleteButton.removeEventListener( 'click', removeRow );
-
-    };
-
-    this.deleteButton.addEventListener( 'click', removeRow );
+    console.log( 'TODO: Group.reset ' );
 
   }
 
-  setDetail( details ) {
+  fromJSON( object ) {
 
-    // TODO
+    this.reset();
+
+    for ( const key in object ) {
+
+      const detail = object[ key ];
+
+      this.addFrame( this.frames.frames[ detail.frameNum] );
+
+    }
 
   }
 
-  getDetails() {
+  toJSON() {
 
-    return { };
+    const output = {};
+
+    for ( let i = 0; i < this.containedFrames.length; i++ ) {
+
+      const detail = this.containedFrames[ i ];
+
+      output[ i ] = {
+
+        frameNum: detail.frame.num,
+        loopAmount: detail.loopAmount,
+
+      };
+
+    }
+
+    return output;
 
   }
 

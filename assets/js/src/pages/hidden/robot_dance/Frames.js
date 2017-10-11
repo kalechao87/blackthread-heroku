@@ -44,27 +44,49 @@ export default class Frames {
 
   }
 
+  createFrame( num, detail ) {
+
+    const frame = new Frame( num, this.robot );
+
+    if ( detail !== undefined ) frame.fromJSON( detail );
+
+    this.frames[ frame.num ] = frame;
+
+    this.framesTable.appendChild( frame.row );
+
+    this.select( frame );
+
+    frame.row.addEventListener( 'click', ( evt ) => {
+
+      evt.preventDefault();
+
+      this.select( frame );
+
+    } );
+
+    const remove = ( evt ) => {
+
+      evt.preventDefault();
+      HTMLControl.controls.frames.table.removeChild( frame.row );
+
+      frame.removeEventListeners();
+      frame.deleteButton.removeEventListener( 'click', remove );
+
+      this.frames[ frame.num ] = null;
+
+    };
+
+    frame.deleteButton.addEventListener( 'click', remove );
+
+  }
+
   initNewFrameButton() {
 
     this.newFrameButton.addEventListener( 'click', ( e ) => {
 
       e.preventDefault();
 
-      const frame = new Frame( this.currentFrameNum ++, this.robot );
-
-      this.frames.push( frame );
-
-      this.framesTable.appendChild( frame.row );
-
-      this.select( frame );
-
-      frame.row.addEventListener( 'click', ( evt ) => {
-
-        evt.preventDefault();
-
-        this.select( frame );
-
-      } );
+      this.createFrame( this.currentFrameNum ++ );
 
     } );
 
@@ -78,9 +100,70 @@ export default class Frames {
 
     this.frames.forEach( ( f ) => {
 
-      if ( f.num !== frame.num ) f.selected = false;
+      if ( f !== null && f.num !== frame.num ) f.selected = false;
 
     } );
+
+  }
+
+  reset() {
+
+    this.frames.forEach( ( frame ) => {
+
+      if ( frame !== null ) frame.deleteButton.click();
+
+    } );
+
+    this.frames = [];
+
+  }
+
+  fromJSON( object ) {
+
+    this.reset();
+
+    for ( const key in object ) {
+
+      const detail = object[ key ];
+
+      if ( detail === null ) {
+
+        this.frames[ key ] = null;
+
+      } else {
+
+        this.createFrame( key, detail );
+        this.currentFrameNum = key;
+
+      }
+
+      console.log( object[ key ] );
+
+    }
+
+  }
+
+  toJSON() {
+
+    const output = {};
+
+    for ( let i = 0; i < this.frames.length; i++ ) {
+
+      const frame = this.frames[ i ];
+
+      if ( frame !== null ) {
+
+        output[ i ] = frame.toJSON();
+
+      } else {
+
+        output[ i ] = null;
+
+      }
+
+    }
+
+    return output;
 
   }
 

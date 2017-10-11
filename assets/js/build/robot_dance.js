@@ -58822,24 +58822,12 @@ var Frame = function () {
   };
 
   Frame.prototype.initDeleteButton = function initDeleteButton() {
-    var _this2 = this;
 
     var deleteButtonCell = document.createElement('td');
     this.deleteButton = document.createElement('button');
     this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
     deleteButtonCell.appendChild(this.deleteButton);
     this.row.appendChild(deleteButtonCell);
-
-    var removeFrame = function (e) {
-
-      e.preventDefault();
-      frames.removeChild(_this2.row);
-
-      _this2.removeEventListeners();
-      _this2.deleteButton.removeEventListener('click', removeFrame);
-    };
-
-    this.deleteButton.addEventListener('click', removeFrame);
   };
 
   Frame.prototype.addEventListeners = function addEventListeners() {
@@ -58879,7 +58867,7 @@ var Frame = function () {
   };
 
   Frame.prototype.initControlFunctions = function initControlFunctions() {
-    var _this3 = this;
+    var _this2 = this;
 
     this.headPitchValue = 0;
     this.headYawValue = 0;
@@ -58916,21 +58904,21 @@ var Frame = function () {
 
         e.preventDefault();
 
-        _this3.headPitchValue = _Math.degToRad(-e.target.value);
+        _this2.headPitchValue = _Math.degToRad(-e.target.value);
 
-        _this3.robot.head.rotation.z = _this3.headPitchValue;
+        _this2.robot.head.rotation.z = _this2.headPitchValue;
 
-        _this3.headQuaternion.copy(_this3.robot.head.quaternion);
+        _this2.headQuaternion.copy(_this2.robot.head.quaternion);
       },
       headYaw: function (e) {
 
         e.preventDefault();
 
-        _this3.headYawValue = _Math.degToRad(e.target.value);
+        _this2.headYawValue = _Math.degToRad(e.target.value);
 
-        _this3.robot.head.rotation.x = _this3.headYawValue;
+        _this2.robot.head.rotation.x = _this2.headYawValue;
 
-        _this3.headQuaternion.copy(_this3.robot.head.quaternion);
+        _this2.headQuaternion.copy(_this2.robot.head.quaternion);
       },
       leftShoulderPitch: function (e) {
 
@@ -58938,11 +58926,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(-e.target.value);
 
-        _this3.robot.leftShoulder.rotateOnAxis(zAxis, _this3.leftShoulderPitchValue - value);
+        _this2.robot.leftShoulder.rotateOnAxis(zAxis, _this2.leftShoulderPitchValue - value);
 
-        _this3.leftShoulderPitchValue = value;
+        _this2.leftShoulderPitchValue = value;
 
-        _this3.leftShoulderQuaternion.copy(_this3.robot.leftShoulder.quaternion);
+        _this2.leftShoulderQuaternion.copy(_this2.robot.leftShoulder.quaternion);
       },
       leftShoulderYaw: function (e) {
 
@@ -58950,11 +58938,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(-e.target.value);
 
-        _this3.robot.leftShoulder.rotateOnAxis(yAxis, _this3.leftShoulderYawValue - value);
+        _this2.robot.leftShoulder.rotateOnAxis(yAxis, _this2.leftShoulderYawValue - value);
 
-        _this3.leftShoulderYawValue = value;
+        _this2.leftShoulderYawValue = value;
 
-        _this3.leftShoulderQuaternion.copy(_this3.robot.leftShoulder.quaternion);
+        _this2.leftShoulderQuaternion.copy(_this2.robot.leftShoulder.quaternion);
       },
       rightShoulderPitch: function (e) {
 
@@ -58962,11 +58950,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(-e.target.value);
 
-        _this3.robot.rightShoulder.rotateOnAxis(zAxis, _this3.rightShoulderPitchValue - value);
+        _this2.robot.rightShoulder.rotateOnAxis(zAxis, _this2.rightShoulderPitchValue - value);
 
-        _this3.rightShoulderPitchValue = value;
+        _this2.rightShoulderPitchValue = value;
 
-        _this3.rightShoulderQuaternion.copy(_this3.robot.rightShoulder.quaternion);
+        _this2.rightShoulderQuaternion.copy(_this2.robot.rightShoulder.quaternion);
       },
       rightShoulderYaw: function (e) {
 
@@ -58974,11 +58962,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(e.target.value);
 
-        _this3.robot.rightShoulder.rotateOnAxis(yAxis, _this3.rightShoulderYawValue - value);
+        _this2.robot.rightShoulder.rotateOnAxis(yAxis, _this2.rightShoulderYawValue - value);
 
-        _this3.rightShoulderYawValue = value;
+        _this2.rightShoulderYawValue = value;
 
-        _this3.rightShoulderQuaternion.copy(_this3.robot.rightShoulder.quaternion);
+        _this2.rightShoulderQuaternion.copy(_this2.robot.rightShoulder.quaternion);
       },
       leftElbowPitch: function (e) {
 
@@ -58986,11 +58974,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(e.target.value);
 
-        _this3.robot.leftElbow.rotateOnAxis(yAxis, _this3.leftElbowPitchValue - value);
+        _this2.robot.leftElbow.rotateOnAxis(yAxis, _this2.leftElbowPitchValue - value);
 
-        _this3.leftElbowPitchValue = value;
+        _this2.leftElbowPitchValue = value;
 
-        _this3.leftElbowQuaternion.copy(_this3.robot.leftElbow.quaternion);
+        _this2.leftElbowQuaternion.copy(_this2.robot.leftElbow.quaternion);
       },
       leftElbowYaw: function (e) {
 
@@ -58998,11 +58986,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(-e.target.value);
 
-        _this3.robot.leftElbow.rotateOnAxis(zAxis, _this3.leftElbowYawValue - value);
+        _this2.robot.leftElbow.rotateOnAxis(zAxis, _this2.leftElbowYawValue - value);
 
-        _this3.leftElbowYawValue = value;
+        _this2.leftElbowYawValue = value;
 
-        _this3.leftElbowQuaternion.copy(_this3.robot.leftElbow.quaternion);
+        _this2.leftElbowQuaternion.copy(_this2.robot.leftElbow.quaternion);
       },
       rightElbowPitch: function (e) {
 
@@ -59010,11 +58998,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(-e.target.value);
 
-        _this3.robot.rightElbow.rotateOnAxis(yAxis, _this3.rightElbowPitchValue - value);
+        _this2.robot.rightElbow.rotateOnAxis(yAxis, _this2.rightElbowPitchValue - value);
 
-        _this3.rightElbowPitchValue = value;
+        _this2.rightElbowPitchValue = value;
 
-        _this3.rightElbowQuaternion.copy(_this3.robot.rightElbow.quaternion);
+        _this2.rightElbowQuaternion.copy(_this2.robot.rightElbow.quaternion);
       },
       rightElbowYaw: function (e) {
 
@@ -59022,11 +59010,11 @@ var Frame = function () {
 
         var value = _Math.degToRad(-e.target.value);
 
-        _this3.robot.rightElbow.rotateOnAxis(zAxis, _this3.rightElbowYawValue - value);
+        _this2.robot.rightElbow.rotateOnAxis(zAxis, _this2.rightElbowYawValue - value);
 
-        _this3.rightElbowYawValue = value;
+        _this2.rightElbowYawValue = value;
 
-        _this3.rightElbowQuaternion.copy(_this3.robot.rightElbow.quaternion);
+        _this2.rightElbowQuaternion.copy(_this2.robot.rightElbow.quaternion);
       }
     };
   };
@@ -59040,32 +59028,47 @@ var Frame = function () {
     this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
   };
 
-  Frame.prototype.setDetail = function setDetail(details) {
+  Frame.prototype.fromJSON = function fromJSON(object) {
 
-    // TODO
-
+    // headQuaternion: this.headQuaternion,
+    // leftShoulderQuaternion: this.leftShoulderQuaternion,
+    // rightShoulderQuaternion: this.rightShoulderQuaternion,
+    // leftElbowQuaternion: this.leftElbowQuaternion,
+    // rightElbowQuaternion: this.rightElbowQuaternion,
+    this.num = object.num;
+    this.headPitch.value = this.headPitchValue = object.headPitchValue;
+    this.headYawValue = object.headYawValue;
+    this.leftShoulderPitchValue = object.leftShoulderPitchValue;
+    this.leftShoulderYawValue = object.leftShoulderYawValue;
+    this.leftElbowPitchValue = object.leftElbowPitchValue;
+    this.leftElbowYawValue = object.leftElbowYawValue;
+    this.rightShoulderPitchValue = object.rightShoulderPitchValue;
+    this.rightShoulderYawValue = object.rightShoulderYawValue;
+    this.rightElbowPitchValue = object.rightElbowPitchValue;
+    this.rightElbowYawValue = object.rightElbowYawValue;
   };
 
-  Frame.prototype.getDetails = function getDetails() {
+  Frame.prototype.toJSON = function toJSON() {
 
     return {
 
+      type: 'frame',
       num: this.num,
       headQuaternion: this.headQuaternion,
       leftShoulderQuaternion: this.leftShoulderQuaternion,
       rightShoulderQuaternion: this.rightShoulderQuaternion,
       leftElbowQuaternion: this.leftElbowQuaternion,
-      rightElbowQuaternion: this.rightElbowQuaternion
-      // headPitchValue: this.headPitchValue,
-      // headYawValue: this.headYawValue,
-      // leftShoulderPitchValue: this.leftShoulderPitchValue,
-      // leftShoulderYawValue: this.leftShoulderYawValue,
-      // leftElbowPitchValue: this.leftElbowPitchValue,
-      // leftElbowYawValue: this.leftElbowYawValue,
-      // rightShoulderPitchValue: this.rightShoulderPitchValue,
-      // rightShoulderYawValue: this.rightShoulderYawValue,
-      // rightElbowPitchValue: this.rightElbowPitchValue,
-      // rightElbowYawValue: this.rightElbowYawValue,
+      rightElbowQuaternion: this.rightElbowQuaternion,
+      headPitchValue: this.headPitchValue,
+      headYawValue: this.headYawValue,
+      leftShoulderPitchValue: this.leftShoulderPitchValue,
+      leftShoulderYawValue: this.leftShoulderYawValue,
+      leftElbowPitchValue: this.leftElbowPitchValue,
+      leftElbowYawValue: this.leftElbowYawValue,
+      rightShoulderPitchValue: this.rightShoulderPitchValue,
+      rightShoulderYawValue: this.rightShoulderYawValue,
+      rightElbowPitchValue: this.rightElbowPitchValue,
+      rightElbowYawValue: this.rightElbowYawValue
 
     };
   };
@@ -59130,27 +59133,48 @@ var Frames = function () {
     this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
   };
 
-  Frames.prototype.initNewFrameButton = function initNewFrameButton() {
+  Frames.prototype.createFrame = function createFrame(num, detail) {
     var _this = this;
+
+    var frame = new Frame(num, this.robot);
+
+    if (detail !== undefined) frame.fromJSON(detail);
+
+    this.frames[frame.num] = frame;
+
+    this.framesTable.appendChild(frame.row);
+
+    this.select(frame);
+
+    frame.row.addEventListener('click', function (evt) {
+
+      evt.preventDefault();
+
+      _this.select(frame);
+    });
+
+    var remove = function (evt) {
+
+      evt.preventDefault();
+      HTMLControl.controls.frames.table.removeChild(frame.row);
+
+      frame.removeEventListeners();
+      frame.deleteButton.removeEventListener('click', remove);
+
+      _this.frames[frame.num] = null;
+    };
+
+    frame.deleteButton.addEventListener('click', remove);
+  };
+
+  Frames.prototype.initNewFrameButton = function initNewFrameButton() {
+    var _this2 = this;
 
     this.newFrameButton.addEventListener('click', function (e) {
 
       e.preventDefault();
 
-      var frame = new Frame(_this.currentFrameNum++, _this.robot);
-
-      _this.frames.push(frame);
-
-      _this.framesTable.appendChild(frame.row);
-
-      _this.select(frame);
-
-      frame.row.addEventListener('click', function (evt) {
-
-        evt.preventDefault();
-
-        _this.select(frame);
-      });
+      _this2.createFrame(_this2.currentFrameNum++);
     });
   };
 
@@ -59162,8 +59186,59 @@ var Frames = function () {
 
     this.frames.forEach(function (f) {
 
-      if (f.num !== frame.num) f.selected = false;
+      if (f !== null && f.num !== frame.num) f.selected = false;
     });
+  };
+
+  Frames.prototype.reset = function reset() {
+
+    this.frames.forEach(function (frame) {
+
+      if (frame !== null) frame.deleteButton.click();
+    });
+
+    this.frames = [];
+  };
+
+  Frames.prototype.fromJSON = function fromJSON(object) {
+
+    this.reset();
+
+    for (var key in object) {
+
+      var detail = object[key];
+
+      if (detail === null) {
+
+        this.frames[key] = null;
+      } else {
+
+        this.createFrame(key, detail);
+        this.currentFrameNum = key;
+      }
+
+      console.log(object[key]);
+    }
+  };
+
+  Frames.prototype.toJSON = function toJSON() {
+
+    var output = {};
+
+    for (var i = 0; i < this.frames.length; i++) {
+
+      var frame = this.frames[i];
+
+      if (frame !== null) {
+
+        output[i] = frame.toJSON();
+      } else {
+
+        output[i] = null;
+      }
+    }
+
+    return output;
   };
 
   return Frames;
@@ -59215,118 +59290,138 @@ var Group$1 = function () {
     framesCell.appendChild(frameTable);
   };
 
-  Group.prototype.initAddFrameButton = function initAddFrameButton() {
+  Group.prototype.addFrame = function addFrame(frame) {
     var _this = this;
 
-    var lastAddedFrameNum = null;
+    var frameDetails = {
+      frame: frame,
+      loopAmount: 1
+    };
+
+    this.containedFrames.push(frameDetails);
+    var framePos = this.containedFrames.length - 1;
+
+    var frameRow = document.createElement('tr');
+
+    this.framesInGroup.appendChild(frameRow);
+    var nameCell = document.createElement('td');
+    nameCell.innerHTML = 'Frame #' + frame.num;
+    frameRow.appendChild(nameCell);
+
+    var loopCell = document.createElement('td');
+    loopCell.innerHTML = 'Loop ';
+    frameRow.appendChild(loopCell);
+
+    var loopInput = document.createElement('input');
+    loopCell.appendChild(loopInput);
+    loopInput.type = 'number';
+    loopInput.min = '0';
+    loopInput.value = '1';
+    loopInput.step = '1';
+
+    var text = document.createElement('span');
+    text.style.width = '8em';
+    text.style.textAlign = 'left';
+    text.style.marginLeft = '0.25em';
+    text.innerHTML = ' time';
+    loopCell.appendChild(text);
+
+    loopInput.addEventListener('input', function (evt) {
+
+      evt.preventDefault();
+      var value = parseInt(evt.target.value, 10);
+
+      if (value === 0) frameRow.style.backgroundColor = 'darkgrey';else frameRow.style.backgroundColor = 'initial';
+
+      if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
+
+      frameDetails.loopAmount = value;
+    });
+
+    var deleteCell = document.createElement('td');
+    frameRow.appendChild(deleteCell);
+
+    var deleteButton = document.createElement('button');
+    deleteCell.appendChild(deleteButton);
+    deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+
+    deleteButton.addEventListener('click', function (evt) {
+
+      evt.preventDefault();
+
+      _this.framesInGroup.removeChild(frameRow);
+
+      if (_this.lastAddedFrameNum === frame.num) _this.lastAddedFrameNum = null;
+
+      _this.containedFrames[framePos] = null;
+    });
+  };
+
+  Group.prototype.initAddFrameButton = function initAddFrameButton() {
+    var _this2 = this;
+
+    this.lastAddedFrameNum = null;
 
     this.addFrameButton.addEventListener('click', function (e) {
 
       e.preventDefault();
 
-      var frameNum = _this.frames.selectedFrame;
+      var frame = _this2.frames.selectedFrame;
 
-      if (frameNum === undefined) return;
+      if (frame === undefined) return;
 
       // don't add the same frame consecutively (use loop instead)
-      if (lastAddedFrameNum === frameNum) return;
+      if (_this2.lastAddedFrameNum === frame.num) return;
 
-      lastAddedFrameNum = frameNum;
+      _this2.lastAddedFrameNum = frame.num;
 
-      var frameDetails = {
-        frame: _this.frames.frames[frameNum],
-        loopAmount: 1
-      };
-
-      _this.containedFrames.push(frameDetails);
-      var framePos = _this.containedFrames.length - 1;
-
-      var frameRow = document.createElement('tr');
-
-      _this.framesInGroup.appendChild(frameRow);
-      var nameCell = document.createElement('td');
-      nameCell.innerHTML = 'Frame #' + frameNum;
-      frameRow.appendChild(nameCell);
-
-      var loopCell = document.createElement('td');
-      loopCell.innerHTML = 'Loop ';
-      frameRow.appendChild(loopCell);
-
-      var loopInput = document.createElement('input');
-      loopCell.appendChild(loopInput);
-      loopInput.type = 'number';
-      loopInput.min = '0';
-      loopInput.value = '1';
-      loopInput.step = '1';
-
-      var text = document.createElement('span');
-      text.style.width = '8em';
-      text.style.textAlign = 'left';
-      text.style.marginLeft = '0.25em';
-      text.innerHTML = ' time';
-      loopCell.appendChild(text);
-
-      loopInput.addEventListener('input', function (evt) {
-
-        evt.preventDefault();
-        var value = parseInt(evt.target.value, 10);
-
-        if (value === 0) frameRow.style.backgroundColor = 'darkgrey';else frameRow.style.backgroundColor = 'initial';
-
-        if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
-
-        frameDetails.loopAmount = value;
-      });
-
-      var deleteCell = document.createElement('td');
-      frameRow.appendChild(deleteCell);
-
-      var deleteButton = document.createElement('button');
-      deleteCell.appendChild(deleteButton);
-      deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-
-      deleteButton.addEventListener('click', function (evt) {
-
-        evt.preventDefault();
-
-        _this.framesInGroup.removeChild(frameRow);
-
-        if (lastAddedFrameNum === frameNum) lastAddedFrameNum = null;
-
-        _this.containedFrames[framePos] = null;
-      });
+      _this2.addFrame(frame);
     });
   };
 
   Group.prototype.initDeleteButton = function initDeleteButton() {
-    var _this2 = this;
 
     var deleteButtonCell = document.createElement('td');
     this.deleteButton = document.createElement('button');
     this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
     deleteButtonCell.appendChild(this.deleteButton);
     this.row.appendChild(deleteButtonCell);
-
-    var removeRow = function (e) {
-
-      e.preventDefault();
-      groups.removeChild(_this2.row);
-
-      _this2.deleteButton.removeEventListener('click', removeRow);
-    };
-
-    this.deleteButton.addEventListener('click', removeRow);
   };
 
-  Group.prototype.setDetail = function setDetail(details) {
+  Group.prototype.reset = function reset() {
 
-    // TODO
-
+    console.log('TODO: Group.reset ');
   };
 
-  Group.prototype.getDetails = function getDetails() {
+  Group.prototype.fromJSON = function fromJSON(object) {
 
-    return {};
+    this.reset();
+
+    for (var key in object) {
+
+      var detail = object[key];
+
+      this.addFrame(this.frames.frames[detail.frameNum]);
+    }
+  };
+
+  Group.prototype.toJSON = function toJSON() {
+
+    var output = {};
+
+    for (var i = 0; i < this.containedFrames.length; i++) {
+
+      var detail = this.containedFrames[i];
+
+      output[i] = {
+
+        frameNum: detail.frame.num,
+        loopAmount: detail.loopAmount
+
+      };
+    }
+
+    return output;
   };
 
   createClass(Group, [{
@@ -59355,27 +59450,47 @@ var Groups = function () {
     this.initNewGroupButton();
   }
 
-  Groups.prototype.initNewGroupButton = function initNewGroupButton() {
+  Groups.prototype.createGroup = function createGroup(num, details) {
     var _this = this;
+
+    var group = new Group$1(num, this.frames);
+
+    if (details !== undefined) group.fromJSON(details);
+
+    this.groups.push(group);
+
+    this.groupsTable.appendChild(group.row);
+
+    this.select(group);
+
+    group.row.addEventListener('click', function (evt) {
+
+      evt.preventDefault();
+
+      _this.select(group);
+    });
+
+    var remove = function (evt) {
+
+      evt.preventDefault();
+      HTMLControl.controls.groups.table.removeChild(group.row);
+
+      group.deleteButton.removeEventListener('click', remove);
+
+      _this.groups[group.num] = null;
+    };
+
+    group.deleteButton.addEventListener('click', remove);
+  };
+
+  Groups.prototype.initNewGroupButton = function initNewGroupButton() {
+    var _this2 = this;
 
     this.newGroupButton.addEventListener('click', function (e) {
 
       e.preventDefault();
 
-      var group = new Group$1(_this.currentGroupNum++, _this.frames);
-
-      _this.groups.push(group);
-
-      _this.groupsTable.appendChild(group.row);
-
-      _this.select(group);
-
-      group.row.addEventListener('click', function (evt) {
-
-        evt.preventDefault();
-
-        _this.select(group);
-      });
+      _this2.createGroup(_this2.currentGroupNum++);
     });
   };
 
@@ -59387,11 +59502,62 @@ var Groups = function () {
 
     this.groups.forEach(function (g) {
 
-      if (g.num !== group.num) {
+      if (g !== null && g.num !== group.num) {
 
         g.selected = false;
       }
     });
+  };
+
+  Groups.prototype.reset = function reset() {
+
+    this.groups.forEach(function (group) {
+
+      if (group !== null) group.deleteButton.click();
+    });
+
+    this.groups = [];
+  };
+
+  Groups.prototype.fromJSON = function fromJSON(object) {
+
+    this.reset();
+
+    for (var key in object) {
+
+      var detail = object[key];
+
+      if (detail === null) {
+
+        this.frames[key] = null;
+      } else {
+
+        this.createGroup(key, detail);
+        this.currentFrameNum = key;
+      }
+
+      console.log(object[key]);
+    }
+  };
+
+  Groups.prototype.toJSON = function toJSON() {
+
+    var output = {};
+
+    for (var i = 0; i < this.groups.length; i++) {
+
+      var group = this.groups[i];
+
+      if (group !== null) {
+
+        output[i] = group.toJSON();
+      } else {
+
+        output[i] = null;
+      }
+    }
+
+    return output;
   };
 
   return Groups;
@@ -59407,13 +59573,16 @@ var Dance = function () {
         this.lastAddedType = null;
         this.table = HTMLControl.controls.dance.table;
 
-        this.details = [];
+        this.framerate = 1;
+
+        this.containedElems = [];
 
         this.initAdvancedControlsToggle();
         this.initAddSelectedFrameButton();
         this.initAddSelectedGroupButton();
         this.initPlayButton();
         this.initResetButton();
+        this.initFramerateInput();
     }
 
     Dance.prototype.initAdvancedControlsToggle = function initAdvancedControlsToggle() {
@@ -59425,25 +59594,21 @@ var Dance = function () {
             HTMLControl.controls.dance.advancedControlSection.classList.toggle('hide');
         });
     };
-    /*
-    <tr>
-      <td>1</td>
-      <td>Frame</td>
-      <td>Loop <input type="number"> times</td>
-    </tr>
-    */
 
-    Dance.prototype.addTableRow = function addTableRow(elem, type) {
+    Dance.prototype.add = function add(elem, type, loop) {
         var _this = this;
 
+        var loopAmount = loop || 1;
+
         var detail = {
+            type: type,
             elem: elem,
-            loopAmount: 1
+            loopAmount: loopAmount
         };
 
-        this.details.push(detail);
+        this.containedElems.push(detail);
 
-        var pos = this.details.length - 1;
+        var pos = this.containedElems.length - 1;
 
         var row = document.createElement('tr');
         this.table.appendChild(row);
@@ -59464,7 +59629,7 @@ var Dance = function () {
         loopCell.appendChild(loopInput);
         loopInput.type = 'number';
         loopInput.min = '0';
-        loopInput.value = '1';
+        loopInput.value = loopAmount;
         loopInput.step = '1';
 
         var text = document.createElement('span');
@@ -59501,7 +59666,7 @@ var Dance = function () {
 
             // if ( this.lastAddedGroupNum === )
 
-            _this.details[pos] = null;
+            _this.containedElems[pos] = null;
         });
     };
 
@@ -59518,7 +59683,7 @@ var Dance = function () {
 
             if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
 
-            _this2.addTableRow(frame, 'Frame');
+            _this2.add(frame, 'Frame');
 
             _this2.lastAddedFrameNum = frame.num;
             _this2.lastAddedType = 'frame';
@@ -59538,11 +59703,32 @@ var Dance = function () {
 
             if (group === null || group.num === _this3.lastAddedGroupNum && _this3.lastAddedType === 'group') return;
 
-            _this3.addTableRow(group, 'Group');
+            _this3.add(group, 'Group');
 
             _this3.lastAddedGroupNum = group.num;
             _this3.lastAddedType = 'group';
         });
+    };
+
+    Dance.prototype.initFramerateInput = function initFramerateInput() {
+        var _this4 = this;
+
+        HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
+
+            _this4.framerate = e.target.value;
+        });
+    };
+
+    Dance.prototype.setFramerate = function setFramerate(rate) {
+
+        if (rate < 0.1 || rate > 10) {
+
+            console.warn('Attempting to set frame rate outside of allowed range [0.1, 10]!');
+            rate = 1;
+        }
+
+        HTMLControl.controls.dance.framerate.value = rate;
+        this.framerate = rate;
     };
 
     Dance.prototype.initPlayButton = function initPlayButton() {
@@ -59565,107 +59751,200 @@ var Dance = function () {
         });
     };
 
-    Dance.prototype.setDetail = function setDetail(details) {
+    Dance.prototype.reset = function reset() {
 
-        // TODO
-
+        console.log('TODO: dance.reset ');
     };
 
-    Dance.prototype.getDetails = function getDetails() {
+    Dance.prototype.fromJSON = function fromJSON(object) {
 
-        return {};
+        this.reset();
+
+        this.setFramerate(object.framerate || 1);
+
+        for (var key in object) {
+
+            var detail = object[key];
+
+            if (detail.type === 'frame') {
+
+                this.add(this.frames.frames[detail.num], 'frame', detail.loopAmount);
+            } else {
+
+                this.add(this.groups.groups[detail.num], 'frame', detail.loopAmount);
+            }
+        }
+    };
+
+    Dance.prototype.toJSON = function toJSON() {
+
+        var output = {
+
+            framerate: this.framerate
+
+        };
+
+        for (var i = 0; i < this.containedElems.length; i++) {
+
+            var detail = this.containedElems[i];
+
+            if (detail !== null) {
+
+                output[i] = {
+
+                    type: detail.type,
+                    num: detail.num,
+                    loopAmount: detail.loopAmount
+
+                };
+            } else {
+
+                output[i] = null;
+            }
+        }
+
+        return output;
     };
 
     return Dance;
 }();
 
+var link = document.createElement('a');
+link.style.display = 'none';
+document.body.appendChild(link); // Firefox workaround, see #6594
+
+var save = function (blob, filename) {
+
+  link.href = URL.createObjectURL(blob);
+  link.download = filename || 'data.json';
+  link.click();
+};
+
+var saveString = function (text, filename) {
+
+  save(new Blob([text], { type: 'text/plain' }), filename);
+};
+
+var exportAsJSON = function (object) {
+
+  var output = JSON.stringify(object, null, '\t');
+  // output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+
+  saveString(output, 'dance.json');
+};
+
 var FileControl = function () {
-    function FileControl(frames, groups, dance) {
-        classCallCheck(this, FileControl);
+  function FileControl(frames, groups, dance) {
+    classCallCheck(this, FileControl);
 
 
-        this.frame = frames;
-        this.groups = groups;
-        this.dance = dance;
+    this.frames = frames;
+    this.groups = groups;
+    this.dance = dance;
 
-        this.initSaveButton();
-        this.initLoadButton();
-        this.initExamples();
+    this.initSaveButton();
+    this.initLoadButton();
+    this.initExamples();
+  }
+
+  FileControl.prototype.load = function load(json) {
+
+    if (!json.metadata || json.metadata.type !== 'Nao Dance File') {
+
+      console.error('Wrong JSON format - cannot load dance!');
+      return;
     }
 
-    FileControl.prototype.load = function load(json) {
+    console.log(json);
 
-        console.log(JSON.stringify(json));
-    };
+    this.frames.fromJSON(json.frames);
+    this.groups.fromJSON(json.groups);
+    this.dance.fromJSON(json.dance);
+  };
 
-    FileControl.prototype.initSaveButton = function initSaveButton() {
+  FileControl.prototype.initSaveButton = function initSaveButton() {
+    var _this = this;
 
-        HTMLControl.controls.file.save.addEventListener('click', function (e) {
+    HTMLControl.controls.file.save.addEventListener('click', function (e) {
 
-            e.preventDefault();
+      e.preventDefault();
 
-            console.log('s');
-        });
-    };
+      var object = {
 
-    FileControl.prototype.initLoadButton = function initLoadButton() {
-        var _this = this;
+        metadata: {
+          type: 'Nao Dance File',
+          generator: 'Blackthread design',
+          version: '1'
+        }
 
-        HTMLControl.controls.file.load.addEventListener('click', function (e) {
+      };
 
-            e.preventDefault();
+      object.frames = _this.frames.toJSON();
+      object.groups = _this.groups.toJSON();
+      object.dance = _this.dance.toJSON();
 
-            HTMLControl.controls.file.fileInput.click();
-        });
+      exportAsJSON(object);
+    });
+  };
 
-        HTMLControl.controls.file.fileInput.addEventListener('change', function (e) {
+  FileControl.prototype.initLoadButton = function initLoadButton() {
+    var _this2 = this;
 
-            var file = e.target.files[0];
+    HTMLControl.controls.file.load.addEventListener('click', function (e) {
 
-            var fileReader = new FileReader();
+      e.preventDefault();
 
-            fileReader.readAsText(file);
+      HTMLControl.controls.file.fileInput.click();
+    });
 
-            fileReader.onload = function (evt) {
+    HTMLControl.controls.file.fileInput.addEventListener('change', function (e) {
 
-                try {
+      var file = e.target.files[0];
 
-                    var json = JSON.parse(evt.target.result);
+      var fileReader = new FileReader();
 
-                    _this.load(json);
-                } catch (error) {
+      fileReader.readAsText(file);
 
-                    console.error('Error while trying to read ' + file.name + ' as JSON: ' + error);
-                }
-            };
-        });
-    };
+      fileReader.onload = function (evt) {
 
-    FileControl.prototype.initExamples = function initExamples() {
-        var _this2 = this;
+        try {
 
-        var examples = HTMLControl.controls.file.examples;
+          var json = JSON.parse(evt.target.result);
 
-        HTMLControl.controls.file.loadExample.addEventListener('click', function (e) {
+          _this2.load(json);
+        } catch (error) {
 
-            e.preventDefault();
+          console.error('Error while trying to read ' + file.name + ' as JSON: ' + error);
+        }
+      };
+    });
+  };
 
-            var path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
+  FileControl.prototype.initExamples = function initExamples() {
+    var _this3 = this;
 
-            fetch(path).then(function (response) {
+    var examples = HTMLControl.controls.file.examples;
 
-                console.log(response);
-                return response.json();
-            }).then(function (json) {
+    HTMLControl.controls.file.loadExample.addEventListener('click', function (e) {
 
-                _this2.load(json);
-            }).catch(function (err) {
-                return console.log(err);
-            });
-        });
-    };
+      e.preventDefault();
 
-    return FileControl;
+      var path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
+
+      fetch(path).then(function (response) {
+
+        console.log(response);
+        return response.json();
+      }).then(function (json) {
+
+        _this3.load(json);
+      }).catch(function (err) {
+        return console.log(err);
+      });
+    });
+  };
+
+  return FileControl;
 }();
 
 var index$2 = createCommonjsModule(function (module) {

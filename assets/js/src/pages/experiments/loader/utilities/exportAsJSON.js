@@ -24,7 +24,7 @@ const exportAsJSON = ( object ) => {
   console.log( object );
   let output = object.toJSON();
 
-  console.log( output )
+  console.log( output );
 
   output.metadata = {
     type: 'Object',
