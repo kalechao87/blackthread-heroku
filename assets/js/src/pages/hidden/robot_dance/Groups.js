@@ -8,6 +8,7 @@ export default class Groups {
     this.frames = frames;
 
     this.currentGroupNum = 0;
+    this.selectedGroup = null;
     this.groups = [];
 
     this.groupsTable = HTMLControl.controls.groups.table;
@@ -45,6 +46,8 @@ export default class Groups {
   select( group ) {
 
     group.selected = true;
+
+    this.selectedGroup = group;
 
     this.groups.forEach( ( g ) => {
 

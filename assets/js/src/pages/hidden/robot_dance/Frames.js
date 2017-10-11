@@ -8,6 +8,7 @@ export default class Frames {
     this.initRobot( robot );
 
     this.currentFrameNum = 0;
+    this.selectedFrame = null;
     this.frames = [];
 
     this.framesTable = HTMLControl.controls.frames.table;
@@ -73,7 +74,7 @@ export default class Frames {
 
     frame.selected = true;
 
-    this.selectedFrame = frame.num;
+    this.selectedFrame = frame;
 
     this.frames.forEach( ( f ) => {
 

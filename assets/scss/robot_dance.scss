@@ -113,7 +113,7 @@
     font-size: small;
     margin: 0;
     padding: 0;
-    padding-left: 0.25em;
+
     padding-top: 0.25em;
     text-align: left;
   }
@@ -212,7 +212,36 @@
 }
 
 .frames-in-group {
+  td {
+    padding-left: 0.25em;
+  }
+}
 
+#advanced-control{
+  display: block;
+}
+
+#dance-controls > div > div {
+
+  display: flex;
+  flex-direction: row;
+
+  button, span, div {
+
+    flex-grow: 1;
+    margin-left: 0.25em;
+    margin-bottom: 0.5em;
+    text-align: center;
+
+  }
+
+  table {
+    max-width: 66%;
+
+    button {
+      margin: 0;
+    }
+  }
 }
 
 

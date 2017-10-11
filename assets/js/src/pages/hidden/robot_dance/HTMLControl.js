@@ -21,7 +21,13 @@ const controls = {
   },
   dance: {
     framerate: document.querySelector( '#framerate' ),
-    showAdvancedControls: document.querySelector( '#advanced-control-enable' ),
+    advancedControlToggle: document.querySelector( '#advanced-control-toggle' ),
+    advancedControlSection: document.querySelector( '#advanced-control' ),
+    table: document.querySelector( '#dance-details' ),
+    addFrameButton: document.querySelector( '#add-frame-to-dance' ),
+    addGroupButton: document.querySelector( '#add-group-to-dance' ),
+    playButton: document.querySelector( '#play-dance' ),
+    resetButton: document.querySelector( '#reset-dance' ),
   },
   music: {
     uploadMP3Button: document.querySelector( '#upload-mp3-button' ),
@@ -31,9 +37,11 @@ const controls = {
     positionSlider: document.querySelector( '#track-position-slider' ),
   },
   file: {
-    saveDanceButton: document.querySelector( '#save-dance' ),
-    loadDanceButton: document.querySelector( '#load-dance' ),
-    examples: document.querySelector( '#premade-examples' ),
+    save: document.querySelector( '#save-dance' ),
+    load: document.querySelector( '#load-dance' ),
+    fileInput: document.querySelector( '#file-input' ),
+    examples: document.querySelector( '#examples' ),
+    loadExample: document.querySelector( '#load-example' ),
   },
 };
 

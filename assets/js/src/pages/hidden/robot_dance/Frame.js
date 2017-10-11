@@ -362,7 +362,13 @@ export default class Frame {
 
   }
 
-  toJSON() {
+  setDetail( details ) {
+
+    // TODO
+
+  }
+
+  getDetails() {
 
     return {
 

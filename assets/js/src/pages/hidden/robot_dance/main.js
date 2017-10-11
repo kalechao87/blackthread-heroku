@@ -13,6 +13,9 @@ import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
 import Frames from './Frames.js';
 import Groups from './Groups.js';
+import Dance from './Dance.js';
+
+import FileControl from './FileControl.js';
 
 import Audio from './Audio.js';
 
@@ -111,8 +114,11 @@ class Main {
 
         this.frames = new Frames( this.nao );
         this.groups = new Groups( this.frames );
+        this.dance  = new Dance( this.groups, this.frames );
 
         this.audio = new Audio( [this.soundSourceLeft, this.soundSourceRight], this.app.camera );
+
+        this.fileControl = new FileControl( this.frames, this.groups, this.dance );
 
         this.app.play();
 

@@ -58480,7 +58480,13 @@ var controls = {
   },
   dance: {
     framerate: document.querySelector('#framerate'),
-    showAdvancedControls: document.querySelector('#advanced-control-enable')
+    advancedControlToggle: document.querySelector('#advanced-control-toggle'),
+    advancedControlSection: document.querySelector('#advanced-control'),
+    table: document.querySelector('#dance-details'),
+    addFrameButton: document.querySelector('#add-frame-to-dance'),
+    addGroupButton: document.querySelector('#add-group-to-dance'),
+    playButton: document.querySelector('#play-dance'),
+    resetButton: document.querySelector('#reset-dance')
   },
   music: {
     uploadMP3Button: document.querySelector('#upload-mp3-button'),
@@ -58490,9 +58496,11 @@ var controls = {
     positionSlider: document.querySelector('#track-position-slider')
   },
   file: {
-    saveDanceButton: document.querySelector('#save-dance'),
-    loadDanceButton: document.querySelector('#load-dance'),
-    examples: document.querySelector('#premade-examples')
+    save: document.querySelector('#save-dance'),
+    load: document.querySelector('#load-dance'),
+    fileInput: document.querySelector('#file-input'),
+    examples: document.querySelector('#examples'),
+    loadExample: document.querySelector('#load-example')
   }
 };
 
@@ -59032,7 +59040,13 @@ var Frame = function () {
     this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
   };
 
-  Frame.prototype.toJSON = function toJSON() {
+  Frame.prototype.setDetail = function setDetail(details) {
+
+    // TODO
+
+  };
+
+  Frame.prototype.getDetails = function getDetails() {
 
     return {
 
@@ -59083,6 +59097,7 @@ var Frames = function () {
     this.initRobot(robot);
 
     this.currentFrameNum = 0;
+    this.selectedFrame = null;
     this.frames = [];
 
     this.framesTable = HTMLControl.controls.frames.table;
@@ -59143,7 +59158,7 @@ var Frames = function () {
 
     frame.selected = true;
 
-    this.selectedFrame = frame.num;
+    this.selectedFrame = frame;
 
     this.frames.forEach(function (f) {
 
@@ -59280,8 +59295,6 @@ var Group$1 = function () {
 
         _this.containedFrames[framePos] = null;
       });
-
-      // console.log( this.containedFrames )
     });
   };
 
@@ -59305,6 +59318,17 @@ var Group$1 = function () {
     this.deleteButton.addEventListener('click', removeRow);
   };
 
+  Group.prototype.setDetail = function setDetail(details) {
+
+    // TODO
+
+  };
+
+  Group.prototype.getDetails = function getDetails() {
+
+    return {};
+  };
+
   createClass(Group, [{
     key: 'selected',
     set: function (bool) {
@@ -59323,6 +59347,7 @@ var Groups = function () {
     this.frames = frames;
 
     this.currentGroupNum = 0;
+    this.selectedGroup = null;
     this.groups = [];
 
     this.groupsTable = HTMLControl.controls.groups.table;
@@ -59358,6 +59383,8 @@ var Groups = function () {
 
     group.selected = true;
 
+    this.selectedGroup = group;
+
     this.groups.forEach(function (g) {
 
       if (g.num !== group.num) {
@@ -59368,6 +59395,263 @@ var Groups = function () {
   };
 
   return Groups;
+}();
+
+var Dance = function () {
+    function Dance(groups, frames) {
+        classCallCheck(this, Dance);
+
+
+        this.groups = groups;
+        this.frames = frames;
+        this.lastAddedType = null;
+        this.table = HTMLControl.controls.dance.table;
+
+        this.details = [];
+
+        this.initAdvancedControlsToggle();
+        this.initAddSelectedFrameButton();
+        this.initAddSelectedGroupButton();
+        this.initPlayButton();
+        this.initResetButton();
+    }
+
+    Dance.prototype.initAdvancedControlsToggle = function initAdvancedControlsToggle() {
+
+        HTMLControl.controls.dance.advancedControlToggle.addEventListener('change', function (e) {
+
+            e.preventDefault();
+
+            HTMLControl.controls.dance.advancedControlSection.classList.toggle('hide');
+        });
+    };
+    /*
+    <tr>
+      <td>1</td>
+      <td>Frame</td>
+      <td>Loop <input type="number"> times</td>
+    </tr>
+    */
+
+    Dance.prototype.addTableRow = function addTableRow(elem, type) {
+        var _this = this;
+
+        var detail = {
+            elem: elem,
+            loopAmount: 1
+        };
+
+        this.details.push(detail);
+
+        var pos = this.details.length - 1;
+
+        var row = document.createElement('tr');
+        this.table.appendChild(row);
+
+        var nameCell = document.createElement('td');
+        row.appendChild(nameCell);
+        nameCell.innerHTML = elem.num;
+
+        var typeCell = document.createElement('td');
+        row.appendChild(typeCell);
+        typeCell.innerHTML = type;
+
+        var loopCell = document.createElement('td');
+        loopCell.innerHTML = 'Loop ';
+        row.appendChild(loopCell);
+
+        var loopInput = document.createElement('input');
+        loopCell.appendChild(loopInput);
+        loopInput.type = 'number';
+        loopInput.min = '0';
+        loopInput.value = '1';
+        loopInput.step = '1';
+
+        var text = document.createElement('span');
+        text.style.width = '8em';
+        text.style.textAlign = 'left';
+        text.style.marginLeft = '0.25em';
+        text.innerHTML = ' time';
+        loopCell.appendChild(text);
+
+        loopInput.addEventListener('input', function (evt) {
+
+            evt.preventDefault();
+            var value = parseInt(evt.target.value, 10);
+
+            if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
+
+            if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
+
+            detail.loopAmount = value;
+        });
+
+        var deleteCell = document.createElement('td');
+        row.appendChild(deleteCell);
+
+        var deleteButton = document.createElement('button');
+        deleteCell.appendChild(deleteButton);
+        deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+
+        deleteButton.addEventListener('click', function (evt) {
+
+            evt.preventDefault();
+
+            _this.table.removeChild(row);
+
+            // if ( this.lastAddedGroupNum === )
+
+            _this.details[pos] = null;
+        });
+    };
+
+    Dance.prototype.initAddSelectedFrameButton = function initAddSelectedFrameButton() {
+        var _this2 = this;
+
+        this.lastAddedFrameNum = null;
+
+        HTMLControl.controls.dance.addFrameButton.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            var frame = _this2.frames.selectedFrame;
+
+            if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
+
+            _this2.addTableRow(frame, 'Frame');
+
+            _this2.lastAddedFrameNum = frame.num;
+            _this2.lastAddedType = 'frame';
+        });
+    };
+
+    Dance.prototype.initAddSelectedGroupButton = function initAddSelectedGroupButton() {
+        var _this3 = this;
+
+        this.lastAddedGroupNum = null;
+
+        HTMLControl.controls.dance.addGroupButton.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            var group = _this3.groups.selectedGroup;
+
+            if (group === null || group.num === _this3.lastAddedGroupNum && _this3.lastAddedType === 'group') return;
+
+            _this3.addTableRow(group, 'Group');
+
+            _this3.lastAddedGroupNum = group.num;
+            _this3.lastAddedType = 'group';
+        });
+    };
+
+    Dance.prototype.initPlayButton = function initPlayButton() {
+
+        HTMLControl.controls.dance.playButton.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            console.log('p ');
+        });
+    };
+
+    Dance.prototype.initResetButton = function initResetButton() {
+
+        HTMLControl.controls.dance.resetButton.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            console.log('r ');
+        });
+    };
+
+    Dance.prototype.setDetail = function setDetail(details) {
+
+        // TODO
+
+    };
+
+    Dance.prototype.getDetails = function getDetails() {
+
+        return {};
+    };
+
+    return Dance;
+}();
+
+var FileControl = function () {
+      function FileControl(frames, groups, dance) {
+            classCallCheck(this, FileControl);
+
+
+            this.frame = frames;
+            this.groups = groups;
+            this.dance = dance;
+
+            this.initSaveButton();
+            this.initLoadButton();
+            this.initExamples();
+      }
+
+      FileControl.prototype.load = function load(file) {};
+
+      FileControl.prototype.initSaveButton = function initSaveButton() {
+
+            HTMLControl.controls.file.save.addEventListener('click', function (e) {
+
+                  e.preventDefault();
+
+                  console.log('s');
+            });
+      };
+
+      FileControl.prototype.initLoadButton = function initLoadButton() {
+
+            HTMLControl.controls.file.load.addEventListener('click', function (e) {
+
+                  e.preventDefault();
+
+                  HTMLControl.controls.file.fileInput.click();
+            });
+
+            HTMLControl.controls.file.fileInput.addEventListener('change', function (e) {
+
+                  var file = e.target.files[0];
+
+                  console.log(file);
+
+                  var fileReader = new FileReader();
+
+                  fileReader.readAsText(file);
+
+                  fileReader.onload = function (evt) {
+
+                        try {
+
+                              var json = JSON.parse(evt.target.result);
+
+                              console.log(JSON.stringify(json));
+                        } catch (error) {
+
+                              console.error('Error while trying to read ' + file.name + ' as JSON: ' + error);
+                        }
+                  };
+            });
+      };
+
+      FileControl.prototype.initExamples = function initExamples() {
+
+            var examples = HTMLControl.controls.file.examples;
+
+            HTMLControl.controls.file.loadExample.addEventListener('click', function (e) {
+
+                  e.preventDefault();
+
+                  console.log(examples.options[examples.selectedIndex].value);
+            });
+      };
+
+      return FileControl;
 }();
 
 var index$2 = createCommonjsModule(function (module) {
@@ -60136,8 +60420,11 @@ var Main = function () {
 
       _this2.frames = new Frames(_this2.nao);
       _this2.groups = new Groups(_this2.frames);
+      _this2.dance = new Dance(_this2.groups, _this2.frames);
 
       _this2.audio = new Audio$1([_this2.soundSourceLeft, _this2.soundSourceRight], _this2.app.camera);
+
+      _this2.fileControl = new FileControl(_this2.frames, _this2.groups, _this2.dance);
 
       _this2.app.play();
     });

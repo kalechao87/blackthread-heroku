@@ -140,8 +140,6 @@ export default class Group {
 
       } );
 
-      // console.log( this.containedFrames )
-
     } );
 
   }
@@ -164,6 +162,18 @@ export default class Group {
     };
 
     this.deleteButton.addEventListener( 'click', removeRow );
+
+  }
+
+  setDetail( details ) {
+
+    // TODO
+
+  }
+
+  getDetails() {
+
+    return { };
 
   }
 
