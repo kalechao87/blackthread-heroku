@@ -59580,78 +59580,92 @@ var Dance = function () {
 }();
 
 var FileControl = function () {
-      function FileControl(frames, groups, dance) {
-            classCallCheck(this, FileControl);
+    function FileControl(frames, groups, dance) {
+        classCallCheck(this, FileControl);
 
 
-            this.frame = frames;
-            this.groups = groups;
-            this.dance = dance;
+        this.frame = frames;
+        this.groups = groups;
+        this.dance = dance;
 
-            this.initSaveButton();
-            this.initLoadButton();
-            this.initExamples();
-      }
+        this.initSaveButton();
+        this.initLoadButton();
+        this.initExamples();
+    }
 
-      FileControl.prototype.load = function load(file) {};
+    FileControl.prototype.load = function load(json) {
 
-      FileControl.prototype.initSaveButton = function initSaveButton() {
+        console.log(JSON.stringify(json));
+    };
 
-            HTMLControl.controls.file.save.addEventListener('click', function (e) {
+    FileControl.prototype.initSaveButton = function initSaveButton() {
 
-                  e.preventDefault();
+        HTMLControl.controls.file.save.addEventListener('click', function (e) {
 
-                  console.log('s');
+            e.preventDefault();
+
+            console.log('s');
+        });
+    };
+
+    FileControl.prototype.initLoadButton = function initLoadButton() {
+        var _this = this;
+
+        HTMLControl.controls.file.load.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            HTMLControl.controls.file.fileInput.click();
+        });
+
+        HTMLControl.controls.file.fileInput.addEventListener('change', function (e) {
+
+            var file = e.target.files[0];
+
+            var fileReader = new FileReader();
+
+            fileReader.readAsText(file);
+
+            fileReader.onload = function (evt) {
+
+                try {
+
+                    var json = JSON.parse(evt.target.result);
+
+                    _this.load(json);
+                } catch (error) {
+
+                    console.error('Error while trying to read ' + file.name + ' as JSON: ' + error);
+                }
+            };
+        });
+    };
+
+    FileControl.prototype.initExamples = function initExamples() {
+        var _this2 = this;
+
+        var examples = HTMLControl.controls.file.examples;
+
+        HTMLControl.controls.file.loadExample.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            var path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
+
+            fetch(path).then(function (response) {
+
+                console.log(response);
+                return response.json();
+            }).then(function (json) {
+
+                _this2.load(json);
+            }).catch(function (err) {
+                return console.log(err);
             });
-      };
+        });
+    };
 
-      FileControl.prototype.initLoadButton = function initLoadButton() {
-
-            HTMLControl.controls.file.load.addEventListener('click', function (e) {
-
-                  e.preventDefault();
-
-                  HTMLControl.controls.file.fileInput.click();
-            });
-
-            HTMLControl.controls.file.fileInput.addEventListener('change', function (e) {
-
-                  var file = e.target.files[0];
-
-                  console.log(file);
-
-                  var fileReader = new FileReader();
-
-                  fileReader.readAsText(file);
-
-                  fileReader.onload = function (evt) {
-
-                        try {
-
-                              var json = JSON.parse(evt.target.result);
-
-                              console.log(JSON.stringify(json));
-                        } catch (error) {
-
-                              console.error('Error while trying to read ' + file.name + ' as JSON: ' + error);
-                        }
-                  };
-            });
-      };
-
-      FileControl.prototype.initExamples = function initExamples() {
-
-            var examples = HTMLControl.controls.file.examples;
-
-            HTMLControl.controls.file.loadExample.addEventListener('click', function (e) {
-
-                  e.preventDefault();
-
-                  console.log(examples.options[examples.selectedIndex].value);
-            });
-      };
-
-      return FileControl;
+    return FileControl;
 }();
 
 var index$2 = createCommonjsModule(function (module) {

@@ -14,7 +14,9 @@ export default class FileControl {
 
   }
 
-  load( file ) {
+  load( json ) {
+
+    console.log( JSON.stringify( json ) );
 
   }
 
@@ -44,8 +46,6 @@ export default class FileControl {
 
       const file = e.target.files[0];
 
-      console.log( file )
-
       const fileReader = new FileReader();
 
       fileReader.readAsText( file );
@@ -56,7 +56,7 @@ export default class FileControl {
 
           const json = JSON.parse( evt.target.result );
 
-          console.log( JSON.stringify( json ) );
+          this.load( json );
 
 
         } catch ( error ) {
@@ -77,7 +77,22 @@ export default class FileControl {
 
       e.preventDefault();
 
-      console.log( examples.options[examples.selectedIndex].value );
+      const path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
+
+      fetch( path )
+        .then( ( response ) => {
+
+          console.log( response );
+          return response.json();
+
+        } )
+
+        .then( ( json ) => {
+
+          this.load( json );
+
+        } )
+        .catch( err => console.log( err ) );
 
     } );
 
