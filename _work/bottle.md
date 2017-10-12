@@ -12,6 +12,6 @@ js:
   'bottle'
 ---
 
-<div class="canvas-container">
-  <canvas id="bottle-canvas" class="fullpage-canvas"></canvas>
+<div id="#container">
+  <canvas id="canvas" class="fullpage-canvas"></canvas>
 </div>

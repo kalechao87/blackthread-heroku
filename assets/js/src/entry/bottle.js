@@ -12,5 +12,5 @@ initNav();
 
 bottleLayout();
 
-const canvas = document.querySelector( '#bottle-canvas' );
+const canvas = document.querySelector( '#canvas' );
 const bottleCanvas = new BottleCanvas( canvas, null, 0xcccccc );

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+// import * as THREE from 'three';
 
 import pointerPos from 'utilities/pointerPos.js';
 // import Stats from 'utilities/stats.js';
@@ -12,9 +12,9 @@ export default class WavelinesCanvas {
 
     const self = this;
 
-    this.container = document.querySelector( '.canvas-container' );
+    this.container = document.querySelector( '#container' );
 
-    this.app = new App( document.querySelector( '#wavelines-canvas' ) );
+    this.app = new App( document.querySelector( '#canvas' ) );
 
     this.app.renderer.setClearColor( 0xffffff );
     this.app.camera.position.set( 0, 0, 1 );

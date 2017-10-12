@@ -11,7 +11,7 @@
 #canvas {
   display: flex;
   flex-direction: row;
-  width: 90vmin;
-  height: 90vmin;
+  width: 100%;
+  min-height: 90vmin;
   border: 1px solid #062f4f;
 }
