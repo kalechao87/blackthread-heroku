@@ -11658,6 +11658,7 @@ if (typeof define === 'function' && define.amd) {
 
 var hammer$1 = interopDefault(hammer);
 
+// Set up Hammer as global
 window.Hammer = hammer$1;
 
 var bind = createCommonjsModule(function (module, exports) {
@@ -12422,6 +12423,13 @@ function initVideos () {
   });
 }
 
+// this needs to be called before any scripts that use hammer.js, as it sets up the global Hammer
+// import initLoadingOverlay from 'utilities/init/initLoadingOverlay.js';
+
+// Set up loading overlay
+// initLoadingOverlay();
+
+// Initialise layout and other things
 initNav();
 
 // BUG: nav left not hidden on first image

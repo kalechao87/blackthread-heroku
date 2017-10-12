@@ -74,7 +74,7 @@ var require$$1 = Object.freeze({
 });
 
 var _core = createCommonjsModule(function (module) {
-var core = module.exports = { version: '2.5.0' };
+var core = module.exports = { version: '2.5.1' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 });
 
@@ -295,13 +295,13 @@ module.exports = function (it) {
 var _aFunction$1 = interopDefault(_aFunction);
 
 
-var require$$0$1 = Object.freeze({
+var require$$6 = Object.freeze({
   default: _aFunction$1
 });
 
 var _ctx = createCommonjsModule(function (module) {
 // optional / simple context binding
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 module.exports = function (fn, that, length) {
   aFunction(fn);
   if (that === undefined) return fn;
@@ -487,14 +487,14 @@ $exports.store = store;
 var _wks$1 = interopDefault(_wks);
 
 
-var require$$0$3 = Object.freeze({
+var require$$0$2 = Object.freeze({
   default: _wks$1
 });
 
 var _setToStringTag = createCommonjsModule(function (module) {
 var def = interopDefault(require$$2$1).f;
 var has = interopDefault(require$$4);
-var TAG = interopDefault(require$$0$3)('toStringTag');
+var TAG = interopDefault(require$$0$2)('toStringTag');
 
 module.exports = function (it, tag, stat) {
   if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
@@ -504,12 +504,12 @@ module.exports = function (it, tag, stat) {
 var _setToStringTag$1 = interopDefault(_setToStringTag);
 
 
-var require$$0$2 = Object.freeze({
+var require$$0$1 = Object.freeze({
   default: _setToStringTag$1
 });
 
 var _wksExt = createCommonjsModule(function (module, exports) {
-exports.f = interopDefault(require$$0$3);
+exports.f = interopDefault(require$$0$2);
 });
 
 var _wksExt$1 = interopDefault(_wksExt);
@@ -546,7 +546,7 @@ module.exports = function (name) {
 var _wksDefine$1 = interopDefault(_wksDefine);
 
 
-var require$$0$4 = Object.freeze({
+var require$$0$3 = Object.freeze({
   default: _wksDefine$1
 });
 
@@ -561,13 +561,13 @@ module.exports = function (it) {
 var _cof$1 = interopDefault(_cof);
 
 
-var require$$0$5 = Object.freeze({
+var require$$0$4 = Object.freeze({
   default: _cof$1
 });
 
 var _iobject = createCommonjsModule(function (module) {
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = interopDefault(require$$0$5);
+var cof = interopDefault(require$$0$4);
 // eslint-disable-next-line no-prototype-builtins
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
   return cof(it) == 'String' ? it.split('') : Object(it);
@@ -705,7 +705,7 @@ module.exports = function (key) {
 var _sharedKey$1 = interopDefault(_sharedKey);
 
 
-var require$$0$6 = Object.freeze({
+var require$$0$5 = Object.freeze({
   default: _sharedKey$1
 });
 
@@ -713,7 +713,7 @@ var _objectKeysInternal = createCommonjsModule(function (module) {
 var has = interopDefault(require$$4);
 var toIObject = interopDefault(require$$1$8);
 var arrayIndexOf = interopDefault(require$$1$10)(false);
-var IE_PROTO = interopDefault(require$$0$6)('IE_PROTO');
+var IE_PROTO = interopDefault(require$$0$5)('IE_PROTO');
 
 module.exports = function (object, names) {
   var O = toIObject(object);
@@ -746,14 +746,14 @@ module.exports = (
 var _enumBugKeys$1 = interopDefault(_enumBugKeys);
 
 
-var require$$0$7 = Object.freeze({
+var require$$0$6 = Object.freeze({
   default: _enumBugKeys$1
 });
 
 var _objectKeys = createCommonjsModule(function (module) {
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
 var $keys = interopDefault(require$$1$7);
-var enumBugKeys = interopDefault(require$$0$7);
+var enumBugKeys = interopDefault(require$$0$6);
 
 module.exports = Object.keys || function keys(O) {
   return $keys(O, enumBugKeys);
@@ -765,26 +765,6 @@ var _objectKeys$1 = interopDefault(_objectKeys);
 
 var require$$5$1 = Object.freeze({
   default: _objectKeys$1
-});
-
-var _keyof = createCommonjsModule(function (module) {
-var getKeys = interopDefault(require$$5$1);
-var toIObject = interopDefault(require$$1$8);
-module.exports = function (object, el) {
-  var O = toIObject(object);
-  var keys = getKeys(O);
-  var length = keys.length;
-  var index = 0;
-  var key;
-  while (length > index) if (O[key = keys[index++]] === el) return key;
-};
-});
-
-var _keyof$1 = interopDefault(_keyof);
-
-
-var require$$16 = Object.freeze({
-  default: _keyof$1
 });
 
 var _objectGops = createCommonjsModule(function (module, exports) {
@@ -806,7 +786,7 @@ exports.f = {}.propertyIsEnumerable;
 var _objectPie$1 = interopDefault(_objectPie);
 var f$3 = _objectPie.f;
 
-var require$$0$8 = Object.freeze({
+var require$$0$7 = Object.freeze({
 	default: _objectPie$1,
 	f: f$3
 });
@@ -815,7 +795,7 @@ var _enumKeys = createCommonjsModule(function (module) {
 // all enumerable object keys, includes symbols
 var getKeys = interopDefault(require$$5$1);
 var gOPS = interopDefault(require$$2$6);
-var pIE = interopDefault(require$$0$8);
+var pIE = interopDefault(require$$0$7);
 module.exports = function (it) {
   var result = getKeys(it);
   var getSymbols = gOPS.f;
@@ -838,7 +818,7 @@ var require$$15 = Object.freeze({
 
 var _isArray = createCommonjsModule(function (module) {
 // 7.2.2 IsArray(argument)
-var cof = interopDefault(require$$0$5);
+var cof = interopDefault(require$$0$4);
 module.exports = Array.isArray || function isArray(arg) {
   return cof(arg) == 'Array';
 };
@@ -870,7 +850,7 @@ module.exports = interopDefault(require$$1) ? Object.defineProperties : function
 var _objectDps$1 = interopDefault(_objectDps);
 
 
-var require$$0$9 = Object.freeze({
+var require$$0$8 = Object.freeze({
   default: _objectDps$1
 });
 
@@ -889,9 +869,9 @@ var require$$3$3 = Object.freeze({
 var _objectCreate = createCommonjsModule(function (module) {
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject = interopDefault(require$$5);
-var dPs = interopDefault(require$$0$9);
-var enumBugKeys = interopDefault(require$$0$7);
-var IE_PROTO = interopDefault(require$$0$6)('IE_PROTO');
+var dPs = interopDefault(require$$0$8);
+var enumBugKeys = interopDefault(require$$0$6);
+var IE_PROTO = interopDefault(require$$0$5)('IE_PROTO');
 var Empty = function () { /* empty */ };
 var PROTOTYPE = 'prototype';
 
@@ -933,14 +913,14 @@ module.exports = Object.create || function create(O, Properties) {
 var _objectCreate$1 = interopDefault(_objectCreate);
 
 
-var require$$6 = Object.freeze({
+var require$$6$1 = Object.freeze({
   default: _objectCreate$1
 });
 
 var _objectGopn = createCommonjsModule(function (module, exports) {
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
 var $keys = interopDefault(require$$1$7);
-var hiddenKeys = interopDefault(require$$0$7).concat('length', 'prototype');
+var hiddenKeys = interopDefault(require$$0$6).concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return $keys(O, hiddenKeys);
@@ -980,13 +960,13 @@ module.exports.f = function getOwnPropertyNames(it) {
 var _objectGopnExt$1 = interopDefault(_objectGopnExt);
 var f$4 = _objectGopnExt.f;
 
-var require$$0$10 = Object.freeze({
+var require$$0$9 = Object.freeze({
   default: _objectGopnExt$1,
   f: f$4
 });
 
 var _objectGopd = createCommonjsModule(function (module, exports) {
-var pIE = interopDefault(require$$0$8);
+var pIE = interopDefault(require$$0$7);
 var createDesc = interopDefault(require$$2$3);
 var toIObject = interopDefault(require$$1$8);
 var toPrimitive = interopDefault(require$$4$1);
@@ -1023,20 +1003,19 @@ var redefine = interopDefault(require$$4$2);
 var META = interopDefault(require$$7).KEY;
 var $fails = interopDefault(require$$1$1);
 var shared = interopDefault(require$$1$5);
-var setToStringTag = interopDefault(require$$0$2);
+var setToStringTag = interopDefault(require$$0$1);
 var uid = interopDefault(require$$12);
-var wks = interopDefault(require$$0$3);
+var wks = interopDefault(require$$0$2);
 var wksExt = interopDefault(require$$1$6);
-var wksDefine = interopDefault(require$$0$4);
-var keyOf = interopDefault(require$$16);
+var wksDefine = interopDefault(require$$0$3);
 var enumKeys = interopDefault(require$$15);
 var isArray = interopDefault(require$$4$4);
 var anObject = interopDefault(require$$5);
 var toIObject = interopDefault(require$$1$8);
 var toPrimitive = interopDefault(require$$4$1);
 var createDesc = interopDefault(require$$2$3);
-var _create = interopDefault(require$$6);
-var gOPNExt = interopDefault(require$$0$10);
+var _create = interopDefault(require$$6$1);
+var gOPNExt = interopDefault(require$$0$9);
 var $GOPD = interopDefault(require$$2$7);
 var $DP = interopDefault(require$$2$1);
 var $keys = interopDefault(require$$5$1);
@@ -1163,7 +1142,7 @@ if (!USE_NATIVE) {
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
   interopDefault(require$$3$4).f = gOPNExt.f = $getOwnPropertyNames;
-  interopDefault(require$$0$8).f = $propertyIsEnumerable;
+  interopDefault(require$$0$7).f = $propertyIsEnumerable;
   interopDefault(require$$2$6).f = $getOwnPropertySymbols;
 
   if (DESCRIPTORS && !interopDefault(require$$2$4)) {
@@ -1192,9 +1171,9 @@ $export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
       : SymbolRegistry[key] = $Symbol(key);
   },
   // 19.4.2.5 Symbol.keyFor(sym)
-  keyFor: function keyFor(key) {
-    if (isSymbol(key)) return keyOf(SymbolRegistry, key);
-    throw TypeError(key + ' is not a symbol!');
+  keyFor: function keyFor(sym) {
+    if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
+    for (var key in SymbolRegistry) if (SymbolRegistry[key] === sym) return key;
   },
   useSetter: function () { setter = true; },
   useSimple: function () { setter = false; }
@@ -1255,7 +1234,7 @@ interopDefault(es6_symbol);
 var es6_object_create = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', { create: interopDefault(require$$6) });
+$export($export.S, 'Object', { create: interopDefault(require$$6$1) });
 });
 
 interopDefault(es6_object_create);
@@ -1271,7 +1250,7 @@ interopDefault(es6_object_defineProperty);
 var es6_object_defineProperties = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 // 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
-$export($export.S + $export.F * !interopDefault(require$$1), 'Object', { defineProperties: interopDefault(require$$0$9) });
+$export($export.S + $export.F * !interopDefault(require$$1), 'Object', { defineProperties: interopDefault(require$$0$8) });
 });
 
 interopDefault(es6_object_defineProperties);
@@ -1292,7 +1271,7 @@ module.exports = function (KEY, exec) {
 var _objectSap$1 = interopDefault(_objectSap);
 
 
-var require$$0$11 = Object.freeze({
+var require$$0$10 = Object.freeze({
   default: _objectSap$1
 });
 
@@ -1301,7 +1280,7 @@ var es6_object_getOwnPropertyDescriptor = createCommonjsModule(function (module)
 var toIObject = interopDefault(require$$1$8);
 var $getOwnPropertyDescriptor = interopDefault(require$$2$7).f;
 
-interopDefault(require$$0$11)('getOwnPropertyDescriptor', function () {
+interopDefault(require$$0$10)('getOwnPropertyDescriptor', function () {
   return function getOwnPropertyDescriptor(it, key) {
     return $getOwnPropertyDescriptor(toIObject(it), key);
   };
@@ -1329,7 +1308,7 @@ var _objectGpo = createCommonjsModule(function (module) {
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 var has = interopDefault(require$$4);
 var toObject = interopDefault(require$$5$2);
-var IE_PROTO = interopDefault(require$$0$6)('IE_PROTO');
+var IE_PROTO = interopDefault(require$$0$5)('IE_PROTO');
 var ObjectProto = Object.prototype;
 
 module.exports = Object.getPrototypeOf || function (O) {
@@ -1344,16 +1323,16 @@ module.exports = Object.getPrototypeOf || function (O) {
 var _objectGpo$1 = interopDefault(_objectGpo);
 
 
-var require$$0$12 = Object.freeze({
+var require$$0$11 = Object.freeze({
   default: _objectGpo$1
 });
 
 var es6_object_getPrototypeOf = createCommonjsModule(function (module) {
 // 19.1.2.9 Object.getPrototypeOf(O)
 var toObject = interopDefault(require$$5$2);
-var $getPrototypeOf = interopDefault(require$$0$12);
+var $getPrototypeOf = interopDefault(require$$0$11);
 
-interopDefault(require$$0$11)('getPrototypeOf', function () {
+interopDefault(require$$0$10)('getPrototypeOf', function () {
   return function getPrototypeOf(it) {
     return $getPrototypeOf(toObject(it));
   };
@@ -1367,7 +1346,7 @@ var es6_object_keys = createCommonjsModule(function (module) {
 var toObject = interopDefault(require$$5$2);
 var $keys = interopDefault(require$$5$1);
 
-interopDefault(require$$0$11)('keys', function () {
+interopDefault(require$$0$10)('keys', function () {
   return function keys(it) {
     return $keys(toObject(it));
   };
@@ -1378,8 +1357,8 @@ interopDefault(es6_object_keys);
 
 var es6_object_getOwnPropertyNames = createCommonjsModule(function (module) {
 // 19.1.2.7 Object.getOwnPropertyNames(O)
-interopDefault(require$$0$11)('getOwnPropertyNames', function () {
-  return interopDefault(require$$0$10).f;
+interopDefault(require$$0$10)('getOwnPropertyNames', function () {
+  return interopDefault(require$$0$9).f;
 });
 });
 
@@ -1390,7 +1369,7 @@ var es6_object_freeze = createCommonjsModule(function (module) {
 var isObject = interopDefault(require$$3$1);
 var meta = interopDefault(require$$7).onFreeze;
 
-interopDefault(require$$0$11)('freeze', function ($freeze) {
+interopDefault(require$$0$10)('freeze', function ($freeze) {
   return function freeze(it) {
     return $freeze && isObject(it) ? $freeze(meta(it)) : it;
   };
@@ -1404,7 +1383,7 @@ var es6_object_seal = createCommonjsModule(function (module) {
 var isObject = interopDefault(require$$3$1);
 var meta = interopDefault(require$$7).onFreeze;
 
-interopDefault(require$$0$11)('seal', function ($seal) {
+interopDefault(require$$0$10)('seal', function ($seal) {
   return function seal(it) {
     return $seal && isObject(it) ? $seal(meta(it)) : it;
   };
@@ -1418,7 +1397,7 @@ var es6_object_preventExtensions = createCommonjsModule(function (module) {
 var isObject = interopDefault(require$$3$1);
 var meta = interopDefault(require$$7).onFreeze;
 
-interopDefault(require$$0$11)('preventExtensions', function ($preventExtensions) {
+interopDefault(require$$0$10)('preventExtensions', function ($preventExtensions) {
   return function preventExtensions(it) {
     return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
   };
@@ -1431,7 +1410,7 @@ var es6_object_isFrozen = createCommonjsModule(function (module) {
 // 19.1.2.12 Object.isFrozen(O)
 var isObject = interopDefault(require$$3$1);
 
-interopDefault(require$$0$11)('isFrozen', function ($isFrozen) {
+interopDefault(require$$0$10)('isFrozen', function ($isFrozen) {
   return function isFrozen(it) {
     return isObject(it) ? $isFrozen ? $isFrozen(it) : false : true;
   };
@@ -1444,7 +1423,7 @@ var es6_object_isSealed = createCommonjsModule(function (module) {
 // 19.1.2.13 Object.isSealed(O)
 var isObject = interopDefault(require$$3$1);
 
-interopDefault(require$$0$11)('isSealed', function ($isSealed) {
+interopDefault(require$$0$10)('isSealed', function ($isSealed) {
   return function isSealed(it) {
     return isObject(it) ? $isSealed ? $isSealed(it) : false : true;
   };
@@ -1457,7 +1436,7 @@ var es6_object_isExtensible = createCommonjsModule(function (module) {
 // 19.1.2.11 Object.isExtensible(O)
 var isObject = interopDefault(require$$3$1);
 
-interopDefault(require$$0$11)('isExtensible', function ($isExtensible) {
+interopDefault(require$$0$10)('isExtensible', function ($isExtensible) {
   return function isExtensible(it) {
     return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
   };
@@ -1471,7 +1450,7 @@ var _objectAssign = createCommonjsModule(function (module) {
 // 19.1.2.1 Object.assign(target, source, ...)
 var getKeys = interopDefault(require$$5$1);
 var gOPS = interopDefault(require$$2$6);
-var pIE = interopDefault(require$$0$8);
+var pIE = interopDefault(require$$0$7);
 var toObject = interopDefault(require$$5$2);
 var IObject = interopDefault(require$$1$9);
 var $assign = Object.assign;
@@ -1530,14 +1509,14 @@ module.exports = Object.is || function is(x, y) {
 var _sameValue$1 = interopDefault(_sameValue);
 
 
-var require$$0$13 = Object.freeze({
+var require$$0$12 = Object.freeze({
   default: _sameValue$1
 });
 
 var es6_object_is = createCommonjsModule(function (module) {
 // 19.1.3.10 Object.is(value1, value2)
 var $export = interopDefault(require$$1$2);
-$export($export.S, 'Object', { is: interopDefault(require$$0$13) });
+$export($export.S, 'Object', { is: interopDefault(require$$0$12) });
 });
 
 interopDefault(es6_object_is);
@@ -1574,7 +1553,7 @@ var _setProto$1 = interopDefault(_setProto);
 var set = _setProto.set;
 var check = _setProto.check;
 
-var require$$0$14 = Object.freeze({
+var require$$0$13 = Object.freeze({
   default: _setProto$1,
   set: set,
   check: check
@@ -1583,15 +1562,15 @@ var require$$0$14 = Object.freeze({
 var es6_object_setPrototypeOf = createCommonjsModule(function (module) {
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
 var $export = interopDefault(require$$1$2);
-$export($export.S, 'Object', { setPrototypeOf: interopDefault(require$$0$14).set });
+$export($export.S, 'Object', { setPrototypeOf: interopDefault(require$$0$13).set });
 });
 
 interopDefault(es6_object_setPrototypeOf);
 
 var _classof = createCommonjsModule(function (module) {
 // getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = interopDefault(require$$0$5);
-var TAG = interopDefault(require$$0$3)('toStringTag');
+var cof = interopDefault(require$$0$4);
+var TAG = interopDefault(require$$0$2)('toStringTag');
 // ES3 wrong here
 var ARG = cof(function () { return arguments; }()) == 'Arguments';
 
@@ -1626,7 +1605,7 @@ var es6_object_toString = createCommonjsModule(function (module) {
 // 19.1.3.6 Object.prototype.toString()
 var classof = interopDefault(require$$1$11);
 var test = {};
-test[interopDefault(require$$0$3)('toStringTag')] = 'z';
+test[interopDefault(require$$0$2)('toStringTag')] = 'z';
 if (test + '' != '[object z]') {
   interopDefault(require$$4$2)(Object.prototype, 'toString', function toString() {
     return '[object ' + classof(this) + ']';
@@ -1658,15 +1637,15 @@ module.exports = function (fn, args, that) {
 var _invoke$1 = interopDefault(_invoke);
 
 
-var require$$1$13 = Object.freeze({
+var require$$4$5 = Object.freeze({
   default: _invoke$1
 });
 
 var _bind = createCommonjsModule(function (module) {
 'use strict';
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var isObject = interopDefault(require$$3$1);
-var invoke = interopDefault(require$$1$13);
+var invoke = interopDefault(require$$4$5);
 var arraySlice = [].slice;
 var factories = {};
 
@@ -1730,8 +1709,8 @@ interopDefault(es6_function_name);
 var es6_function_hasInstance = createCommonjsModule(function (module) {
 'use strict';
 var isObject = interopDefault(require$$3$1);
-var getPrototypeOf = interopDefault(require$$0$12);
-var HAS_INSTANCE = interopDefault(require$$0$3)('hasInstance');
+var getPrototypeOf = interopDefault(require$$0$11);
+var HAS_INSTANCE = interopDefault(require$$0$2)('hasInstance');
 var FunctionProto = Function.prototype;
 // 19.2.3.6 Function.prototype[@@hasInstance](V)
 if (!(HAS_INSTANCE in FunctionProto)) interopDefault(require$$2$1).f(FunctionProto, HAS_INSTANCE, { value: function (O) {
@@ -1753,7 +1732,7 @@ module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u20
 var _stringWs$1 = interopDefault(_stringWs);
 
 
-var require$$0$17 = Object.freeze({
+var require$$0$16 = Object.freeze({
   default: _stringWs$1
 });
 
@@ -1761,7 +1740,7 @@ var _stringTrim = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var defined = interopDefault(require$$4$3);
 var fails = interopDefault(require$$1$1);
-var spaces = interopDefault(require$$0$17);
+var spaces = interopDefault(require$$0$16);
 var space = '[' + spaces + ']';
 var non = '\u200b\u0085';
 var ltrim = RegExp('^' + space + space + '*');
@@ -1793,14 +1772,14 @@ module.exports = exporter;
 var _stringTrim$1 = interopDefault(_stringTrim);
 
 
-var require$$0$16 = Object.freeze({
+var require$$0$15 = Object.freeze({
   default: _stringTrim$1
 });
 
 var _parseInt = createCommonjsModule(function (module) {
 var $parseInt = interopDefault(require$$3).parseInt;
-var $trim = interopDefault(require$$0$16).trim;
-var ws = interopDefault(require$$0$17);
+var $trim = interopDefault(require$$0$15).trim;
+var ws = interopDefault(require$$0$16);
 var hex = /^[-+]?0[xX]/;
 
 module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix) {
@@ -1812,13 +1791,13 @@ module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? f
 var _parseInt$1 = interopDefault(_parseInt);
 
 
-var require$$0$15 = Object.freeze({
+var require$$0$14 = Object.freeze({
   default: _parseInt$1
 });
 
 var es6_parseInt = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
-var $parseInt = interopDefault(require$$0$15);
+var $parseInt = interopDefault(require$$0$14);
 // 18.2.5 parseInt(string, radix)
 $export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt });
 });
@@ -1827,9 +1806,9 @@ interopDefault(es6_parseInt);
 
 var _parseFloat = createCommonjsModule(function (module) {
 var $parseFloat = interopDefault(require$$3).parseFloat;
-var $trim = interopDefault(require$$0$16).trim;
+var $trim = interopDefault(require$$0$15).trim;
 
-module.exports = 1 / $parseFloat(interopDefault(require$$0$17) + '-0') !== -Infinity ? function parseFloat(str) {
+module.exports = 1 / $parseFloat(interopDefault(require$$0$16) + '-0') !== -Infinity ? function parseFloat(str) {
   var string = $trim(String(str), 3);
   var result = $parseFloat(string);
   return result === 0 && string.charAt(0) == '-' ? -0 : result;
@@ -1839,13 +1818,13 @@ module.exports = 1 / $parseFloat(interopDefault(require$$0$17) + '-0') !== -Infi
 var _parseFloat$1 = interopDefault(_parseFloat);
 
 
-var require$$0$18 = Object.freeze({
+var require$$0$17 = Object.freeze({
   default: _parseFloat$1
 });
 
 var es6_parseFloat = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
-var $parseFloat = interopDefault(require$$0$18);
+var $parseFloat = interopDefault(require$$0$17);
 // 18.2.4 parseFloat(string)
 $export($export.G + $export.F * (parseFloat != $parseFloat), { parseFloat: $parseFloat });
 });
@@ -1854,7 +1833,7 @@ interopDefault(es6_parseFloat);
 
 var _inheritIfRequired = createCommonjsModule(function (module) {
 var isObject = interopDefault(require$$3$1);
-var setPrototypeOf = interopDefault(require$$0$14).set;
+var setPrototypeOf = interopDefault(require$$0$13).set;
 module.exports = function (that, target, C) {
   var S = target.constructor;
   var P;
@@ -1867,7 +1846,7 @@ module.exports = function (that, target, C) {
 var _inheritIfRequired$1 = interopDefault(_inheritIfRequired);
 
 
-var require$$0$19 = Object.freeze({
+var require$$0$18 = Object.freeze({
   default: _inheritIfRequired$1
 });
 
@@ -1875,20 +1854,20 @@ var es6_number_constructor = createCommonjsModule(function (module) {
 'use strict';
 var global = interopDefault(require$$3);
 var has = interopDefault(require$$4);
-var cof = interopDefault(require$$0$5);
-var inheritIfRequired = interopDefault(require$$0$19);
+var cof = interopDefault(require$$0$4);
+var inheritIfRequired = interopDefault(require$$0$18);
 var toPrimitive = interopDefault(require$$4$1);
 var fails = interopDefault(require$$1$1);
 var gOPN = interopDefault(require$$3$4).f;
 var gOPD = interopDefault(require$$2$7).f;
 var dP = interopDefault(require$$2$1).f;
-var $trim = interopDefault(require$$0$16).trim;
+var $trim = interopDefault(require$$0$15).trim;
 var NUMBER = 'Number';
 var $Number = global[NUMBER];
 var Base = $Number;
 var proto = $Number.prototype;
 // Opera ~12 has broken Object#toString
-var BROKEN_COF = cof(interopDefault(require$$6)(proto)) == NUMBER;
+var BROKEN_COF = cof(interopDefault(require$$6$1)(proto)) == NUMBER;
 var TRIM = 'trim' in String.prototype;
 
 // 7.1.3 ToNumber(argument)
@@ -1946,7 +1925,7 @@ if (!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')) {
 interopDefault(es6_number_constructor);
 
 var _aNumberValue = createCommonjsModule(function (module) {
-var cof = interopDefault(require$$0$5);
+var cof = interopDefault(require$$0$4);
 module.exports = function (it, msg) {
   if (typeof it != 'number' && cof(it) != 'Number') throw TypeError(msg);
   return +it;
@@ -1956,7 +1935,7 @@ module.exports = function (it, msg) {
 var _aNumberValue$1 = interopDefault(_aNumberValue);
 
 
-var require$$0$20 = Object.freeze({
+var require$$0$19 = Object.freeze({
   default: _aNumberValue$1
 });
 
@@ -1978,7 +1957,7 @@ module.exports = function repeat(count) {
 var _stringRepeat$1 = interopDefault(_stringRepeat);
 
 
-var require$$1$14 = Object.freeze({
+var require$$1$13 = Object.freeze({
   default: _stringRepeat$1
 });
 
@@ -1986,8 +1965,8 @@ var es6_number_toFixed = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var toInteger = interopDefault(require$$2$5);
-var aNumberValue = interopDefault(require$$0$20);
-var repeat = interopDefault(require$$1$14);
+var aNumberValue = interopDefault(require$$0$19);
+var repeat = interopDefault(require$$1$13);
 var $toFixed = 1.0.toFixed;
 var floor = Math.floor;
 var data = [0, 0, 0, 0, 0, 0];
@@ -2105,7 +2084,7 @@ var es6_number_toPrecision = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var $fails = interopDefault(require$$1$1);
-var aNumberValue = interopDefault(require$$0$20);
+var aNumberValue = interopDefault(require$$0$19);
 var $toPrecision = 1.0.toPrecision;
 
 $export($export.P + $export.F * ($fails(function () {
@@ -2159,7 +2138,7 @@ module.exports = function isInteger(it) {
 var _isInteger$1 = interopDefault(_isInteger);
 
 
-var require$$0$21 = Object.freeze({
+var require$$0$20 = Object.freeze({
   default: _isInteger$1
 });
 
@@ -2167,7 +2146,7 @@ var es6_number_isInteger = createCommonjsModule(function (module) {
 // 20.1.2.3 Number.isInteger(number)
 var $export = interopDefault(require$$1$2);
 
-$export($export.S, 'Number', { isInteger: interopDefault(require$$0$21) });
+$export($export.S, 'Number', { isInteger: interopDefault(require$$0$20) });
 });
 
 interopDefault(es6_number_isInteger);
@@ -2189,7 +2168,7 @@ interopDefault(es6_number_isNan);
 var es6_number_isSafeInteger = createCommonjsModule(function (module) {
 // 20.1.2.5 Number.isSafeInteger(number)
 var $export = interopDefault(require$$1$2);
-var isInteger = interopDefault(require$$0$21);
+var isInteger = interopDefault(require$$0$20);
 var abs = Math.abs;
 
 $export($export.S, 'Number', {
@@ -2221,7 +2200,7 @@ interopDefault(es6_number_minSafeInteger);
 
 var es6_number_parseFloat = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
-var $parseFloat = interopDefault(require$$0$18);
+var $parseFloat = interopDefault(require$$0$17);
 // 20.1.2.12 Number.parseFloat(string)
 $export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', { parseFloat: $parseFloat });
 });
@@ -2230,7 +2209,7 @@ interopDefault(es6_number_parseFloat);
 
 var es6_number_parseInt = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
-var $parseInt = interopDefault(require$$0$15);
+var $parseInt = interopDefault(require$$0$14);
 // 20.1.2.13 Number.parseInt(string, radix)
 $export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', { parseInt: $parseInt });
 });
@@ -2247,14 +2226,14 @@ module.exports = Math.log1p || function log1p(x) {
 var _mathLog1p$1 = interopDefault(_mathLog1p);
 
 
-var require$$0$22 = Object.freeze({
+var require$$0$21 = Object.freeze({
   default: _mathLog1p$1
 });
 
 var es6_math_acosh = createCommonjsModule(function (module) {
 // 20.2.2.3 Math.acosh(x)
 var $export = interopDefault(require$$1$2);
-var log1p = interopDefault(require$$0$22);
+var log1p = interopDefault(require$$0$21);
 var sqrt = Math.sqrt;
 var $acosh = Math.acosh;
 
@@ -2315,14 +2294,14 @@ module.exports = Math.sign || function sign(x) {
 var _mathSign$1 = interopDefault(_mathSign);
 
 
-var require$$0$23 = Object.freeze({
+var require$$0$22 = Object.freeze({
   default: _mathSign$1
 });
 
 var es6_math_cbrt = createCommonjsModule(function (module) {
 // 20.2.2.9 Math.cbrt(x)
 var $export = interopDefault(require$$1$2);
-var sign = interopDefault(require$$0$23);
+var sign = interopDefault(require$$0$22);
 
 $export($export.S, 'Math', {
   cbrt: function cbrt(x) {
@@ -2376,14 +2355,14 @@ module.exports = (!$expm1
 var _mathExpm1$1 = interopDefault(_mathExpm1);
 
 
-var require$$0$24 = Object.freeze({
+var require$$0$23 = Object.freeze({
   default: _mathExpm1$1
 });
 
 var es6_math_expm1 = createCommonjsModule(function (module) {
 // 20.2.2.14 Math.expm1(x)
 var $export = interopDefault(require$$1$2);
-var $expm1 = interopDefault(require$$0$24);
+var $expm1 = interopDefault(require$$0$23);
 
 $export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', { expm1: $expm1 });
 });
@@ -2392,7 +2371,7 @@ interopDefault(es6_math_expm1);
 
 var _mathFround = createCommonjsModule(function (module) {
 // 20.2.2.16 Math.fround(x)
-var sign = interopDefault(require$$0$23);
+var sign = interopDefault(require$$0$22);
 var pow = Math.pow;
 var EPSILON = pow(2, -52);
 var EPSILON32 = pow(2, -23);
@@ -2419,7 +2398,7 @@ module.exports = Math.fround || function fround(x) {
 var _mathFround$1 = interopDefault(_mathFround);
 
 
-var require$$0$25 = Object.freeze({
+var require$$0$24 = Object.freeze({
   default: _mathFround$1
 });
 
@@ -2427,7 +2406,7 @@ var es6_math_fround = createCommonjsModule(function (module) {
 // 20.2.2.16 Math.fround(x)
 var $export = interopDefault(require$$1$2);
 
-$export($export.S, 'Math', { fround: interopDefault(require$$0$25) });
+$export($export.S, 'Math', { fround: interopDefault(require$$0$24) });
 });
 
 interopDefault(es6_math_fround);
@@ -2501,7 +2480,7 @@ var es6_math_log1p = createCommonjsModule(function (module) {
 // 20.2.2.20 Math.log1p(x)
 var $export = interopDefault(require$$1$2);
 
-$export($export.S, 'Math', { log1p: interopDefault(require$$0$22) });
+$export($export.S, 'Math', { log1p: interopDefault(require$$0$21) });
 });
 
 interopDefault(es6_math_log1p);
@@ -2523,7 +2502,7 @@ var es6_math_sign = createCommonjsModule(function (module) {
 // 20.2.2.28 Math.sign(x)
 var $export = interopDefault(require$$1$2);
 
-$export($export.S, 'Math', { sign: interopDefault(require$$0$23) });
+$export($export.S, 'Math', { sign: interopDefault(require$$0$22) });
 });
 
 interopDefault(es6_math_sign);
@@ -2531,7 +2510,7 @@ interopDefault(es6_math_sign);
 var es6_math_sinh = createCommonjsModule(function (module) {
 // 20.2.2.30 Math.sinh(x)
 var $export = interopDefault(require$$1$2);
-var expm1 = interopDefault(require$$0$24);
+var expm1 = interopDefault(require$$0$23);
 var exp = Math.exp;
 
 // V8 near Chromium 38 has a problem with very small numbers
@@ -2551,7 +2530,7 @@ interopDefault(es6_math_sinh);
 var es6_math_tanh = createCommonjsModule(function (module) {
 // 20.2.2.33 Math.tanh(x)
 var $export = interopDefault(require$$1$2);
-var expm1 = interopDefault(require$$0$24);
+var expm1 = interopDefault(require$$0$23);
 var exp = Math.exp;
 
 $export($export.S, 'Math', {
@@ -2632,7 +2611,7 @@ interopDefault(es6_string_raw);
 var es6_string_trim = createCommonjsModule(function (module) {
 'use strict';
 // 21.1.3.25 String.prototype.trim()
-interopDefault(require$$0$16)('trim', function ($trim) {
+interopDefault(require$$0$15)('trim', function ($trim) {
   return function trim() {
     return $trim(this, 3);
   };
@@ -2664,7 +2643,7 @@ module.exports = function (TO_STRING) {
 var _stringAt$1 = interopDefault(_stringAt);
 
 
-var require$$0$26 = Object.freeze({
+var require$$0$25 = Object.freeze({
   default: _stringAt$1
 });
 
@@ -2675,19 +2654,19 @@ module.exports = {};
 var _iterators$1 = interopDefault(_iterators);
 
 
-var require$$1$15 = Object.freeze({
+var require$$1$14 = Object.freeze({
 	default: _iterators$1
 });
 
 var _iterCreate = createCommonjsModule(function (module) {
 'use strict';
-var create = interopDefault(require$$6);
+var create = interopDefault(require$$6$1);
 var descriptor = interopDefault(require$$2$3);
-var setToStringTag = interopDefault(require$$0$2);
+var setToStringTag = interopDefault(require$$0$1);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-interopDefault(require$$2)(IteratorPrototype, interopDefault(require$$0$3)('iterator'), function () { return this; });
+interopDefault(require$$2)(IteratorPrototype, interopDefault(require$$0$2)('iterator'), function () { return this; });
 
 module.exports = function (Constructor, NAME, next) {
   Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -2698,7 +2677,7 @@ module.exports = function (Constructor, NAME, next) {
 var _iterCreate$1 = interopDefault(_iterCreate);
 
 
-var require$$0$27 = Object.freeze({
+var require$$0$26 = Object.freeze({
   default: _iterCreate$1
 });
 
@@ -2709,11 +2688,11 @@ var $export = interopDefault(require$$1$2);
 var redefine = interopDefault(require$$4$2);
 var hide = interopDefault(require$$2);
 var has = interopDefault(require$$4);
-var Iterators = interopDefault(require$$1$15);
-var $iterCreate = interopDefault(require$$0$27);
-var setToStringTag = interopDefault(require$$0$2);
-var getPrototypeOf = interopDefault(require$$0$12);
-var ITERATOR = interopDefault(require$$0$3)('iterator');
+var Iterators = interopDefault(require$$1$14);
+var $iterCreate = interopDefault(require$$0$26);
+var setToStringTag = interopDefault(require$$0$1);
+var getPrototypeOf = interopDefault(require$$0$11);
+var ITERATOR = interopDefault(require$$0$2)('iterator');
 var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
 var FF_ITERATOR = '@@iterator';
 var KEYS = 'keys';
@@ -2784,7 +2763,7 @@ var require$$5$4 = Object.freeze({
 
 var es6_string_iterator = createCommonjsModule(function (module) {
 'use strict';
-var $at = interopDefault(require$$0$26)(true);
+var $at = interopDefault(require$$0$25)(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
 interopDefault(require$$5$4)(String, 'String', function (iterated) {
@@ -2807,7 +2786,7 @@ interopDefault(es6_string_iterator);
 var es6_string_codePointAt = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
-var $at = interopDefault(require$$0$26)(false);
+var $at = interopDefault(require$$0$25)(false);
 $export($export.P, 'String', {
   // 21.1.3.3 String.prototype.codePointAt(pos)
   codePointAt: function codePointAt(pos) {
@@ -2821,8 +2800,8 @@ interopDefault(es6_string_codePointAt);
 var _isRegexp = createCommonjsModule(function (module) {
 // 7.2.8 IsRegExp(argument)
 var isObject = interopDefault(require$$3$1);
-var cof = interopDefault(require$$0$5);
-var MATCH = interopDefault(require$$0$3)('match');
+var cof = interopDefault(require$$0$4);
+var MATCH = interopDefault(require$$0$2)('match');
 module.exports = function (it) {
   var isRegExp;
   return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : cof(it) == 'RegExp');
@@ -2850,12 +2829,12 @@ module.exports = function (that, searchString, NAME) {
 var _stringContext$1 = interopDefault(_stringContext);
 
 
-var require$$1$16 = Object.freeze({
+var require$$1$15 = Object.freeze({
   default: _stringContext$1
 });
 
 var _failsIsRegexp = createCommonjsModule(function (module) {
-var MATCH = interopDefault(require$$0$3)('match');
+var MATCH = interopDefault(require$$0$2)('match');
 module.exports = function (KEY) {
   var re = /./;
   try {
@@ -2872,7 +2851,7 @@ module.exports = function (KEY) {
 var _failsIsRegexp$1 = interopDefault(_failsIsRegexp);
 
 
-var require$$0$28 = Object.freeze({
+var require$$0$27 = Object.freeze({
   default: _failsIsRegexp$1
 });
 
@@ -2881,11 +2860,11 @@ var es6_string_endsWith = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var toLength = interopDefault(require$$3$2);
-var context = interopDefault(require$$1$16);
+var context = interopDefault(require$$1$15);
 var ENDS_WITH = 'endsWith';
 var $endsWith = ''[ENDS_WITH];
 
-$export($export.P + $export.F * interopDefault(require$$0$28)(ENDS_WITH), 'String', {
+$export($export.P + $export.F * interopDefault(require$$0$27)(ENDS_WITH), 'String', {
   endsWith: function endsWith(searchString /* , endPosition = @length */) {
     var that = context(this, searchString, ENDS_WITH);
     var endPosition = arguments.length > 1 ? arguments[1] : undefined;
@@ -2905,10 +2884,10 @@ var es6_string_includes = createCommonjsModule(function (module) {
 // 21.1.3.7 String.prototype.includes(searchString, position = 0)
 'use strict';
 var $export = interopDefault(require$$1$2);
-var context = interopDefault(require$$1$16);
+var context = interopDefault(require$$1$15);
 var INCLUDES = 'includes';
 
-$export($export.P + $export.F * interopDefault(require$$0$28)(INCLUDES), 'String', {
+$export($export.P + $export.F * interopDefault(require$$0$27)(INCLUDES), 'String', {
   includes: function includes(searchString /* , position = 0 */) {
     return !!~context(this, searchString, INCLUDES)
       .indexOf(searchString, arguments.length > 1 ? arguments[1] : undefined);
@@ -2923,7 +2902,7 @@ var $export = interopDefault(require$$1$2);
 
 $export($export.P, 'String', {
   // 21.1.3.13 String.prototype.repeat(count)
-  repeat: interopDefault(require$$1$14)
+  repeat: interopDefault(require$$1$13)
 });
 });
 
@@ -2934,11 +2913,11 @@ var es6_string_startsWith = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var toLength = interopDefault(require$$3$2);
-var context = interopDefault(require$$1$16);
+var context = interopDefault(require$$1$15);
 var STARTS_WITH = 'startsWith';
 var $startsWith = ''[STARTS_WITH];
 
-$export($export.P + $export.F * interopDefault(require$$0$28)(STARTS_WITH), 'String', {
+$export($export.P + $export.F * interopDefault(require$$0$27)(STARTS_WITH), 'String', {
   startsWith: function startsWith(searchString /* , position = 0 */) {
     var that = context(this, searchString, STARTS_WITH);
     var index = toLength(Math.min(arguments.length > 1 ? arguments[1] : undefined, that.length));
@@ -2977,14 +2956,14 @@ module.exports = function (NAME, exec) {
 var _stringHtml$1 = interopDefault(_stringHtml);
 
 
-var require$$0$29 = Object.freeze({
+var require$$0$28 = Object.freeze({
   default: _stringHtml$1
 });
 
 var es6_string_anchor = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.2 String.prototype.anchor(name)
-interopDefault(require$$0$29)('anchor', function (createHTML) {
+interopDefault(require$$0$28)('anchor', function (createHTML) {
   return function anchor(name) {
     return createHTML(this, 'a', 'name', name);
   };
@@ -2996,7 +2975,7 @@ interopDefault(es6_string_anchor);
 var es6_string_big = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.3 String.prototype.big()
-interopDefault(require$$0$29)('big', function (createHTML) {
+interopDefault(require$$0$28)('big', function (createHTML) {
   return function big() {
     return createHTML(this, 'big', '', '');
   };
@@ -3008,7 +2987,7 @@ interopDefault(es6_string_big);
 var es6_string_blink = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.4 String.prototype.blink()
-interopDefault(require$$0$29)('blink', function (createHTML) {
+interopDefault(require$$0$28)('blink', function (createHTML) {
   return function blink() {
     return createHTML(this, 'blink', '', '');
   };
@@ -3020,7 +2999,7 @@ interopDefault(es6_string_blink);
 var es6_string_bold = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.5 String.prototype.bold()
-interopDefault(require$$0$29)('bold', function (createHTML) {
+interopDefault(require$$0$28)('bold', function (createHTML) {
   return function bold() {
     return createHTML(this, 'b', '', '');
   };
@@ -3032,7 +3011,7 @@ interopDefault(es6_string_bold);
 var es6_string_fixed = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.6 String.prototype.fixed()
-interopDefault(require$$0$29)('fixed', function (createHTML) {
+interopDefault(require$$0$28)('fixed', function (createHTML) {
   return function fixed() {
     return createHTML(this, 'tt', '', '');
   };
@@ -3044,7 +3023,7 @@ interopDefault(es6_string_fixed);
 var es6_string_fontcolor = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.7 String.prototype.fontcolor(color)
-interopDefault(require$$0$29)('fontcolor', function (createHTML) {
+interopDefault(require$$0$28)('fontcolor', function (createHTML) {
   return function fontcolor(color) {
     return createHTML(this, 'font', 'color', color);
   };
@@ -3056,7 +3035,7 @@ interopDefault(es6_string_fontcolor);
 var es6_string_fontsize = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.8 String.prototype.fontsize(size)
-interopDefault(require$$0$29)('fontsize', function (createHTML) {
+interopDefault(require$$0$28)('fontsize', function (createHTML) {
   return function fontsize(size) {
     return createHTML(this, 'font', 'size', size);
   };
@@ -3068,7 +3047,7 @@ interopDefault(es6_string_fontsize);
 var es6_string_italics = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.9 String.prototype.italics()
-interopDefault(require$$0$29)('italics', function (createHTML) {
+interopDefault(require$$0$28)('italics', function (createHTML) {
   return function italics() {
     return createHTML(this, 'i', '', '');
   };
@@ -3080,7 +3059,7 @@ interopDefault(es6_string_italics);
 var es6_string_link = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.10 String.prototype.link(url)
-interopDefault(require$$0$29)('link', function (createHTML) {
+interopDefault(require$$0$28)('link', function (createHTML) {
   return function link(url) {
     return createHTML(this, 'a', 'href', url);
   };
@@ -3092,7 +3071,7 @@ interopDefault(es6_string_link);
 var es6_string_small = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.11 String.prototype.small()
-interopDefault(require$$0$29)('small', function (createHTML) {
+interopDefault(require$$0$28)('small', function (createHTML) {
   return function small() {
     return createHTML(this, 'small', '', '');
   };
@@ -3104,7 +3083,7 @@ interopDefault(es6_string_small);
 var es6_string_strike = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.12 String.prototype.strike()
-interopDefault(require$$0$29)('strike', function (createHTML) {
+interopDefault(require$$0$28)('strike', function (createHTML) {
   return function strike() {
     return createHTML(this, 'strike', '', '');
   };
@@ -3116,7 +3095,7 @@ interopDefault(es6_string_strike);
 var es6_string_sub = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.13 String.prototype.sub()
-interopDefault(require$$0$29)('sub', function (createHTML) {
+interopDefault(require$$0$28)('sub', function (createHTML) {
   return function sub() {
     return createHTML(this, 'sub', '', '');
   };
@@ -3128,7 +3107,7 @@ interopDefault(es6_string_sub);
 var es6_string_sup = createCommonjsModule(function (module) {
 'use strict';
 // B.2.3.14 String.prototype.sup()
-interopDefault(require$$0$29)('sup', function (createHTML) {
+interopDefault(require$$0$28)('sup', function (createHTML) {
   return function sup() {
     return createHTML(this, 'sup', '', '');
   };
@@ -3199,14 +3178,14 @@ module.exports = (fails(function () {
 var _dateToIsoString$1 = interopDefault(_dateToIsoString);
 
 
-var require$$0$30 = Object.freeze({
+var require$$0$29 = Object.freeze({
   default: _dateToIsoString$1
 });
 
 var es6_date_toIsoString = createCommonjsModule(function (module) {
 // 20.3.4.36 / 15.9.5.43 Date.prototype.toISOString()
 var $export = interopDefault(require$$1$2);
-var toISOString = interopDefault(require$$0$30);
+var toISOString = interopDefault(require$$0$29);
 
 // PhantomJS / old WebKit has a broken implementations
 $export($export.P + $export.F * (Date.prototype.toISOString !== toISOString), 'Date', {
@@ -3248,15 +3227,15 @@ module.exports = function (hint) {
 var _dateToPrimitive$1 = interopDefault(_dateToPrimitive);
 
 
-var require$$0$31 = Object.freeze({
+var require$$0$30 = Object.freeze({
   default: _dateToPrimitive$1
 });
 
 var es6_date_toPrimitive = createCommonjsModule(function (module) {
-var TO_PRIMITIVE = interopDefault(require$$0$3)('toPrimitive');
+var TO_PRIMITIVE = interopDefault(require$$0$2)('toPrimitive');
 var proto = Date.prototype;
 
-if (!(TO_PRIMITIVE in proto)) interopDefault(require$$2)(proto, TO_PRIMITIVE, interopDefault(require$$0$31));
+if (!(TO_PRIMITIVE in proto)) interopDefault(require$$2)(proto, TO_PRIMITIVE, interopDefault(require$$0$30));
 });
 
 interopDefault(es6_date_toPrimitive);
@@ -3288,14 +3267,14 @@ module.exports = function (iterator, fn, value, entries) {
 var _iterCall$1 = interopDefault(_iterCall);
 
 
-var require$$4$5 = Object.freeze({
+var require$$4$6 = Object.freeze({
   default: _iterCall$1
 });
 
 var _isArrayIter = createCommonjsModule(function (module) {
 // check on default Array iterator
-var Iterators = interopDefault(require$$1$15);
-var ITERATOR = interopDefault(require$$0$3)('iterator');
+var Iterators = interopDefault(require$$1$14);
+var ITERATOR = interopDefault(require$$0$2)('iterator');
 var ArrayProto = Array.prototype;
 
 module.exports = function (it) {
@@ -3324,14 +3303,14 @@ module.exports = function (object, index, value) {
 var _createProperty$1 = interopDefault(_createProperty);
 
 
-var require$$0$32 = Object.freeze({
+var require$$0$31 = Object.freeze({
   default: _createProperty$1
 });
 
 var core_getIteratorMethod = createCommonjsModule(function (module) {
 var classof = interopDefault(require$$1$11);
-var ITERATOR = interopDefault(require$$0$3)('iterator');
-var Iterators = interopDefault(require$$1$15);
+var ITERATOR = interopDefault(require$$0$2)('iterator');
+var Iterators = interopDefault(require$$1$14);
 module.exports = interopDefault(require$$0).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
     || it['@@iterator']
@@ -3347,7 +3326,7 @@ var require$$13 = Object.freeze({
 });
 
 var _iterDetect = createCommonjsModule(function (module) {
-var ITERATOR = interopDefault(require$$0$3)('iterator');
+var ITERATOR = interopDefault(require$$0$2)('iterator');
 var SAFE_CLOSING = false;
 
 try {
@@ -3383,10 +3362,10 @@ var es6_array_from = createCommonjsModule(function (module) {
 var ctx = interopDefault(require$$1$4);
 var $export = interopDefault(require$$1$2);
 var toObject = interopDefault(require$$5$2);
-var call = interopDefault(require$$4$5);
+var call = interopDefault(require$$4$6);
 var isArrayIter = interopDefault(require$$17);
 var toLength = interopDefault(require$$3$2);
-var createProperty = interopDefault(require$$0$32);
+var createProperty = interopDefault(require$$0$31);
 var getIterFn = interopDefault(require$$13);
 
 $export($export.S + $export.F * !interopDefault(require$$5$5)(function (iter) { Array.from(iter); }), 'Array', {
@@ -3423,7 +3402,7 @@ interopDefault(es6_array_from);
 var es6_array_of = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
-var createProperty = interopDefault(require$$0$32);
+var createProperty = interopDefault(require$$0$31);
 
 // WebKit Array.of isn't generic
 $export($export.S + $export.F * interopDefault(require$$1$1)(function () {
@@ -3459,7 +3438,7 @@ module.exports = function (method, arg) {
 var _strictMethod$1 = interopDefault(_strictMethod);
 
 
-var require$$0$33 = Object.freeze({
+var require$$0$32 = Object.freeze({
   default: _strictMethod$1
 });
 
@@ -3471,7 +3450,7 @@ var toIObject = interopDefault(require$$1$8);
 var arrayJoin = [].join;
 
 // fallback for not array-like strings
-$export($export.P + $export.F * (interopDefault(require$$1$9) != Object || !interopDefault(require$$0$33)(arrayJoin)), 'Array', {
+$export($export.P + $export.F * (interopDefault(require$$1$9) != Object || !interopDefault(require$$0$32)(arrayJoin)), 'Array', {
   join: function join(separator) {
     return arrayJoin.call(toIObject(this), separator === undefined ? ',' : separator);
   }
@@ -3484,7 +3463,7 @@ var es6_array_slice = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var html = interopDefault(require$$3$3);
-var cof = interopDefault(require$$0$5);
+var cof = interopDefault(require$$0$4);
 var toAbsoluteIndex = interopDefault(require$$23);
 var toLength = interopDefault(require$$3$2);
 var arraySlice = [].slice;
@@ -3516,7 +3495,7 @@ interopDefault(es6_array_slice);
 var es6_array_sort = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var toObject = interopDefault(require$$5$2);
 var fails = interopDefault(require$$1$1);
 var $sort = [].sort;
@@ -3529,7 +3508,7 @@ $export($export.P + $export.F * (fails(function () {
   // V8 bug
   test.sort(null);
   // Old WebKit
-}) || !interopDefault(require$$0$33)($sort)), 'Array', {
+}) || !interopDefault(require$$0$32)($sort)), 'Array', {
   // 22.1.3.25 Array.prototype.sort(comparefn)
   sort: function sort(comparefn) {
     return comparefn === undefined
@@ -3544,7 +3523,7 @@ interopDefault(es6_array_sort);
 var _arraySpeciesConstructor = createCommonjsModule(function (module) {
 var isObject = interopDefault(require$$3$1);
 var isArray = interopDefault(require$$4$4);
-var SPECIES = interopDefault(require$$0$3)('species');
+var SPECIES = interopDefault(require$$0$2)('species');
 
 module.exports = function (original) {
   var C;
@@ -3563,13 +3542,13 @@ module.exports = function (original) {
 var _arraySpeciesConstructor$1 = interopDefault(_arraySpeciesConstructor);
 
 
-var require$$0$34 = Object.freeze({
+var require$$0$33 = Object.freeze({
   default: _arraySpeciesConstructor$1
 });
 
 var _arraySpeciesCreate = createCommonjsModule(function (module) {
 // 9.4.2.3 ArraySpeciesCreate(originalArray, length)
-var speciesConstructor = interopDefault(require$$0$34);
+var speciesConstructor = interopDefault(require$$0$33);
 
 module.exports = function (original, length) {
   return new (speciesConstructor(original))(length);
@@ -3579,7 +3558,7 @@ module.exports = function (original, length) {
 var _arraySpeciesCreate$1 = interopDefault(_arraySpeciesCreate);
 
 
-var require$$1$17 = Object.freeze({
+var require$$1$16 = Object.freeze({
   default: _arraySpeciesCreate$1
 });
 
@@ -3595,7 +3574,7 @@ var ctx = interopDefault(require$$1$4);
 var IObject = interopDefault(require$$1$9);
 var toObject = interopDefault(require$$5$2);
 var toLength = interopDefault(require$$3$2);
-var asc = interopDefault(require$$1$17);
+var asc = interopDefault(require$$1$16);
 module.exports = function (TYPE, $create) {
   var IS_MAP = TYPE == 1;
   var IS_FILTER = TYPE == 2;
@@ -3641,7 +3620,7 @@ var es6_array_forEach = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var $forEach = interopDefault(require$$10)(0);
-var STRICT = interopDefault(require$$0$33)([].forEach, true);
+var STRICT = interopDefault(require$$0$32)([].forEach, true);
 
 $export($export.P + $export.F * !STRICT, 'Array', {
   // 22.1.3.10 / 15.4.4.18 Array.prototype.forEach(callbackfn [, thisArg])
@@ -3658,7 +3637,7 @@ var es6_array_map = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var $map = interopDefault(require$$10)(1);
 
-$export($export.P + $export.F * !interopDefault(require$$0$33)([].map, true), 'Array', {
+$export($export.P + $export.F * !interopDefault(require$$0$32)([].map, true), 'Array', {
   // 22.1.3.15 / 15.4.4.19 Array.prototype.map(callbackfn [, thisArg])
   map: function map(callbackfn /* , thisArg */) {
     return $map(this, callbackfn, arguments[1]);
@@ -3673,7 +3652,7 @@ var es6_array_filter = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var $filter = interopDefault(require$$10)(2);
 
-$export($export.P + $export.F * !interopDefault(require$$0$33)([].filter, true), 'Array', {
+$export($export.P + $export.F * !interopDefault(require$$0$32)([].filter, true), 'Array', {
   // 22.1.3.7 / 15.4.4.20 Array.prototype.filter(callbackfn [, thisArg])
   filter: function filter(callbackfn /* , thisArg */) {
     return $filter(this, callbackfn, arguments[1]);
@@ -3688,7 +3667,7 @@ var es6_array_some = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var $some = interopDefault(require$$10)(3);
 
-$export($export.P + $export.F * !interopDefault(require$$0$33)([].some, true), 'Array', {
+$export($export.P + $export.F * !interopDefault(require$$0$32)([].some, true), 'Array', {
   // 22.1.3.23 / 15.4.4.17 Array.prototype.some(callbackfn [, thisArg])
   some: function some(callbackfn /* , thisArg */) {
     return $some(this, callbackfn, arguments[1]);
@@ -3703,7 +3682,7 @@ var es6_array_every = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var $every = interopDefault(require$$10)(4);
 
-$export($export.P + $export.F * !interopDefault(require$$0$33)([].every, true), 'Array', {
+$export($export.P + $export.F * !interopDefault(require$$0$32)([].every, true), 'Array', {
   // 22.1.3.5 / 15.4.4.16 Array.prototype.every(callbackfn [, thisArg])
   every: function every(callbackfn /* , thisArg */) {
     return $every(this, callbackfn, arguments[1]);
@@ -3714,7 +3693,7 @@ $export($export.P + $export.F * !interopDefault(require$$0$33)([].every, true), 
 interopDefault(es6_array_every);
 
 var _arrayReduce = createCommonjsModule(function (module) {
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var toObject = interopDefault(require$$5$2);
 var IObject = interopDefault(require$$1$9);
 var toLength = interopDefault(require$$3$2);
@@ -3747,16 +3726,16 @@ module.exports = function (that, callbackfn, aLen, memo, isRight) {
 var _arrayReduce$1 = interopDefault(_arrayReduce);
 
 
-var require$$1$18 = Object.freeze({
+var require$$1$17 = Object.freeze({
   default: _arrayReduce$1
 });
 
 var es6_array_reduce = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
-var $reduce = interopDefault(require$$1$18);
+var $reduce = interopDefault(require$$1$17);
 
-$export($export.P + $export.F * !interopDefault(require$$0$33)([].reduce, true), 'Array', {
+$export($export.P + $export.F * !interopDefault(require$$0$32)([].reduce, true), 'Array', {
   // 22.1.3.18 / 15.4.4.21 Array.prototype.reduce(callbackfn [, initialValue])
   reduce: function reduce(callbackfn /* , initialValue */) {
     return $reduce(this, callbackfn, arguments.length, arguments[1], false);
@@ -3769,9 +3748,9 @@ interopDefault(es6_array_reduce);
 var es6_array_reduceRight = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
-var $reduce = interopDefault(require$$1$18);
+var $reduce = interopDefault(require$$1$17);
 
-$export($export.P + $export.F * !interopDefault(require$$0$33)([].reduceRight, true), 'Array', {
+$export($export.P + $export.F * !interopDefault(require$$0$32)([].reduceRight, true), 'Array', {
   // 22.1.3.19 / 15.4.4.22 Array.prototype.reduceRight(callbackfn [, initialValue])
   reduceRight: function reduceRight(callbackfn /* , initialValue */) {
     return $reduce(this, callbackfn, arguments.length, arguments[1], true);
@@ -3788,7 +3767,7 @@ var $indexOf = interopDefault(require$$1$10)(false);
 var $native = [].indexOf;
 var NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
 
-$export($export.P + $export.F * (NEGATIVE_ZERO || !interopDefault(require$$0$33)($native)), 'Array', {
+$export($export.P + $export.F * (NEGATIVE_ZERO || !interopDefault(require$$0$32)($native)), 'Array', {
   // 22.1.3.11 / 15.4.4.14 Array.prototype.indexOf(searchElement [, fromIndex])
   indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
     return NEGATIVE_ZERO
@@ -3810,7 +3789,7 @@ var toLength = interopDefault(require$$3$2);
 var $native = [].lastIndexOf;
 var NEGATIVE_ZERO = !!$native && 1 / [1].lastIndexOf(1, -0) < 0;
 
-$export($export.P + $export.F * (NEGATIVE_ZERO || !interopDefault(require$$0$33)($native)), 'Array', {
+$export($export.P + $export.F * (NEGATIVE_ZERO || !interopDefault(require$$0$32)($native)), 'Array', {
   // 22.1.3.14 / 15.4.4.15 Array.prototype.lastIndexOf(searchElement [, fromIndex])
   lastIndexOf: function lastIndexOf(searchElement /* , fromIndex = @[*-1] */) {
     // convert -0 to +0
@@ -3866,7 +3845,7 @@ var require$$2$9 = Object.freeze({
 
 var _addToUnscopables = createCommonjsModule(function (module) {
 // 22.1.3.31 Array.prototype[@@unscopables]
-var UNSCOPABLES = interopDefault(require$$0$3)('unscopables');
+var UNSCOPABLES = interopDefault(require$$0$2)('unscopables');
 var ArrayProto = Array.prototype;
 if (ArrayProto[UNSCOPABLES] == undefined) interopDefault(require$$2)(ArrayProto, UNSCOPABLES, {});
 module.exports = function (key) {
@@ -3877,7 +3856,7 @@ module.exports = function (key) {
 var _addToUnscopables$1 = interopDefault(_addToUnscopables);
 
 
-var require$$0$35 = Object.freeze({
+var require$$0$34 = Object.freeze({
   default: _addToUnscopables$1
 });
 
@@ -3887,7 +3866,7 @@ var $export = interopDefault(require$$1$2);
 
 $export($export.P, 'Array', { copyWithin: interopDefault(require$$2$9) });
 
-interopDefault(require$$0$35)('copyWithin');
+interopDefault(require$$0$34)('copyWithin');
 });
 
 interopDefault(es6_array_copyWithin);
@@ -3923,7 +3902,7 @@ var $export = interopDefault(require$$1$2);
 
 $export($export.P, 'Array', { fill: interopDefault(require$$3$5) });
 
-interopDefault(require$$0$35)('fill');
+interopDefault(require$$0$34)('fill');
 });
 
 interopDefault(es6_array_fill);
@@ -3942,7 +3921,7 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-interopDefault(require$$0$35)(KEY);
+interopDefault(require$$0$34)(KEY);
 });
 
 interopDefault(es6_array_find);
@@ -3961,7 +3940,7 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-interopDefault(require$$0$35)(KEY);
+interopDefault(require$$0$34)(KEY);
 });
 
 interopDefault(es6_array_findIndex);
@@ -3971,7 +3950,7 @@ var _setSpecies = createCommonjsModule(function (module) {
 var global = interopDefault(require$$3);
 var dP = interopDefault(require$$2$1);
 var DESCRIPTORS = interopDefault(require$$1);
-var SPECIES = interopDefault(require$$0$3)('species');
+var SPECIES = interopDefault(require$$0$2)('species');
 
 module.exports = function (KEY) {
   var C = global[KEY];
@@ -3985,12 +3964,12 @@ module.exports = function (KEY) {
 var _setSpecies$1 = interopDefault(_setSpecies);
 
 
-var require$$0$36 = Object.freeze({
+var require$$0$35 = Object.freeze({
   default: _setSpecies$1
 });
 
 var es6_array_species = createCommonjsModule(function (module) {
-interopDefault(require$$0$36)('Array');
+interopDefault(require$$0$35)('Array');
 });
 
 interopDefault(es6_array_species);
@@ -4004,15 +3983,15 @@ module.exports = function (done, value) {
 var _iterStep$1 = interopDefault(_iterStep);
 
 
-var require$$4$6 = Object.freeze({
+var require$$4$7 = Object.freeze({
   default: _iterStep$1
 });
 
 var es6_array_iterator = createCommonjsModule(function (module) {
 'use strict';
-var addToUnscopables = interopDefault(require$$0$35);
-var step = interopDefault(require$$4$6);
-var Iterators = interopDefault(require$$1$15);
+var addToUnscopables = interopDefault(require$$0$34);
+var step = interopDefault(require$$4$7);
+var Iterators = interopDefault(require$$1$14);
 var toIObject = interopDefault(require$$1$8);
 
 // 22.1.3.4 Array.prototype.entries()
@@ -4048,7 +4027,7 @@ addToUnscopables('entries');
 var es6_array_iterator$1 = interopDefault(es6_array_iterator);
 
 
-var require$$6$1 = Object.freeze({
+var require$$6$2 = Object.freeze({
   default: es6_array_iterator$1
 });
 
@@ -4071,17 +4050,17 @@ module.exports = function () {
 var _flags$1 = interopDefault(_flags);
 
 
-var require$$1$19 = Object.freeze({
+var require$$1$18 = Object.freeze({
   default: _flags$1
 });
 
 var es6_regexp_constructor = createCommonjsModule(function (module) {
 var global = interopDefault(require$$3);
-var inheritIfRequired = interopDefault(require$$0$19);
+var inheritIfRequired = interopDefault(require$$0$18);
 var dP = interopDefault(require$$2$1).f;
 var gOPN = interopDefault(require$$3$4).f;
 var isRegExp = interopDefault(require$$2$8);
-var $flags = interopDefault(require$$1$19);
+var $flags = interopDefault(require$$1$18);
 var $RegExp = global.RegExp;
 var Base = $RegExp;
 var proto = $RegExp.prototype;
@@ -4091,7 +4070,7 @@ var re2 = /a/g;
 var CORRECT_NEW = new $RegExp(re1) !== re1;
 
 if (interopDefault(require$$1) && (!CORRECT_NEW || interopDefault(require$$1$1)(function () {
-  re2[interopDefault(require$$0$3)('match')] = false;
+  re2[interopDefault(require$$0$2)('match')] = false;
   // RegExp constructor can alter flags and IsRegExp works correct with @@match
   return $RegExp(re1) != re1 || $RegExp(re2) == re2 || $RegExp(re1, 'i') != '/a/i';
 }))) {
@@ -4118,7 +4097,7 @@ if (interopDefault(require$$1) && (!CORRECT_NEW || interopDefault(require$$1$1)(
   interopDefault(require$$4$2)(global, 'RegExp', $RegExp);
 }
 
-interopDefault(require$$0$36)('RegExp');
+interopDefault(require$$0$35)('RegExp');
 });
 
 interopDefault(es6_regexp_constructor);
@@ -4127,7 +4106,7 @@ var es6_regexp_flags = createCommonjsModule(function (module) {
 // 21.2.5.3 get RegExp.prototype.flags()
 if (interopDefault(require$$1) && /./g.flags != 'g') interopDefault(require$$2$1).f(RegExp.prototype, 'flags', {
   configurable: true,
-  get: interopDefault(require$$1$19)
+  get: interopDefault(require$$1$18)
 });
 });
 
@@ -4137,7 +4116,7 @@ var es6_regexp_toString = createCommonjsModule(function (module) {
 'use strict';
 
 var anObject = interopDefault(require$$5);
-var $flags = interopDefault(require$$1$19);
+var $flags = interopDefault(require$$1$18);
 var DESCRIPTORS = interopDefault(require$$1);
 var TO_STRING = 'toString';
 var $toString = /./[TO_STRING];
@@ -4169,7 +4148,7 @@ var hide = interopDefault(require$$2);
 var redefine = interopDefault(require$$4$2);
 var fails = interopDefault(require$$1$1);
 var defined = interopDefault(require$$4$3);
-var wks = interopDefault(require$$0$3);
+var wks = interopDefault(require$$0$2);
 
 module.exports = function (KEY, length, exec) {
   var SYMBOL = wks(KEY);
@@ -4197,13 +4176,13 @@ module.exports = function (KEY, length, exec) {
 var _fixReWks$1 = interopDefault(_fixReWks);
 
 
-var require$$1$20 = Object.freeze({
+var require$$1$19 = Object.freeze({
   default: _fixReWks$1
 });
 
 var es6_regexp_match = createCommonjsModule(function (module) {
 // @@match logic
-interopDefault(require$$1$20)('match', 1, function (defined, MATCH, $match) {
+interopDefault(require$$1$19)('match', 1, function (defined, MATCH, $match) {
   // 21.1.3.11 String.prototype.match(regexp)
   return [function match(regexp) {
     'use strict';
@@ -4218,7 +4197,7 @@ interopDefault(es6_regexp_match);
 
 var es6_regexp_replace = createCommonjsModule(function (module) {
 // @@replace logic
-interopDefault(require$$1$20)('replace', 2, function (defined, REPLACE, $replace) {
+interopDefault(require$$1$19)('replace', 2, function (defined, REPLACE, $replace) {
   // 21.1.3.14 String.prototype.replace(searchValue, replaceValue)
   return [function replace(searchValue, replaceValue) {
     'use strict';
@@ -4235,7 +4214,7 @@ interopDefault(es6_regexp_replace);
 
 var es6_regexp_search = createCommonjsModule(function (module) {
 // @@search logic
-interopDefault(require$$1$20)('search', 1, function (defined, SEARCH, $search) {
+interopDefault(require$$1$19)('search', 1, function (defined, SEARCH, $search) {
   // 21.1.3.15 String.prototype.search(regexp)
   return [function search(regexp) {
     'use strict';
@@ -4250,7 +4229,7 @@ interopDefault(es6_regexp_search);
 
 var es6_regexp_split = createCommonjsModule(function (module) {
 // @@split logic
-interopDefault(require$$1$20)('split', 2, function (defined, SPLIT, $split) {
+interopDefault(require$$1$19)('split', 2, function (defined, SPLIT, $split) {
   'use strict';
   var isRegExp = interopDefault(require$$2$8);
   var _split = $split;
@@ -4335,13 +4314,13 @@ module.exports = function (it, Constructor, name, forbiddenField) {
 var _anInstance$1 = interopDefault(_anInstance);
 
 
-var require$$4$7 = Object.freeze({
+var require$$4$8 = Object.freeze({
   default: _anInstance$1
 });
 
 var _forOf = createCommonjsModule(function (module) {
 var ctx = interopDefault(require$$1$4);
-var call = interopDefault(require$$4$5);
+var call = interopDefault(require$$4$6);
 var isArrayIter = interopDefault(require$$17);
 var anObject = interopDefault(require$$5);
 var toLength = interopDefault(require$$3$2);
@@ -4370,15 +4349,15 @@ exports.RETURN = RETURN;
 var _forOf$1 = interopDefault(_forOf);
 
 
-var require$$1$21 = Object.freeze({
+var require$$1$20 = Object.freeze({
   default: _forOf$1
 });
 
 var _speciesConstructor = createCommonjsModule(function (module) {
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
 var anObject = interopDefault(require$$5);
-var aFunction = interopDefault(require$$0$1);
-var SPECIES = interopDefault(require$$0$3)('species');
+var aFunction = interopDefault(require$$6);
+var SPECIES = interopDefault(require$$0$2)('species');
 module.exports = function (O, D) {
   var C = anObject(O).constructor;
   var S;
@@ -4389,13 +4368,13 @@ module.exports = function (O, D) {
 var _speciesConstructor$1 = interopDefault(_speciesConstructor);
 
 
-var require$$1$22 = Object.freeze({
+var require$$1$21 = Object.freeze({
   default: _speciesConstructor$1
 });
 
 var _task = createCommonjsModule(function (module) {
 var ctx = interopDefault(require$$1$4);
-var invoke = interopDefault(require$$1$13);
+var invoke = interopDefault(require$$4$5);
 var html = interopDefault(require$$3$3);
 var cel = interopDefault(require$$2$2);
 var global = interopDefault(require$$3);
@@ -4437,7 +4416,7 @@ if (!setTask || !clearTask) {
     delete queue[id];
   };
   // Node.js 0.8-
-  if (interopDefault(require$$0$5)(process) == 'process') {
+  if (interopDefault(require$$0$4)(process) == 'process') {
     defer = function (id) {
       process.nextTick(ctx(run, id, 1));
     };
@@ -4484,7 +4463,7 @@ var _task$1 = interopDefault(_task);
 var set$1 = _task.set;
 var clear = _task.clear;
 
-var require$$0$37 = Object.freeze({
+var require$$0$36 = Object.freeze({
   default: _task$1,
   set: set$1,
   clear: clear
@@ -4492,11 +4471,11 @@ var require$$0$37 = Object.freeze({
 
 var _microtask = createCommonjsModule(function (module) {
 var global = interopDefault(require$$3);
-var macrotask = interopDefault(require$$0$37).set;
+var macrotask = interopDefault(require$$0$36).set;
 var Observer = global.MutationObserver || global.WebKitMutationObserver;
 var process = global.process;
 var Promise = global.Promise;
-var isNode = interopDefault(require$$0$5)(process) == 'process';
+var isNode = interopDefault(require$$0$4)(process) == 'process';
 
 module.exports = function () {
   var head, last, notify;
@@ -4571,7 +4550,7 @@ var require$$8 = Object.freeze({
 var _newPromiseCapability = createCommonjsModule(function (module) {
 'use strict';
 // 25.4.1.5 NewPromiseCapability(C)
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 
 function PromiseCapability(C) {
   var resolve, reject;
@@ -4592,7 +4571,7 @@ module.exports.f = function (C) {
 var _newPromiseCapability$1 = interopDefault(_newPromiseCapability);
 var f$7 = _newPromiseCapability.f;
 
-var require$$1$23 = Object.freeze({
+var require$$1$22 = Object.freeze({
   default: _newPromiseCapability$1,
   f: f$7
 });
@@ -4610,14 +4589,18 @@ module.exports = function (exec) {
 var _perform$1 = interopDefault(_perform);
 
 
-var require$$0$38 = Object.freeze({
+var require$$0$37 = Object.freeze({
   default: _perform$1
 });
 
 var _promiseResolve = createCommonjsModule(function (module) {
-var newPromiseCapability = interopDefault(require$$1$23);
+var anObject = interopDefault(require$$5);
+var isObject = interopDefault(require$$3$1);
+var newPromiseCapability = interopDefault(require$$1$22);
 
 module.exports = function (C, x) {
+  anObject(C);
+  if (isObject(x) && x.constructor === C) return x;
   var promiseCapability = newPromiseCapability.f(C);
   var resolve = promiseCapability.resolve;
   resolve(x);
@@ -4628,7 +4611,7 @@ module.exports = function (C, x) {
 var _promiseResolve$1 = interopDefault(_promiseResolve);
 
 
-var require$$0$39 = Object.freeze({
+var require$$0$38 = Object.freeze({
   default: _promiseResolve$1
 });
 
@@ -4655,15 +4638,15 @@ var ctx = interopDefault(require$$1$4);
 var classof = interopDefault(require$$1$11);
 var $export = interopDefault(require$$1$2);
 var isObject = interopDefault(require$$3$1);
-var aFunction = interopDefault(require$$0$1);
-var anInstance = interopDefault(require$$4$7);
-var forOf = interopDefault(require$$1$21);
-var speciesConstructor = interopDefault(require$$1$22);
-var task = interopDefault(require$$0$37).set;
+var aFunction = interopDefault(require$$6);
+var anInstance = interopDefault(require$$4$8);
+var forOf = interopDefault(require$$1$20);
+var speciesConstructor = interopDefault(require$$1$21);
+var task = interopDefault(require$$0$36).set;
 var microtask = interopDefault(require$$8)();
-var newPromiseCapabilityModule = interopDefault(require$$1$23);
-var perform = interopDefault(require$$0$38);
-var promiseResolve = interopDefault(require$$0$39);
+var newPromiseCapabilityModule = interopDefault(require$$1$22);
+var perform = interopDefault(require$$0$37);
+var promiseResolve = interopDefault(require$$0$38);
 var PROMISE = 'Promise';
 var TypeError = global.TypeError;
 var process = global.process;
@@ -4677,7 +4660,7 @@ var USE_NATIVE = !!function () {
   try {
     // correct subclassing with @@species support
     var promise = $Promise.resolve(1);
-    var FakePromise = (promise.constructor = {})[interopDefault(require$$0$3)('species')] = function (exec) {
+    var FakePromise = (promise.constructor = {})[interopDefault(require$$0$2)('species')] = function (exec) {
       exec(empty, empty);
     };
     // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
@@ -4686,12 +4669,6 @@ var USE_NATIVE = !!function () {
 }();
 
 // helpers
-var sameConstructor = LIBRARY ? function (a, b) {
-  // with library wrapper special case
-  return a === b || a === $Promise && b === Wrapper;
-} : function (a, b) {
-  return a === b;
-};
 var isThenable = function (it) {
   var then;
   return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
@@ -4863,15 +4840,15 @@ if (!USE_NATIVE) {
     this.reject = ctx($reject, promise, 1);
   };
   newPromiseCapabilityModule.f = newPromiseCapability = function (C) {
-    return sameConstructor($Promise, C)
+    return C === $Promise || C === Wrapper
       ? new OwnPromiseCapability(C)
       : newGenericPromiseCapability(C);
   };
 }
 
 $export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
-interopDefault(require$$0$2)($Promise, PROMISE);
-interopDefault(require$$0$36)(PROMISE);
+interopDefault(require$$0$1)($Promise, PROMISE);
+interopDefault(require$$0$35)(PROMISE);
 Wrapper = interopDefault(require$$0)[PROMISE];
 
 // statics
@@ -4887,9 +4864,7 @@ $export($export.S + $export.F * !USE_NATIVE, PROMISE, {
 $export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
   // 25.4.4.6 Promise.resolve(x)
   resolve: function resolve(x) {
-    // instanceof instead of internal slot check because we should fix it without replacement native Promise core
-    if (x instanceof $Promise && sameConstructor(x.constructor, this)) return x;
-    return promiseResolve(this, x);
+    return promiseResolve(LIBRARY && this === Wrapper ? $Promise : this, x);
   }
 });
 $export($export.S + $export.F * !(USE_NATIVE && interopDefault(require$$5$5)(function (iter) {
@@ -4951,24 +4926,24 @@ module.exports = function (it, TYPE) {
 var _validateCollection$1 = interopDefault(_validateCollection);
 
 
-var require$$1$24 = Object.freeze({
+var require$$1$23 = Object.freeze({
   default: _validateCollection$1
 });
 
 var _collectionStrong = createCommonjsModule(function (module) {
 'use strict';
 var dP = interopDefault(require$$2$1).f;
-var create = interopDefault(require$$6);
+var create = interopDefault(require$$6$1);
 var redefineAll = interopDefault(require$$3$6);
 var ctx = interopDefault(require$$1$4);
-var anInstance = interopDefault(require$$4$7);
-var forOf = interopDefault(require$$1$21);
+var anInstance = interopDefault(require$$4$8);
+var forOf = interopDefault(require$$1$20);
 var $iterDefine = interopDefault(require$$5$4);
-var step = interopDefault(require$$4$6);
-var setSpecies = interopDefault(require$$0$36);
+var step = interopDefault(require$$4$7);
+var setSpecies = interopDefault(require$$0$35);
 var DESCRIPTORS = interopDefault(require$$1);
 var fastKey = interopDefault(require$$7).fastKey;
-var validate = interopDefault(require$$1$24);
+var validate = interopDefault(require$$1$23);
 var SIZE = DESCRIPTORS ? '_s' : 'size';
 
 var getEntry = function (that, key) {
@@ -5123,13 +5098,13 @@ var $export = interopDefault(require$$1$2);
 var redefine = interopDefault(require$$4$2);
 var redefineAll = interopDefault(require$$3$6);
 var meta = interopDefault(require$$7);
-var forOf = interopDefault(require$$1$21);
-var anInstance = interopDefault(require$$4$7);
+var forOf = interopDefault(require$$1$20);
+var anInstance = interopDefault(require$$4$8);
 var isObject = interopDefault(require$$3$1);
 var fails = interopDefault(require$$1$1);
 var $iterDetect = interopDefault(require$$5$5);
-var setToStringTag = interopDefault(require$$0$2);
-var inheritIfRequired = interopDefault(require$$0$19);
+var setToStringTag = interopDefault(require$$0$1);
+var inheritIfRequired = interopDefault(require$$0$18);
 
 module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
   var Base = global[NAME];
@@ -5207,18 +5182,18 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 var _collection$1 = interopDefault(_collection);
 
 
-var require$$0$40 = Object.freeze({
+var require$$0$39 = Object.freeze({
   default: _collection$1
 });
 
 var es6_map = createCommonjsModule(function (module) {
 'use strict';
 var strong = interopDefault(require$$2$10);
-var validate = interopDefault(require$$1$24);
+var validate = interopDefault(require$$1$23);
 var MAP = 'Map';
 
 // 23.1 Map Objects
-module.exports = interopDefault(require$$0$40)(MAP, function (get) {
+module.exports = interopDefault(require$$0$39)(MAP, function (get) {
   return function Map() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.1.3.6 Map.prototype.get(key)
@@ -5243,11 +5218,11 @@ var require$$3$7 = Object.freeze({
 var es6_set = createCommonjsModule(function (module) {
 'use strict';
 var strong = interopDefault(require$$2$10);
-var validate = interopDefault(require$$1$24);
+var validate = interopDefault(require$$1$23);
 var SET = 'Set';
 
 // 23.2 Set Objects
-module.exports = interopDefault(require$$0$40)(SET, function (get) {
+module.exports = interopDefault(require$$0$39)(SET, function (get) {
   return function Set() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.2.3.1 Set.prototype.add(value)
@@ -5260,7 +5235,7 @@ module.exports = interopDefault(require$$0$40)(SET, function (get) {
 var es6_set$1 = interopDefault(es6_set);
 
 
-var require$$4$8 = Object.freeze({
+var require$$4$9 = Object.freeze({
   default: es6_set$1
 });
 
@@ -5270,11 +5245,11 @@ var redefineAll = interopDefault(require$$3$6);
 var getWeak = interopDefault(require$$7).getWeak;
 var anObject = interopDefault(require$$5);
 var isObject = interopDefault(require$$3$1);
-var anInstance = interopDefault(require$$4$7);
-var forOf = interopDefault(require$$1$21);
+var anInstance = interopDefault(require$$4$8);
+var forOf = interopDefault(require$$1$20);
 var createArrayMethod = interopDefault(require$$10);
 var $has = interopDefault(require$$4);
-var validate = interopDefault(require$$1$24);
+var validate = interopDefault(require$$1$23);
 var arrayFind = createArrayMethod(5);
 var arrayFindIndex = createArrayMethod(6);
 var id = 0;
@@ -5373,7 +5348,7 @@ var assign = interopDefault(require$$5$3);
 var weak = interopDefault(require$$2$11);
 var isObject = interopDefault(require$$3$1);
 var fails = interopDefault(require$$1$1);
-var validate = interopDefault(require$$1$24);
+var validate = interopDefault(require$$1$23);
 var WEAK_MAP = 'WeakMap';
 var getWeak = meta.getWeak;
 var isExtensible = Object.isExtensible;
@@ -5403,7 +5378,7 @@ var methods = {
 };
 
 // 23.3 WeakMap Objects
-var $WeakMap = module.exports = interopDefault(require$$0$40)(WEAK_MAP, wrapper, methods, weak, true, true);
+var $WeakMap = module.exports = interopDefault(require$$0$39)(WEAK_MAP, wrapper, methods, weak, true, true);
 
 // IE11 WeakMap frozen keys fix
 if (fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7; })) {
@@ -5429,18 +5404,18 @@ if (fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp)
 var es6_weakMap$1 = interopDefault(es6_weakMap);
 
 
-var require$$0$41 = Object.freeze({
+var require$$0$40 = Object.freeze({
   default: es6_weakMap$1
 });
 
 var es6_weakSet = createCommonjsModule(function (module) {
 'use strict';
 var weak = interopDefault(require$$2$11);
-var validate = interopDefault(require$$1$24);
+var validate = interopDefault(require$$1$23);
 var WEAK_SET = 'WeakSet';
 
 // 23.4 WeakSet Objects
-interopDefault(require$$0$40)(WEAK_SET, function (get) {
+interopDefault(require$$0$39)(WEAK_SET, function (get) {
   return function WeakSet() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.4.3.1 WeakSet.prototype.add(value)
@@ -5526,14 +5501,14 @@ var $typed = interopDefault(require$$33);
 var hide = interopDefault(require$$2);
 var redefineAll = interopDefault(require$$3$6);
 var fails = interopDefault(require$$1$1);
-var anInstance = interopDefault(require$$4$7);
+var anInstance = interopDefault(require$$4$8);
 var toInteger = interopDefault(require$$2$5);
 var toLength = interopDefault(require$$3$2);
 var toIndex = interopDefault(require$$24);
 var gOPN = interopDefault(require$$3$4).f;
 var dP = interopDefault(require$$2$1).f;
 var arrayFill = interopDefault(require$$3$5);
-var setToStringTag = interopDefault(require$$0$2);
+var setToStringTag = interopDefault(require$$0$1);
 var ARRAY_BUFFER = 'ArrayBuffer';
 var DATA_VIEW = 'DataView';
 var PROTOTYPE = 'prototype';
@@ -5813,7 +5788,7 @@ var toAbsoluteIndex = interopDefault(require$$23);
 var toLength = interopDefault(require$$3$2);
 var isObject = interopDefault(require$$3$1);
 var ArrayBuffer = interopDefault(require$$3).ArrayBuffer;
-var speciesConstructor = interopDefault(require$$1$22);
+var speciesConstructor = interopDefault(require$$1$21);
 var $ArrayBuffer = buffer.ArrayBuffer;
 var $DataView = buffer.DataView;
 var $isView = $typed.ABV && ArrayBuffer.isView;
@@ -5849,7 +5824,7 @@ $export($export.P + $export.U + $export.F * interopDefault(require$$1$1)(functio
   }
 });
 
-interopDefault(require$$0$36)(ARRAY_BUFFER);
+interopDefault(require$$0$35)(ARRAY_BUFFER);
 });
 
 interopDefault(es6_typed_arrayBuffer);
@@ -5873,7 +5848,7 @@ if (interopDefault(require$$1)) {
   var $typed = interopDefault(require$$33);
   var $buffer = interopDefault(require$$32);
   var ctx = interopDefault(require$$1$4);
-  var anInstance = interopDefault(require$$4$7);
+  var anInstance = interopDefault(require$$4$8);
   var propertyDesc = interopDefault(require$$2$3);
   var hide = interopDefault(require$$2);
   var redefineAll = interopDefault(require$$3$6);
@@ -5887,19 +5862,19 @@ if (interopDefault(require$$1)) {
   var isObject = interopDefault(require$$3$1);
   var toObject = interopDefault(require$$5$2);
   var isArrayIter = interopDefault(require$$17);
-  var create = interopDefault(require$$6);
-  var getPrototypeOf = interopDefault(require$$0$12);
+  var create = interopDefault(require$$6$1);
+  var getPrototypeOf = interopDefault(require$$0$11);
   var gOPN = interopDefault(require$$3$4).f;
   var getIterFn = interopDefault(require$$13);
   var uid = interopDefault(require$$12);
-  var wks = interopDefault(require$$0$3);
+  var wks = interopDefault(require$$0$2);
   var createArrayMethod = interopDefault(require$$10);
   var createArrayIncludes = interopDefault(require$$1$10);
-  var speciesConstructor = interopDefault(require$$1$22);
-  var ArrayIterators = interopDefault(require$$6$1);
-  var Iterators = interopDefault(require$$1$15);
+  var speciesConstructor = interopDefault(require$$1$21);
+  var ArrayIterators = interopDefault(require$$6$2);
+  var Iterators = interopDefault(require$$1$14);
   var $iterDetect = interopDefault(require$$5$5);
-  var setSpecies = interopDefault(require$$0$36);
+  var setSpecies = interopDefault(require$$0$35);
   var arrayFill = interopDefault(require$$3$5);
   var arrayCopyWithin = interopDefault(require$$2$9);
   var $DP = interopDefault(require$$2$1);
@@ -6349,12 +6324,12 @@ if (interopDefault(require$$1)) {
 var _typedArray$1 = interopDefault(_typedArray);
 
 
-var require$$0$42 = Object.freeze({
+var require$$0$41 = Object.freeze({
   default: _typedArray$1
 });
 
 var es6_typed_int8Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Int8', 1, function (init) {
+interopDefault(require$$0$41)('Int8', 1, function (init) {
   return function Int8Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6364,7 +6339,7 @@ interopDefault(require$$0$42)('Int8', 1, function (init) {
 interopDefault(es6_typed_int8Array);
 
 var es6_typed_uint8Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Uint8', 1, function (init) {
+interopDefault(require$$0$41)('Uint8', 1, function (init) {
   return function Uint8Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6374,7 +6349,7 @@ interopDefault(require$$0$42)('Uint8', 1, function (init) {
 interopDefault(es6_typed_uint8Array);
 
 var es6_typed_uint8ClampedArray = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Uint8', 1, function (init) {
+interopDefault(require$$0$41)('Uint8', 1, function (init) {
   return function Uint8ClampedArray(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6384,7 +6359,7 @@ interopDefault(require$$0$42)('Uint8', 1, function (init) {
 interopDefault(es6_typed_uint8ClampedArray);
 
 var es6_typed_int16Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Int16', 2, function (init) {
+interopDefault(require$$0$41)('Int16', 2, function (init) {
   return function Int16Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6394,7 +6369,7 @@ interopDefault(require$$0$42)('Int16', 2, function (init) {
 interopDefault(es6_typed_int16Array);
 
 var es6_typed_uint16Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Uint16', 2, function (init) {
+interopDefault(require$$0$41)('Uint16', 2, function (init) {
   return function Uint16Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6404,7 +6379,7 @@ interopDefault(require$$0$42)('Uint16', 2, function (init) {
 interopDefault(es6_typed_uint16Array);
 
 var es6_typed_int32Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Int32', 4, function (init) {
+interopDefault(require$$0$41)('Int32', 4, function (init) {
   return function Int32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6414,7 +6389,7 @@ interopDefault(require$$0$42)('Int32', 4, function (init) {
 interopDefault(es6_typed_int32Array);
 
 var es6_typed_uint32Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Uint32', 4, function (init) {
+interopDefault(require$$0$41)('Uint32', 4, function (init) {
   return function Uint32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6424,7 +6399,7 @@ interopDefault(require$$0$42)('Uint32', 4, function (init) {
 interopDefault(es6_typed_uint32Array);
 
 var es6_typed_float32Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Float32', 4, function (init) {
+interopDefault(require$$0$41)('Float32', 4, function (init) {
   return function Float32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6434,7 +6409,7 @@ interopDefault(require$$0$42)('Float32', 4, function (init) {
 interopDefault(es6_typed_float32Array);
 
 var es6_typed_float64Array = createCommonjsModule(function (module) {
-interopDefault(require$$0$42)('Float64', 8, function (init) {
+interopDefault(require$$0$41)('Float64', 8, function (init) {
   return function Float64Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -6446,7 +6421,7 @@ interopDefault(es6_typed_float64Array);
 var es6_reflect_apply = createCommonjsModule(function (module) {
 // 26.1.1 Reflect.apply(target, thisArgument, argumentsList)
 var $export = interopDefault(require$$1$2);
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var anObject = interopDefault(require$$5);
 var rApply = (interopDefault(require$$3).Reflect || {}).apply;
 var fApply = Function.apply;
@@ -6467,8 +6442,8 @@ interopDefault(es6_reflect_apply);
 var es6_reflect_construct = createCommonjsModule(function (module) {
 // 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
 var $export = interopDefault(require$$1$2);
-var create = interopDefault(require$$6);
-var aFunction = interopDefault(require$$0$1);
+var create = interopDefault(require$$6$1);
+var aFunction = interopDefault(require$$6);
 var anObject = interopDefault(require$$5);
 var isObject = interopDefault(require$$3$1);
 var fails = interopDefault(require$$1$1);
@@ -6572,7 +6547,7 @@ var Enumerate = function (iterated) {
   var key;
   for (key in iterated) keys.push(key);
 };
-interopDefault(require$$0$27)(Enumerate, 'Object', function () {
+interopDefault(require$$0$26)(Enumerate, 'Object', function () {
   var that = this;
   var keys = that._k;
   var key;
@@ -6594,7 +6569,7 @@ interopDefault(es6_reflect_enumerate);
 var es6_reflect_get = createCommonjsModule(function (module) {
 // 26.1.6 Reflect.get(target, propertyKey [, receiver])
 var gOPD = interopDefault(require$$2$7);
-var getPrototypeOf = interopDefault(require$$0$12);
+var getPrototypeOf = interopDefault(require$$0$11);
 var has = interopDefault(require$$4);
 var $export = interopDefault(require$$1$2);
 var isObject = interopDefault(require$$3$1);
@@ -6635,7 +6610,7 @@ interopDefault(es6_reflect_getOwnPropertyDescriptor);
 var es6_reflect_getPrototypeOf = createCommonjsModule(function (module) {
 // 26.1.8 Reflect.getPrototypeOf(target)
 var $export = interopDefault(require$$1$2);
-var getProto = interopDefault(require$$0$12);
+var getProto = interopDefault(require$$0$11);
 var anObject = interopDefault(require$$5);
 
 $export($export.S, 'Reflect', {
@@ -6730,7 +6705,7 @@ var es6_reflect_set = createCommonjsModule(function (module) {
 // 26.1.13 Reflect.set(target, propertyKey, V [, receiver])
 var dP = interopDefault(require$$2$1);
 var gOPD = interopDefault(require$$2$7);
-var getPrototypeOf = interopDefault(require$$0$12);
+var getPrototypeOf = interopDefault(require$$0$11);
 var has = interopDefault(require$$4);
 var $export = interopDefault(require$$1$2);
 var createDesc = interopDefault(require$$2$3);
@@ -6765,7 +6740,7 @@ interopDefault(es6_reflect_set);
 var es6_reflect_setPrototypeOf = createCommonjsModule(function (module) {
 // 26.1.14 Reflect.setPrototypeOf(target, proto)
 var $export = interopDefault(require$$1$2);
-var setProto = interopDefault(require$$0$14);
+var setProto = interopDefault(require$$0$13);
 
 if (setProto) $export($export.S, 'Reflect', {
   setPrototypeOf: function setPrototypeOf(target, proto) {
@@ -6794,7 +6769,7 @@ $export($export.P, 'Array', {
   }
 });
 
-interopDefault(require$$0$35)('includes');
+interopDefault(require$$0$34)('includes');
 });
 
 interopDefault(es7_array_includes);
@@ -6806,7 +6781,7 @@ var isArray = interopDefault(require$$4$4);
 var isObject = interopDefault(require$$3$1);
 var toLength = interopDefault(require$$3$2);
 var ctx = interopDefault(require$$1$4);
-var IS_CONCAT_SPREADABLE = interopDefault(require$$0$3)('isConcatSpreadable');
+var IS_CONCAT_SPREADABLE = interopDefault(require$$0$2)('isConcatSpreadable');
 
 function flattenIntoArray(target, original, source, sourceLen, start, depth, mapper, thisArg) {
   var targetIndex = start;
@@ -6855,8 +6830,8 @@ var $export = interopDefault(require$$1$2);
 var flattenIntoArray = interopDefault(require$$5$6);
 var toObject = interopDefault(require$$5$2);
 var toLength = interopDefault(require$$3$2);
-var aFunction = interopDefault(require$$0$1);
-var arraySpeciesCreate = interopDefault(require$$1$17);
+var aFunction = interopDefault(require$$6);
+var arraySpeciesCreate = interopDefault(require$$1$16);
 
 $export($export.P, 'Array', {
   flatMap: function flatMap(callbackfn /* , thisArg */) {
@@ -6870,7 +6845,7 @@ $export($export.P, 'Array', {
   }
 });
 
-interopDefault(require$$0$35)('flatMap');
+interopDefault(require$$0$34)('flatMap');
 });
 
 interopDefault(es7_array_flatMap);
@@ -6883,7 +6858,7 @@ var flattenIntoArray = interopDefault(require$$5$6);
 var toObject = interopDefault(require$$5$2);
 var toLength = interopDefault(require$$3$2);
 var toInteger = interopDefault(require$$2$5);
-var arraySpeciesCreate = interopDefault(require$$1$17);
+var arraySpeciesCreate = interopDefault(require$$1$16);
 
 $export($export.P, 'Array', {
   flatten: function flatten(/* depthArg = 1 */) {
@@ -6896,7 +6871,7 @@ $export($export.P, 'Array', {
   }
 });
 
-interopDefault(require$$0$35)('flatten');
+interopDefault(require$$0$34)('flatten');
 });
 
 interopDefault(es7_array_flatten);
@@ -6905,7 +6880,7 @@ var es7_string_at = createCommonjsModule(function (module) {
 'use strict';
 // https://github.com/mathiasbynens/String.prototype.at
 var $export = interopDefault(require$$1$2);
-var $at = interopDefault(require$$0$26)(true);
+var $at = interopDefault(require$$0$25)(true);
 
 $export($export.P, 'String', {
   at: function at(pos) {
@@ -6919,7 +6894,7 @@ interopDefault(es7_string_at);
 var _stringPad = createCommonjsModule(function (module) {
 // https://github.com/tc39/proposal-string-pad-start-end
 var toLength = interopDefault(require$$3$2);
-var repeat = interopDefault(require$$1$14);
+var repeat = interopDefault(require$$1$13);
 var defined = interopDefault(require$$4$3);
 
 module.exports = function (that, maxLength, fillString, left) {
@@ -6938,7 +6913,7 @@ module.exports = function (that, maxLength, fillString, left) {
 var _stringPad$1 = interopDefault(_stringPad);
 
 
-var require$$0$43 = Object.freeze({
+var require$$0$42 = Object.freeze({
   default: _stringPad$1
 });
 
@@ -6946,7 +6921,7 @@ var es7_string_padStart = createCommonjsModule(function (module) {
 'use strict';
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = interopDefault(require$$1$2);
-var $pad = interopDefault(require$$0$43);
+var $pad = interopDefault(require$$0$42);
 
 $export($export.P, 'String', {
   padStart: function padStart(maxLength /* , fillString = ' ' */) {
@@ -6961,7 +6936,7 @@ var es7_string_padEnd = createCommonjsModule(function (module) {
 'use strict';
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = interopDefault(require$$1$2);
-var $pad = interopDefault(require$$0$43);
+var $pad = interopDefault(require$$0$42);
 
 $export($export.P, 'String', {
   padEnd: function padEnd(maxLength /* , fillString = ' ' */) {
@@ -6975,7 +6950,7 @@ interopDefault(es7_string_padEnd);
 var es7_string_trimLeft = createCommonjsModule(function (module) {
 'use strict';
 // https://github.com/sebmarkbage/ecmascript-string-left-right-trim
-interopDefault(require$$0$16)('trimLeft', function ($trim) {
+interopDefault(require$$0$15)('trimLeft', function ($trim) {
   return function trimLeft() {
     return $trim(this, 1);
   };
@@ -6987,7 +6962,7 @@ interopDefault(es7_string_trimLeft);
 var es7_string_trimRight = createCommonjsModule(function (module) {
 'use strict';
 // https://github.com/sebmarkbage/ecmascript-string-left-right-trim
-interopDefault(require$$0$16)('trimRight', function ($trim) {
+interopDefault(require$$0$15)('trimRight', function ($trim) {
   return function trimRight() {
     return $trim(this, 2);
   };
@@ -7003,7 +6978,7 @@ var $export = interopDefault(require$$1$2);
 var defined = interopDefault(require$$4$3);
 var toLength = interopDefault(require$$3$2);
 var isRegExp = interopDefault(require$$2$8);
-var getFlags = interopDefault(require$$1$19);
+var getFlags = interopDefault(require$$1$18);
 var RegExpProto = RegExp.prototype;
 
 var $RegExpStringIterator = function (regexp, string) {
@@ -7011,7 +6986,7 @@ var $RegExpStringIterator = function (regexp, string) {
   this._s = string;
 };
 
-interopDefault(require$$0$27)($RegExpStringIterator, 'RegExp String', function next() {
+interopDefault(require$$0$26)($RegExpStringIterator, 'RegExp String', function next() {
   var match = this._r.exec(this._s);
   return { value: match, done: match === null };
 });
@@ -7032,13 +7007,13 @@ $export($export.P, 'String', {
 interopDefault(es7_string_matchAll);
 
 var es7_symbol_asyncIterator = createCommonjsModule(function (module) {
-interopDefault(require$$0$4)('asyncIterator');
+interopDefault(require$$0$3)('asyncIterator');
 });
 
 interopDefault(es7_symbol_asyncIterator);
 
 var es7_symbol_observable = createCommonjsModule(function (module) {
-interopDefault(require$$0$4)('observable');
+interopDefault(require$$0$3)('observable');
 });
 
 interopDefault(es7_symbol_observable);
@@ -7049,7 +7024,7 @@ var $export = interopDefault(require$$1$2);
 var ownKeys = interopDefault(require$$3$8);
 var toIObject = interopDefault(require$$1$8);
 var gOPD = interopDefault(require$$2$7);
-var createProperty = interopDefault(require$$0$32);
+var createProperty = interopDefault(require$$0$31);
 
 $export($export.S, 'Object', {
   getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object) {
@@ -7073,7 +7048,7 @@ interopDefault(es7_object_getOwnPropertyDescriptors);
 var _objectToArray = createCommonjsModule(function (module) {
 var getKeys = interopDefault(require$$5$1);
 var toIObject = interopDefault(require$$1$8);
-var isEnum = interopDefault(require$$0$8).f;
+var isEnum = interopDefault(require$$0$7).f;
 module.exports = function (isEntries) {
   return function (it) {
     var O = toIObject(it);
@@ -7092,14 +7067,14 @@ module.exports = function (isEntries) {
 var _objectToArray$1 = interopDefault(_objectToArray);
 
 
-var require$$0$44 = Object.freeze({
+var require$$0$43 = Object.freeze({
   default: _objectToArray$1
 });
 
 var es7_object_values = createCommonjsModule(function (module) {
 // https://github.com/tc39/proposal-object-values-entries
 var $export = interopDefault(require$$1$2);
-var $values = interopDefault(require$$0$44)(false);
+var $values = interopDefault(require$$0$43)(false);
 
 $export($export.S, 'Object', {
   values: function values(it) {
@@ -7113,7 +7088,7 @@ interopDefault(es7_object_values);
 var es7_object_entries = createCommonjsModule(function (module) {
 // https://github.com/tc39/proposal-object-values-entries
 var $export = interopDefault(require$$1$2);
-var $entries = interopDefault(require$$0$44)(true);
+var $entries = interopDefault(require$$0$43)(true);
 
 $export($export.S, 'Object', {
   entries: function entries(it) {
@@ -7139,7 +7114,7 @@ module.exports = interopDefault(require$$2$4) || !interopDefault(require$$1$1)(f
 var _objectForcedPam$1 = interopDefault(_objectForcedPam);
 
 
-var require$$0$45 = Object.freeze({
+var require$$0$44 = Object.freeze({
   default: _objectForcedPam$1
 });
 
@@ -7147,11 +7122,11 @@ var es7_object_defineGetter = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var toObject = interopDefault(require$$5$2);
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var $defineProperty = interopDefault(require$$2$1);
 
 // B.2.2.2 Object.prototype.__defineGetter__(P, getter)
-interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$45), 'Object', {
+interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$44), 'Object', {
   __defineGetter__: function __defineGetter__(P, getter) {
     $defineProperty.f(toObject(this), P, { get: aFunction(getter), enumerable: true, configurable: true });
   }
@@ -7164,11 +7139,11 @@ var es7_object_defineSetter = createCommonjsModule(function (module) {
 'use strict';
 var $export = interopDefault(require$$1$2);
 var toObject = interopDefault(require$$5$2);
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var $defineProperty = interopDefault(require$$2$1);
 
 // B.2.2.3 Object.prototype.__defineSetter__(P, setter)
-interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$45), 'Object', {
+interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$44), 'Object', {
   __defineSetter__: function __defineSetter__(P, setter) {
     $defineProperty.f(toObject(this), P, { set: aFunction(setter), enumerable: true, configurable: true });
   }
@@ -7182,11 +7157,11 @@ var es7_object_lookupGetter = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var toObject = interopDefault(require$$5$2);
 var toPrimitive = interopDefault(require$$4$1);
-var getPrototypeOf = interopDefault(require$$0$12);
+var getPrototypeOf = interopDefault(require$$0$11);
 var getOwnPropertyDescriptor = interopDefault(require$$2$7).f;
 
 // B.2.2.4 Object.prototype.__lookupGetter__(P)
-interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$45), 'Object', {
+interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$44), 'Object', {
   __lookupGetter__: function __lookupGetter__(P) {
     var O = toObject(this);
     var K = toPrimitive(P, true);
@@ -7205,11 +7180,11 @@ var es7_object_lookupSetter = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var toObject = interopDefault(require$$5$2);
 var toPrimitive = interopDefault(require$$4$1);
-var getPrototypeOf = interopDefault(require$$0$12);
+var getPrototypeOf = interopDefault(require$$0$11);
 var getOwnPropertyDescriptor = interopDefault(require$$2$7).f;
 
 // B.2.2.5 Object.prototype.__lookupSetter__(P)
-interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$45), 'Object', {
+interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$44), 'Object', {
   __lookupSetter__: function __lookupSetter__(P) {
     var O = toObject(this);
     var K = toPrimitive(P, true);
@@ -7224,7 +7199,7 @@ interopDefault(require$$1) && $export($export.P + interopDefault(require$$0$45),
 interopDefault(es7_object_lookupSetter);
 
 var _arrayFromIterable = createCommonjsModule(function (module) {
-var forOf = interopDefault(require$$1$21);
+var forOf = interopDefault(require$$1$20);
 
 module.exports = function (iter, ITERATOR) {
   var result = [];
@@ -7255,7 +7230,7 @@ module.exports = function (NAME) {
 var _collectionToJson$1 = interopDefault(_collectionToJson);
 
 
-var require$$0$46 = Object.freeze({
+var require$$0$45 = Object.freeze({
   default: _collectionToJson$1
 });
 
@@ -7263,7 +7238,7 @@ var es7_map_toJson = createCommonjsModule(function (module) {
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var $export = interopDefault(require$$1$2);
 
-$export($export.P + $export.R, 'Map', { toJSON: interopDefault(require$$0$46)('Map') });
+$export($export.P + $export.R, 'Map', { toJSON: interopDefault(require$$0$45)('Map') });
 });
 
 interopDefault(es7_map_toJson);
@@ -7272,7 +7247,7 @@ var es7_set_toJson = createCommonjsModule(function (module) {
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var $export = interopDefault(require$$1$2);
 
-$export($export.P + $export.R, 'Set', { toJSON: interopDefault(require$$0$46)('Set') });
+$export($export.P + $export.R, 'Set', { toJSON: interopDefault(require$$0$45)('Set') });
 });
 
 interopDefault(es7_set_toJson);
@@ -7295,34 +7270,34 @@ module.exports = function (COLLECTION) {
 var _setCollectionOf$1 = interopDefault(_setCollectionOf);
 
 
-var require$$0$47 = Object.freeze({
+var require$$0$46 = Object.freeze({
   default: _setCollectionOf$1
 });
 
 var es7_map_of = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-map.of
-interopDefault(require$$0$47)('Map');
+interopDefault(require$$0$46)('Map');
 });
 
 interopDefault(es7_map_of);
 
 var es7_set_of = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-set.of
-interopDefault(require$$0$47)('Set');
+interopDefault(require$$0$46)('Set');
 });
 
 interopDefault(es7_set_of);
 
 var es7_weakMap_of = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakmap.of
-interopDefault(require$$0$47)('WeakMap');
+interopDefault(require$$0$46)('WeakMap');
 });
 
 interopDefault(es7_weakMap_of);
 
 var es7_weakSet_of = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakset.of
-interopDefault(require$$0$47)('WeakSet');
+interopDefault(require$$0$46)('WeakSet');
 });
 
 interopDefault(es7_weakSet_of);
@@ -7331,9 +7306,9 @@ var _setCollectionFrom = createCommonjsModule(function (module) {
 'use strict';
 // https://tc39.github.io/proposal-setmap-offrom/
 var $export = interopDefault(require$$1$2);
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var ctx = interopDefault(require$$1$4);
-var forOf = interopDefault(require$$1$21);
+var forOf = interopDefault(require$$1$20);
 
 module.exports = function (COLLECTION) {
   $export($export.S, COLLECTION, { from: function from(source /* , mapFn, thisArg */) {
@@ -7361,34 +7336,34 @@ module.exports = function (COLLECTION) {
 var _setCollectionFrom$1 = interopDefault(_setCollectionFrom);
 
 
-var require$$0$48 = Object.freeze({
+var require$$0$47 = Object.freeze({
   default: _setCollectionFrom$1
 });
 
 var es7_map_from = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-map.from
-interopDefault(require$$0$48)('Map');
+interopDefault(require$$0$47)('Map');
 });
 
 interopDefault(es7_map_from);
 
 var es7_set_from = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-set.from
-interopDefault(require$$0$48)('Set');
+interopDefault(require$$0$47)('Set');
 });
 
 interopDefault(es7_set_from);
 
 var es7_weakMap_from = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakmap.from
-interopDefault(require$$0$48)('WeakMap');
+interopDefault(require$$0$47)('WeakMap');
 });
 
 interopDefault(es7_weakMap_from);
 
 var es7_weakSet_from = createCommonjsModule(function (module) {
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakset.from
-interopDefault(require$$0$48)('WeakSet');
+interopDefault(require$$0$47)('WeakSet');
 });
 
 interopDefault(es7_weakSet_from);
@@ -7414,7 +7389,7 @@ interopDefault(es7_system_global);
 var es7_error_isError = createCommonjsModule(function (module) {
 // https://github.com/ljharb/proposal-is-error
 var $export = interopDefault(require$$1$2);
-var cof = interopDefault(require$$0$5);
+var cof = interopDefault(require$$0$4);
 
 $export($export.S, 'Error', {
   isError: function isError(it) {
@@ -7485,15 +7460,15 @@ module.exports = Math.scale || function scale(x, inLow, inHigh, outLow, outHigh)
 var _mathScale$1 = interopDefault(_mathScale);
 
 
-var require$$0$49 = Object.freeze({
+var require$$0$48 = Object.freeze({
   default: _mathScale$1
 });
 
 var es7_math_fscale = createCommonjsModule(function (module) {
 // https://rwaldron.github.io/proposal-math-extensions/
 var $export = interopDefault(require$$1$2);
-var scale = interopDefault(require$$0$49);
-var fround = interopDefault(require$$0$25);
+var scale = interopDefault(require$$0$48);
+var fround = interopDefault(require$$0$24);
 
 $export($export.S, 'Math', {
   fscale: function fscale(x, inLow, inHigh, outLow, outHigh) {
@@ -7584,7 +7559,7 @@ var es7_math_scale = createCommonjsModule(function (module) {
 // https://rwaldron.github.io/proposal-math-extensions/
 var $export = interopDefault(require$$1$2);
 
-$export($export.S, 'Math', { scale: interopDefault(require$$0$49) });
+$export($export.S, 'Math', { scale: interopDefault(require$$0$48) });
 });
 
 interopDefault(es7_math_scale);
@@ -7628,8 +7603,8 @@ var es7_promise_finally = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var core = interopDefault(require$$0);
 var global = interopDefault(require$$3);
-var speciesConstructor = interopDefault(require$$1$22);
-var promiseResolve = interopDefault(require$$0$39);
+var speciesConstructor = interopDefault(require$$1$21);
+var promiseResolve = interopDefault(require$$0$38);
 
 $export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
   var C = speciesConstructor(this, core.Promise || global.Promise);
@@ -7651,8 +7626,8 @@ var es7_promise_try = createCommonjsModule(function (module) {
 'use strict';
 // https://github.com/tc39/proposal-promise-try
 var $export = interopDefault(require$$1$2);
-var newPromiseCapability = interopDefault(require$$1$23);
-var perform = interopDefault(require$$0$38);
+var newPromiseCapability = interopDefault(require$$1$22);
+var perform = interopDefault(require$$0$37);
 
 $export($export.S, 'Promise', { 'try': function (callbackfn) {
   var promiseCapability = newPromiseCapability.f(this);
@@ -7668,7 +7643,7 @@ var _metadata = createCommonjsModule(function (module) {
 var Map = interopDefault(require$$3$7);
 var $export = interopDefault(require$$1$2);
 var shared = interopDefault(require$$1$5)('metadata');
-var store = shared.store || (shared.store = new (interopDefault(require$$0$41))());
+var store = shared.store || (shared.store = new (interopDefault(require$$0$40))());
 
 var getOrCreateMetadataMap = function (target, targetKey, create) {
   var targetMetadata = store.get(target);
@@ -7776,7 +7751,7 @@ interopDefault(es7_reflect_deleteMetadata);
 var es7_reflect_getMetadata = createCommonjsModule(function (module) {
 var metadata = interopDefault(require$$2$12);
 var anObject = interopDefault(require$$5);
-var getPrototypeOf = interopDefault(require$$0$12);
+var getPrototypeOf = interopDefault(require$$0$11);
 var ordinaryHasOwnMetadata = metadata.has;
 var ordinaryGetOwnMetadata = metadata.get;
 var toMetaKey = metadata.key;
@@ -7796,11 +7771,11 @@ metadata.exp({ getMetadata: function getMetadata(metadataKey, target /* , target
 interopDefault(es7_reflect_getMetadata);
 
 var es7_reflect_getMetadataKeys = createCommonjsModule(function (module) {
-var Set = interopDefault(require$$4$8);
+var Set = interopDefault(require$$4$9);
 var from = interopDefault(require$$3$9);
 var metadata = interopDefault(require$$2$12);
 var anObject = interopDefault(require$$5);
-var getPrototypeOf = interopDefault(require$$0$12);
+var getPrototypeOf = interopDefault(require$$0$11);
 var ordinaryOwnMetadataKeys = metadata.keys;
 var toMetaKey = metadata.key;
 
@@ -7849,7 +7824,7 @@ interopDefault(es7_reflect_getOwnMetadataKeys);
 var es7_reflect_hasMetadata = createCommonjsModule(function (module) {
 var metadata = interopDefault(require$$2$12);
 var anObject = interopDefault(require$$5);
-var getPrototypeOf = interopDefault(require$$0$12);
+var getPrototypeOf = interopDefault(require$$0$11);
 var ordinaryHasOwnMetadata = metadata.has;
 var toMetaKey = metadata.key;
 
@@ -7884,7 +7859,7 @@ interopDefault(es7_reflect_hasOwnMetadata);
 var es7_reflect_metadata = createCommonjsModule(function (module) {
 var $metadata = interopDefault(require$$2$12);
 var anObject = interopDefault(require$$5);
-var aFunction = interopDefault(require$$0$1);
+var aFunction = interopDefault(require$$6);
 var toMetaKey = $metadata.key;
 var ordinaryDefineOwnMetadata = $metadata.set;
 
@@ -7906,7 +7881,7 @@ var es7_asap = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
 var microtask = interopDefault(require$$8)();
 var process = interopDefault(require$$3).process;
-var isNode = interopDefault(require$$0$5)(process) == 'process';
+var isNode = interopDefault(require$$0$4)(process) == 'process';
 
 $export($export.G, {
   asap: function asap(fn) {
@@ -7925,13 +7900,13 @@ var $export = interopDefault(require$$1$2);
 var global = interopDefault(require$$3);
 var core = interopDefault(require$$0);
 var microtask = interopDefault(require$$8)();
-var OBSERVABLE = interopDefault(require$$0$3)('observable');
-var aFunction = interopDefault(require$$0$1);
+var OBSERVABLE = interopDefault(require$$0$2)('observable');
+var aFunction = interopDefault(require$$6);
 var anObject = interopDefault(require$$5);
-var anInstance = interopDefault(require$$4$7);
+var anInstance = interopDefault(require$$4$8);
 var redefineAll = interopDefault(require$$3$6);
 var hide = interopDefault(require$$2);
-var forOf = interopDefault(require$$1$21);
+var forOf = interopDefault(require$$1$20);
 var RETURN = forOf.RETURN;
 
 var getMethod = function (fn) {
@@ -8117,74 +8092,27 @@ hide($Observable.prototype, OBSERVABLE, function () { return this; });
 
 $export($export.G, { Observable: $Observable });
 
-interopDefault(require$$0$36)('Observable');
+interopDefault(require$$0$35)('Observable');
 });
 
 interopDefault(es7_observable);
-
-var _path = createCommonjsModule(function (module) {
-module.exports = interopDefault(require$$3);
-});
-
-var _path$1 = interopDefault(_path);
-
-
-var require$$2$13 = Object.freeze({
-	default: _path$1
-});
-
-var _partial = createCommonjsModule(function (module) {
-'use strict';
-var path = interopDefault(require$$2$13);
-var invoke = interopDefault(require$$1$13);
-var aFunction = interopDefault(require$$0$1);
-module.exports = function (/* ...pargs */) {
-  var fn = aFunction(this);
-  var length = arguments.length;
-  var pargs = Array(length);
-  var i = 0;
-  var _ = path._;
-  var holder = false;
-  while (length > i) if ((pargs[i] = arguments[i++]) === _) holder = true;
-  return function (/* ...args */) {
-    var that = this;
-    var aLen = arguments.length;
-    var j = 0;
-    var k = 0;
-    var args;
-    if (!holder && !aLen) return invoke(fn, pargs, that);
-    args = pargs.slice();
-    if (holder) for (;length > j; j++) if (args[j] === _) args[j] = arguments[k++];
-    while (aLen > k) args.push(arguments[k++]);
-    return invoke(fn, args, that);
-  };
-};
-});
-
-var _partial$1 = interopDefault(_partial);
-
-
-var require$$0$50 = Object.freeze({
-  default: _partial$1
-});
 
 var web_timers = createCommonjsModule(function (module) {
 // ie9- setTimeout & setInterval additional parameters fix
 var global = interopDefault(require$$3);
 var $export = interopDefault(require$$1$2);
-var invoke = interopDefault(require$$1$13);
-var partial = interopDefault(require$$0$50);
 var navigator = global.navigator;
+var slice = [].slice;
 var MSIE = !!navigator && /MSIE .\./.test(navigator.userAgent); // <- dirty ie9- check
 var wrap = function (set) {
-  return MSIE ? function (fn, time /* , ...args */) {
-    return set(invoke(
-      partial,
-      [].slice.call(arguments, 2),
+  return function (fn, time /* , ...args */) {
+    var boundArgs = arguments.length > 2;
+    var args = boundArgs ? slice.call(arguments, 2) : false;
+    return set(boundArgs ? function () {
       // eslint-disable-next-line no-new-func
-      typeof fn == 'function' ? fn : Function(fn)
-    ), time);
-  } : set;
+      (typeof fn == 'function' ? fn : Function(fn)).apply(this, args);
+    } : fn, time);
+  };
 };
 $export($export.G + $export.B + $export.F * MSIE, {
   setTimeout: wrap(global.setTimeout),
@@ -8196,7 +8124,7 @@ interopDefault(web_timers);
 
 var web_immediate = createCommonjsModule(function (module) {
 var $export = interopDefault(require$$1$2);
-var $task = interopDefault(require$$0$37);
+var $task = interopDefault(require$$0$36);
 $export($export.G + $export.B, {
   setImmediate: $task.set,
   clearImmediate: $task.clear
@@ -8206,13 +8134,13 @@ $export($export.G + $export.B, {
 interopDefault(web_immediate);
 
 var web_dom_iterable = createCommonjsModule(function (module) {
-var $iterators = interopDefault(require$$6$1);
+var $iterators = interopDefault(require$$6$2);
 var getKeys = interopDefault(require$$5$1);
 var redefine = interopDefault(require$$4$2);
 var global = interopDefault(require$$3);
 var hide = interopDefault(require$$2);
-var Iterators = interopDefault(require$$1$15);
-var wks = interopDefault(require$$0$3);
+var Iterators = interopDefault(require$$1$14);
+var wks = interopDefault(require$$0$2);
 var ITERATOR = wks('iterator');
 var TO_STRING_TAG = wks('toStringTag');
 var ArrayValues = Iterators.Array;
@@ -9029,14 +8957,14 @@ module.exports = function (regExp, replace) {
 var _replacer$1 = interopDefault(_replacer);
 
 
-var require$$0$51 = Object.freeze({
+var require$$0$49 = Object.freeze({
   default: _replacer$1
 });
 
 var core_regexp_escape = createCommonjsModule(function (module) {
 // https://github.com/benjamingr/RexExp.escape
 var $export = interopDefault(require$$1$2);
-var $re = interopDefault(require$$0$51)(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+var $re = interopDefault(require$$0$49)(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 
 $export($export.S, 'RegExp', { escape: function escape(it) { return $re(it); } });
 });
@@ -53282,7 +53210,7 @@ function App(canvas) {
 
     if (_camera.type !== 'PerspectiveCamera') {
 
-      console.warn('THREE.APP: AutoResize only works with PerspectiveCamera');
+      console.warn('THREE.App: AutoResize only works with PerspectiveCamera');
       return;
     }
 
@@ -54553,32 +54481,32 @@ NURBSCurve.prototype.getTangent = function (t) {
 };
 
 /**
- * @author Kyle-Larson https://github.com/Kyle-Larson
- * @author Takahiro https://github.com/takahirox
- *
- * Loader loads FBX file and generates Group representing FBX scene.
- * Requires FBX file to be >= 7.0 and in ASCII or to be any version in Binary format.
- *
- * Supports:
- * 	Mesh Generation (Positional Data)
- * 	Normal Data (Per Vertex Drawing Instance)
- *  UV Data (Per Vertex Drawing Instance)
- *  Skinning
- *  Animation
- * 	- Separated Animations based on stacks.
- * 	- Skeletal & Non-Skeletal Animations
- *  NURBS (Open, Closed and Periodic forms)
- *
- * Needs Support:
- * 	Indexed Buffers
- * 	PreRotation support.
- */
+* @author Kyle-Larson https://github.com/Kyle-Larson
+* @author Takahiro https://github.com/takahirox
+*
+* Loader loads FBX file and generates Group representing FBX scene.
+* Requires FBX file to be >= 7.0 and in ASCII or to be any version in Binary format.
+*
+* Supports:
+* 	Mesh Generation (Positional Data)
+* 	Normal Data (Per Vertex Drawing Instance)
+*  UV Data (Per Vertex Drawing Instance)
+*  Skinning
+*  Animation
+* 	- Separated Animations based on stacks.
+* 	- Skeletal & Non-Skeletal Animations
+*  NURBS (Open, Closed and Periodic forms)
+*
+* Needs Support:
+* 	Indexed Buffers
+* 	PreRotation support.
+*/
 
 /**
- * Generates a loader for loading FBX files from URL and parsing into
- * a THREE.Group.
- * @param {THREE.LoadingManager} manager - Loading Manager for loader to use.
- */
+  * Generates a loader for loading FBX files from URL and parsing into
+  * a THREE.Group.
+  * @param {THREE.LoadingManager} manager - Loading Manager for loader to use.
+  */
 function FBXLoader(manager) {
 
   this.manager = manager !== undefined ? manager : DefaultLoadingManager;
@@ -54587,21 +54515,19 @@ function FBXLoader(manager) {
 Object.assign(FBXLoader.prototype, {
 
   /**
-   * Loads an ASCII/Binary FBX file from URL and parses into a THREE.Group.
-   * THREE.Group will have an animations property of AnimationClips
-   * of the different animations exported with the FBX.
-   * @param {string} url - URL of the FBX file.
-   * @param {function(THREE.Group):void} onLoad - Callback for when FBX file is loaded and parsed.
-   * @param {function(ProgressEvent):void} onProgress - Callback fired periodically when file is being retrieved from server.
-   * @param {function(Event):void} onError - Callback fired when error occurs (Currently only with retrieving file, not with parsing errors).
-   */
+    * Loads an ASCII/Binary FBX file from URL and parses into a THREE.Group.
+    * THREE.Group will have an animations property of AnimationClips
+    * of the different animations exported with the FBX.
+    * @param {string} url - URL of the FBX file.
+    * @param {function(THREE.Group):void} onLoad - Callback for when FBX file is loaded and parsed.
+    * @param {function(ProgressEvent):void} onProgress - Callback fired periodically when file is being retrieved from server.
+    * @param {function(Event):void} onError - Callback fired when error occurs (Currently only with retrieving file, not with parsing errors).
+    */
   load: function (url, onLoad, onProgress, onError) {
 
     var self = this;
 
-    var resourceDirectory = url.split(/[\\\/]/);
-    resourceDirectory.pop();
-    resourceDirectory = resourceDirectory.join('/') + '/';
+    var resourceDirectory = Loader.prototype.extractUrlBase(url);
 
     var loader = new FileLoader(this.manager);
     loader.setResponseType('arraybuffer');
@@ -54626,13 +54552,13 @@ Object.assign(FBXLoader.prototype, {
 
 
   /**
-   * Parses an ASCII/Binary FBX file and returns a THREE.Group.
-   * THREE.Group will have an animations property of AnimationClips
-   * of the different animations within the FBX file.
-   * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
-   * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
-   * @returns {THREE.Group}
-   */
+    * Parses an ASCII/Binary FBX file and returns a THREE.Group.
+    * THREE.Group will have an animations property of AnimationClips
+    * of the different animations within the FBX file.
+    * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
+    * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
+    * @returns {THREE.Group}
+    */
   parse: function (FBXBuffer, resourceDirectory) {
 
     var FBXTree = void 0;
@@ -54646,12 +54572,12 @@ Object.assign(FBXLoader.prototype, {
 
       if (!isFbxFormatASCII(FBXText)) {
 
-        throw new Error('FBXLoader: Unknown format.');
+        throw new Error('THREE.FBXLoader: Unknown format.');
       }
 
       if (getFbxVersion(FBXText) < 7000) {
 
-        throw new Error('FBXLoader: FBX version not supported, FileVersion: ' + getFbxVersion(FBXText));
+        throw new Error('THREE.FBXLoader: FBX version not supported, FileVersion: ' + getFbxVersion(FBXText));
       }
 
       FBXTree = new TextParser().parse(FBXText);
@@ -54672,22 +54598,22 @@ Object.assign(FBXLoader.prototype, {
 });
 
 /**
- * Parses map of relationships between objects.
- * @param {{Connections: { properties: { connections: [number, number, string][]}}}} FBXTree
- * @returns {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
- */
+  * Parses map of relationships between objects.
+  * @param {{Connections: { properties: { connections: [number, number, string][]}}}} FBXTree
+  * @returns {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
+  */
 function parseConnections(FBXTree) {
 
   /**
-   * @type {Map<number, { parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
-   */
+    * @type {Map<number, { parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
+    */
   var connectionMap = new Map();
 
   if ('Connections' in FBXTree) {
 
     /**
-     * @type {[number, number, string][]}
-     */
+      * @type {[number, number, string][]}
+      */
     var connectionArray = FBXTree.Connections.properties.connections;
     for (var connectionArrayIndex = 0, connectionArrayLength = connectionArray.length; connectionArrayIndex < connectionArrayLength; ++connectionArrayIndex) {
 
@@ -54721,15 +54647,15 @@ function parseConnections(FBXTree) {
 }
 
 /**
- * Parses map of images referenced in FBXTree.
- * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
- * @returns {Map<number, string(image blob URL)>}
- */
+  * Parses map of images referenced in FBXTree.
+  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
+  * @returns {Map<number, string(image blob/data URL)>}
+  */
 function parseImages(FBXTree) {
 
   /**
-   * @type {Map<number, string(image blob URL)>}
-   */
+    * @type {Map<number, string(image blob/data URL)>}
+    */
   var imageMap = new Map();
 
   if ('Video' in FBXTree.Objects.subNodes) {
@@ -54753,13 +54679,12 @@ function parseImages(FBXTree) {
 }
 
 /**
- * @param {videoNode} videoNode - Node to get texture image information from.
- * @returns {string} - image blob URL
- */
+  * @param {videoNode} videoNode - Node to get texture image information from.
+  * @returns {string} - image blob/data URL
+  */
 function parseImage(videoNode) {
 
-  var buffer = videoNode.properties.Content;
-  var array = new Uint8Array(buffer);
+  var content = videoNode.properties.Content;
   var fileName = videoNode.properties.RelativeFilename || videoNode.properties.Filename;
   var extension = fileName.slice(fileName.lastIndexOf('.') + 1).toLowerCase();
 
@@ -54794,22 +54719,28 @@ function parseImage(videoNode) {
 
   }
 
+  if (typeof content === 'string') {
+
+    return 'data:' + type + ';base64,' + content;
+  }
+
+  var array = new Uint8Array(content);
   return window.URL.createObjectURL(new Blob([array], { type: type }));
 }
 
 /**
- * Parses map of textures referenced in FBXTree.
- * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
- * @param {THREE.TextureLoader} loader
- * @param {Map<number, string(image blob URL)>} imageMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {Map<number, THREE.Texture>}
- */
+  * Parses map of textures referenced in FBXTree.
+  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
+  * @param {THREE.TextureLoader} loader
+  * @param {Map<number, string(image blob/data URL)>} imageMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {Map<number, THREE.Texture>}
+  */
 function parseTextures(FBXTree, loader, imageMap, connections) {
 
   /**
-   * @type {Map<number, THREE.Texture>}
-   */
+    * @type {Map<number, THREE.Texture>}
+    */
   var textureMap = new Map();
 
   if ('Texture' in FBXTree.Objects.subNodes) {
@@ -54826,13 +54757,12 @@ function parseTextures(FBXTree, loader, imageMap, connections) {
 }
 
 /**
- * @param {textureNode} textureNode - Node to get texture information from.
- * @param {THREE.TextureLoader} loader
- * @param {Map<number, string(image blob URL)>} imageMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {THREE.Texture}
- */
-
+  * @param {textureNode} textureNode - Node to get texture information from.
+  * @param {THREE.TextureLoader} loader
+  * @param {Map<number, string(image blob/data URL)>} imageMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {THREE.Texture}
+  */
 function parseTexture(textureNode, loader, imageMap, connections) {
 
   var FBX_ID = textureNode.id;
@@ -54870,16 +54800,15 @@ function parseTexture(textureNode, loader, imageMap, connections) {
 
   var currentPath = loader.path;
 
-  if (fileName.indexOf('blob:') === 0) {
+  if (fileName.indexOf('blob:') === 0 || fileName.indexOf('data:') === 0) {
 
     loader.setPath(undefined);
   }
 
   /**
-   * @type {THREE.Texture}
-   */
+    * @type {THREE.Texture}
+    */
   var texture = loader.load(fileName);
-
   texture.name = name;
   texture.FBX_ID = FBX_ID;
 
@@ -54901,12 +54830,12 @@ function parseTexture(textureNode, loader, imageMap, connections) {
 }
 
 /**
- * Parses map of Material information.
- * @param {{Objects: {subNodes: {Material: Object.<number, FBXMaterialNode>}}}} FBXTree
- * @param {Map<number, THREE.Texture>} textureMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {Map<number, THREE.Material>}
- */
+  * Parses map of Material information.
+  * @param {{Objects: {subNodes: {Material: Object.<number, FBXMaterialNode>}}}} FBXTree
+  * @param {Map<number, THREE.Texture>} textureMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {Map<number, THREE.Material>}
+  */
 function parseMaterials(FBXTree, textureMap, connections) {
 
   var materialMap = new Map();
@@ -54917,7 +54846,6 @@ function parseMaterials(FBXTree, textureMap, connections) {
     for (var nodeID in materialNodes) {
 
       var material = parseMaterial(materialNodes[nodeID], textureMap, connections);
-      // materialMap.set( parseInt( nodeID ), material );
       if (material !== null) materialMap.set(parseInt(nodeID), material);
     }
   }
@@ -54926,12 +54854,12 @@ function parseMaterials(FBXTree, textureMap, connections) {
 }
 
 /**
- * Takes information from Material node and returns a generated THREE.Material
- * @param {FBXMaterialNode} materialNode
- * @param {Map<number, THREE.Texture>} textureMap
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {THREE.Material}
- */
+  * Takes information from Material node and returns a generated THREE.Material
+  * @param {FBXMaterialNode} materialNode
+  * @param {Map<number, THREE.Texture>} textureMap
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {THREE.Material}
+  */
 function parseMaterial(materialNode, textureMap, connections) {
 
   var FBX_ID = materialNode.id;
@@ -54976,21 +54904,25 @@ function parseMaterial(materialNode, textureMap, connections) {
 }
 
 /**
- * @typedef {{Diffuse: FBXVector3, Specular: FBXVector3, Shininess: FBXValue, Emissive: FBXVector3, EmissiveFactor: FBXValue, Opacity: FBXValue}} FBXMaterialProperties
- */
+  * @typedef {{Diffuse: FBXVector3, Specular: FBXVector3, Shininess: FBXValue, Emissive: FBXVector3, EmissiveFactor: FBXValue, Opacity: FBXValue}} FBXMaterialProperties
+  */
 /**
- * @typedef {{color: THREE.Color=, specular: THREE.Color=, shininess: number=, emissive: THREE.Color=, emissiveIntensity: number=, opacity: number=, transparent: boolean=, map: THREE.Texture=}} THREEMaterialParameterPack
- */
+  * @typedef {{color: THREE.Color=, specular: THREE.Color=, shininess: number=, emissive: THREE.Color=, emissiveIntensity: number=, opacity: number=, transparent: boolean=, map: THREE.Texture=}} THREEMaterialParameterPack
+  */
 /**
- * @param {FBXMaterialProperties} properties
- * @param {Map<number, THREE.Texture>} textureMap
- * @param {{ID: number, relationship: string}[]} childrenRelationships
- * @returns {THREEMaterialParameterPack}
- */
+  * @param {FBXMaterialProperties} properties
+  * @param {Map<number, THREE.Texture>} textureMap
+  * @param {{ID: number, relationship: string}[]} childrenRelationships
+  * @returns {THREEMaterialParameterPack}
+  */
 function parseParameters(properties, textureMap, childrenRelationships) {
 
   var parameters = {};
 
+  if (properties.BumpFactor) {
+
+    parameters.bumpScale = parseFloat(properties.BumpFactor.value);
+  }
   if (properties.Diffuse) {
 
     parameters.color = parseColor(properties.Diffuse);
@@ -55009,7 +54941,7 @@ function parseParameters(properties, textureMap, childrenRelationships) {
   }
   if (properties.EmissiveFactor) {
 
-    parameters.emissiveIntensity = properties.EmissiveFactor.value;
+    parameters.emissiveIntensity = parseFloat(properties.EmissiveFactor.value);
   }
   if (properties.Opacity) {
 
@@ -55043,20 +54975,12 @@ function parseParameters(properties, textureMap, childrenRelationships) {
         parameters.normalMap = textureMap.get(relationship.ID);
         break;
 
-      case ' "EmissiveColor':
-      case 'EmissiveColor':
-        parameters.emissiveMap = textureMap.get(relationship.ID);
-        break;
-
-      case ' "SpecularColor':
-      case 'SpecularColor':
-        parameters.specularMap = textureMap.get(relationship.ID);
-        break;
-
-      case ' "AmbientColor':
       case 'AmbientColor':
+      case 'EmissiveColor':
+      case ' "AmbientColor':
+      case ' "EmissiveColor':
       default:
-        console.warn('Unknown texture application of type ' + type + ', skipping texture');
+        console.warn('THREE.FBXLoader: Unknown texture application of type %s, skipping texture.', type);
         break;
 
     }
@@ -55066,11 +54990,11 @@ function parseParameters(properties, textureMap, childrenRelationships) {
 }
 
 /**
- * Generates map of Skeleton-like objects for use later when generating and binding skeletons.
- * @param {{Objects: {subNodes: {Deformer: Object.<number, FBXSubDeformerNode>}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @returns {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>}
- */
+  * Generates map of Skeleton-like objects for use later when generating and binding skeletons.
+  * @param {{Objects: {subNodes: {Deformer: Object.<number, FBXSubDeformerNode>}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @returns {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>}
+  */
 function parseDeformers(FBXTree, connections) {
 
   var deformers = {};
@@ -55098,11 +55022,11 @@ function parseDeformers(FBXTree, connections) {
 }
 
 /**
- * Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections and an object containing SubDeformer nodes.
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} connections
- * @param {Object.<number, FBXSubDeformerNode>} DeformerNodes
- * @returns {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}}
- */
+  * Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections and an object containing SubDeformer nodes.
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} connections
+  * @param {Object.<number, FBXSubDeformerNode>} DeformerNodes
+  * @returns {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}}
+  */
 function parseSkeleton(connections, DeformerNodes) {
 
   var subDeformers = {};
@@ -55140,12 +55064,12 @@ function parseSkeleton(connections, DeformerNodes) {
 }
 
 /**
- * Generates Buffer geometries from geometry information in FBXTree, and generates map of THREE.BufferGeometries
- * @param {{Objects: {subNodes: {Geometry: Object.<number, FBXGeometryNode}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
- * @returns {Map<number, THREE.BufferGeometry>}
- */
+  * Generates Buffer geometries from geometry information in FBXTree, and generates map of THREE.BufferGeometries
+  * @param {{Objects: {subNodes: {Geometry: Object.<number, FBXGeometryNode}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
+  * @returns {Map<number, THREE.BufferGeometry>}
+  */
 function parseGeometries(FBXTree, connections, deformers) {
 
   var geometryMap = new Map();
@@ -55166,12 +55090,12 @@ function parseGeometries(FBXTree, connections, deformers) {
 }
 
 /**
- * Generates BufferGeometry from FBXGeometryNode.
- * @param {FBXGeometryNode} geometryNode
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers
- * @returns {THREE.BufferGeometry}
- */
+  * Generates BufferGeometry from FBXGeometryNode.
+  * @param {FBXGeometryNode} geometryNode
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers
+  * @returns {THREE.BufferGeometry}
+  */
 function parseGeometry(geometryNode, relationships, deformers) {
 
   switch (geometryNode.attrType) {
@@ -55188,12 +55112,12 @@ function parseGeometry(geometryNode, relationships, deformers) {
 }
 
 /**
- * Specialty function for parsing Mesh based Geometry Nodes.
- * @param {FBXGeometryNode} geometryNode
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships - Object representing relationships between specific geometry node and other nodes.
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers - Map object of deformers and subDeformers by ID.
- * @returns {THREE.BufferGeometry}
- */
+  * Specialty function for parsing Mesh based Geometry Nodes.
+  * @param {FBXGeometryNode} geometryNode
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships - Object representing relationships between specific geometry node and other nodes.
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers - Map object of deformers and subDeformers by ID.
+  * @returns {THREE.BufferGeometry}
+  */
 function parseMeshGeometry(geometryNode, relationships, deformers) {
 
   for (var i = 0; i < relationships.children.length; ++i) {
@@ -55206,9 +55130,9 @@ function parseMeshGeometry(geometryNode, relationships, deformers) {
 }
 
 /**
- * @param {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}} deformer - Skeleton representation for geometry instance.
- * @returns {THREE.BufferGeometry}
- */
+  * @param {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}} deformer - Skeleton representation for geometry instance.
+  * @returns {THREE.BufferGeometry}
+  */
 function genGeometry(geometryNode, deformer) {
 
   var geometry = new Geometry$1();
@@ -55227,7 +55151,13 @@ function genGeometry(geometryNode, deformer) {
 
   if (subNodes.LayerElementUV) {
 
-    var uvInfo = getUVs(subNodes.LayerElementUV[0]);
+    var uvInfo = [];
+    var i = 0;
+    while (subNodes.LayerElementUV[i]) {
+
+      uvInfo.push(getUVs(subNodes.LayerElementUV[i]));
+      i++;
+    }
   }
 
   if (subNodes.LayerElementColor) {
@@ -55306,7 +55236,7 @@ function genGeometry(geometryNode, deformer) {
 
         if (!displayedWeightsWarning) {
 
-          console.warn('FBXLoader: Vertex has more than 4 skinning weights assigned to vertex.  Deleting additional weights.');
+          console.warn('THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights.');
           displayedWeightsWarning = true;
         }
 
@@ -55353,7 +55283,12 @@ function genGeometry(geometryNode, deformer) {
 
     if (uvInfo) {
 
-      vertex.uv.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, uvInfo));
+      var uvTemp = new Vector2();
+
+      for (var i = 0; i < uvInfo.length; i++) {
+
+        vertex.uv.push(uvTemp.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, uvInfo[i])));
+      }
     }
 
     if (colorInfo) {
@@ -55388,8 +55323,8 @@ function genGeometry(geometryNode, deformer) {
   }
 
   /**
-   * @type {{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-   */
+    * @type {{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
+    */
   var bufferInfo = geometry.flattenToBuffers();
 
   var geo = new BufferGeometry();
@@ -55400,10 +55335,20 @@ function genGeometry(geometryNode, deformer) {
 
     geo.addAttribute('normal', new Float32BufferAttribute(bufferInfo.normalBuffer, 3));
   }
-  if (bufferInfo.uvBuffer.length > 0) {
+  if (bufferInfo.uvBuffers.length > 0) {
 
-    geo.addAttribute('uv', new Float32BufferAttribute(bufferInfo.uvBuffer, 2));
+    for (var i = 0; i < bufferInfo.uvBuffers.length; i++) {
+
+      var name = 'uv' + (i + 1).toString();
+      if (i == 0) {
+
+        name = 'uv';
+      }
+
+      geo.addAttribute(name, new Float32BufferAttribute(bufferInfo.uvBuffers[i], 2));
+    }
   }
+
   if (subNodes.LayerElementColor) {
 
     geo.addAttribute('color', new Float32BufferAttribute(bufferInfo.colorBuffer, 3));
@@ -55439,10 +55384,10 @@ function genGeometry(geometryNode, deformer) {
 }
 
 /**
- * Parses normal information for geometry.
- * @param {FBXGeometryNode} geometryNode
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses normal information for geometry.
+  * @param {FBXGeometryNode} geometryNode
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getNormals(NormalNode) {
 
   var mappingType = NormalNode.properties.MappingInformationType;
@@ -55470,10 +55415,10 @@ function getNormals(NormalNode) {
 }
 
 /**
- * Parses UV information for geometry.
- * @param {FBXGeometryNode} geometryNode
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses UV information for geometry.
+  * @param {FBXGeometryNode} geometryNode
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getUVs(UVNode) {
 
   var mappingType = UVNode.properties.MappingInformationType;
@@ -55495,10 +55440,10 @@ function getUVs(UVNode) {
 }
 
 /**
- * Parses Vertex Color information for geometry.
- * @param {FBXGeometryNode} geometryNode
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses Vertex Color information for geometry.
+  * @param {FBXGeometryNode} geometryNode
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getColors(ColorNode) {
 
   var mappingType = ColorNode.properties.MappingInformationType;
@@ -55520,10 +55465,10 @@ function getColors(ColorNode) {
 }
 
 /**
- * Parses material application information for geometry.
- * @param {FBXGeometryNode}
- * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
- */
+  * Parses material application information for geometry.
+  * @param {FBXGeometryNode}
+  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+  */
 function getMaterials(MaterialNode) {
 
   var mappingType = MaterialNode.properties.MappingInformationType;
@@ -55562,13 +55507,13 @@ function getMaterials(MaterialNode) {
 }
 
 /**
- * Function uses the infoObject and given indices to return value array of object.
- * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
- * @param {number} polygonIndex - Index of polygon in geometry.
- * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
- * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
- * @returns {number[]}
- */
+  * Function uses the infoObject and given indices to return value array of object.
+  * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+  * @param {number} polygonIndex - Index of polygon in geometry.
+  * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+  * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+  * @returns {number[]}
+  */
 
 var dataArray = [];
 
@@ -55577,13 +55522,13 @@ var GetData = {
   ByPolygonVertex: {
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonVertexIndex * infoObject.dataSize;
@@ -55595,13 +55540,13 @@ var GetData = {
 
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonVertexIndex];
@@ -55616,13 +55561,13 @@ var GetData = {
   ByPolygon: {
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonIndex * infoObject.dataSize;
@@ -55634,13 +55579,13 @@ var GetData = {
 
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonIndex];
@@ -55666,13 +55611,13 @@ var GetData = {
   AllSame: {
 
     /**
-     * Function uses the infoObject and given indices to return value array of object.
-     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-     * @param {number} polygonIndex - Index of polygon in geometry.
-     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-     * @returns {number[]}
-     */
+      * Function uses the infoObject and given indices to return value array of object.
+      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+      * @param {number} polygonIndex - Index of polygon in geometry.
+      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+      * @returns {number[]}
+      */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = infoObject.indices[0] * infoObject.dataSize;
@@ -55691,16 +55636,16 @@ function getData(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 }
 
 /**
- * Specialty function for parsing NurbsCurve based Geometry Nodes.
- * @param {FBXGeometryNode} geometryNode
- * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
- * @returns {THREE.BufferGeometry}
- */
+  * Specialty function for parsing NurbsCurve based Geometry Nodes.
+  * @param {FBXGeometryNode} geometryNode
+  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
+  * @returns {THREE.BufferGeometry}
+  */
 function parseNurbsGeometry(geometryNode) {
 
   if (NURBSCurve === undefined) {
 
-    console.error('THREE.FBXLoader relies on NURBSCurve for any nurbs present in the model.  Nurbs will show up as empty geometry.');
+    console.error('THREE.FBXLoader: The loader relies on THREE.NURBSCurve for any nurbs present in the model. Nurbs will show up as empty geometry.');
     return new BufferGeometry();
   }
 
@@ -55708,7 +55653,7 @@ function parseNurbsGeometry(geometryNode) {
 
   if (isNaN(order)) {
 
-    console.error('FBXLoader: Invalid Order ' + geometryNode.properties.Order + ' given for geometry ID: ' + geometryNode.id);
+    console.error('THREE.FBXLoader: Invalid Order %s given for geometry ID: %s', geometryNode.properties.Order, geometryNode.id);
     return new BufferGeometry();
   }
 
@@ -55757,14 +55702,14 @@ function parseNurbsGeometry(geometryNode) {
 }
 
 /**
- * Finally generates Scene graph and Scene graph Objects.
- * @param {{Objects: {subNodes: {Model: Object.<number, FBXModelNode>}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
- * @param {Map<number, THREE.BufferGeometry>} geometryMap
- * @param {Map<number, THREE.Material>} materialMap
- * @returns {THREE.Group}
- */
+  * Finally generates Scene graph and Scene graph Objects.
+  * @param {{Objects: {subNodes: {Model: Object.<number, FBXModelNode>}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
+  * @param {Map<number, THREE.BufferGeometry>} geometryMap
+  * @param {Map<number, THREE.Material>} materialMap
+  * @returns {THREE.Group}
+  */
 function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
   var sceneGraph = new Group();
@@ -55772,13 +55717,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   var ModelNode = FBXTree.Objects.subNodes.Model;
 
   /**
-   * @type {Array.<THREE.Object3D>}
-   */
+    * @type {Array.<THREE.Object3D>}
+    */
   var modelArray = [];
 
   /**
-   * @type {Map.<number, THREE.Object3D>}
-   */
+    * @type {Map.<number, THREE.Object3D>}
+    */
   var modelMap = new Map();
 
   for (var nodeID in ModelNode) {
@@ -55813,20 +55758,226 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
       switch (node.attrType) {
 
+        case 'Camera':
+          /* ***********
+          * Supported camera types:
+          * PerspectiveCamera
+          * OrthographicCamera
+          ************** */
+          var cameraAttribute;
+
+          for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
+
+            var childID = conns.children[childrenIndex].ID;
+
+            var attr = FBXTree.Objects.subNodes.NodeAttribute[childID];
+
+            if (attr !== undefined && attr.properties !== undefined) {
+
+              cameraAttribute = attr.properties;
+            }
+          }
+
+          if (cameraAttribute === undefined) {
+
+            model = new Object3D();
+          } else {
+
+            var type = 0;
+            if (cameraAttribute.CameraProjectionType !== undefined && (cameraAttribute.CameraProjectionType.value === '1' || cameraAttribute.CameraProjectionType.value === 1)) {
+
+              type = 1;
+            }
+
+            var nearClippingPlane = 1;
+            if (cameraAttribute.NearPlane !== undefined) {
+
+              nearClippingPlane = cameraAttribute.NearPlane.value / 1000;
+            }
+
+            var farClippingPlane = 1000;
+            if (cameraAttribute.FarPlane !== undefined) {
+
+              farClippingPlane = cameraAttribute.FarPlane.value / 1000;
+            }
+
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+
+            if (cameraAttribute.AspectWidth !== undefined && cameraAttribute.AspectHeight !== undefined) {
+
+              width = parseFloat(cameraAttribute.AspectWidth.value);
+              height = parseFloat(cameraAttribute.AspectHeight.value);
+            }
+
+            var aspect = width / height;
+
+            var fov = 45;
+            if (cameraAttribute.FieldOfView !== undefined) {
+
+              fov = parseFloat(cameraAttribute.FieldOfView.value);
+            }
+
+            switch (type) {
+
+              case '0': // Perspective
+              case 0:
+                model = new PerspectiveCamera(fov, aspect, nearClippingPlane, farClippingPlane);
+                break;
+
+              case '1': // Orthographic
+              case 1:
+                model = new OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, nearClippingPlane, farClippingPlane);
+                break;
+
+              default:
+                console.warn('THREE.FBXLoader: Unknown camera type ' + type + '.');
+                model = new Object3D();
+                break;
+
+            }
+          }
+
+          break;
+
+        case 'Light':
+          /* ***********
+          * Supported light types:
+          * DirectionalLight
+          * PointLight
+          * SpotLight
+          ************** */
+
+          var lightAttribute;
+
+          for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
+
+            var childID = conns.children[childrenIndex].ID;
+
+            var attr = FBXTree.Objects.subNodes.NodeAttribute[childID];
+
+            if (attr !== undefined && attr.properties !== undefined) {
+
+              lightAttribute = attr.properties;
+            }
+          }
+
+          if (lightAttribute === undefined) {
+
+            model = new Object3D();
+          } else {
+
+            var type;
+
+            // LightType can be undefined for Point lights
+            if (lightAttribute.LightType === undefined) {
+
+              type = 0;
+            } else {
+
+              type = lightAttribute.LightType.value;
+            }
+
+            var color = 0xffffff;
+
+            if (lightAttribute.Color !== undefined) {
+
+              var temp = lightAttribute.Color.value.split(',');
+
+              var r = parseFloat(temp[0]);
+              var g = parseFloat(temp[1]);
+              var b = parseFloat(temp[1]);
+
+              color = new Color(r, g, b);
+            }
+
+            var intensity = lightAttribute.Intensity === undefined ? 1 : lightAttribute.Intensity.value / 100;
+
+            // light disabled
+            if (lightAttribute.CastLightOnObject !== undefined && (lightAttribute.CastLightOnObject.value === '0' || lightAttribute.CastLightOnObject.value === 0)) {
+
+              intensity = 0;
+            }
+
+            var distance = 0;
+            if (lightAttribute.FarAttenuationEnd !== undefined) {
+
+              if (lightAttribute.EnableFarAttenuation !== undefined && (lightAttribute.EnableFarAttenuation.value === '0' || lightAttribute.EnableFarAttenuation.value === 0)) {
+
+                distance = 0;
+              } else {
+
+                distance = lightAttribute.FarAttenuationEnd.value / 1000;
+              }
+            }
+
+            // TODO
+            // could be calculated linearly from FarAttenuationStart to FarAttenuationEnd?
+            var decay = 1;
+
+            switch (type) {
+
+              case '0': // Point
+              case 0:
+                model = new PointLight(color, intensity, distance, decay);
+                break;
+
+              case '1': // Directional
+              case 1:
+                model = new DirectionalLight(color, intensity);
+                break;
+
+              case '2': // Spot
+              case 2:
+                var angle = Math.PI / 3;
+
+                if (lightAttribute.InnerAngle !== undefined) {
+
+                  angle = _Math.degToRad(lightAttribute.InnerAngle.value);
+                }
+
+                var penumbra = 0;
+                if (lightAttribute.OuterAngle !== undefined) {
+
+                  // TODO: this is not correct - FBX calculates outer and inner angle in degrees
+                  // with OuterAngle > InnerAngle && OuterAngle <= Math.PI
+                  // while three.js uses a penumbra between (0, 1) to attenuate the inner angle
+                  penumbra = _Math.degToRad(lightAttribute.OuterAngle.value);
+                  penumbra = Math.max(penumbra, 1);
+                }
+
+                model = new SpotLight(color, intensity, distance, angle, penumbra, decay);
+                break;
+
+              default:
+                console.warn('THREE.FBXLoader: Unknown light type ' + lightAttribute.LightType.value + ', defaulting to a THREE.PointLight.');
+                model = new PointLight(color, intensity);
+                break;
+
+            }
+
+            if (lightAttribute.CastShadows !== undefined && (lightAttribute.CastShadows.value === '1' || lightAttribute.CastShadows.value === 1)) {
+
+              model.castShadow = true;
+            }
+          }
+
+          break;
+
         case 'Mesh':
           /**
-           * @type {?THREE.BufferGeometry}
-           */
+            * @type {?THREE.BufferGeometry}
+            */
           var geometry = null;
 
           /**
-           * @type {THREE.MultiMaterial|THREE.Material}
-           */
+            * @type {THREE.MultiMaterial|THREE.Material}
+            */
           var material = null;
 
           /**
-           * @type {Array.<THREE.Material>}
-           */
+            * @type {Array.<THREE.Material>}
+            */
           var materials = [];
 
           for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
@@ -55926,12 +56077,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
     if ('Lcl_Scaling' in node.properties) {
 
-      var scaleFactor = parseFloatArray(node.properties.Lcl_Scaling.value);
-
-      model.scale.fromArray(scaleFactor);
-
-      // original line
-      // model.scale.fromArray( parseFloatArray( node.properties.Lcl_Scaling.value ) );
+      model.scale.fromArray(parseFloatArray(node.properties.Lcl_Scaling.value));
     }
 
     if ('PreRotation' in node.properties) {
@@ -55943,19 +56089,52 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
       model.rotation.setFromQuaternion(preRotations, 'ZYX');
     }
 
-    // https://github.com/mrdoob/three.js/issues/11895
+    // allow transformed pivots - see https://github.com/mrdoob/three.js/issues/11895
     if ('GeometricTranslation' in node.properties) {
-      (function () {
 
-        var array = node.properties.GeometricTranslation.value;
-        model.traverse(function (child) {
+      var array = node.properties.GeometricTranslation.value;
 
-          if (child.geometry) {
+      model.traverse(function (child) {
 
-            child.geometry.translate(array[0], array[1], array[2]);
+        if (child.geometry) {
+
+          child.geometry.translate(array[0], array[1], array[2]);
+        }
+      });
+    }
+
+    if ('LookAtProperty' in node.properties) {
+
+      var conns = connections.get(model.FBX_ID);
+
+      for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
+
+        var child = conns.children[childrenIndex];
+
+        if (child.relationship === 'LookAtProperty' || child.relationship === ' "LookAtProperty') {
+
+          var lookAtTarget = FBXTree.Objects.subNodes.Model[child.ID];
+
+          if ('Lcl_Translation' in lookAtTarget.properties) {
+
+            var pos = lookAtTarget.properties.Lcl_Translation.value.split(',').map(function (val) {
+
+              return parseFloat(val);
+            });
+
+            // DirectionalLight, SpotLight
+            if (model.target !== undefined) {
+
+              model.target.position.set(pos[0], pos[1], pos[2]);
+              sceneGraph.add(model.target);
+            } else {
+              // Cameras and other Object3Ds
+
+              model.lookAt(new Vector3(pos[0], pos[1], pos[2]));
+            }
           }
-        });
-      })();
+        }
+      }
     }
 
     var conns = connections.get(model.FBX_ID);
@@ -56016,8 +56195,8 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
       var subDeformerIndex = subDeformer.index;
 
       /**
-       * @type {THREE.Bone}
-       */
+        * @type {THREE.Bone}
+        */
       var bone = deformer.bones[subDeformerIndex];
       if (!worldMatrices.has(bone.FBX_ID)) {
 
@@ -56071,14 +56250,29 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
   addAnimations(sceneGraph, animations);
 
+  // Parse ambient color - if it's not set to black (default), create an ambient light
+  if ('GlobalSettings' in FBXTree && 'AmbientColor' in FBXTree.GlobalSettings.properties) {
+
+    var ambientColor = FBXTree.GlobalSettings.properties.AmbientColor.value;
+    var r = ambientColor[0];
+    var g = ambientColor[1];
+    var b = ambientColor[2];
+
+    if (r !== 0 || g !== 0 || b !== 0) {
+
+      var color = new Color(r, g, b);
+      sceneGraph.add(new AmbientLight(color, 1));
+    }
+  }
+
   return sceneGraph;
 }
 
 /**
- * Parses animation information from FBXTree and generates an AnimationInfoObject.
- * @param {{Objects: {subNodes: {AnimationCurveNode: any, AnimationCurve: any, AnimationLayer: any, AnimationStack: any}}}} FBXTree
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- */
+  * Parses animation information from FBXTree and generates an AnimationInfoObject.
+  * @param {{Objects: {subNodes: {AnimationCurveNode: any, AnimationCurve: any, AnimationLayer: any, AnimationStack: any}}}} FBXTree
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  */
 function parseAnimations(FBXTree, connections, sceneGraph) {
 
   var rawNodes = FBXTree.Objects.subNodes.AnimationCurveNode;
@@ -56087,373 +56281,373 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   var rawStacks = FBXTree.Objects.subNodes.AnimationStack;
 
   /**
-   * @type {{
-  		 curves: Map<number, {
-  		 T: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			};
-  		},
-  			R: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			};
-  		},
-  			S: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			};
-  		}
-  		}>,
-  		layers: Map<number, {
-  		T: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			},
-  		},
-  		R: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			},
-  		},
-  		S: {
-  			id: number;
-  			attr: string;
-  			internalID: number;
-  			attrX: boolean;
-  			attrY: boolean;
-  			attrZ: boolean;
-  			containerBoneID: number;
-  			containerID: number;
-  			curves: {
-  				x: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				y: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  				z: {
-  					version: any;
-  					id: number;
-  					internalID: number;
-  					times: number[];
-  					values: number[];
-  					attrFlag: number[];
-  					attrData: number[];
-  				};
-  			},
-  		}
-  		}[]>,
-  		stacks: Map<number, {
-  			name: string,
-  			layers: {
-  			T: {
-  				id: number;
-  				attr: string;
-  				internalID: number;
-  				attrX: boolean;
-  				attrY: boolean;
-  				attrZ: boolean;
-  				containerBoneID: number;
-  				containerID: number;
-  				curves: {
-  					x: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					y: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					z: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  				};
-  			};
-  			R: {
-  				id: number;
-  				attr: string;
-  				internalID: number;
-  				attrX: boolean;
-  				attrY: boolean;
-  				attrZ: boolean;
-  				containerBoneID: number;
-  				containerID: number;
-  				curves: {
-  					x: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					y: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					z: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  				};
-  			};
-  			S: {
-  				id: number;
-  				attr: string;
-  				internalID: number;
-  				attrX: boolean;
-  				attrY: boolean;
-  				attrZ: boolean;
-  				containerBoneID: number;
-  				containerID: number;
-  				curves: {
-  					x: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					y: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  					z: {
-  						version: any;
-  						id: number;
-  						internalID: number;
-  						times: number[];
-  						values: number[];
-  						attrFlag: number[];
-  						attrData: number[];
-  					};
-  				};
-  			};
-  		}[][],
-  		length: number,
-  		frames: number }>,
-  		length: number,
-  		fps: number,
-  		frames: number
-  	}}
-  	*/
+    * @type {{
+        curves: Map<number, {
+        T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      },
+        R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      },
+        S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      }
+      }>,
+      layers: Map<number, {
+      T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      }
+      }[]>,
+      stacks: Map<number, {
+        name: string,
+        layers: {
+        T: {
+          id: number;
+          attr: string;
+          internalID: number;
+          attrX: boolean;
+          attrY: boolean;
+          attrZ: boolean;
+          containerBoneID: number;
+          containerID: number;
+          curves: {
+            x: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            y: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            z: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+          };
+        };
+        R: {
+          id: number;
+          attr: string;
+          internalID: number;
+          attrX: boolean;
+          attrY: boolean;
+          attrZ: boolean;
+          containerBoneID: number;
+          containerID: number;
+          curves: {
+            x: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            y: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            z: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+          };
+        };
+        S: {
+          id: number;
+          attr: string;
+          internalID: number;
+          attrX: boolean;
+          attrY: boolean;
+          attrZ: boolean;
+          containerBoneID: number;
+          containerID: number;
+          curves: {
+            x: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            y: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+            z: {
+              version: any;
+              id: number;
+              internalID: number;
+              times: number[];
+              values: number[];
+              attrFlag: number[];
+              attrData: number[];
+            };
+          };
+        };
+      }[][],
+      length: number,
+      frames: number }>,
+      length: number,
+      fps: number,
+      frames: number
+    }}
+    */
   var returnObject = {
     curves: new Map(),
     layers: {},
@@ -56464,17 +56658,17 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   };
 
   /**
-   * @type {Array.<{
-  		id: number;
-  		attr: string;
-  		internalID: number;
-  		attrX: boolean;
-  		attrY: boolean;
-  		attrZ: boolean;
-  		containerBoneID: number;
-  		containerID: number;
-  	}>}
-  	*/
+    * @type {Array.<{
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+    }>}
+    */
   var animationCurveNodes = [];
   for (var nodeID in rawNodes) {
 
@@ -56486,46 +56680,46 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   }
 
   /**
-   * @type {Map.<number, {
-  		id: number,
-  		attr: string,
-  		internalID: number,
-  		attrX: boolean,
-  		attrY: boolean,
-  		attrZ: boolean,
-  		containerBoneID: number,
-  		containerID: number,
-  		curves: {
-  			x: {
-  				version: any,
-  				id: number,
-  				internalID: number,
-  				times: number[],
-  				values: number[],
-  				attrFlag: number[],
-  				attrData: number[],
-  			},
-  			y: {
-  				version: any,
-  				id: number,
-  				internalID: number,
-  				times: number[],
-  				values: number[],
-  				attrFlag: number[],
-  				attrData: number[],
-  			},
-  			z: {
-  				version: any,
-  				id: number,
-  				internalID: number,
-  				times: number[],
-  				values: number[],
-  				attrFlag: number[],
-  				attrData: number[],
-  			}
-  		}
-  	}>}
-  	*/
+    * @type {Map.<number, {
+      id: number,
+      attr: string,
+      internalID: number,
+      attrX: boolean,
+      attrY: boolean,
+      attrZ: boolean,
+      containerBoneID: number,
+      containerID: number,
+      curves: {
+        x: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+        },
+        y: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+        },
+        z: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+        }
+      }
+    }>}
+    */
   var tmpMap = new Map();
   for (var animationCurveNodeIndex = 0; animationCurveNodeIndex < animationCurveNodes.length; ++animationCurveNodeIndex) {
 
@@ -56537,16 +56731,16 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   }
 
   /**
-   * @type {{
-  		version: any,
-  		id: number,
-  		internalID: number,
-  		times: number[],
-  		values: number[],
-  		attrFlag: number[],
-  		attrData: number[],
-  	}[]}
-  	*/
+    * @type {{
+      version: any,
+      id: number,
+      internalID: number,
+      times: number[],
+      values: number[],
+      attrFlag: number[],
+      attrData: number[],
+    }[]}
+    */
   var animationCurves = [];
   for (nodeID in rawCurves) {
 
@@ -56651,126 +56845,126 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   for (var nodeID in rawLayers) {
 
     /**
-     * @type {{
-    	T: {
-    		id: number;
-    		attr: string;
-    		internalID: number;
-    		attrX: boolean;
-    		attrY: boolean;
-    		attrZ: boolean;
-    		containerBoneID: number;
-    		containerID: number;
-    		curves: {
-    			x: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			y: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			z: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    		},
-    	},
-    	R: {
-    		id: number;
-    		attr: string;
-    		internalID: number;
-    		attrX: boolean;
-    		attrY: boolean;
-    		attrZ: boolean;
-    		containerBoneID: number;
-    		containerID: number;
-    		curves: {
-    			x: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			y: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			z: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    		},
-    	},
-    	S: {
-    		id: number;
-    		attr: string;
-    		internalID: number;
-    		attrX: boolean;
-    		attrY: boolean;
-    		attrZ: boolean;
-    		containerBoneID: number;
-    		containerID: number;
-    		curves: {
-    			x: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			y: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    			z: {
-    				version: any;
-    				id: number;
-    				internalID: number;
-    				times: number[];
-    				values: number[];
-    				attrFlag: number[];
-    				attrData: number[];
-    			};
-    		},
-    	}
-    	}[]}
-    	*/
+      * @type {{
+      T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      },
+      S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        },
+      }
+      }[]}
+      */
     var layer = [];
     var children = connections.get(parseInt(nodeID)).children;
 
@@ -56839,54 +57033,54 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
 }
 
 /**
- * @param {Object} FBXTree
- * @param {{id: number, attrName: string, properties: Object<string, any>}} animationCurveNode
- * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
- * @param {{skeleton: {bones: {FBX_ID: number}[]}}} sceneGraph
- */
+  * @param {Object} FBXTree
+  * @param {{id: number, attrName: string, properties: Object<string, any>}} animationCurveNode
+  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+  * @param {{skeleton: {bones: {FBX_ID: number}[]}}} sceneGraph
+  */
 function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph) {
 
   var rawModels = FBXTree.Objects.subNodes.Model;
 
   var returnObject = {
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     id: animationCurveNode.id,
 
     /**
-     * @type {string}
-     */
+      * @type {string}
+      */
     attr: animationCurveNode.attrName,
 
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     internalID: animationCurveNode.id,
 
     /**
-     * @type {boolean}
-     */
+      * @type {boolean}
+      */
     attrX: false,
 
     /**
-     * @type {boolean}
-     */
+      * @type {boolean}
+      */
     attrY: false,
 
     /**
-     * @type {boolean}
-     */
+      * @type {boolean}
+      */
     attrZ: false,
 
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     containerBoneID: -1,
 
     /**
-     * @type {number}
-     */
+      * @type {number}
+      */
     containerID: -1,
 
     curves: {
@@ -56896,8 +57090,8 @@ function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph
     },
 
     /**
-     * @type {number[]}
-     */
+      * @type {number[]}
+      */
     preRotations: null
   };
 
@@ -56949,8 +57143,8 @@ function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph
 }
 
 /**
- * @param {{id: number, subNodes: {KeyTime: {properties: {a: string}}, KeyValueFloat: {properties: {a: string}}, KeyAttrFlags: {properties: {a: string}}, KeyAttrDataFloat: {properties: {a: string}}}}} animationCurve
- */
+  * @param {{id: number, subNodes: {KeyTime: {properties: {a: string}}, KeyValueFloat: {properties: {a: string}}, KeyAttrFlags: {properties: {a: string}}, KeyAttrDataFloat: {properties: {a: string}}}}} animationCurve
+  */
 function parseAnimationCurve(animationCurve) {
 
   return {
@@ -56966,128 +57160,128 @@ function parseAnimationCurve(animationCurve) {
 }
 
 /**
- * Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
- * than the max or min respectively.
- * @param {{
-			T: {
-					id: number,
-					attr: string,
-					internalID: number,
-					attrX: boolean,
-					attrY: boolean,
-					attrZ: boolean,
-					containerBoneID: number,
-					containerID: number,
-					curves: {
-							x: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							y: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							z: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-					},
-			},
-			R: {
-					id: number,
-					attr: string,
-					internalID: number,
-					attrX: boolean,
-					attrY: boolean,
-					attrZ: boolean,
-					containerBoneID: number,
-					containerID: number,
-					curves: {
-							x: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							y: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							z: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-					},
-			},
-			S: {
-					id: number,
-					attr: string,
-					internalID: number,
-					attrX: boolean,
-					attrY: boolean,
-					attrZ: boolean,
-					containerBoneID: number,
-					containerID: number,
-					curves: {
-							x: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							y: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-							z: {
-									version: any,
-									id: number,
-									internalID: number,
-									times: number[],
-									values: number[],
-									attrFlag: number[],
-									attrData: number[],
-							},
-					},
-			},
-	}} layer
-	*/
+  * Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
+  * than the max or min respectively.
+  * @param {{
+      T: {
+          id: number,
+          attr: string,
+          internalID: number,
+          attrX: boolean,
+          attrY: boolean,
+          attrZ: boolean,
+          containerBoneID: number,
+          containerID: number,
+          curves: {
+              x: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              y: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              z: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+          },
+      },
+      R: {
+          id: number,
+          attr: string,
+          internalID: number,
+          attrX: boolean,
+          attrY: boolean,
+          attrZ: boolean,
+          containerBoneID: number,
+          containerID: number,
+          curves: {
+              x: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              y: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              z: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+          },
+      },
+      S: {
+          id: number,
+          attr: string,
+          internalID: number,
+          attrX: boolean,
+          attrY: boolean,
+          attrZ: boolean,
+          containerBoneID: number,
+          containerID: number,
+          curves: {
+              x: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              y: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+              z: {
+                  version: any,
+                  id: number,
+                  internalID: number,
+                  times: number[],
+                  values: number[],
+                  attrFlag: number[],
+                  attrData: number[],
+              },
+          },
+      },
+  }} layer
+  */
 function getCurveNodeMaxMinTimeStamps(layer, timestamps) {
 
   if (layer.R) {
@@ -57105,38 +57299,38 @@ function getCurveNodeMaxMinTimeStamps(layer, timestamps) {
 }
 
 /**
- * Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
- * exceeds the maximum or minimum.
- * @param {{
-			x: {
-					version: any,
-					id: number,
-					internalID: number,
-					times: number[],
-					values: number[],
-					attrFlag: number[],
-					attrData: number[],
-			},
-			y: {
-					version: any,
-					id: number,
-					internalID: number,
-					times: number[],
-					values: number[],
-					attrFlag: number[],
-					attrData: number[],
-			},
-			z: {
-					version: any,
-					id: number,
-					internalID: number,
-					times: number[],
-					values: number[],
-					attrFlag: number[],
-					attrData: number[],
-			}
-	}} curve
-	*/
+  * Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
+  * exceeds the maximum or minimum.
+  * @param {{
+      x: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+      },
+      y: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+      },
+      z: {
+          version: any,
+          id: number,
+          internalID: number,
+          times: number[],
+          values: number[],
+          attrFlag: number[],
+          attrData: number[],
+      }
+  }} curve
+  */
 function getCurveMaxMinTimeStamp(curve, timestamps) {
 
   if (curve.x) {
@@ -57154,9 +57348,9 @@ function getCurveMaxMinTimeStamp(curve, timestamps) {
 }
 
 /**
- * Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
- * @param {{times: number[]}} axis
- */
+  * Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
+  * @param {{times: number[]}} axis
+  */
 function getCurveAxisMaxMinTimeStamps(axis, timestamps) {
 
   timestamps.max = axis.times[axis.times.length - 1] > timestamps.max ? axis.times[axis.times.length - 1] : timestamps.max;
@@ -57164,375 +57358,375 @@ function getCurveAxisMaxMinTimeStamps(axis, timestamps) {
 }
 
 /**
- * @param {{
-	curves: Map<number, {
-		T: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		R: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		S: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-	}>;
-	layers: Map<number, {
-		T: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		R: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-		S: {
-			id: number;
-			attr: string;
-			internalID: number;
-			attrX: boolean;
-			attrY: boolean;
-			attrZ: boolean;
-			containerBoneID: number;
-			containerID: number;
-			curves: {
-				x: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				y: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-				z: {
-					version: any;
-					id: number;
-					internalID: number;
-					times: number[];
-					values: number[];
-					attrFlag: number[];
-					attrData: number[];
-				};
-			};
-		};
-	}[]>;
-	stacks: Map<number, {
-		name: string;
-		layers: {
-			T: {
-				id: number;
-				attr: string;
-				internalID: number;
-				attrX: boolean;
-				attrY: boolean;
-				attrZ: boolean;
-				containerBoneID: number;
-				containerID: number;
-				curves: {
-					x: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					y: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					z: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-				};
-			};
-			R: {
-				id: number;
-				attr: string;
-				internalID: number;
-				attrX: boolean;
-				attrY: boolean;
-				attrZ: boolean;
-				containerBoneID: number;
-				containerID: number;
-				curves: {
-					x: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					y: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					z: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-				};
-			};
-			S: {
-				id: number;
-				attr: string;
-				internalID: number;
-				attrX: boolean;
-				attrY: boolean;
-				attrZ: boolean;
-				containerBoneID: number;
-				containerID: number;
-				curves: {
-					x: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					y: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-					z: {
-						version: any;
-						id: number;
-						internalID: number;
-						times: number[];
-						values: number[];
-						attrFlag: number[];
-						attrData: number[];
-					};
-				};
-			};
-		}[][];
-		length: number;
-		frames: number;
-	}>;
-	length: number;
-	fps: number;
-	frames: number;
+  * @param {{
+  curves: Map<number, {
+    T: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    R: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    S: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+  }>;
+  layers: Map<number, {
+    T: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    R: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+    S: {
+      id: number;
+      attr: string;
+      internalID: number;
+      attrX: boolean;
+      attrY: boolean;
+      attrZ: boolean;
+      containerBoneID: number;
+      containerID: number;
+      curves: {
+        x: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        y: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+        z: {
+          version: any;
+          id: number;
+          internalID: number;
+          times: number[];
+          values: number[];
+          attrFlag: number[];
+          attrData: number[];
+        };
+      };
+    };
+  }[]>;
+  stacks: Map<number, {
+    name: string;
+    layers: {
+      T: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      };
+      R: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      };
+      S: {
+        id: number;
+        attr: string;
+        internalID: number;
+        attrX: boolean;
+        attrY: boolean;
+        attrZ: boolean;
+        containerBoneID: number;
+        containerID: number;
+        curves: {
+          x: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          y: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+          z: {
+            version: any;
+            id: number;
+            internalID: number;
+            times: number[];
+            values: number[];
+            attrFlag: number[];
+            attrData: number[];
+          };
+        };
+      };
+    }[][];
+    length: number;
+    frames: number;
+  }>;
+  length: number;
+  fps: number;
+  frames: number;
 }} animations,
-	* @param {{skeleton: { bones: THREE.Bone[]}}} group
-	*/
+  * @param {{skeleton: { bones: THREE.Bone[]}}} group
+  */
 function addAnimations(group, animations) {
 
   if (group.animations === undefined) {
@@ -57547,22 +57741,22 @@ function addAnimations(group, animations) {
     var stack = stacks[key];
 
     /**
-     * @type {{
-     * name: string,
-     * fps: number,
-     * length: number,
-     * hierarchy: Array.<{
-     * 	parent: number,
-     * 	name: string,
-     * 	keys: Array.<{
-     * 		time: number,
-     * 		pos: Array.<number>,
-     * 		rot: Array.<number>,
-     * 		scl: Array.<number>
-     * 	}>
-     * }>
-     * }}
-     */
+      * @type {{
+      * name: string,
+      * fps: number,
+      * length: number,
+      * hierarchy: Array.<{
+      * 	parent: number,
+      * 	name: string,
+      * 	keys: Array.<{
+      * 		time: number,
+      * 		pos: Array.<number>,
+      * 		rot: Array.<number>,
+      * 		scl: Array.<number>
+      * 	}>
+      * }>
+      * }}
+      */
     var animationData = {
       name: stack.name,
       fps: 30,
@@ -57613,8 +57807,8 @@ var euler = new Euler();
 var quaternion = new Quaternion();
 
 /**
- * @param {THREE.Bone} bone
- */
+  * @param {THREE.Bone} bone
+  */
 function generateKey(animations, animationNode, bone, frame) {
 
   var key = {
@@ -57650,8 +57844,8 @@ function generateKey(animations, animationNode, bone, frame) {
   } catch (error) {
 
     // Curve is not fully plotted.
-    console.log(bone);
-    console.log(error);
+    console.log('THREE.FBXLoader: ', bone);
+    console.log('THREE.FBXLoader: ', error);
   }
 
   return key;
@@ -57693,45 +57887,45 @@ function isKeyExistOnFrame(curve, frame) {
 }
 
 /**
- * An instance of a Vertex with data for drawing vertices to the screen.
- * @constructor
- */
+  * An instance of a Vertex with data for drawing vertices to the screen.
+  * @constructor
+  */
 function Vertex$1() {
 
   /**
-   * Position of the vertex.
-   * @type {THREE.Vector3}
-   */
+    * Position of the vertex.
+    * @type {THREE.Vector3}
+    */
   this.position = new Vector3();
 
   /**
-   * Normal of the vertex
-   * @type {THREE.Vector3}
-   */
+    * Normal of the vertex
+    * @type {THREE.Vector3}
+    */
   this.normal = new Vector3();
 
   /**
-   * UV coordinates of the vertex.
-   * @type {THREE.Vector2}
-   */
-  this.uv = new Vector2();
+    * Array of UV coordinates of the vertex.
+    * @type {Array of THREE.Vector2}
+    */
+  this.uv = [];
 
   /**
-   * Color of the vertex
-   * @type {THREE.Vector3}
-   */
+    * Color of the vertex
+    * @type {THREE.Vector3}
+    */
   this.color = new Vector3();
 
   /**
-   * Indices of the bones vertex is influenced by.
-   * @type {THREE.Vector4}
-   */
+    * Indices of the bones vertex is influenced by.
+    * @type {THREE.Vector4}
+    */
   this.skinIndices = new Vector4(0, 0, 0, 0);
 
   /**
-   * Weights that each bone influences the vertex.
-   * @type {THREE.Vector4}
-   */
+    * Weights that each bone influences the vertex.
+    * @type {THREE.Vector4}
+    */
   this.skinWeights = new Vector4(0, 0, 0, 0);
 }
 
@@ -57748,11 +57942,14 @@ Object.assign(Vertex$1.prototype, {
 
     return returnVar;
   },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
+  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
 
     this.position.toArray(vertexBuffer, vertexBuffer.length);
     this.normal.toArray(normalBuffer, normalBuffer.length);
-    this.uv.toArray(uvBuffer, uvBuffer.length);
+    for (var i = 0; i < this.uv.length; i++) {
+
+      this.uv[i].toArray(uvBuffers[i], uvBuffers[i].length);
+    }
     this.color.toArray(colorBuffer, colorBuffer.length);
     this.skinIndices.toArray(skinIndexBuffer, skinIndexBuffer.length);
     this.skinWeights.toArray(skinWeightBuffer, skinWeightBuffer.length);
@@ -57760,13 +57957,13 @@ Object.assign(Vertex$1.prototype, {
 });
 
 /**
- * @constructor
- */
+  * @constructor
+  */
 function Triangle$1() {
 
   /**
-   * @type {{position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}
-   */
+    * @type {{position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}
+    */
   this.vertices = [];
 }
 
@@ -57782,25 +57979,25 @@ Object.assign(Triangle$1.prototype, {
 
     return returnVar;
   },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
+  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
 
     var vertices = this.vertices;
 
     for (var i = 0, l = vertices.length; i < l; ++i) {
 
-      vertices[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer);
+      vertices[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer);
     }
   }
 });
 
 /**
- * @constructor
- */
+  * @constructor
+  */
 function Face() {
 
   /**
-   * @type {{vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[]}
-   */
+    * @type {{vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[]}
+    */
   this.triangles = [];
   this.materialIndex = 0;
 }
@@ -57830,62 +58027,65 @@ Object.assign(Face.prototype, {
       this.triangles.push(triangle);
     }
   },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer) {
+  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer) {
 
     var triangles = this.triangles;
     var materialIndex = this.materialIndex;
 
     for (var i = 0, l = triangles.length; i < l; ++i) {
 
-      triangles[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer);
+      triangles[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer);
       append(materialIndexBuffer, [materialIndex, materialIndex, materialIndex]);
     }
   }
 });
 
 /**
- * @constructor
- */
+  * @constructor
+  */
 function Geometry$1() {
 
   /**
-   * @type {{triangles: {vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[], materialIndex: number}[]}
-   */
+    * @type {{triangles: {vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: Array of THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[], materialIndex: number}[]}
+    */
   this.faces = [];
 
   /**
-   * @type {{}|THREE.Skeleton}
-   */
+    * @type {{}|THREE.Skeleton}
+    */
   this.skeleton = null;
 }
 
 Object.assign(Geometry$1.prototype, {
 
   /**
-   * @returns	{{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-   */
+    * @returns	{{vertexBuffer: number[], normalBuffer: number[], uvBuffers: Array of number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
+    */
   flattenToBuffers: function () {
 
     var vertexBuffer = [];
     var normalBuffer = [];
-    var uvBuffer = [];
+    var uvBuffers = [];
     var colorBuffer = [];
     var skinIndexBuffer = [];
     var skinWeightBuffer = [];
-
     var materialIndexBuffer = [];
 
     var faces = this.faces;
 
-    for (var i = 0, l = faces.length; i < l; ++i) {
+    for (var i = 0; i < faces[0].triangles[0].vertices[0].uv.length; i++) {
 
-      faces[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffer, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer);
+      uvBuffers.push([]);
+    }
+
+    for (var i = 0, l = faces.length; i < l; ++i) {
+      faces[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer);
     }
 
     return {
       vertexBuffer: vertexBuffer,
       normalBuffer: normalBuffer,
-      uvBuffer: uvBuffer,
+      uvBuffers: uvBuffers,
       colorBuffer: colorBuffer,
       skinIndexBuffer: skinIndexBuffer,
       skinWeightBuffer: skinWeightBuffer,
@@ -57937,29 +58137,33 @@ Object.assign(TextParser.prototype, {
 
     var split = text.split('\n');
 
-    for (var line in split) {
+    for (var lineNum = 0, lineLength = split.length; lineNum < lineLength; lineNum++) {
 
-      var l = split[line];
+      var l = split[lineNum];
 
-      // short cut
+      // skip comment line
       if (l.match(/^[\s\t]*;/)) {
 
         continue;
-      } // skip comment line
+      }
+
+      // skip empty line
       if (l.match(/^[\s\t]*$/)) {
 
         continue;
-      } // skip empty line
+      }
 
       // beginning of node
       var beginningOfNodeExp = new RegExp('^\\t{' + this.currentIndent + '}(\\w+):(.*){', '');
       var match = l.match(beginningOfNodeExp);
+
       if (match) {
 
         var nodeName = match[1].trim().replace(/^"/, '').replace(/"$/, '');
         var nodeAttrs = match[2].split(',');
 
         for (var i = 0, l = nodeAttrs.length; i < l; i++) {
+
           nodeAttrs[i] = nodeAttrs[i].trim().replace(/^"/, '').replace(/"$/, '');
         }
 
@@ -57970,10 +58174,19 @@ Object.assign(TextParser.prototype, {
       // node's property
       var propExp = new RegExp('^\\t{' + this.currentIndent + '}(\\w+):[\\s\\t\\r\\n](.*)');
       var match = l.match(propExp);
+
       if (match) {
 
         var propName = match[1].replace(/^"/, '').replace(/"$/, '').trim();
         var propValue = match[2].replace(/^"/, '').replace(/"$/, '').trim();
+
+        // for special case: base64 image data follows "Content: ," line
+        //	Content: ,
+        //	 "iVB..."
+        if (propName === 'Content' && propValue === ',') {
+
+          propValue = split[++lineNum].replace(/"/g, '').trim();
+        }
 
         this.parseNodeProperty(l, propName, propValue);
         continue;
@@ -57981,6 +58194,7 @@ Object.assign(TextParser.prototype, {
 
       // end of node
       var endOfNodeExp = new RegExp('^\\t{' + (this.currentIndent - 1) + '}}');
+
       if (l.match(endOfNodeExp)) {
 
         this.nodeEnd();
@@ -58098,7 +58312,7 @@ Object.assign(TextParser.prototype, {
     var parentName = currentNode.name;
 
     // special case parent node's is like "Properties70"
-    // these chilren nodes must treat with careful
+    // these children nodes must treat with careful
     if (parentName !== undefined) {
 
       var propMatch = parentName.match(/Properties(\d)+/);
@@ -58110,7 +58324,7 @@ Object.assign(TextParser.prototype, {
     }
 
     // special case Connections
-    if (propName == 'C') {
+    if (propName === 'C') {
 
       var connProps = propValue.split(',').slice(1);
       var from = parseInt(connProps[0]);
@@ -58129,7 +58343,7 @@ Object.assign(TextParser.prototype, {
     }
 
     // special case Connections
-    if (propName == 'Node') {
+    if (propName === 'Node') {
 
       var id = parseInt(propValue);
       currentNode.properties.id = id;
@@ -58177,6 +58391,7 @@ Object.assign(TextParser.prototype, {
     var props = propValue.split('",');
 
     for (var i = 0, l = props.length; i < l; i++) {
+
       props[i] = props[i].trim().replace(/^\"/, '').replace(/\s/, '_');
     }
 
@@ -58188,7 +58403,7 @@ Object.assign(TextParser.prototype, {
 
     /*
     if ( innerPropValue === undefined ) {
-    	innerPropValue = props[3];
+      innerPropValue = props[3];
     }
     */
 
@@ -58244,10 +58459,10 @@ function BinaryParser() {}
 Object.assign(BinaryParser.prototype, {
 
   /**
-   * Parses binary data and builds FBXTree as much compatible as possible with the one built by TextParser.
-   * @param {ArrayBuffer} buffer
-   * @returns {THREE.FBXTree}
-   */
+    * Parses binary data and builds FBXTree as much compatible as possible with the one built by TextParser.
+    * @param {ArrayBuffer} buffer
+    * @returns {THREE.FBXTree}
+    */
   parse: function (buffer) {
 
     var reader = new BinaryReader(buffer);
@@ -58255,7 +58470,7 @@ Object.assign(BinaryParser.prototype, {
 
     var version = reader.getUint32();
 
-    console.log('FBX binary version: ' + version);
+    console.log('THREE.FBXLoader: FBX binary version: ' + version);
 
     var allNodes = new FBXTree();
 
@@ -58270,16 +58485,16 @@ Object.assign(BinaryParser.prototype, {
 
 
   /**
-   * Checks if reader has reached the end of content.
-   * @param {BinaryReader} reader
-   * @returns {boolean}
-   */
+    * Checks if reader has reached the end of content.
+    * @param {BinaryReader} reader
+    * @returns {boolean}
+    */
   endOfContent: function (reader) {
 
     // footer size: 160bytes + 16-byte alignment padding
     // - 16bytes: magic
     // - padding til 16-byte alignment (at least 1byte?)
-    //   (seems like some exporters embed fixed 15bytes?)
+    //   (seems like some exporters embed fixed 15 or 16bytes?)
     // - 4bytes: magic
     // - 4bytes: version
     // - 120bytes: zero
@@ -58289,17 +58504,17 @@ Object.assign(BinaryParser.prototype, {
       return (reader.getOffset() + 160 + 16 & ~0xf) >= reader.size();
     }
 
-    return reader.getOffset() + 160 + 15 >= reader.size();
+    return reader.getOffset() + 160 + 16 >= reader.size();
   },
 
 
   /**
-   * Parses Node as much compatible as possible with the one parsed by TextParser
-   * TODO: could be optimized more?
-   * @param {BinaryReader} reader
-   * @param {number} version
-   * @returns {Object} - Returns an Object as node, or null if NULL-record.
-   */
+    * Parses Node as much compatible as possible with the one parsed by TextParser
+    * TODO: could be optimized more?
+    * @param {BinaryReader} reader
+    * @param {number} version
+    * @returns {Object} - Returns an Object as node, or null if NULL-record.
+    */
   parseNode: function (reader, version) {
 
     // The first three data sizes depends on version.
@@ -58556,10 +58771,10 @@ Object.assign(BinaryParser.prototype, {
 
         if (window.Zlib === undefined) {
 
-          throw new Error('FBXLoader: Import inflate.min.js from https://github.com/imaya/zlib.js');
+          throw new Error('THREE.FBXLoader: External library Inflate.min.js required, obtain or import from https://github.com/imaya/zlib.js');
         }
 
-        var inflate = new Zlib.Inflate(new Uint8Array(reader.getArrayBuffer(compressedLength)));
+        var inflate = new Zlib.Inflate(new Uint8Array(reader.getArrayBuffer(compressedLength))); // eslint-disable-line no-undef
         var reader2 = new BinaryReader(inflate.decompress().buffer);
 
         switch (type) {
@@ -58590,7 +58805,7 @@ Object.assign(BinaryParser.prototype, {
         return reader.getArrayBuffer(length);
 
       default:
-        console.error('FBX contains an unknown property type ' + type);
+        throw new Error('THREE.FBXLoader: Unknown property type ' + type);
 
     }
   }
@@ -58875,6 +59090,9 @@ Object.assign(BinaryReader.prototype, {
       s += String.fromCharCode(value);
     }
 
+    // Manage UTF8 encoding
+    s = decodeURIComponent(escape(s));
+
     this.skip(size);
 
     return s;
@@ -58993,9 +59211,9 @@ Object.assign(FBXTree.prototype, {
 });
 
 /**
- * @param {ArrayBuffer} buffer
- * @returns {boolean}
- */
+  * @param {ArrayBuffer} buffer
+  * @returns {boolean}
+  */
 function isFbxFormatBinary(buffer) {
 
   var CORRECT = 'Kaydara FBX Binary  \0';
@@ -59004,8 +59222,8 @@ function isFbxFormatBinary(buffer) {
 }
 
 /**
- * @returns {boolean}
- */
+  * @returns {boolean}
+  */
 function isFbxFormatASCII(text) {
 
   var CORRECT = ['K', 'a', 'y', 'd', 'a', 'r', 'a', '\\', 'F', 'B', 'X', '\\', 'B', 'i', 'n', 'a', 'r', 'y', '\\', '\\'];
@@ -59023,7 +59241,7 @@ function isFbxFormatASCII(text) {
   for (var i = 0; i < CORRECT.length; ++i) {
 
     var num = read(1);
-    if (num == CORRECT[i]) {
+    if (num === CORRECT[i]) {
 
       return false;
     }
@@ -59033,8 +59251,8 @@ function isFbxFormatASCII(text) {
 }
 
 /**
- * @returns {number}
- */
+  * @returns {number}
+  */
 function getFbxVersion(text) {
 
   var versionRegExp = /FBXVersion: (\d+)/;
@@ -59044,14 +59262,14 @@ function getFbxVersion(text) {
     var version = parseInt(match[1]);
     return version;
   }
-  throw new Error('FBXLoader: Cannot find the version number for the file given.');
+  throw new Error('THREE.FBXLoader: Cannot find the version number for the file given.');
 }
 
 /**
- * Converts FBX ticks into real time seconds.
- * @param {number} time - FBX tick timestamp to convert.
- * @returns {number} - FBX tick in real world time.
- */
+  * Converts FBX ticks into real time seconds.
+  * @param {number} time - FBX tick timestamp to convert.
+  * @returns {number} - FBX tick in real world time.
+  */
 function convertFBXTimeToSeconds(time) {
 
   // Constant is FBX ticks per second.
@@ -59059,12 +59277,12 @@ function convertFBXTimeToSeconds(time) {
 }
 
 /**
- * Parses comma separated list of float numbers and returns them in an array.
- * @example
- * // Returns [ 5.6, 9.4, 2.5, 1.4 ]
- * parseFloatArray( "5.6,9.4,2.5,1.4" )
- * @returns {number[]}
- */
+  * Parses comma separated list of float numbers and returns them in an array.
+  * @example
+  * // Returns [ 5.6, 9.4, 2.5, 1.4 ]
+  * parseFloatArray( "5.6,9.4,2.5,1.4" )
+  * @returns {number[]}
+  */
 function parseFloatArray(string) {
 
   var array = string.split(',');
@@ -59078,12 +59296,12 @@ function parseFloatArray(string) {
 }
 
 /**
- * Parses comma separated list of int numbers and returns them in an array.
- * @example
- * // Returns [ 5, 8, 2, 3 ]
- * parseFloatArray( "5,8,2,3" )
- * @returns {number[]}
- */
+  * Parses comma separated list of int numbers and returns them in an array.
+  * @example
+  * // Returns [ 5, 8, 2, 3 ]
+  * parseFloatArray( "5,8,2,3" )
+  * @returns {number[]}
+  */
 function parseIntArray(string) {
 
   var array = string.split(',');
@@ -59097,20 +59315,20 @@ function parseIntArray(string) {
 }
 
 /**
- * Parses Vector3 property from FBXTree.  Property is given as .value.x, .value.y, etc.
- * @param {FBXVector3} property - Property to parse as Vector3.
- * @returns {THREE.Vector3}
- */
+  * Parses Vector3 property from FBXTree.  Property is given as .value.x, .value.y, etc.
+  * @param {FBXVector3} property - Property to parse as Vector3.
+  * @returns {THREE.Vector3}
+  */
 function parseVector3(property) {
 
   return new Vector3().fromArray(property.value);
 }
 
 /**
- * Parses Color property from FBXTree.  Property is given as .value.x, .value.y, etc.
- * @param {FBXVector3} property - Property to parse as Color.
- * @returns {THREE.Color}
- */
+  * Parses Color property from FBXTree.  Property is given as .value.x, .value.y, etc.
+  * @param {FBXVector3} property - Property to parse as Color.
+  * @returns {THREE.Color}
+  */
 function parseColor(property) {
 
   return new Color().fromArray(property.value);
@@ -59122,12 +59340,12 @@ function parseMatrixArray(floatString) {
 }
 
 /**
- * Converts ArrayBuffer to String.
- * @param {ArrayBuffer} buffer
- * @param {number} from
- * @param {number} to
- * @returns {String}
- */
+  * Converts ArrayBuffer to String.
+  * @param {ArrayBuffer} buffer
+  * @param {number} from
+  * @param {number} to
+  * @returns {String}
+  */
 function convertArrayBufferToString(buffer, from, to) {
 
   if (from === undefined) from = 0;
@@ -59151,10 +59369,10 @@ function convertArrayBufferToString(buffer, from, to) {
 }
 
 /**
- * Converts number from degrees into radians.
- * @param {number} value
- * @returns {number}
- */
+  * Converts number from degrees into radians.
+  * @param {number} value
+  * @returns {number}
+  */
 function degreeToRadian(value) {
 
   return value * DEG2RAD;
