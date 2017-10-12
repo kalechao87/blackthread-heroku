@@ -21,7 +21,7 @@ It has two options - the number of sides of the central polygon (left) and the n
 The tiling is created out out of two Euclidean triangular pieces, one representing half a white fish, the other half a black fish.
 
 
-<div class="canvas-container">
+<div id="container">
   <div id="p-selection">
     <a href="#" id="p-down">
       <span class="fa fa-chevron-left fa-pull-left icon-padded"></span>
@@ -40,5 +40,5 @@ The tiling is created out out of two Euclidean triangular pieces, one representi
       <span class="fa fa-chevron-right fa-pull-right icon-padded"></span>
     </a>
   </div>
-  <canvas id="escherSketch-canvas" class="fullpage-canvas"></canvas>
+  <canvas id="canvas" class="fullwidth"></canvas>
 </div>

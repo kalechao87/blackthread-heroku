@@ -19,9 +19,9 @@ export default class EscherSketchCanvas {
 
     const self = this;
 
-    self.container = document.querySelector( '.canvas-container' );
+    self.container = document.querySelector( '#container' );
 
-    self.app = new App( document.querySelector( '#escherSketch-canvas' ) );
+    self.app = new App( document.querySelector( '#canvas' ) );
 
     self.app.camera.position.set( 0, 0, 1.5 );
     self.app.camera.far = 5;
@@ -67,7 +67,7 @@ export default class EscherSketchCanvas {
       this.spec.q = newQ;
 
       // TODO: display a warning here saying p, q can't both be 4
-      if ( pValue() === 4 && qValue() === 4 ) return; 
+      if ( pValue() === 4 && qValue() === 4 ) return;
 
       // Add a slight delay before rebuilding the tiling to allow the displayed
       // value p / q to update
