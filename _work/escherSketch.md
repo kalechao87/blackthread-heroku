@@ -3,6 +3,7 @@ layout: standard
 title:  "Escher Sketch"
 date:   2017-03-31 13:00:35 +0700
 categories: work
+permalink: /work/eschersketch/
 comments: true
 excerpt: "Automatic Escher inspired hyperbolic art generation prototype"
 header:
