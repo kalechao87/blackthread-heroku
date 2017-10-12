@@ -17,7 +17,7 @@ end
 
 # serve the jekyll site from the _site folder
 get '/*' do
-  file_name = "_site#{request.path_info}/index.html".gsub(%r{\/+},'/')
+  file_name = "_site#{request.path_info}/*.html".gsub(%r{\/+},'/')
   if File.exists?(file_name)
 File.read(file_name)
   else
