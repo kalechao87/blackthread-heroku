@@ -39,6 +39,8 @@ export default class Frame {
 
     this.robot = robot;
 
+    console.log( robot )
+
     this.num = num;
 
     if ( !isBaseFrame ) {
@@ -193,193 +195,53 @@ export default class Frame {
 
   initControlFunctions() {
 
-    // const xAxis = new THREE.Vector3( 1, 0, 0 );
+    const xAxis = new THREE.Vector3( 1, 0, 0 );
     const yAxis = new THREE.Vector3( 0, 1, 0 );
     const zAxis = new THREE.Vector3( 0, 0, 1 );
 
+    const control = ( e, name, sign, direction, axis ) => {
+
+      e.preventDefault();
+
+      const value = THREE.Math.degToRad( sign * e.target.value );
+
+      this.robot[name].rotateOnAxis( axis, this[ name + direction + 'Value'] - value );
+
+      this[ name + direction + 'Value'] = value;
+      this[ name + direction + 'Set'] = true;
+
+      this[ name + 'Quaternion' ].copy( this.robot[ name ].quaternion );
+
+    };
+
     this.controlFunctions = {
 
-      headPitch: ( e ) => {
+      headPitch: e => control( e, 'head', 1, 'Pitch', zAxis ),
+      headYaw: e => control( e, 'head', 1, 'Yaw', xAxis ),
 
-        e.preventDefault();
+      leftShoulderPitch: e => control( e, 'leftShoulder', -1, 'Pitch', zAxis ),
+      leftShoulderYaw: e => control( e, 'leftShoulder', -1, 'Yaw', yAxis ),
 
-        this.headPitchValue = THREE.Math.degToRad( -e.target.value );
+      rightShoulderPitch: e => control( e, 'rightShoulder', -1, 'Pitch', zAxis ),
+      rightShoulderYaw: e => control( e, 'rightShoulder', 1, 'Yaw', yAxis ),
 
-        this.robot.head.rotation.z = this.headPitchValue;
+      leftElbowPitch: e => control( e, 'leftElbow', 1, 'Pitch', yAxis ),
+      leftElbowYaw: e => control( e, 'leftElbow', -1, 'Yaw', zAxis ),
 
-        this.headPitchSet = true;
+      rightElbowPitch: e => control( e, 'rightElbow', -1, 'Pitch', yAxis ),
+      rightElbowYaw: e => control( e, 'rightElbow', -1, 'Yaw', zAxis ),
 
-        this.headQuaternion.copy( this.robot.head.quaternion );
-
-      },
-      headYaw: ( e ) => {
-
-        e.preventDefault();
-
-        this.headYawValue = THREE.Math.degToRad( e.target.value );
-        this.headYawSet = true;
-
-        this.robot.head.rotation.x = this.headYawValue;
-
-        this.headQuaternion.copy( this.robot.head.quaternion );
-
-      },
-      leftShoulderPitch: ( e ) => {
-
-        e.preventDefault();
-
-        const value = THREE.Math.degToRad( -e.target.value );
-
-        this.robot.leftShoulder.rotateOnAxis( zAxis, this.leftShoulderPitchValue - value );
-
-        this.leftShoulderPitchValue = value;
-        this.leftShoulderPitchSet = true;
-
-        this.leftShoulderQuaternion.copy( this.robot.leftShoulder.quaternion );
-
-      },
-      leftShoulderYaw: ( e ) => {
-
-        e.preventDefault();
-
-        const value = THREE.Math.degToRad( -e.target.value );
-
-        this.robot.leftShoulder.rotateOnAxis( yAxis, this.leftShoulderYawValue - value );
-
-        this.leftShoulderYawValue = value;
-        this.leftShoulderYawSet = true;
-
-        this.leftShoulderQuaternion.copy( this.robot.leftShoulder.quaternion );
-
-      },
-      rightShoulderPitch: ( e ) => {
-
-        e.preventDefault();
-
-        const value = THREE.Math.degToRad( -e.target.value );
-
-        this.robot.rightShoulder.rotateOnAxis( zAxis, this.rightShoulderPitchValue - value );
-
-        this.rightShoulderPitchValue = value;
-        this.rightShoulderPitchSet = true;
-
-        this.rightShoulderQuaternion.copy( this.robot.rightShoulder.quaternion );
-
-      },
-      rightShoulderYaw: ( e ) => {
-
-        e.preventDefault();
-
-
-        const value = THREE.Math.degToRad( e.target.value );
-
-        this.robot.rightShoulder.rotateOnAxis( yAxis, this.rightShoulderYawValue - value );
-
-        this.rightShoulderYawValue = value;
-        this.rightShoulderYawSet = true;
-
-        this.rightShoulderQuaternion.copy( this.robot.rightShoulder.quaternion );
-
-      },
-      leftElbowPitch: ( e ) => {
-
-        e.preventDefault();
-
-        const value = THREE.Math.degToRad( e.target.value );
-
-        this.robot.leftElbow.rotateOnAxis( yAxis, this.leftElbowPitchValue - value );
-
-        this.leftElbowPitchValue = value;
-        this.leftElbowPitchSet = true;
-
-        this.leftElbowQuaternion.copy( this.robot.leftElbow.quaternion );
-
-      },
-      leftElbowYaw: ( e ) => {
-
-        e.preventDefault();
-
-        const value = THREE.Math.degToRad( -e.target.value );
-
-        this.robot.leftElbow.rotateOnAxis( zAxis, this.leftElbowYawValue - value );
-
-        this.leftElbowYawValue = value;
-        this.leftElbowYawSet = true;
-
-        this.leftElbowQuaternion.copy( this.robot.leftElbow.quaternion );
-
-      },
-      rightElbowPitch: ( e ) => {
-
-        e.preventDefault();
-
-        const value = THREE.Math.degToRad( -e.target.value );
-
-        this.robot.rightElbow.rotateOnAxis( yAxis, this.rightElbowPitchValue - value );
-
-        this.rightElbowPitchValue = value;
-        this.rightElbowPitchSet = true;
-
-        this.rightElbowQuaternion.copy( this.robot.rightElbow.quaternion );
-
-      },
-      rightElbowYaw: ( e ) => {
-
-        e.preventDefault();
-
-        const value = THREE.Math.degToRad( -e.target.value );
-
-        this.robot.rightElbow.rotateOnAxis( zAxis, this.rightElbowYawValue - value );
-
-        this.rightElbowYawValue = value;
-        this.rightElbowYawSet = true;
-
-        this.rightElbowQuaternion.copy( this.robot.rightElbow.quaternion );
-
-      },
     };
+
   }
 
   setRotations() {
 
-    this.robot.head.rotation.set( this.headYawValue, 0, this.headPitchValue );
+    this.robot.head.quaternion.copy( this.headQuaternion );
     this.robot.leftShoulder.quaternion.copy( this.leftShoulderQuaternion );
     this.robot.rightShoulder.quaternion.copy( this.rightShoulderQuaternion );
     this.robot.leftElbow.quaternion.copy( this.leftElbowQuaternion );
     this.robot.rightElbow.quaternion.copy( this.rightElbowQuaternion );
-
-    // if ( this.headPitchSet || this.headYawSet ) {
-
-    //   this.robot.head.rotation.set( this.headYawValue, 0, this.headPitchValue );
-
-    // }
-
-
-    // if ( this.leftShoulderPitchSet || this.leftShoulderYawSet ) {
-
-    //   this.robot.leftShoulder.quaternion.copy( this.leftShoulderQuaternion );
-
-    // }
-
-    // if ( this.rightShoulderPitchSet || this.rightShoulderYawSet ) {
-
-    //   this.robot.rightShoulder.quaternion.copy( this.rightShoulderQuaternion );
-
-    // }
-
-
-    // if ( this.leftElbowPitchSet || this.leftElbowYawSet ) {
-
-    //   this.robot.leftElbow.quaternion.copy( this.leftElbowQuaternion );
-
-    // }
-
-
-    // if ( this.rightElbowPitchSet || this.rightElbowYawSet ) {
-
-    //   this.robot.rightElbow.quaternion.copy( this.rightElbowQuaternion );
-
-    // }
 
   }
 

@@ -11,6 +11,7 @@ import HTMLControl from './HTMLControl.js';
 
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
+import Frame from './components/Frames.js';
 import Frames from './components/Frames.js';
 import Groups from './components/Groups.js';
 import Dance from './components/Dance.js';
@@ -18,6 +19,7 @@ import Dance from './components/Dance.js';
 import FileControl from './FileControl.js';
 import Audio from './Audio.js';
 
+import animationControl from './animation/animationControl.js';
 
 // Set up THREE caching
 THREE.Cache.enabled = true;
@@ -49,6 +51,10 @@ class Main {
     this.app.onUpdate = function () {
 
       // use this.delta for timings here
+      const delta = this.delta / 1000;
+
+      animationControl.onUpdate( delta );
+
 
     };
 
@@ -109,9 +115,20 @@ class Main {
         this.initBackground();
         this.initLighting();
         this.initCamera();
-        this.initControls();
+        this.initCameraControl();
 
-        this.frames = new Frames( this.nao );
+        this.initRobot( this.nao );
+
+        animationControl.initMixer( this.nao );
+
+
+        const defaultFrame = new Frame( 999999, this.robot, true );
+
+        this.frames = new Frames( this.robot );
+
+        this.frames.setDefaultFrame( defaultFrame );
+        animationControl.setDefaultFrame( defaultFrame );
+
         this.groups = new Groups( this.frames );
         this.dance  = new Dance( this.groups, this.frames );
 
@@ -122,6 +139,33 @@ class Main {
         this.app.play();
 
       } );
+
+  }
+
+  // set up the robots moveable parts
+  initRobot( robot ) {
+
+    this.robot = {
+
+      head: robot.getObjectByName( 'headControl' ),
+
+      leftShoulder: robot.getObjectByName( 'shoulderControlLeft' ),
+      rightShoulder: robot.getObjectByName( 'shoulderControlRight' ),
+
+      leftElbow: robot.getObjectByName( 'elbowControlLeft' ),
+      rightElbow: robot.getObjectByName( 'elbowControlRight' ),
+
+    };
+
+    // slight hack since the model's head is very slightly rotated at the start
+    // so reset that here
+    this.robot.head.rotation.set( 0, 0, 0 );
+
+    this.robot.headInitialQuaternion = this.robot.head.quaternion.clone();
+    this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
+    this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
+    this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
+    this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
 
   }
 
@@ -153,9 +197,6 @@ class Main {
 
   initCamera() {
 
-    // console.log( this.camera )
-
-    // this.app.camera = this.camera;
     this.app.camera.far = 800;
     this.app.camera.fov = 35;
     this.app.camera.position.set( 0, 0, 200 );
@@ -163,11 +204,9 @@ class Main {
 
   }
 
-  initControls() {
+  initCameraControl() {
 
     this.app.controls = new OrbitControls( this.app.camera, this.app.canvas );
-
-    // this.app.controls.object = this.camera;
 
     // vertical rotation limits
     this.app.controls.minPolarAngle = Math.PI * 0.1; // upper

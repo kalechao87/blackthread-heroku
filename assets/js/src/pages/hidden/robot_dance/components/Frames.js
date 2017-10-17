@@ -1,21 +1,15 @@
 import HTMLControl from '../HTMLControl.js';
 import Frame from './Frame.js';
 
-let lastCreatedFrame = null;
-
 export default class Frames {
 
   constructor( robot ) {
 
-    this.initRobot( robot );
+    this.robot = robot;
 
     this.currentFrameNum = 0;
     this.selectedFrame = null;
     this.frames = [];
-
-    // this holds the base pose for the robot - if values are undefined in other frames they
-    // will fallback to this frame
-    this.defaultFrame = new Frame( 999999, this.robot, true );
 
     this.framesTable = HTMLControl.controls.frames.table;
     this.newFrameButton = HTMLControl.controls.frames.createButton;
@@ -23,38 +17,15 @@ export default class Frames {
 
   }
 
+  setDefaultFrame( frame ) {
 
-  initRobot( robot ) {
-
-    this.robot = {
-
-      head: robot.getObjectByName( 'headControl' ),
-
-      leftShoulder: robot.getObjectByName( 'shoulderControlLeft' ),
-      rightShoulder: robot.getObjectByName( 'shoulderControlRight' ),
-
-      leftElbow: robot.getObjectByName( 'elbowControlLeft' ),
-      rightElbow: robot.getObjectByName( 'elbowControlRight' ),
-
-    };
-
-    // slight hack since the model's head is very slightly rotated at the start
-    // so reset that here
-    this.robot.head.rotation.set( 0, 0, 0 );
-
-    this.robot.headInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
-    this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
-    this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
-    this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
-    this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
+    this.defaultFrame = frame;
 
   }
 
-  createFrame( num, detail ) {
+  createFrame( num ) {
 
     const frame = new Frame( num, this.robot );
-
-    if ( detail !== undefined ) frame.fromJSON( detail );
 
     this.frames[ frame.num ] = frame;
 
@@ -90,7 +61,7 @@ export default class Frames {
 
       e.preventDefault();
 
-      lastCreatedFrame = this.createFrame( this.currentFrameNum ++ );
+      this.createFrame( this.currentFrameNum ++ );
 
     } );
 

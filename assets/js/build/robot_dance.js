@@ -58818,6 +58818,8 @@ var Frame = function () {
 
     this.robot = robot;
 
+    console.log(robot);
+
     this.num = num;
 
     if (!isBaseFrame) {
@@ -58948,182 +58950,71 @@ var Frame = function () {
   Frame.prototype.initControlFunctions = function initControlFunctions() {
     var _this = this;
 
-    // const xAxis = new THREE.Vector3( 1, 0, 0 );
+    var xAxis = new Vector3(1, 0, 0);
     var yAxis = new Vector3(0, 1, 0);
     var zAxis = new Vector3(0, 0, 1);
+
+    var control = function (e, name, sign, direction, axis) {
+
+      e.preventDefault();
+
+      var value = _Math.degToRad(sign * e.target.value);
+
+      _this.robot[name].rotateOnAxis(axis, _this[name + direction + 'Value'] - value);
+
+      _this[name + direction + 'Value'] = value;
+      _this[name + direction + 'Set'] = true;
+
+      _this[name + 'Quaternion'].copy(_this.robot[name].quaternion);
+    };
 
     this.controlFunctions = {
 
       headPitch: function (e) {
-
-        e.preventDefault();
-
-        _this.headPitchValue = _Math.degToRad(-e.target.value);
-
-        _this.robot.head.rotation.z = _this.headPitchValue;
-
-        _this.headPitchSet = true;
-
-        _this.headQuaternion.copy(_this.robot.head.quaternion);
+        return control(e, 'head', 1, 'Pitch', zAxis);
       },
       headYaw: function (e) {
-
-        e.preventDefault();
-
-        _this.headYawValue = _Math.degToRad(e.target.value);
-        _this.headYawSet = true;
-
-        _this.robot.head.rotation.x = _this.headYawValue;
-
-        _this.headQuaternion.copy(_this.robot.head.quaternion);
+        return control(e, 'head', 1, 'Yaw', xAxis);
       },
+
       leftShoulderPitch: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(-e.target.value);
-
-        _this.robot.leftShoulder.rotateOnAxis(zAxis, _this.leftShoulderPitchValue - value);
-
-        _this.leftShoulderPitchValue = value;
-        _this.leftShoulderPitchSet = true;
-
-        _this.leftShoulderQuaternion.copy(_this.robot.leftShoulder.quaternion);
+        return control(e, 'leftShoulder', -1, 'Pitch', zAxis);
       },
       leftShoulderYaw: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(-e.target.value);
-
-        _this.robot.leftShoulder.rotateOnAxis(yAxis, _this.leftShoulderYawValue - value);
-
-        _this.leftShoulderYawValue = value;
-        _this.leftShoulderYawSet = true;
-
-        _this.leftShoulderQuaternion.copy(_this.robot.leftShoulder.quaternion);
+        return control(e, 'leftShoulder', -1, 'Yaw', yAxis);
       },
+
       rightShoulderPitch: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(-e.target.value);
-
-        _this.robot.rightShoulder.rotateOnAxis(zAxis, _this.rightShoulderPitchValue - value);
-
-        _this.rightShoulderPitchValue = value;
-        _this.rightShoulderPitchSet = true;
-
-        _this.rightShoulderQuaternion.copy(_this.robot.rightShoulder.quaternion);
+        return control(e, 'rightShoulder', -1, 'Pitch', zAxis);
       },
       rightShoulderYaw: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(e.target.value);
-
-        _this.robot.rightShoulder.rotateOnAxis(yAxis, _this.rightShoulderYawValue - value);
-
-        _this.rightShoulderYawValue = value;
-        _this.rightShoulderYawSet = true;
-
-        _this.rightShoulderQuaternion.copy(_this.robot.rightShoulder.quaternion);
+        return control(e, 'rightShoulder', 1, 'Yaw', yAxis);
       },
+
       leftElbowPitch: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(e.target.value);
-
-        _this.robot.leftElbow.rotateOnAxis(yAxis, _this.leftElbowPitchValue - value);
-
-        _this.leftElbowPitchValue = value;
-        _this.leftElbowPitchSet = true;
-
-        _this.leftElbowQuaternion.copy(_this.robot.leftElbow.quaternion);
+        return control(e, 'leftElbow', 1, 'Pitch', yAxis);
       },
       leftElbowYaw: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(-e.target.value);
-
-        _this.robot.leftElbow.rotateOnAxis(zAxis, _this.leftElbowYawValue - value);
-
-        _this.leftElbowYawValue = value;
-        _this.leftElbowYawSet = true;
-
-        _this.leftElbowQuaternion.copy(_this.robot.leftElbow.quaternion);
+        return control(e, 'leftElbow', -1, 'Yaw', zAxis);
       },
+
       rightElbowPitch: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(-e.target.value);
-
-        _this.robot.rightElbow.rotateOnAxis(yAxis, _this.rightElbowPitchValue - value);
-
-        _this.rightElbowPitchValue = value;
-        _this.rightElbowPitchSet = true;
-
-        _this.rightElbowQuaternion.copy(_this.robot.rightElbow.quaternion);
+        return control(e, 'rightElbow', -1, 'Pitch', yAxis);
       },
       rightElbowYaw: function (e) {
-
-        e.preventDefault();
-
-        var value = _Math.degToRad(-e.target.value);
-
-        _this.robot.rightElbow.rotateOnAxis(zAxis, _this.rightElbowYawValue - value);
-
-        _this.rightElbowYawValue = value;
-        _this.rightElbowYawSet = true;
-
-        _this.rightElbowQuaternion.copy(_this.robot.rightElbow.quaternion);
+        return control(e, 'rightElbow', -1, 'Yaw', zAxis);
       }
+
     };
   };
 
   Frame.prototype.setRotations = function setRotations() {
 
-    this.robot.head.rotation.set(this.headYawValue, 0, this.headPitchValue);
+    this.robot.head.quaternion.copy(this.headQuaternion);
     this.robot.leftShoulder.quaternion.copy(this.leftShoulderQuaternion);
     this.robot.rightShoulder.quaternion.copy(this.rightShoulderQuaternion);
     this.robot.leftElbow.quaternion.copy(this.leftElbowQuaternion);
     this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
-
-    // if ( this.headPitchSet || this.headYawSet ) {
-
-    //   this.robot.head.rotation.set( this.headYawValue, 0, this.headPitchValue );
-
-    // }
-
-
-    // if ( this.leftShoulderPitchSet || this.leftShoulderYawSet ) {
-
-    //   this.robot.leftShoulder.quaternion.copy( this.leftShoulderQuaternion );
-
-    // }
-
-    // if ( this.rightShoulderPitchSet || this.rightShoulderYawSet ) {
-
-    //   this.robot.rightShoulder.quaternion.copy( this.rightShoulderQuaternion );
-
-    // }
-
-
-    // if ( this.leftElbowPitchSet || this.leftElbowYawSet ) {
-
-    //   this.robot.leftElbow.quaternion.copy( this.leftElbowQuaternion );
-
-    // }
-
-
-    // if ( this.rightElbowPitchSet || this.rightElbowYawSet ) {
-
-    //   this.robot.rightElbow.quaternion.copy( this.rightElbowQuaternion );
-
-    // }
   };
 
   Frame.prototype.fromJSON = function fromJSON(object) {
@@ -59241,59 +59132,31 @@ var Frame = function () {
   return Frame;
 }();
 
-var lastCreatedFrame = null;
-
 var Frames = function () {
   function Frames(robot) {
     classCallCheck(this, Frames);
 
 
-    this.initRobot(robot);
+    this.robot = robot;
 
     this.currentFrameNum = 0;
     this.selectedFrame = null;
     this.frames = [];
-
-    // this holds the base pose for the robot - if values are undefined in other frames they
-    // will fallback to this frame
-    this.defaultFrame = new Frame(999999, this.robot, true);
 
     this.framesTable = HTMLControl.controls.frames.table;
     this.newFrameButton = HTMLControl.controls.frames.createButton;
     this.initNewFrameButton();
   }
 
-  Frames.prototype.initRobot = function initRobot(robot) {
+  Frames.prototype.setDefaultFrame = function setDefaultFrame(frame) {
 
-    this.robot = {
-
-      head: robot.getObjectByName('headControl'),
-
-      leftShoulder: robot.getObjectByName('shoulderControlLeft'),
-      rightShoulder: robot.getObjectByName('shoulderControlRight'),
-
-      leftElbow: robot.getObjectByName('elbowControlLeft'),
-      rightElbow: robot.getObjectByName('elbowControlRight')
-
-    };
-
-    // slight hack since the model's head is very slightly rotated at the start
-    // so reset that here
-    this.robot.head.rotation.set(0, 0, 0);
-
-    this.robot.headInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
-    this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
-    this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
-    this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
-    this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
+    this.defaultFrame = frame;
   };
 
-  Frames.prototype.createFrame = function createFrame(num, detail) {
+  Frames.prototype.createFrame = function createFrame(num) {
     var _this = this;
 
     var frame = new Frame(num, this.robot);
-
-    if (detail !== undefined) frame.fromJSON(detail);
 
     this.frames[frame.num] = frame;
 
@@ -59327,7 +59190,7 @@ var Frames = function () {
 
       e.preventDefault();
 
-      lastCreatedFrame = _this2.createFrame(_this2.currentFrameNum++);
+      _this2.createFrame(_this2.currentFrameNum++);
     });
   };
 
@@ -59435,7 +59298,171 @@ var LoopInputCell = function LoopInputCell(row) {
     });
 };
 
-// import HTMLControl from '../HTMLControl.js';
+var framerate = 1;
+
+var AnimationControl = function () {
+  function AnimationControl() {
+    var _this = this;
+
+    classCallCheck(this, AnimationControl);
+
+
+    this.defaultFrame = null;
+
+    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
+
+      e.preventDefault();
+
+      _this.framerate = e.target.value;
+    });
+  }
+
+  AnimationControl.prototype.setDefaultFrame = function setDefaultFrame(frame) {
+
+    this.defaultFrame = frame;
+  };
+
+  AnimationControl.prototype.initMixer = function initMixer(object) {
+
+    this.mixer = new AnimationMixer(object);
+  };
+
+  AnimationControl.prototype.onUpdate = function onUpdate(delta) {
+
+    if (this.mixer) this.mixer.update(delta);
+  };
+
+  // create a keyframe track consisting of two keyframes, representing the time span of one frame
+
+
+  AnimationControl.prototype.createKeyFrameTrack = function createKeyFrameTrack(part, initialPos, finalPos) {
+
+    return new QuaternionKeyframeTrack(part, [0, // start at 0
+    framerate], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
+  };
+
+  // a Clip consists of several keyframe tracks
+  // - for example the movement of an arm over the duration of a group
+  // an Action controls playback of the clip
+
+
+  AnimationControl.prototype.createAction = function createAction(name, tracks) {
+
+    var clip = new AnimationClip(name, -1, tracks);
+
+    var action = this.mixer.clipAction(clip);
+
+    action.name = clip.name;
+
+    return action;
+  };
+
+  AnimationControl.prototype.uncache = function uncache(action) {
+
+    var clip = action.getClip();
+
+    this.mixer.uncacheClip(clip);
+    this.mixer.uncacheAction(clip);
+  };
+
+  createClass(AnimationControl, [{
+    key: 'framerate',
+    set: function (value) {
+
+      console.log('AnimationControl.framerate not yet implemented! ');
+
+      // TODO - probably best to store all actions, then use timeScale to set the speed
+    }
+  }]);
+  return AnimationControl;
+}();
+
+var animationControl = new AnimationControl();
+
+var GroupAnimation = function () {
+    function GroupAnimation(robot) {
+        classCallCheck(this, GroupAnimation);
+
+
+        this.robot = robot;
+
+        this.actions = [];
+    }
+
+    GroupAnimation.prototype.createAnimation = function createAnimation(framesDetails) {
+
+        this.reset();
+
+        // we need at least two frames to create the animation
+        if (framesDetails.length < 2) return;
+
+        var headTracks = [];
+        var leftShoulderTracks = [];
+        var rightShoulderTracks = [];
+        var leftElbowTracks = [];
+        var rightElbowTracks = [];
+
+        for (var i = 1; i < framesDetails.length; i++) {
+
+            var initialFrame = framesDetails[i - 1].frame;
+            var finalFrame = framesDetails[i].frame;
+
+            headTracks.push(animationControl.createKeyFrameTrack('headControl.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion));
+
+            leftShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlLeft.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion));
+
+            rightShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlRight.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion));
+
+            leftElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlLeft.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion));
+
+            rightElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlRight.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, this.framerate));
+        }
+
+        var headAction = animationControl.createAction('headControl.quaternion', headTracks);
+        headAction.play();
+
+        var leftShoulderAction = animationControl.createAction('shoulderControlLeft.quaternion', leftShoulderTracks);
+        leftShoulderAction.play();
+
+        var rightShoulderAction = animationControl.createAction('shoulderControlRight.quaternion', rightShoulderTracks);
+        rightShoulderAction.play();
+
+        var leftElbowAction = animationControl.createAction('elbowControlLeft.quaternion', leftElbowTracks);
+        leftElbowAction.play();
+
+        var rightElbowAction = animationControl.createAction('elbowControlRight.quaternion', rightElbowTracks);
+        rightElbowAction.play();
+
+        this.actions = [headAction, leftShoulderAction, rightShoulderAction, leftElbowAction, rightElbowAction];
+    };
+
+    GroupAnimation.prototype.play = function play() {
+
+        this.actions.forEach(function (action) {
+
+            action.play();
+        });
+    };
+
+    GroupAnimation.prototype.pause = function pause() {
+
+        this.actions.forEach(function (action) {
+
+            action.play();
+        });
+    };
+
+    GroupAnimation.prototype.reset = function reset() {
+
+        this.actions.forEach(function (action) {
+
+            animationControl.uncache(action);
+        });
+    };
+
+    return GroupAnimation;
+}();
+
 var Group$1 = function () {
   function Group(num, frames) {
     classCallCheck(this, Group);
@@ -59443,9 +59470,13 @@ var Group$1 = function () {
 
     this.frames = frames;
 
+    this.robot = frames.robot;
+
     this.containedFrames = [];
 
     this.num = num;
+
+    this.animation = new GroupAnimation(this.robot);
 
     this.initTableRow();
 
@@ -59502,8 +59533,6 @@ var Group$1 = function () {
 
     detail.deleteButton = new DeleteButtonCell(row);
 
-    // const self = this;
-
     detail.deleteButton.onClick = function () {
 
       _this.framesInGroup.removeChild(row);
@@ -59512,6 +59541,8 @@ var Group$1 = function () {
 
       _this.containedFrames[framePos] = null;
     };
+
+    this.animation.createAnimation(this.containedFrames);
   };
 
   Group.prototype.initAddFrameButton = function initAddFrameButton() {
@@ -59591,7 +59622,15 @@ var Group$1 = function () {
     key: 'selected',
     set: function (bool) {
 
-      if (bool === true) this.row.style.backgroundColor = 'aliceBlue';else this.row.style.backgroundColor = 'initial';
+      if (bool === true) {
+
+        this.row.style.backgroundColor = 'aliceBlue';
+        this.animation.play();
+      } else {
+
+        this.row.style.backgroundColor = 'initial';
+        this.animation.pause();
+      }
     }
   }]);
   return Group;
@@ -60781,7 +60820,9 @@ var Main = function () {
     this.app.onUpdate = function () {
 
       // use this.delta for timings here
+      var delta = this.delta / 1000;
 
+      animationControl.onUpdate(delta);
     };
 
     // put any per resize calculations here
@@ -60834,9 +60875,19 @@ var Main = function () {
       _this2.initBackground();
       _this2.initLighting();
       _this2.initCamera();
-      _this2.initControls();
+      _this2.initCameraControl();
 
-      _this2.frames = new Frames(_this2.nao);
+      _this2.initRobot(_this2.nao);
+
+      animationControl.initMixer(_this2.nao);
+
+      var defaultFrame = new Frames(999999, _this2.robot, true);
+
+      _this2.frames = new Frames(_this2.robot);
+
+      _this2.frames.setDefaultFrame(defaultFrame);
+      animationControl.setDefaultFrame(defaultFrame);
+
       _this2.groups = new Groups(_this2.frames);
       _this2.dance = new Dance(_this2.groups, _this2.frames);
 
@@ -60846,6 +60897,34 @@ var Main = function () {
 
       _this2.app.play();
     });
+  };
+
+  // set up the robots moveable parts
+
+
+  Main.prototype.initRobot = function initRobot(robot) {
+
+    this.robot = {
+
+      head: robot.getObjectByName('headControl'),
+
+      leftShoulder: robot.getObjectByName('shoulderControlLeft'),
+      rightShoulder: robot.getObjectByName('shoulderControlRight'),
+
+      leftElbow: robot.getObjectByName('elbowControlLeft'),
+      rightElbow: robot.getObjectByName('elbowControlRight')
+
+    };
+
+    // slight hack since the model's head is very slightly rotated at the start
+    // so reset that here
+    this.robot.head.rotation.set(0, 0, 0);
+
+    this.robot.headInitialQuaternion = this.robot.head.quaternion.clone();
+    this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
+    this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
+    this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
+    this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
   };
 
   Main.prototype.initLighting = function initLighting() {
@@ -60875,20 +60954,15 @@ var Main = function () {
 
   Main.prototype.initCamera = function initCamera() {
 
-    // console.log( this.camera )
-
-    // this.app.camera = this.camera;
     this.app.camera.far = 800;
     this.app.camera.fov = 35;
     this.app.camera.position.set(0, 0, 200);
     this.app.camera.updateProjectionMatrix();
   };
 
-  Main.prototype.initControls = function initControls() {
+  Main.prototype.initCameraControl = function initCameraControl() {
 
     this.app.controls = new OrbitControls(this.app.camera, this.app.canvas);
-
-    // this.app.controls.object = this.camera;
 
     // vertical rotation limits
     this.app.controls.minPolarAngle = Math.PI * 0.1; // upper

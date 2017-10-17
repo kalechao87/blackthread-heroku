@@ -1,8 +1,8 @@
-// import HTMLControl from '../HTMLControl.js';
 import TextCell from './HTML/TextCell.js';
 import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 import LoopInputCell from './HTML/LoopInputCell.js';
 
+import GroupAnimation from '../animation/GroupAnimation.js';
 
 export default class Group {
 
@@ -10,9 +10,13 @@ export default class Group {
 
     this.frames = frames;
 
+    this.robot = frames.robot;
+
     this.containedFrames = [];
 
     this.num = num;
+
+    this.animation = new GroupAnimation( this.robot );
 
     this.initTableRow();
 
@@ -22,8 +26,17 @@ export default class Group {
 
   set selected( bool ) {
 
-    if ( bool === true ) this.row.style.backgroundColor = 'aliceBlue';
-    else this.row.style.backgroundColor = 'initial';
+    if ( bool === true ) {
+
+      this.row.style.backgroundColor = 'aliceBlue';
+      this.animation.play();
+
+    } else {
+
+      this.row.style.backgroundColor = 'initial';
+      this.animation.pause();
+
+    }
 
   }
 
@@ -80,8 +93,6 @@ export default class Group {
 
     detail.deleteButton = new DeleteButtonCell( row );
 
-    // const self = this;
-
     detail.deleteButton.onClick = () => {
 
       this.framesInGroup.removeChild( row );
@@ -91,6 +102,8 @@ export default class Group {
       this.containedFrames[ framePos ] = null;
 
     };
+
+    this.animation.createAnimation( this.containedFrames );
 
   }
 
