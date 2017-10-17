@@ -11,12 +11,11 @@ import HTMLControl from './HTMLControl.js';
 
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
-import Frames from './Frames.js';
-import Groups from './Groups.js';
-import Dance from './Dance.js';
+import Frames from './components/Frames.js';
+import Groups from './components/Groups.js';
+import Dance from './components/Dance.js';
 
 import FileControl from './FileControl.js';
-
 import Audio from './Audio.js';
 
 

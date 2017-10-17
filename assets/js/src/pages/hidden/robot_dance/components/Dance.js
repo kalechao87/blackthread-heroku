@@ -1,4 +1,7 @@
-import HTMLControl from './HTMLControl.js';
+import HTMLControl from '../HTMLControl.js';
+import TextCell from './HTML/TextCell.js';
+import DeleteButtonCell from './HTML/DeleteButtonCell.js';
+import LoopInputCell from './HTML/LoopInputCell.js';
 
 export default class Dance {
 
@@ -42,6 +45,7 @@ export default class Dance {
       type,
       elem,
       loopAmount,
+      deleteButton: null,
     };
 
     this.containedElems.push( detail );
@@ -51,65 +55,26 @@ export default class Dance {
     const row = document.createElement( 'tr' );
     this.table.appendChild( row );
 
-    const nameCell = document.createElement( 'td' );
-    row.appendChild( nameCell );
-    nameCell.innerHTML = elem.num;
+    new TextCell( row, elem.num );
+    new TextCell( row, type );
 
-    const typeCell = document.createElement( 'td' );
-    row.appendChild( typeCell );
-    typeCell.innerHTML = type;
+    const loopInput = new LoopInputCell( row );
 
-    const loopCell = document.createElement( 'td' );
-    loopCell.innerHTML = 'Loop ';
-    row.appendChild( loopCell );
-
-    const loopInput = document.createElement( 'input' );
-    loopCell.appendChild( loopInput );
-    loopInput.type = 'number';
-    loopInput.min = '0';
-    loopInput.value = loopAmount;
-    loopInput.step = '1';
-
-    const text = document.createElement( 'span' );
-    text.style.width = '8em';
-    text.style.textAlign = 'left';
-    text.style.marginLeft = '0.25em';
-    text.innerHTML = ' time';
-    loopCell.appendChild( text );
-
-    loopInput.addEventListener( 'input', ( evt ) => {
-
-      evt.preventDefault();
-      const value = parseInt( evt.target.value, 10 );
-
-      if ( value === 0 ) row.style.backgroundColor = 'darkgrey';
-      else row.style.backgroundColor = 'initial';
-
-      if ( value !== 1 ) text.innerHTML = ' times';
-      else text.nodeValue = text.innerHTML = ' time';
+    loopInput.onInput = ( value ) => {
 
       detail.loopAmount = value;
 
-    } );
+    };
 
-    const deleteCell = document.createElement( 'td' );
-    row.appendChild( deleteCell );
+    detail.deleteButton = new DeleteButtonCell( row );
 
-    const deleteButton = document.createElement( 'button' );
-    deleteCell.appendChild( deleteButton );
-    deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-
-    deleteButton.addEventListener( 'click', ( evt ) => {
-
-      evt.preventDefault();
+    detail.deleteButton.onClick = () => {
 
       this.table.removeChild( row );
 
-      // if ( this.lastAddedGroupNum === )
-
       this.containedElems[ pos ] = null;
 
-    } );
+    };
 
   }
 
@@ -209,7 +174,13 @@ export default class Dance {
 
   reset() {
 
-    console.log( 'TODO: dance.reset ' );
+    this.containedElems.forEach( ( elem ) => {
+
+      if ( elem !== null ) elem.deleteButton.click();
+
+    } );
+
+    this.containedElems = [];
 
   }
 
@@ -257,7 +228,7 @@ export default class Dance {
           num: detail.num,
           loopAmount: detail.loopAmount,
 
-        }
+        };
 
       } else {
 

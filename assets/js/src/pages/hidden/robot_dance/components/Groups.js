@@ -1,4 +1,4 @@
-import HTMLControl from './HTMLControl.js';
+import HTMLControl from '../HTMLControl.js';
 import Group from './Group.js';
 
 export default class Groups {
@@ -37,19 +37,13 @@ export default class Groups {
 
     } );
 
-    const remove = ( evt ) => {
+    group.deleteButton.onClick = () => {
 
-      evt.preventDefault();
-      HTMLControl.controls.groups.table.removeChild( group.row );
-
-      group.deleteButton.removeEventListener( 'click', remove );
+      this.groupsTable.removeChild( group.row );
 
       this.groups[ group.num ] = null;
 
     };
-
-    group.deleteButton.addEventListener( 'click', remove );
-
 
   }
 
@@ -113,8 +107,6 @@ export default class Groups {
         this.currentFrameNum = key;
 
       }
-
-      console.log( object[ key ] );
 
     }
 

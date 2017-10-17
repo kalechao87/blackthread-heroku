@@ -1,5 +1,7 @@
-import HTMLControl from './HTMLControl.js';
+import HTMLControl from '../HTMLControl.js';
 import Frame from './Frame.js';
+
+let lastCreatedFrame = null;
 
 export default class Frames {
 
@@ -10,6 +12,10 @@ export default class Frames {
     this.currentFrameNum = 0;
     this.selectedFrame = null;
     this.frames = [];
+
+    // this holds the base pose for the robot - if values are undefined in other frames they
+    // will fallback to this frame
+    this.defaultFrame = new Frame( 999999, this.robot, true );
 
     this.framesTable = HTMLControl.controls.frames.table;
     this.newFrameButton = HTMLControl.controls.frames.createButton;
@@ -64,19 +70,17 @@ export default class Frames {
 
     } );
 
-    const remove = ( evt ) => {
+    frame.deleteButton.onClick = () => {
 
-      evt.preventDefault();
       HTMLControl.controls.frames.table.removeChild( frame.row );
 
       frame.removeEventListeners();
-      frame.deleteButton.removeEventListener( 'click', remove );
 
       this.frames[ frame.num ] = null;
 
     };
 
-    frame.deleteButton.addEventListener( 'click', remove );
+    return frame;
 
   }
 
@@ -86,7 +90,7 @@ export default class Frames {
 
       e.preventDefault();
 
-      this.createFrame( this.currentFrameNum ++ );
+      lastCreatedFrame = this.createFrame( this.currentFrameNum ++ );
 
     } );
 
@@ -136,8 +140,6 @@ export default class Frames {
         this.currentFrameNum = key;
 
       }
-
-      console.log( object[ key ] );
 
     }
 
