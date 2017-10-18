@@ -20,7 +20,6 @@ export default class Dance {
     this.initAddSelectedFrameButton();
     this.initAddSelectedGroupButton();
     this.initPlayButton();
-    this.initResetButton();
     this.initFramerateInput();
 
   }
@@ -37,12 +36,11 @@ export default class Dance {
     } );
   }
 
-  add( elem, type, loop ) {
+  add( elem, loop ) {
 
     const loopAmount = loop || 1;
 
     const detail = {
-      type,
       elem,
       loopAmount,
       deleteButton: null,
@@ -56,7 +54,7 @@ export default class Dance {
     this.table.appendChild( row );
 
     new TextCell( row, elem.num );
-    new TextCell( row, type );
+    new TextCell( row, elem.type );
 
     const loopInput = new LoopInputCell( row );
 
@@ -159,24 +157,11 @@ export default class Dance {
 
   }
 
-  initResetButton() {
-
-    HTMLControl.controls.dance.resetButton.addEventListener( 'click', ( e ) => {
-
-      e.preventDefault();
-
-      console.log( 'r ' );
-
-
-    } );
-
-  }
-
   reset() {
 
     this.containedElems.forEach( ( elem ) => {
 
-      if ( elem !== null ) elem.deleteButton.click();
+      if ( elem !== null && elem.deleteButton ) elem.deleteButton.click();
 
     } );
 
@@ -192,15 +177,19 @@ export default class Dance {
 
     for ( const key in object ) {
 
-      const detail = object[ key ];
+      const elem = object[ key ];
 
-      if ( detail.type === 'frame' ) {
+      if ( elem.type === 'frame' ) {
 
-        this.add( this.frames.frames[ detail.num ], 'frame', detail.loopAmount );
+        this.add( this.frames.frames[ elem.num ], elem.loopAmount );
 
-      } else {
+      } else if ( elem.type === 'group' ) {
 
-        this.add( this.groups.groups[ detail.num ], 'frame', detail.loopAmount );
+        this.add( this.groups.groups[ elem.num ], elem.loopAmount );
+
+      } else if ( key === 'framerate' ) {
+
+        console.log( 'TODO: load framerate from file' );
 
       }
 
@@ -224,8 +213,8 @@ export default class Dance {
 
         output[ i ] = {
 
-          type: detail.type,
-          num: detail.num,
+          type: detail.elem.type,
+          num: detail.elem.num,
           loopAmount: detail.loopAmount,
 
         };

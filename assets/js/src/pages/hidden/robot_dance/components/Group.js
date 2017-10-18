@@ -8,6 +8,8 @@ export default class Group {
 
   constructor( num, frames ) {
 
+    this.type = 'group';
+
     this.frames = frames;
 
     this.robot = frames.robot;
@@ -29,12 +31,13 @@ export default class Group {
     if ( bool === true ) {
 
       this.row.style.backgroundColor = 'aliceBlue';
+      this.animation.createAnimation( this.containedFrames );
       this.animation.play();
 
     } else {
 
       this.row.style.backgroundColor = 'initial';
-      this.animation.pause();
+      this.animation.stop();
 
     }
 
@@ -104,6 +107,7 @@ export default class Group {
     };
 
     this.animation.createAnimation( this.containedFrames );
+    this.animation.play();
 
   }
 
@@ -117,7 +121,7 @@ export default class Group {
 
       const frame = this.frames.selectedFrame;
 
-      if ( frame === undefined ) return;
+      if ( frame === undefined || frame === null ) return;
 
       // don't add the same frame consecutively (use loop instead)
       if ( this.lastAddedFrameNum === frame.num ) return;
@@ -130,16 +134,6 @@ export default class Group {
 
   }
 
-  // initDeleteButton() {
-
-  //   const deleteButtonCell = document.createElement( 'td' );
-  //   this.deleteButton = document.createElement( 'button' );
-  //   this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-  //   deleteButtonCell.appendChild( this.deleteButton );
-  //   this.row.appendChild( deleteButtonCell );
-
-  // }
-
   reset() {
 
     this.containedFrames.forEach( ( frame ) => {
@@ -149,6 +143,8 @@ export default class Group {
     } );
 
     this.containedFrames = [];
+    this.animation.stop();
+    this.animation.reset();
 
   }
 

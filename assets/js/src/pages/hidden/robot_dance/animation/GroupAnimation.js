@@ -28,42 +28,35 @@ export default class GroupAnimation {
       const initialFrame = framesDetails[ i - 1 ].frame;
       const finalFrame = framesDetails[ i ].frame;
 
+      const frameStartTime = i - 1;
+
       headTracks.push(
-        animationControl.createKeyFrameTrack( 'headControl.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion )
+        animationControl.createKeyFrameTrack( 'headControl.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime )
       );
 
       leftShoulderTracks.push(
-        animationControl.createKeyFrameTrack( 'shoulderControlLeft.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion )
+        animationControl.createKeyFrameTrack( 'shoulderControlLeft.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime )
       );
 
       rightShoulderTracks.push(
-        animationControl.createKeyFrameTrack( 'shoulderControlRight.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion )
+        animationControl.createKeyFrameTrack( 'shoulderControlRight.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime )
       );
 
       leftElbowTracks.push(
-        animationControl.createKeyFrameTrack( 'elbowControlLeft.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion )
+        animationControl.createKeyFrameTrack( 'elbowControlLeft.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime )
       );
 
       rightElbowTracks.push(
-        animationControl.createKeyFrameTrack( 'elbowControlRight.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, this.framerate )
+        animationControl.createKeyFrameTrack( 'elbowControlRight.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime )
       );
 
     }
 
     const headAction = animationControl.createAction( 'headControl.quaternion', headTracks );
-    headAction.play();
-
     const leftShoulderAction = animationControl.createAction( 'shoulderControlLeft.quaternion', leftShoulderTracks );
-    leftShoulderAction.play();
-
     const rightShoulderAction = animationControl.createAction( 'shoulderControlRight.quaternion', rightShoulderTracks );
-    rightShoulderAction.play();
-
     const leftElbowAction = animationControl.createAction( 'elbowControlLeft.quaternion', leftElbowTracks );
-    leftElbowAction.play();
-
     const rightElbowAction = animationControl.createAction( 'elbowControlRight.quaternion', rightElbowTracks );
-    rightElbowAction.play();
 
     this.actions = [
       headAction,
@@ -71,7 +64,7 @@ export default class GroupAnimation {
       rightShoulderAction,
       leftElbowAction,
       rightElbowAction,
-    ]
+    ];
 
   }
 
@@ -85,11 +78,11 @@ export default class GroupAnimation {
 
   }
 
-  pause() {
+  stop() {
 
     this.actions.forEach( ( action ) => {
 
-      action.play();
+      action.stop();
 
     } );
 

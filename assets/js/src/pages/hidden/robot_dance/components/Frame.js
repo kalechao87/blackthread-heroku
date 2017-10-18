@@ -37,9 +37,9 @@ export default class Frame {
 
   constructor( num, robot, isBaseFrame = false ) {
 
-    this.robot = robot;
+    this.type = 'frame';
 
-    console.log( robot )
+    this.robot = robot;
 
     this.num = num;
 
@@ -205,11 +205,16 @@ export default class Frame {
 
       const value = THREE.Math.degToRad( sign * e.target.value );
 
+      // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
       this.robot[name].rotateOnAxis( axis, this[ name + direction + 'Value'] - value );
 
+      // e.g. this.headPitchValue = value;
       this[ name + direction + 'Value'] = value;
+
+      // e.g. this.headPitchSet = true;
       this[ name + direction + 'Set'] = true;
 
+      // e.g. this.headQuaternion.copy(this.robot[ 'head' ].quaternion);
       this[ name + 'Quaternion' ].copy( this.robot[ name ].quaternion );
 
     };
@@ -245,55 +250,37 @@ export default class Frame {
 
   }
 
-  fromJSON( object, number = this.num ) {
+  fromJSON( object ) {
 
-    this.headQuaternion = object.headQuaternion;
-    this.leftShoulderQuaternion = object.leftShoulderQuaternion;
-    this.rightShoulderQuaternion = object.rightShoulderQuaternion;
-    this.leftElbowQuaternion = object.leftElbowQuaternion;
-    this.rightElbowQuaternion = object.rightElbowQuaternion;
+    // this.headQuaternion.fromArray( object.headQuaternion );
+    // this.leftShoulderQuaternion.fromArray( object.leftShoulderQuaternion );
+    // this.rightShoulderQuaternion.fromArray( object.rightShoulderQuaternion );
+    // this.leftElbowQuaternion.fromArray( object.leftElbowQuaternion );
+    // this.rightElbowQuaternion.fromArray( object.rightElbowQuaternion );
 
-    this.num = number;
+    this.num = object.number;
 
-    this.headPitchValue = object.headPitchValue;
-    this.headPitchSet = object.headPitchSet;
-    // if ( this.headPitchSet ) this.headPitchInput.value = -Math.floor( THREE.Math.radToDeg( object.headPitchValue ) );
+    this.headPitchInput.value = object.headPitch;
+    this.headYawInput.value = object.headYaw;
+    this.leftShoulderPitchInput.value = object.leftShoulderPitch;
+    this.leftShoulderYawInput.value = object.leftShoulderYaw;
+    this.rightShoulderPitchInput.value = object.rightShoulderPitch;
+    this.rightShoulderYawInput.value = object.rightShoulderYaw;
+    this.leftElbowPitchInput.value = object.leftElbowPitch;
+    this.leftElbowYawInput.value = object.leftElbowYaw;
+    this.rightElbowPitchInput.value = object.rightElbowPitch;
+    this.rightElbowYawInput.value = object.rightElbowYaw;
 
-    this.headYawValue = object.headYawValue;
-    this.headYawSet = object.headYawSet;
-    // this.headYawInput.value =  Math.floor( THREE.Math.radToDeg( object.headYawValue ) );
-
-    this.leftShoulderPitchValue = object.leftShoulderPitchValue;
-    this.leftShoulderPitchSet = object.leftShoulderPitchSet;
-    // this.leftShoulderPitchInput.value = -Math.floor( THREE.Math.radToDeg( object.leftShoulderPitchValue ) );
-
-    this.leftShoulderYawValue = object.leftShoulderYawValue;
-    this.leftShoulderYawSet = object.leftShoulderYawSet;
-    // this.leftShoulderYawInput.value -Math.floor( THREE.Math.radToDeg( object.leftShoulderYawValue ) );
-
-    this.rightShoulderPitchValue = object.rightShoulderPitchValue;
-    this.rightShoulderPitchSet = object.rightShoulderPitchSet;
-    // this.rightShoulderPitchInput.value -Math.floor( THREE.Math.radToDeg( object.rightShoulderPitchValue ) );
-
-    this.rightShoulderYawValue = object.rightShoulderYawValue;
-    this.rightShoulderYawSet = object.rightShoulderYawSet;
-    // this.rightShoulderYawInput.value = Math.floor( THREE.Math.radToDeg( object.rightShoulderYawValue ) );
-
-    this.leftElbowPitchValue = object.leftElbowPitchValue;
-    this.leftElbowPitchSet = object.leftElbowPitchSet;
-     // this.leftElbowPitchInput.value Math.floor( THREE.Math.radToDeg( object.leftElbowPitchValue ) );
-
-    this.leftElbowYawValue = object.leftElbowYawValue;
-    this.leftElbowYawSet = object.leftElbowYawSet;
-    // this.leftElbowYawInput.value = -Math.floor( THREE.Math.radToDeg( object.leftElbowYawValue ) );
-
-    this.rightElbowPitchValue = object.rightElbowPitchValue;
-    this.rightElbowPitchSet = object.rightElbowPitchSet;
-    // this.rightElbowPitchInput.value = -Math.floor( THREE.Math.radToDeg( object.rightElbowPitchValue ) );
-
-    this.rightElbowYawValue = object.rightElbowYawValue;
-    this.rightElbowYawSet = object.rightElbowYawSet;
-    // this.rightElbowYawInput.value = -Math.floor( THREE.Math.radToDeg( object.rightElbowYawValue ) );
+    this.headPitchSet = this.headPitchInput.value !== '';
+    this.headYawSet = this.headYawInput.value !== '';
+    this.leftShoulderPitchSet = this.leftShoulderPitchInput.value !== '';
+    this.leftShoulderYawSet = this.leftShoulderYawInput.value !== '';
+    this.rightShoulderPitchSet = this.rightShoulderPitchInput.value !== '';
+    this.rightShoulderYawSet = this.rightShoulderYawInput.value !== '';
+    this.leftElbowPitchSet = this.leftElbowPitchInput.value !== '';
+    this.leftElbowYawSet = this.leftElbowYawInput.value !== '';
+    this.rightElbowPitchSet = this.rightElbowPitchInput.value !== '';
+    this.rightElbowYawSet = this.headPitchInput.value !== '';
 
     this.setRotations();
 
@@ -304,38 +291,35 @@ export default class Frame {
     return {
 
       type: 'frame',
-      num: this.num,
+      number: this.num,
 
-      headQuaternion: this.headQuaternion,
-      leftShoulderQuaternion: this.leftShoulderQuaternion,
-      rightShoulderQuaternion: this.rightShoulderQuaternion,
-      leftElbowQuaternion: this.leftElbowQuaternion,
-      rightElbowQuaternion: this.rightElbowQuaternion,
+      // headQuaternion: this.headQuaternion.toArray(),
+      // leftShoulderQuaternion: this.leftShoulderQuaternion.toArray(),
+      // rightShoulderQuaternion: this.rightShoulderQuaternion.toArray(),
+      // leftElbowQuaternion: this.leftElbowQuaternion.toArray(),
+      // rightElbowQuaternion: this.rightElbowQuaternion.toArray(),
 
-      headPitchValue: this.headPitchValue,
-      headPitchSet: this.headPitchSet,
-      headYawValue: this.headYawValue,
-      headYawSet: this.headYawSet,
+      headPitch: this.headPitchInput.value,
+      headYaw: this.headYawInput.value,
+      leftShoulderPitch: this.leftShoulderPitchInput.value,
+      leftShoulderYaw: this.leftShoulderYawInput.value,
+      rightShoulderPitch: this.rightShoulderPitchInput.value,
+      rightShoulderYaw: this.rightShoulderYawInput.value,
+      leftElbowPitch: this.leftElbowPitchInput.value,
+      leftElbowYaw: this.leftElbowYawInput.value,
+      rightElbowPitch: this.rightElbowPitchInput.value,
+      rightElbowYaw: this.rightElbowYawInput.value,
 
-      leftShoulderPitchValue: this.leftShoulderPitchValue,
-      leftShoulderPitchSet: this.leftShoulderPitchSet,
-      leftShoulderYawValue: this.leftShoulderYawValue,
-      leftShoulderYawSet: this.leftShoulderYawSet,
-
-      rightShoulderPitchValue: this.rightShoulderPitchValue,
-      rightShoulderPitchSet: this.rightShoulderPitchSet,
-      rightShoulderYawValue: this.rightShoulderYawValue,
-      rightShoulderYawSet: this.rightShoulderYawSet,
-
-      leftElbowPitchValue: this.leftElbowPitchValue,
-      leftElbowPitchSet: this.leftElbowPitchSet,
-      leftElbowYawValue: this.leftElbowYawValue,
-      leftElbowYawSet: this.leftElbowYawSet,
-
-      rightElbowPitchValue: this.rightElbowPitchValue,
-      rightElbowPitchSet: this.rightElbowPitchSet,
-      rightElbowYawValue: this.rightElbowYawValue,
-      rightElbowYawSet: this.rightElbowYawSet,
+      // headPitchSet: this.headPitchSet,
+      // headYawSet: this.headYawSet,
+      // leftShoulderPitchSet: this.leftShoulderPitchSet,
+      // leftShoulderYawSet: this.leftShoulderYawSet,
+      // rightShoulderPitchSet: this.rightShoulderPitchSet,
+      // rightShoulderYawSet: this.rightShoulderYawSet,
+      // leftElbowPitchSet: this.leftElbowPitchSet,
+      // leftElbowYawSet: this.leftElbowYawSet,
+      // rightElbowPitchSet: this.rightElbowPitchSet,
+      // rightElbowYawSet: this.rightElbowYawSet,
 
     };
 

@@ -1,11 +1,16 @@
 import HTMLControl from '../HTMLControl.js';
 import Frame from './Frame.js';
 
+import animationControl from '../animation/animationControl.js';
+
 export default class Frames {
 
   constructor( robot ) {
 
     this.robot = robot;
+
+    // used as the base standing pose for the robot, all dances start here
+    this.defaultFrame = new Frame( 999999, this.robot, true );
 
     this.currentFrameNum = 0;
     this.selectedFrame = null;
@@ -17,15 +22,11 @@ export default class Frames {
 
   }
 
-  setDefaultFrame( frame ) {
-
-    this.defaultFrame = frame;
-
-  }
-
-  createFrame( num ) {
+  createFrame( num, detail ) {
 
     const frame = new Frame( num, this.robot );
+
+    if ( detail !== undefined ) frame.fromJSON( detail );
 
     this.frames[ frame.num ] = frame;
 
@@ -33,9 +34,9 @@ export default class Frames {
 
     this.select( frame );
 
-    frame.row.addEventListener( 'click', ( evt ) => {
+    frame.row.addEventListener( 'click', ( e ) => {
 
-      evt.preventDefault();
+      e.preventDefault();
 
       this.select( frame );
 
@@ -48,6 +49,12 @@ export default class Frames {
       frame.removeEventListeners();
 
       this.frames[ frame.num ] = null;
+
+      if ( this.selectedFrame === frame ) {
+
+        this.selectedFrame = null;
+
+      }
 
     };
 
@@ -69,6 +76,8 @@ export default class Frames {
 
   select( frame ) {
 
+    animationControl.pauseAllAnimation();
+
     frame.selected = true;
 
     this.selectedFrame = frame;
@@ -89,6 +98,8 @@ export default class Frames {
 
     } );
 
+    this.selectedFrame = null;
+    this.currentFrameNum = 0;
     this.frames = [];
 
   }
@@ -101,15 +112,22 @@ export default class Frames {
 
       const detail = object[ key ];
 
-      if ( detail === null ) {
+      if( detail.type === 'frame' ) {
 
-        this.frames[ key ] = null;
+        console.log( detail )
 
-      } else {
+          if ( detail === null ) {
 
-        this.createFrame( key, detail );
-        this.currentFrameNum = key;
+            this.frames[ key ] = null;
 
+          } else {
+
+            const num = parseInt( key, 10 );
+
+            this.createFrame( num, detail );
+            if ( this.currentFrameNum < num ) this.currentFrameNum = num;
+
+          }
       }
 
     }

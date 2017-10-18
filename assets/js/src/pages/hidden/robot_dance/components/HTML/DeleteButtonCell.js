@@ -12,17 +12,17 @@ export default class DeleteButtonCell {
 
     this.onClick = () => {};
 
-    const click = ( e ) => {
+    this.click = ( e ) => {
 
-      e.preventDefault();
+      if ( e ) e.preventDefault();
 
       this.onClick();
 
-      deleteButton.removeEventListener( 'click', click );
+      deleteButton.removeEventListener( 'click', this.click );
 
     };
 
-    deleteButton.addEventListener( 'click', click );
+    deleteButton.addEventListener( 'click', this.click );
 
   }
 

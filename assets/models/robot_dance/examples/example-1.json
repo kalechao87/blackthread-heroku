@@ -1,22 +1,66 @@
 {
-    "glossary": {
-        "title": "example glossary",
-		"GlossDiv": {
-            "title": "S",
-			"GlossList": {
-                "GlossEntry": {
-                    "ID": "SGML",
-					"SortAs": "SGML",
-					"GlossTerm": "Standard Generalized Markup Language",
-					"Acronym": "SGML",
-					"Abbrev": "ISO 8879:1986",
-					"GlossDef": {
-                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
-						"GlossSeeAlso": ["GML", "XML"]
-                    },
-					"GlossSee": "markup"
-                }
-            }
-        }
-    }
+	"metadata": {
+		"type": "Nao Dance File",
+		"generator": "Blackthread design",
+		"version": "1"
+	},
+	"frames": {
+		"0": {
+			"type": "frame",
+			"number": 0,
+			"headPitch": "17",
+			"headYaw": "15",
+			"leftShoulderPitch": "21",
+			"leftShoulderYaw": "16",
+			"rightShoulderPitch": "27",
+			"rightShoulderYaw": "14",
+			"leftElbowPitch": "18",
+			"leftElbowYaw": "16",
+			"rightElbowPitch": "12",
+			"rightElbowYaw": "12"
+		},
+		"1": {
+			"type": "frame",
+			"number": 1,
+			"headPitch": "",
+			"headYaw": "",
+			"leftShoulderPitch": "",
+			"leftShoulderYaw": "",
+			"rightShoulderPitch": "",
+			"rightShoulderYaw": "",
+			"leftElbowPitch": "",
+			"leftElbowYaw": "",
+			"rightElbowPitch": "",
+			"rightElbowYaw": ""
+		}
+	},
+	"groups": {
+		"0": {
+			"0": {
+				"frameNum": 1,
+				"loopAmount": 1
+			},
+			"1": {
+				"frameNum": 0,
+				"loopAmount": 1
+			},
+			"2": {
+				"frameNum": 1,
+				"loopAmount": 1
+			}
+		}
+	},
+	"dance": {
+		"0": {
+			"type": "group",
+			"num": 0,
+			"loopAmount": "Group"
+		},
+		"1": {
+			"type": "frame",
+			"num": 1,
+			"loopAmount": "Frame"
+		},
+		"framerate": 1
+	}
 }

@@ -52711,6 +52711,9 @@ function App(canvas) {
 
     if (!self.autoResize) return;
 
+    // don't do anything if the camera doesn't exist yet
+    if (!_camera) return;
+
     if (_camera.type !== 'PerspectiveCamera') {
 
       console.warn('THREE.App: AutoResize only works with PerspectiveCamera');
@@ -58485,8 +58488,8 @@ var controls = {
     table: document.querySelector('#dance-details'),
     addFrameButton: document.querySelector('#add-frame-to-dance'),
     addGroupButton: document.querySelector('#add-group-to-dance'),
-    playButton: document.querySelector('#play-dance'),
-    resetButton: document.querySelector('#reset-dance')
+    playButton: document.querySelector('#play-dance')
+
   },
   music: {
     uploadMP3Button: document.querySelector('#upload-mp3-button'),
@@ -58500,7 +58503,8 @@ var controls = {
     load: document.querySelector('#load-dance'),
     fileInput: document.querySelector('#file-input'),
     examples: document.querySelector('#examples'),
-    loadExample: document.querySelector('#load-example')
+    loadExample: document.querySelector('#load-example'),
+    resetButton: document.querySelector('#reset-dance')
   }
 };
 
@@ -58769,16 +58773,16 @@ var DeleteButtonCell = function DeleteButtonCell(row) {
 
     this.onClick = function () {};
 
-    var click = function (e) {
+    this.click = function (e) {
 
-        e.preventDefault();
+        if (e) e.preventDefault();
 
         _this.onClick();
 
-        deleteButton.removeEventListener('click', click);
+        deleteButton.removeEventListener('click', _this.click);
     };
 
-    deleteButton.addEventListener('click', click);
+    deleteButton.addEventListener('click', this.click);
 };
 
 var constraints = {
@@ -58816,9 +58820,9 @@ var Frame = function () {
     classCallCheck(this, Frame);
 
 
-    this.robot = robot;
+    this.type = 'frame';
 
-    console.log(robot);
+    this.robot = robot;
 
     this.num = num;
 
@@ -58960,11 +58964,16 @@ var Frame = function () {
 
       var value = _Math.degToRad(sign * e.target.value);
 
+      // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
       _this.robot[name].rotateOnAxis(axis, _this[name + direction + 'Value'] - value);
 
+      // e.g. this.headPitchValue = value;
       _this[name + direction + 'Value'] = value;
+
+      // e.g. this.headPitchSet = true;
       _this[name + direction + 'Set'] = true;
 
+      // e.g. this.headQuaternion.copy(this.robot[ 'head' ].quaternion);
       _this[name + 'Quaternion'].copy(_this.robot[name].quaternion);
     };
 
@@ -59018,56 +59027,36 @@ var Frame = function () {
   };
 
   Frame.prototype.fromJSON = function fromJSON(object) {
-    var number = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.num;
 
+    // this.headQuaternion.fromArray( object.headQuaternion );
+    // this.leftShoulderQuaternion.fromArray( object.leftShoulderQuaternion );
+    // this.rightShoulderQuaternion.fromArray( object.rightShoulderQuaternion );
+    // this.leftElbowQuaternion.fromArray( object.leftElbowQuaternion );
+    // this.rightElbowQuaternion.fromArray( object.rightElbowQuaternion );
 
-    this.headQuaternion = object.headQuaternion;
-    this.leftShoulderQuaternion = object.leftShoulderQuaternion;
-    this.rightShoulderQuaternion = object.rightShoulderQuaternion;
-    this.leftElbowQuaternion = object.leftElbowQuaternion;
-    this.rightElbowQuaternion = object.rightElbowQuaternion;
+    this.num = object.number;
 
-    this.num = number;
+    this.headPitchInput.value = object.headPitch;
+    this.headYawInput.value = object.headYaw;
+    this.leftShoulderPitchInput.value = object.leftShoulderPitch;
+    this.leftShoulderYawInput.value = object.leftShoulderYaw;
+    this.rightShoulderPitchInput.value = object.rightShoulderPitch;
+    this.rightShoulderYawInput.value = object.rightShoulderYaw;
+    this.leftElbowPitchInput.value = object.leftElbowPitch;
+    this.leftElbowYawInput.value = object.leftElbowYaw;
+    this.rightElbowPitchInput.value = object.rightElbowPitch;
+    this.rightElbowYawInput.value = object.rightElbowYaw;
 
-    this.headPitchValue = object.headPitchValue;
-    this.headPitchSet = object.headPitchSet;
-    // if ( this.headPitchSet ) this.headPitchInput.value = -Math.floor( THREE.Math.radToDeg( object.headPitchValue ) );
-
-    this.headYawValue = object.headYawValue;
-    this.headYawSet = object.headYawSet;
-    // this.headYawInput.value =  Math.floor( THREE.Math.radToDeg( object.headYawValue ) );
-
-    this.leftShoulderPitchValue = object.leftShoulderPitchValue;
-    this.leftShoulderPitchSet = object.leftShoulderPitchSet;
-    // this.leftShoulderPitchInput.value = -Math.floor( THREE.Math.radToDeg( object.leftShoulderPitchValue ) );
-
-    this.leftShoulderYawValue = object.leftShoulderYawValue;
-    this.leftShoulderYawSet = object.leftShoulderYawSet;
-    // this.leftShoulderYawInput.value -Math.floor( THREE.Math.radToDeg( object.leftShoulderYawValue ) );
-
-    this.rightShoulderPitchValue = object.rightShoulderPitchValue;
-    this.rightShoulderPitchSet = object.rightShoulderPitchSet;
-    // this.rightShoulderPitchInput.value -Math.floor( THREE.Math.radToDeg( object.rightShoulderPitchValue ) );
-
-    this.rightShoulderYawValue = object.rightShoulderYawValue;
-    this.rightShoulderYawSet = object.rightShoulderYawSet;
-    // this.rightShoulderYawInput.value = Math.floor( THREE.Math.radToDeg( object.rightShoulderYawValue ) );
-
-    this.leftElbowPitchValue = object.leftElbowPitchValue;
-    this.leftElbowPitchSet = object.leftElbowPitchSet;
-    // this.leftElbowPitchInput.value Math.floor( THREE.Math.radToDeg( object.leftElbowPitchValue ) );
-
-    this.leftElbowYawValue = object.leftElbowYawValue;
-    this.leftElbowYawSet = object.leftElbowYawSet;
-    // this.leftElbowYawInput.value = -Math.floor( THREE.Math.radToDeg( object.leftElbowYawValue ) );
-
-    this.rightElbowPitchValue = object.rightElbowPitchValue;
-    this.rightElbowPitchSet = object.rightElbowPitchSet;
-    // this.rightElbowPitchInput.value = -Math.floor( THREE.Math.radToDeg( object.rightElbowPitchValue ) );
-
-    this.rightElbowYawValue = object.rightElbowYawValue;
-    this.rightElbowYawSet = object.rightElbowYawSet;
-    // this.rightElbowYawInput.value = -Math.floor( THREE.Math.radToDeg( object.rightElbowYawValue ) );
+    this.headPitchSet = this.headPitchInput.value !== '';
+    this.headYawSet = this.headYawInput.value !== '';
+    this.leftShoulderPitchSet = this.leftShoulderPitchInput.value !== '';
+    this.leftShoulderYawSet = this.leftShoulderYawInput.value !== '';
+    this.rightShoulderPitchSet = this.rightShoulderPitchInput.value !== '';
+    this.rightShoulderYawSet = this.rightShoulderYawInput.value !== '';
+    this.leftElbowPitchSet = this.leftElbowPitchInput.value !== '';
+    this.leftElbowYawSet = this.leftElbowYawInput.value !== '';
+    this.rightElbowPitchSet = this.rightElbowPitchInput.value !== '';
+    this.rightElbowYawSet = this.headPitchInput.value !== '';
 
     this.setRotations();
   };
@@ -59077,38 +59066,35 @@ var Frame = function () {
     return {
 
       type: 'frame',
-      num: this.num,
+      number: this.num,
 
-      headQuaternion: this.headQuaternion,
-      leftShoulderQuaternion: this.leftShoulderQuaternion,
-      rightShoulderQuaternion: this.rightShoulderQuaternion,
-      leftElbowQuaternion: this.leftElbowQuaternion,
-      rightElbowQuaternion: this.rightElbowQuaternion,
+      // headQuaternion: this.headQuaternion.toArray(),
+      // leftShoulderQuaternion: this.leftShoulderQuaternion.toArray(),
+      // rightShoulderQuaternion: this.rightShoulderQuaternion.toArray(),
+      // leftElbowQuaternion: this.leftElbowQuaternion.toArray(),
+      // rightElbowQuaternion: this.rightElbowQuaternion.toArray(),
 
-      headPitchValue: this.headPitchValue,
-      headPitchSet: this.headPitchSet,
-      headYawValue: this.headYawValue,
-      headYawSet: this.headYawSet,
+      headPitch: this.headPitchInput.value,
+      headYaw: this.headYawInput.value,
+      leftShoulderPitch: this.leftShoulderPitchInput.value,
+      leftShoulderYaw: this.leftShoulderYawInput.value,
+      rightShoulderPitch: this.rightShoulderPitchInput.value,
+      rightShoulderYaw: this.rightShoulderYawInput.value,
+      leftElbowPitch: this.leftElbowPitchInput.value,
+      leftElbowYaw: this.leftElbowYawInput.value,
+      rightElbowPitch: this.rightElbowPitchInput.value,
+      rightElbowYaw: this.rightElbowYawInput.value
 
-      leftShoulderPitchValue: this.leftShoulderPitchValue,
-      leftShoulderPitchSet: this.leftShoulderPitchSet,
-      leftShoulderYawValue: this.leftShoulderYawValue,
-      leftShoulderYawSet: this.leftShoulderYawSet,
-
-      rightShoulderPitchValue: this.rightShoulderPitchValue,
-      rightShoulderPitchSet: this.rightShoulderPitchSet,
-      rightShoulderYawValue: this.rightShoulderYawValue,
-      rightShoulderYawSet: this.rightShoulderYawSet,
-
-      leftElbowPitchValue: this.leftElbowPitchValue,
-      leftElbowPitchSet: this.leftElbowPitchSet,
-      leftElbowYawValue: this.leftElbowYawValue,
-      leftElbowYawSet: this.leftElbowYawSet,
-
-      rightElbowPitchValue: this.rightElbowPitchValue,
-      rightElbowPitchSet: this.rightElbowPitchSet,
-      rightElbowYawValue: this.rightElbowYawValue,
-      rightElbowYawSet: this.rightElbowYawSet
+      // headPitchSet: this.headPitchSet,
+      // headYawSet: this.headYawSet,
+      // leftShoulderPitchSet: this.leftShoulderPitchSet,
+      // leftShoulderYawSet: this.leftShoulderYawSet,
+      // rightShoulderPitchSet: this.rightShoulderPitchSet,
+      // rightShoulderYawSet: this.rightShoulderYawSet,
+      // leftElbowPitchSet: this.leftElbowPitchSet,
+      // leftElbowYawSet: this.leftElbowYawSet,
+      // rightElbowPitchSet: this.rightElbowPitchSet,
+      // rightElbowYawSet: this.rightElbowYawSet,
 
     };
   };
@@ -59132,12 +59118,106 @@ var Frame = function () {
   return Frame;
 }();
 
+var AnimationControl = function () {
+  function AnimationControl() {
+    var _this = this;
+
+    classCallCheck(this, AnimationControl);
+
+
+    this.defaultFrame = null;
+
+    this.frames = null;
+    this.groups = null;
+    this.dance = null;
+
+    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
+
+      e.preventDefault();
+
+      _this.framerate = e.target.value;
+    });
+  }
+
+  AnimationControl.prototype.setDance = function setDance(dance) {
+
+    this.dance = dance;
+    this.frames = dance.frames;
+    this.groups = dance.groups;
+
+    return this;
+  };
+
+  AnimationControl.prototype.pauseAllAnimation = function pauseAllAnimation() {
+
+    this.groups.deselectAll();
+  };
+
+  AnimationControl.prototype.initMixer = function initMixer(object) {
+
+    this.mixer = new AnimationMixer(object);
+  };
+
+  AnimationControl.prototype.onUpdate = function onUpdate(delta) {
+
+    if (this.mixer) this.mixer.update(delta);
+  };
+
+  // create a keyframe track consisting of two keyframes, representing the time span of one frame
+
+
+  AnimationControl.prototype.createKeyFrameTrack = function createKeyFrameTrack(part, initialPos, finalPos, startTime) {
+
+    return new QuaternionKeyframeTrack(part, [startTime, startTime + 1], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
+  };
+
+  // a Clip consists of several keyframe tracks
+  // - for example the movement of an arm over the duration of a group
+  // an Action controls playback of the clip
+
+
+  AnimationControl.prototype.createAction = function createAction(name, tracks) {
+
+    var clip = new AnimationClip(name, -1, tracks);
+
+    var action = this.mixer.clipAction(clip);
+
+    action.name = clip.name;
+
+    return action;
+  };
+
+  AnimationControl.prototype.uncache = function uncache(action) {
+
+    var clip = action.getClip();
+
+    this.mixer.uncacheClip(clip);
+    this.mixer.uncacheAction(clip);
+  };
+
+  createClass(AnimationControl, [{
+    key: 'framerate',
+    set: function (value) {
+
+      console.log('AnimationControl.framerate not yet implemented! ');
+
+      // TODO - probably best to store all actions, then use timeScale to set the speed
+    }
+  }]);
+  return AnimationControl;
+}();
+
+var animationControl = new AnimationControl();
+
 var Frames = function () {
   function Frames(robot) {
     classCallCheck(this, Frames);
 
 
     this.robot = robot;
+
+    // used as the base standing pose for the robot, all dances start here
+    this.defaultFrame = new Frame(999999, this.robot, true);
 
     this.currentFrameNum = 0;
     this.selectedFrame = null;
@@ -59148,15 +59228,12 @@ var Frames = function () {
     this.initNewFrameButton();
   }
 
-  Frames.prototype.setDefaultFrame = function setDefaultFrame(frame) {
-
-    this.defaultFrame = frame;
-  };
-
-  Frames.prototype.createFrame = function createFrame(num) {
+  Frames.prototype.createFrame = function createFrame(num, detail) {
     var _this = this;
 
     var frame = new Frame(num, this.robot);
+
+    if (detail !== undefined) frame.fromJSON(detail);
 
     this.frames[frame.num] = frame;
 
@@ -59164,9 +59241,9 @@ var Frames = function () {
 
     this.select(frame);
 
-    frame.row.addEventListener('click', function (evt) {
+    frame.row.addEventListener('click', function (e) {
 
-      evt.preventDefault();
+      e.preventDefault();
 
       _this.select(frame);
     });
@@ -59178,6 +59255,11 @@ var Frames = function () {
       frame.removeEventListeners();
 
       _this.frames[frame.num] = null;
+
+      if (_this.selectedFrame === frame) {
+
+        _this.selectedFrame = null;
+      }
     };
 
     return frame;
@@ -59196,6 +59278,8 @@ var Frames = function () {
 
   Frames.prototype.select = function select(frame) {
 
+    animationControl.pauseAllAnimation();
+
     frame.selected = true;
 
     this.selectedFrame = frame;
@@ -59213,6 +59297,8 @@ var Frames = function () {
       if (frame !== null) frame.deleteButton.click();
     });
 
+    this.selectedFrame = null;
+    this.currentFrameNum = 0;
     this.frames = [];
   };
 
@@ -59224,13 +59310,20 @@ var Frames = function () {
 
       var detail = object[key];
 
-      if (detail === null) {
+      if (detail.type === 'frame') {
 
-        this.frames[key] = null;
-      } else {
+        console.log(detail);
 
-        this.createFrame(key, detail);
-        this.currentFrameNum = key;
+        if (detail === null) {
+
+          this.frames[key] = null;
+        } else {
+
+          var num = parseInt(key, 10);
+
+          this.createFrame(num, detail);
+          if (this.currentFrameNum < num) this.currentFrameNum = num;
+        }
       }
     }
   };
@@ -59298,175 +59391,89 @@ var LoopInputCell = function LoopInputCell(row) {
     });
 };
 
-var framerate = 1;
-
-var AnimationControl = function () {
-  function AnimationControl() {
-    var _this = this;
-
-    classCallCheck(this, AnimationControl);
+var GroupAnimation = function () {
+  function GroupAnimation(robot) {
+    classCallCheck(this, GroupAnimation);
 
 
-    this.defaultFrame = null;
+    this.robot = robot;
 
-    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
-
-      e.preventDefault();
-
-      _this.framerate = e.target.value;
-    });
+    this.actions = [];
   }
 
-  AnimationControl.prototype.setDefaultFrame = function setDefaultFrame(frame) {
+  GroupAnimation.prototype.createAnimation = function createAnimation(framesDetails) {
 
-    this.defaultFrame = frame;
-  };
+    this.reset();
 
-  AnimationControl.prototype.initMixer = function initMixer(object) {
+    // we need at least two frames to create the animation
+    if (framesDetails.length < 2) return;
 
-    this.mixer = new AnimationMixer(object);
-  };
+    var headTracks = [];
+    var leftShoulderTracks = [];
+    var rightShoulderTracks = [];
+    var leftElbowTracks = [];
+    var rightElbowTracks = [];
 
-  AnimationControl.prototype.onUpdate = function onUpdate(delta) {
+    for (var i = 1; i < framesDetails.length; i++) {
 
-    if (this.mixer) this.mixer.update(delta);
-  };
+      var initialFrame = framesDetails[i - 1].frame;
+      var finalFrame = framesDetails[i].frame;
 
-  // create a keyframe track consisting of two keyframes, representing the time span of one frame
+      var frameStartTime = i - 1;
 
+      headTracks.push(animationControl.createKeyFrameTrack('headControl.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
 
-  AnimationControl.prototype.createKeyFrameTrack = function createKeyFrameTrack(part, initialPos, finalPos) {
+      leftShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlLeft.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
 
-    return new QuaternionKeyframeTrack(part, [0, // start at 0
-    framerate], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
-  };
+      rightShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlRight.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
 
-  // a Clip consists of several keyframe tracks
-  // - for example the movement of an arm over the duration of a group
-  // an Action controls playback of the clip
+      leftElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlLeft.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
 
-
-  AnimationControl.prototype.createAction = function createAction(name, tracks) {
-
-    var clip = new AnimationClip(name, -1, tracks);
-
-    var action = this.mixer.clipAction(clip);
-
-    action.name = clip.name;
-
-    return action;
-  };
-
-  AnimationControl.prototype.uncache = function uncache(action) {
-
-    var clip = action.getClip();
-
-    this.mixer.uncacheClip(clip);
-    this.mixer.uncacheAction(clip);
-  };
-
-  createClass(AnimationControl, [{
-    key: 'framerate',
-    set: function (value) {
-
-      console.log('AnimationControl.framerate not yet implemented! ');
-
-      // TODO - probably best to store all actions, then use timeScale to set the speed
-    }
-  }]);
-  return AnimationControl;
-}();
-
-var animationControl = new AnimationControl();
-
-var GroupAnimation = function () {
-    function GroupAnimation(robot) {
-        classCallCheck(this, GroupAnimation);
-
-
-        this.robot = robot;
-
-        this.actions = [];
+      rightElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlRight.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
     }
 
-    GroupAnimation.prototype.createAnimation = function createAnimation(framesDetails) {
+    var headAction = animationControl.createAction('headControl.quaternion', headTracks);
+    var leftShoulderAction = animationControl.createAction('shoulderControlLeft.quaternion', leftShoulderTracks);
+    var rightShoulderAction = animationControl.createAction('shoulderControlRight.quaternion', rightShoulderTracks);
+    var leftElbowAction = animationControl.createAction('elbowControlLeft.quaternion', leftElbowTracks);
+    var rightElbowAction = animationControl.createAction('elbowControlRight.quaternion', rightElbowTracks);
 
-        this.reset();
+    this.actions = [headAction, leftShoulderAction, rightShoulderAction, leftElbowAction, rightElbowAction];
+  };
 
-        // we need at least two frames to create the animation
-        if (framesDetails.length < 2) return;
+  GroupAnimation.prototype.play = function play() {
 
-        var headTracks = [];
-        var leftShoulderTracks = [];
-        var rightShoulderTracks = [];
-        var leftElbowTracks = [];
-        var rightElbowTracks = [];
+    this.actions.forEach(function (action) {
 
-        for (var i = 1; i < framesDetails.length; i++) {
+      action.play();
+    });
+  };
 
-            var initialFrame = framesDetails[i - 1].frame;
-            var finalFrame = framesDetails[i].frame;
+  GroupAnimation.prototype.stop = function stop() {
 
-            headTracks.push(animationControl.createKeyFrameTrack('headControl.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion));
+    this.actions.forEach(function (action) {
 
-            leftShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlLeft.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion));
+      action.stop();
+    });
+  };
 
-            rightShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlRight.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion));
+  GroupAnimation.prototype.reset = function reset() {
 
-            leftElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlLeft.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion));
+    this.actions.forEach(function (action) {
 
-            rightElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlRight.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, this.framerate));
-        }
+      animationControl.uncache(action);
+    });
+  };
 
-        var headAction = animationControl.createAction('headControl.quaternion', headTracks);
-        headAction.play();
-
-        var leftShoulderAction = animationControl.createAction('shoulderControlLeft.quaternion', leftShoulderTracks);
-        leftShoulderAction.play();
-
-        var rightShoulderAction = animationControl.createAction('shoulderControlRight.quaternion', rightShoulderTracks);
-        rightShoulderAction.play();
-
-        var leftElbowAction = animationControl.createAction('elbowControlLeft.quaternion', leftElbowTracks);
-        leftElbowAction.play();
-
-        var rightElbowAction = animationControl.createAction('elbowControlRight.quaternion', rightElbowTracks);
-        rightElbowAction.play();
-
-        this.actions = [headAction, leftShoulderAction, rightShoulderAction, leftElbowAction, rightElbowAction];
-    };
-
-    GroupAnimation.prototype.play = function play() {
-
-        this.actions.forEach(function (action) {
-
-            action.play();
-        });
-    };
-
-    GroupAnimation.prototype.pause = function pause() {
-
-        this.actions.forEach(function (action) {
-
-            action.play();
-        });
-    };
-
-    GroupAnimation.prototype.reset = function reset() {
-
-        this.actions.forEach(function (action) {
-
-            animationControl.uncache(action);
-        });
-    };
-
-    return GroupAnimation;
+  return GroupAnimation;
 }();
 
 var Group$1 = function () {
   function Group(num, frames) {
     classCallCheck(this, Group);
 
+
+    this.type = 'group';
 
     this.frames = frames;
 
@@ -59543,6 +59550,7 @@ var Group$1 = function () {
     };
 
     this.animation.createAnimation(this.containedFrames);
+    this.animation.play();
   };
 
   Group.prototype.initAddFrameButton = function initAddFrameButton() {
@@ -59556,7 +59564,7 @@ var Group$1 = function () {
 
       var frame = _this2.frames.selectedFrame;
 
-      if (frame === undefined) return;
+      if (frame === undefined || frame === null) return;
 
       // don't add the same frame consecutively (use loop instead)
       if (_this2.lastAddedFrameNum === frame.num) return;
@@ -59567,16 +59575,6 @@ var Group$1 = function () {
     });
   };
 
-  // initDeleteButton() {
-
-  //   const deleteButtonCell = document.createElement( 'td' );
-  //   this.deleteButton = document.createElement( 'button' );
-  //   this.deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-  //   deleteButtonCell.appendChild( this.deleteButton );
-  //   this.row.appendChild( deleteButtonCell );
-
-  // }
-
   Group.prototype.reset = function reset() {
 
     this.containedFrames.forEach(function (frame) {
@@ -59585,6 +59583,8 @@ var Group$1 = function () {
     });
 
     this.containedFrames = [];
+    this.animation.stop();
+    this.animation.reset();
   };
 
   Group.prototype.fromJSON = function fromJSON(object) {
@@ -59625,11 +59625,12 @@ var Group$1 = function () {
       if (bool === true) {
 
         this.row.style.backgroundColor = 'aliceBlue';
+        this.animation.createAnimation(this.containedFrames);
         this.animation.play();
       } else {
 
         this.row.style.backgroundColor = 'initial';
-        this.animation.pause();
+        this.animation.stop();
       }
     }
   }]);
@@ -59677,6 +59678,12 @@ var Groups = function () {
       _this.groupsTable.removeChild(group.row);
 
       _this.groups[group.num] = null;
+
+      group.reset();
+
+      console.log('TODO: deleting group should reset animation ');
+
+      if (_this.selectedGroup === group) _this.selectedGroup = null;
     };
   };
 
@@ -59706,6 +59713,20 @@ var Groups = function () {
     });
   };
 
+  Groups.prototype.deselectAll = function deselectAll() {
+
+    this.groups.forEach(function (group) {
+      group.selected = false;
+    });
+  };
+
+  Groups.prototype.stopPlayingAll = function stopPlayingAll() {
+
+    this.groups.forEach(function (group) {
+      group.animation.stop();
+    });
+  };
+
   Groups.prototype.reset = function reset() {
 
     this.groups.forEach(function (group) {
@@ -59713,6 +59734,8 @@ var Groups = function () {
       if (group !== null) group.deleteButton.click();
     });
 
+    this.currentGroupNum = 0;
+    this.selectedGroup = null;
     this.groups = [];
   };
 
@@ -59776,7 +59799,6 @@ var Dance = function () {
     this.initAddSelectedFrameButton();
     this.initAddSelectedGroupButton();
     this.initPlayButton();
-    this.initResetButton();
     this.initFramerateInput();
   }
 
@@ -59790,13 +59812,12 @@ var Dance = function () {
     });
   };
 
-  Dance.prototype.add = function add(elem, type, loop) {
+  Dance.prototype.add = function add(elem, loop) {
     var _this = this;
 
     var loopAmount = loop || 1;
 
     var detail = {
-      type: type,
       elem: elem,
       loopAmount: loopAmount,
       deleteButton: null
@@ -59810,7 +59831,7 @@ var Dance = function () {
     this.table.appendChild(row);
 
     new TextCell(row, elem.num);
-    new TextCell(row, type);
+    new TextCell(row, elem.type);
 
     var loopInput = new LoopInputCell(row);
 
@@ -59900,21 +59921,11 @@ var Dance = function () {
     });
   };
 
-  Dance.prototype.initResetButton = function initResetButton() {
-
-    HTMLControl.controls.dance.resetButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      console.log('r ');
-    });
-  };
-
   Dance.prototype.reset = function reset() {
 
     this.containedElems.forEach(function (elem) {
 
-      if (elem !== null) elem.deleteButton.click();
+      if (elem !== null && elem.deleteButton) elem.deleteButton.click();
     });
 
     this.containedElems = [];
@@ -59928,14 +59939,17 @@ var Dance = function () {
 
     for (var key in object) {
 
-      var detail = object[key];
+      var elem = object[key];
 
-      if (detail.type === 'frame') {
+      if (elem.type === 'frame') {
 
-        this.add(this.frames.frames[detail.num], 'frame', detail.loopAmount);
-      } else {
+        this.add(this.frames.frames[elem.num], elem.loopAmount);
+      } else if (elem.type === 'group') {
 
-        this.add(this.groups.groups[detail.num], 'frame', detail.loopAmount);
+        this.add(this.groups.groups[elem.num], elem.loopAmount);
+      } else if (key === 'framerate') {
+
+        console.log('TODO: load framerate from file');
       }
     }
   };
@@ -59956,8 +59970,8 @@ var Dance = function () {
 
         output[i] = {
 
-          type: detail.type,
-          num: detail.num,
+          type: detail.elem.type,
+          num: detail.elem.num,
           loopAmount: detail.loopAmount
 
         };
@@ -60009,6 +60023,7 @@ var FileControl = function () {
     this.initSaveButton();
     this.initLoadButton();
     this.initExamples();
+    this.initResetButton();
   }
 
   FileControl.prototype.load = function load(json) {
@@ -60018,8 +60033,6 @@ var FileControl = function () {
       console.error('Wrong JSON format - cannot load dance!');
       return;
     }
-
-    console.log(json);
 
     this.frames.fromJSON(json.frames);
     this.groups.fromJSON(json.groups);
@@ -60084,8 +60097,30 @@ var FileControl = function () {
     });
   };
 
-  FileControl.prototype.initExamples = function initExamples() {
+  FileControl.prototype.initResetButton = function initResetButton() {
     var _this3 = this;
+
+    HTMLControl.controls.file.resetButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      /* eslint no-alert: 0 */
+      if (confirm('This will reset everything! Are you sure?')) {
+
+        _this3.resetAll();
+      }
+    });
+  };
+
+  FileControl.prototype.resetAll = function resetAll() {
+
+    this.frames.reset();
+    this.groups.reset();
+    this.dance.reset();
+  };
+
+  FileControl.prototype.initExamples = function initExamples() {
+    var _this4 = this;
 
     var examples = HTMLControl.controls.file.examples;
 
@@ -60096,12 +60131,9 @@ var FileControl = function () {
       var path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
 
       fetch(path).then(function (response) {
-
-        console.log(response);
         return response.json();
       }).then(function (json) {
-
-        _this3.load(json);
+        return _this4.load(json);
       }).catch(function (err) {
         return console.log(err);
       });
@@ -60881,19 +60913,15 @@ var Main = function () {
 
       animationControl.initMixer(_this2.nao);
 
-      var defaultFrame = new Frames(999999, _this2.robot, true);
+      var frames = new Frames(_this2.robot);
+      var groups = new Groups(frames);
+      var dance = new Dance(groups, frames);
 
-      _this2.frames = new Frames(_this2.robot);
+      animationControl.setDance(dance);
 
-      _this2.frames.setDefaultFrame(defaultFrame);
-      animationControl.setDefaultFrame(defaultFrame);
+      new Audio$1([_this2.soundSourceLeft, _this2.soundSourceRight], _this2.app.camera);
 
-      _this2.groups = new Groups(_this2.frames);
-      _this2.dance = new Dance(_this2.groups, _this2.frames);
-
-      _this2.audio = new Audio$1([_this2.soundSourceLeft, _this2.soundSourceRight], _this2.app.camera);
-
-      _this2.fileControl = new FileControl(_this2.frames, _this2.groups, _this2.dance);
+      new FileControl(frames, groups, dance);
 
       _this2.app.play();
     });

@@ -9,6 +9,10 @@ class AnimationControl {
 
     this.defaultFrame = null;
 
+    this.frames = null;
+    this.groups = null;
+    this.dance = null;
+
     HTMLControl.controls.dance.framerate.addEventListener( 'input', ( e ) => {
 
       e.preventDefault();
@@ -27,12 +31,21 @@ class AnimationControl {
 
   }
 
-  setDefaultFrame( frame ) {
+  setDance( dance ) {
 
-    this.defaultFrame = frame;
+    this.dance = dance;
+    this.frames = dance.frames;
+    this.groups = dance.groups;
+
+    return this;
 
   }
 
+  pauseAllAnimation() {
+
+    this.groups.deselectAll();
+
+  }
 
   initMixer( object ) {
 
@@ -47,12 +60,12 @@ class AnimationControl {
   }
 
   // create a keyframe track consisting of two keyframes, representing the time span of one frame
-  createKeyFrameTrack( part, initialPos, finalPos ) {
+  createKeyFrameTrack( part, initialPos, finalPos, startTime ) {
 
     return new THREE.QuaternionKeyframeTrack( part,
       [
-        0, // start at 0
-        framerate, // finish at 0 + framerate - actual scheduling will take place in the AnimationAction
+        startTime,
+        startTime + 1, // framerate is fixed a 1 fps, we'll use the action.timescale to convert to other framerates
       ],
       [
         initialPos.x,

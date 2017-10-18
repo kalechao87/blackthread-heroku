@@ -50,6 +50,9 @@ function App( canvas ) {
 
     if ( !self.autoResize ) return;
 
+    // don't do anything if the camera doesn't exist yet
+    if ( !_camera ) return;
+
     if ( _camera.type !== 'PerspectiveCamera' ) {
 
       console.warn( 'THREE.App: AutoResize only works with PerspectiveCamera' );

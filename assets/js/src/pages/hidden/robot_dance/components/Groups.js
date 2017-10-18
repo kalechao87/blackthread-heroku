@@ -43,6 +43,12 @@ export default class Groups {
 
       this.groups[ group.num ] = null;
 
+      group.reset();
+
+      console.log( 'TODO: deleting group should reset animation ' );
+
+      if ( this.selectedGroup === group ) this.selectedGroup = null;
+
     };
 
   }
@@ -77,6 +83,18 @@ export default class Groups {
 
   }
 
+  deselectAll() {
+
+    this.groups.forEach( ( group ) => { group.selected = false; } );
+
+  }
+
+  stopPlayingAll() {
+
+    this.groups.forEach( ( group ) => { group.animation.stop(); } );
+
+  }
+
   reset() {
 
     this.groups.forEach( ( group ) => {
@@ -85,6 +103,8 @@ export default class Groups {
 
     } );
 
+    this.currentGroupNum = 0;
+    this.selectedGroup = null;
     this.groups = [];
 
   }

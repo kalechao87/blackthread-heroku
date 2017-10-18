@@ -27,7 +27,7 @@ const controls = {
     addFrameButton: document.querySelector( '#add-frame-to-dance' ),
     addGroupButton: document.querySelector( '#add-group-to-dance' ),
     playButton: document.querySelector( '#play-dance' ),
-    resetButton: document.querySelector( '#reset-dance' ),
+
   },
   music: {
     uploadMP3Button: document.querySelector( '#upload-mp3-button' ),
@@ -42,6 +42,7 @@ const controls = {
     fileInput: document.querySelector( '#file-input' ),
     examples: document.querySelector( '#examples' ),
     loadExample: document.querySelector( '#load-example' ),
+    resetButton: document.querySelector( '#reset-dance' ),
   },
 };
 

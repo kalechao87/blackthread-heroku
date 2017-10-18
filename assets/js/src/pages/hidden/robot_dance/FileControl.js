@@ -39,6 +39,7 @@ export default class FileControl {
     this.initSaveButton();
     this.initLoadButton();
     this.initExamples();
+    this.initResetButton();
 
   }
 
@@ -50,8 +51,6 @@ export default class FileControl {
       return;
 
     }
-
-    console.log( json );
 
     this.frames.fromJSON( json.frames );
     this.groups.fromJSON( json.groups );
@@ -122,6 +121,31 @@ export default class FileControl {
     } );
   }
 
+  initResetButton() {
+
+    HTMLControl.controls.file.resetButton.addEventListener( 'click', ( e ) => {
+
+      e.preventDefault();
+
+      /* eslint no-alert: 0 */
+      if ( confirm( 'This will reset everything! Are you sure?' ) ) {
+
+        this.resetAll();
+
+      }
+
+    } );
+
+  }
+
+  resetAll() {
+
+    this.frames.reset();
+    this.groups.reset();
+    this.dance.reset();
+
+  }
+
   initExamples() {
 
     const examples = HTMLControl.controls.file.examples;
@@ -133,18 +157,8 @@ export default class FileControl {
       const path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
 
       fetch( path )
-        .then( ( response ) => {
-
-          console.log( response );
-          return response.json();
-
-        } )
-
-        .then( ( json ) => {
-
-          this.load( json );
-
-        } )
+        .then( response => response.json() )
+        .then( json => this.load( json ) )
         .catch( err => console.log( err ) );
 
     } );

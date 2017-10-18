@@ -121,20 +121,16 @@ class Main {
 
         animationControl.initMixer( this.nao );
 
+        const frames = new Frames( this.robot );
+        const groups = new Groups( frames );
+        const dance = new Dance( groups, frames );
 
-        const defaultFrame = new Frame( 999999, this.robot, true );
+        animationControl.setDance( dance );
 
-        this.frames = new Frames( this.robot );
 
-        this.frames.setDefaultFrame( defaultFrame );
-        animationControl.setDefaultFrame( defaultFrame );
+        new Audio( [ this.soundSourceLeft, this.soundSourceRight ], this.app.camera );
 
-        this.groups = new Groups( this.frames );
-        this.dance  = new Dance( this.groups, this.frames );
-
-        this.audio = new Audio( [this.soundSourceLeft, this.soundSourceRight], this.app.camera );
-
-        this.fileControl = new FileControl( this.frames, this.groups, this.dance );
+        new FileControl( frames, groups, dance );
 
         this.app.play();
 
