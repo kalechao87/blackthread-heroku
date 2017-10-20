@@ -96,6 +96,8 @@ export default class GroupAnimation {
 
     } );
 
+    this.robot.resetPose();
+
   }
 
 }

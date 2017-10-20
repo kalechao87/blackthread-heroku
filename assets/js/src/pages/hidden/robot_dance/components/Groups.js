@@ -6,6 +6,7 @@ export default class Groups {
   constructor( frames ) {
 
     this.frames = frames;
+    this.robot = frames.robot;
 
     this.currentGroupNum = 0;
     this.selectedGroup = null;

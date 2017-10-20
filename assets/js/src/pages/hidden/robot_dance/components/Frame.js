@@ -34,17 +34,17 @@ const constraints = {
 
 export default class Frame {
 
-  constructor( num, robot, isBaseFrame = false ) {
+  constructor( robot, num, isBaseFrame = false ) {
 
     this.type = 'frame';
 
-    this.robot = robot;
-
     this.num = num;
+
+    this.robot = robot;
 
     if ( !isBaseFrame ) {
 
-      this.createTableEntry();
+      this.createTableEntry( num );
       this.initControlFunctions();
       this.initDefaultValues();
       this.initSetFlags( false );
@@ -75,11 +75,11 @@ export default class Frame {
 
   }
 
-  createTableEntry() {
+  createTableEntry( num ) {
 
     this.row = document.createElement( 'tr' );
 
-    new TextCell( this.row, this.num );
+    new TextCell( this.row, num );
 
     const headCell = document.createElement( 'td' );
     this.row.appendChild( headCell );
@@ -200,9 +200,21 @@ export default class Frame {
 
     const control = ( e, name, sign, direction, axis ) => {
 
-      e.preventDefault();
+      let value;
 
-      const value = THREE.Math.degToRad( sign * e.target.value );
+      // this function can either be used from an input Event or by passing a number directly
+      if ( e instanceof Event ) {
+
+        e.preventDefault();
+
+        value = THREE.Math.degToRad( sign * e.target.value );
+
+
+      } else {
+
+        value = THREE.Math.degToRad( sign * e );
+
+      }
 
       // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
       this.robot[name].rotateOnAxis( axis, this[ name + direction + 'Value'] - value );
@@ -249,15 +261,24 @@ export default class Frame {
 
   }
 
+  setValuesAndQuaternionsFromInputs() {
+
+    this.controlFunctions.headPitch( this.headPitchInput.value );
+    this.controlFunctions.headYaw( this.headYawInput.value );
+    this.controlFunctions.leftShoulderPitch( this.leftShoulderPitchInput.value );
+    this.controlFunctions.leftShoulderYaw( this.leftShoulderYawInput.value );
+
+    this.controlFunctions.rightShoulderPitch( this.rightShoulderPitchInput.value );
+    this.controlFunctions.rightShoulderYaw( this.rightShoulderYawInput.value );
+    this.controlFunctions.leftElbowPitch( this.leftElbowPitchInput.value );
+    this.controlFunctions.leftElbowYaw( this.leftElbowYawInput.value );
+
+    this.controlFunctions.rightElbowPitch( this.rightElbowPitchInput.value );
+    this.controlFunctions.rightElbowYaw( this.rightElbowYawInput.value );
+
+  }
+
   fromJSON( object ) {
-
-    // this.headQuaternion.fromArray( object.headQuaternion );
-    // this.leftShoulderQuaternion.fromArray( object.leftShoulderQuaternion );
-    // this.rightShoulderQuaternion.fromArray( object.rightShoulderQuaternion );
-    // this.leftElbowQuaternion.fromArray( object.leftElbowQuaternion );
-    // this.rightElbowQuaternion.fromArray( object.rightElbowQuaternion );
-
-    this.num = object.number;
 
     this.headPitchInput.value = object.headPitch;
     this.headYawInput.value = object.headYaw;
@@ -281,6 +302,7 @@ export default class Frame {
     this.rightElbowPitchSet = this.rightElbowPitchInput.value !== '';
     this.rightElbowYawSet = this.headPitchInput.value !== '';
 
+    this.setValuesAndQuaternionsFromInputs();
     this.setRotations();
 
   }
@@ -288,15 +310,6 @@ export default class Frame {
   toJSON() {
 
     return {
-
-      type: 'frame',
-      number: this.num,
-
-      // headQuaternion: this.headQuaternion.toArray(),
-      // leftShoulderQuaternion: this.leftShoulderQuaternion.toArray(),
-      // rightShoulderQuaternion: this.rightShoulderQuaternion.toArray(),
-      // leftElbowQuaternion: this.leftElbowQuaternion.toArray(),
-      // rightElbowQuaternion: this.rightElbowQuaternion.toArray(),
 
       headPitch: this.headPitchInput.value,
       headYaw: this.headYawInput.value,
@@ -308,17 +321,6 @@ export default class Frame {
       leftElbowYaw: this.leftElbowYawInput.value,
       rightElbowPitch: this.rightElbowPitchInput.value,
       rightElbowYaw: this.rightElbowYawInput.value,
-
-      // headPitchSet: this.headPitchSet,
-      // headYawSet: this.headYawSet,
-      // leftShoulderPitchSet: this.leftShoulderPitchSet,
-      // leftShoulderYawSet: this.leftShoulderYawSet,
-      // rightShoulderPitchSet: this.rightShoulderPitchSet,
-      // rightShoulderYawSet: this.rightShoulderYawSet,
-      // leftElbowPitchSet: this.leftElbowPitchSet,
-      // leftElbowYawSet: this.leftElbowYawSet,
-      // rightElbowPitchSet: this.rightElbowPitchSet,
-      // rightElbowYawSet: this.rightElbowYawSet,
 
     };
 

@@ -15,10 +15,13 @@ import Frames from './components/Frames.js';
 import Groups from './components/Groups.js';
 import Dance from './components/Dance.js';
 
+import Robot from './Robot.js';
 import FileControl from './FileControl.js';
 import Audio from './Audio.js';
 
 import animationControl from './animation/animationControl.js';
+
+
 
 // Set up THREE caching
 THREE.Cache.enabled = true;
@@ -92,9 +95,9 @@ class Main {
 
     const naoPromise = loaders.fbxLoader( '/assets/models/robot_dance/nao.fbx' ).then( ( object ) => {
 
-      this.nao = object;
+      invertMirroredFBX( object );
 
-      invertMirroredFBX( this.nao );
+      this.robot = new Robot( object );
 
     } );
 
@@ -109,20 +112,18 @@ class Main {
       () => {
 
         this.app.scene.add( this.stage );
-        this.app.scene.add( this.nao );
+        this.app.scene.add( this.robot.model );
 
         this.initBackground();
         this.initLighting();
         this.initCamera();
         this.initCameraControl();
 
-        this.initRobot( this.nao );
-
-        animationControl.initMixer( this.nao );
+        animationControl.initMixer( this.robot.model );
 
         const frames = new Frames( this.robot );
         const groups = new Groups( frames );
-        const dance = new Dance( groups, frames );
+        const dance = new Dance( groups );
 
         animationControl.setDance( dance );
 
@@ -137,35 +138,6 @@ class Main {
 
   }
 
-  // set up the robots moveable parts
-  initRobot( robot ) {
-
-    console.log( robot )
-
-    this.robot = {
-
-      head: robot.getObjectByName( 'head' ),
-
-      leftShoulder: robot.getObjectByName( 'leftShoulder' ),
-      rightShoulder: robot.getObjectByName( 'rightShoulder' ),
-
-      leftElbow: robot.getObjectByName( 'leftElbow' ),
-      rightElbow: robot.getObjectByName( 'rightElbow' ),
-
-    };
-
-    // slight hack since the model's head is very slightly rotated at the start
-    // so reset that here
-    // this.robot.head.rotation.set( 0, 0, 0 );
-
-    this.robot.headInitialQuaternion = this.robot.head.quaternion.clone();
-    this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
-    this.robot.rightShoulderInitialQuaternion = this.robot.rightShoulder.quaternion.clone();
-    this.robot.leftElbowInitialQuaternion = this.robot.leftElbow.quaternion.clone();
-    this.robot.rightElbowInitialQuaternion = this.robot.rightElbow.quaternion.clone();
-
-  }
-
   initLighting() {
 
     const ambientLight = new THREE.AmbientLight( 0xffffff, 0.3 );
@@ -175,19 +147,10 @@ class Main {
     this.spotlightStageLeftLow.distance = 200;
     this.spotlightStageCenterHigh.distance = 400;
 
-    // this.spotlightStageRightLow.position.y = 0;
-    // this.spotlightStageLeftLow.position.y = 0;
-    // this.spotlightStageCenterHigh.position.y = 200;
-
-    // this.spotlightStageRightLow.intensity = 2;
-    // this.spotlightStageLeftLow.intensity = 2;
-    // this.spotlightStageCenterHigh.intensity = 2;
-
     this.spotlightStageRightLow.penumbra = 0.25;
     this.spotlightStageLeftLow.penumbra = 0.25;
     this.spotlightStageCenterHigh.penumbra = 0.25;
 
-    // console.log( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
     this.app.scene.add( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
 
   }

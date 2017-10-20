@@ -9,11 +9,11 @@ export default class Frames {
 
     this.robot = robot;
 
-    // used as the base standing pose for the robot, all dances start here
-    this.defaultFrame = new Frame( 999999, this.robot, true );
+    // used as the default standing pose for the robot, all dances start here
+    this.defaultFrame = new Frame( this.robot, true );
 
     this.currentFrameNum = 0;
-    this.selectedFrame = null;
+    this.selectedFrameNum = -1;
     this.frames = [];
 
     this.framesTable = HTMLControl.controls.frames.table;
@@ -22,46 +22,35 @@ export default class Frames {
 
   }
 
-  removeFrame ( frame ) {
+  removeFrame( frame ) {
 
     HTMLControl.controls.frames.table.removeChild( frame.row );
 
     frame.removeEventListeners();
 
-    this.frames[ frame.num ] = null;
-
-    if ( this.selectedFrame === frame ) {
-
-      this.selectedFrame = null;
-
-    }
-
   }
 
-  createFrame( num, detail ) {
+  createFrame( detail ) {
 
-    const frame = new Frame( num, this.robot );
+    const frame = new Frame( this.robot, this.currentFrameNum );
 
     if ( detail !== undefined ) frame.fromJSON( detail );
 
-    this.frames[ frame.num ] = frame;
+    this.frames[ this.currentFrameNum ] = frame;
 
     this.framesTable.appendChild( frame.row );
 
-    this.select( frame );
+    this.select( this.currentFrameNum );
 
     frame.row.addEventListener( 'click', ( e ) => {
 
       e.preventDefault();
 
-      this.select( frame );
+      this.select( frame.num );
 
     } );
 
-    // frame.deleteButton.onClick = this.removeFrame;
-
-    // frame.deleteButton.disabled = true;
-
+    this.currentFrameNum ++;
 
     return frame;
 
@@ -73,7 +62,7 @@ export default class Frames {
 
       e.preventDefault();
 
-      this.createFrame( this.currentFrameNum ++ );
+      this.createFrame();
 
       if ( this.currentFrameNum >= 30 ) {
 
@@ -90,19 +79,20 @@ export default class Frames {
 
   }
 
-  select( frame ) {
+  select( num ) {
 
     animationControl.pauseAllAnimation();
 
+    const frame = this.frames[ num ];
+
     frame.selected = true;
+    this.selectedFrameNum = num;
 
-    this.selectedFrame = frame;
+    for ( let i = 0; i < this.frames.length; i++ ) {
 
-    this.frames.forEach( ( f ) => {
+      if ( i !== num ) this.frames[ i ].selected = false;
 
-      if ( f !== null && f.num !== frame.num ) f.selected = false;
-
-    } );
+    }
 
   }
 
@@ -110,11 +100,11 @@ export default class Frames {
 
     this.frames.forEach( ( frame ) => {
 
-      if ( frame !== null ) this.removeFrame( frame );
+      this.removeFrame( frame );
 
     } );
 
-    this.selectedFrame = null;
+    this.selectedFrameNum = -1;
     this.currentFrameNum = 0;
     this.frames = [];
 
@@ -126,25 +116,7 @@ export default class Frames {
 
     for ( const key in object ) {
 
-      const detail = object[ key ];
-
-      if( detail.type === 'frame' ) {
-
-        console.log( detail )
-
-          if ( detail === null ) {
-
-            this.frames[ key ] = null;
-
-          } else {
-
-            const num = parseInt( key, 10 );
-
-            this.createFrame( num, detail );
-            if ( this.currentFrameNum < num ) this.currentFrameNum = num;
-
-          }
-      }
+      this.createFrame( object[ key ] );
 
     }
 

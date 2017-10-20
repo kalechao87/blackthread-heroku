@@ -11,7 +11,6 @@ export default class Group {
     this.type = 'group';
 
     this.frames = frames;
-
     this.robot = frames.robot;
 
     this.containedFrames = [];
@@ -24,20 +23,26 @@ export default class Group {
 
     this.initAddFrameButton();
 
+    this._selected = false;
+
   }
 
   set selected( bool ) {
+
+    if ( this._selected === bool ) return;
 
     if ( bool === true ) {
 
       this.row.style.backgroundColor = 'aliceBlue';
       this.animation.createAnimation( this.containedFrames );
       this.animation.play();
+      this._selected = true;
 
     } else {
 
       this.row.style.backgroundColor = 'initial';
       this.animation.stop();
+      this._selected = false;
 
     }
 
@@ -63,8 +68,6 @@ export default class Group {
 
     frameTable.appendChild( this.framesInGroup );
     framesCell.appendChild( frameTable );
-
-    // this.row.appendChild( document.createElement( 'td' ) );
 
   }
 
@@ -103,10 +106,12 @@ export default class Group {
 
       this.containedFrames.splice( framePos, 1 );
 
+      this.animation.createAnimation( this.containedFrames );
+
     };
 
-    this.animation.createAnimation( this.containedFrames );
-    this.animation.play();
+    this.selected = true;
+
 
   }
 
@@ -118,14 +123,14 @@ export default class Group {
 
       e.preventDefault();
 
-      const frame = this.frames.selectedFrame;
+      const frame = this.frames.frames[ this.frames.selectedFrameNum ];
 
       if ( frame === undefined || frame === null ) return;
 
       // don't add the same frame consecutively (use loop instead)
-      if ( this.lastAddedFrameNum === frame.num ) return;
+      if ( this.lastAddedFrame === frame ) return;
 
-      this.lastAddedFrameNum = frame.num;
+      this.lastAddedFrameNum = frame;
 
       this.addFrame( frame );
 

@@ -114,7 +114,7 @@ Object.assign( FBXLoader.prototype, {
 
     }
 
-    console.log( FBXTree );
+    // console.log( FBXTree );
 
     const connections = parseConnections( FBXTree );
     const images = parseImages( FBXTree );
@@ -1980,8 +1980,7 @@ function parseScene( FBXTree, connections, deformers, geometryMap, materialMap )
   // world positions.
   sceneGraph.updateMatrixWorld( true );
 
-  if( 'Takes' in FBXTree ) {
-
+  if ( 'Takes' in FBXTree ) {
 
     // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
     // to attach animations to, since FBXs treat animations as animations for the entire scene,

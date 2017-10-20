@@ -6,10 +6,12 @@ import animationControl from '../animation/animationControl.js';
 
 export default class Dance {
 
-  constructor( groups, frames ) {
+  constructor( groups ) {
 
     this.groups = groups;
-    this.frames = frames;
+    this.frames = groups.frames;
+    this.robot = this.frames.robot;
+
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
 
