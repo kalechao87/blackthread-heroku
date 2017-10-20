@@ -5,9 +5,9 @@ export default class DeleteButtonCell {
   constructor( row ) {
 
     const deleteButtonCell = document.createElement( 'td' );
-    const deleteButton = document.createElement( 'button' );
-    deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-    deleteButtonCell.appendChild( deleteButton );
+    this.button = document.createElement( 'button' );
+    this.button.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+    deleteButtonCell.appendChild( this.button );
     row.appendChild( deleteButtonCell );
 
     this.onClick = () => {};
@@ -18,11 +18,17 @@ export default class DeleteButtonCell {
 
       this.onClick();
 
-      deleteButton.removeEventListener( 'click', this.click );
+      this.button.removeEventListener( 'click', this.click );
 
     };
 
-    deleteButton.addEventListener( 'click', this.click );
+    this.button.addEventListener( 'click', this.click );
+
+  }
+
+  set disabled( value ) {
+
+    this.button.disabled = true;
 
   }
 

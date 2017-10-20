@@ -2,6 +2,7 @@ import HTMLControl from '../HTMLControl.js';
 import TextCell from './HTML/TextCell.js';
 import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 import LoopInputCell from './HTML/LoopInputCell.js';
+import animationControl from '../animation/animationControl.js';
 
 export default class Dance {
 
@@ -12,8 +13,6 @@ export default class Dance {
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
 
-    this.framerate = 1;
-
     this.containedElems = [];
 
     this.initAdvancedControlsToggle();
@@ -21,6 +20,12 @@ export default class Dance {
     this.initAddSelectedGroupButton();
     this.initPlayButton();
     this.initFramerateInput();
+
+  }
+
+  set framerate( value ) {
+
+    animationControl.framerate = value;
 
   }
 
@@ -70,7 +75,7 @@ export default class Dance {
 
       this.table.removeChild( row );
 
-      this.containedElems[ pos ] = null;
+      this.containedElems.splice( pos, 1 );
 
     };
 
@@ -177,19 +182,19 @@ export default class Dance {
 
     for ( const key in object ) {
 
-      const elem = object[ key ];
+      const value = object[ key ];
 
-      if ( elem.type === 'frame' ) {
+      if ( value.type === 'frame' ) {
 
-        this.add( this.frames.frames[ elem.num ], elem.loopAmount );
+        this.add( this.frames.frames[ value.num ], value.loopAmount );
 
-      } else if ( elem.type === 'group' ) {
+      } else if ( value.type === 'group' ) {
 
-        this.add( this.groups.groups[ elem.num ], elem.loopAmount );
+        this.add( this.groups.groups[ value.num ], value.loopAmount );
 
       } else if ( key === 'framerate' ) {
 
-        console.log( 'TODO: load framerate from file' );
+        HTMLControl.controls.dance.framerate.value = value;
 
       }
 

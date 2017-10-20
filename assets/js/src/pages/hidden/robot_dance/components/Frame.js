@@ -2,7 +2,6 @@ import * as THREE from 'three';
 
 import TextCell from './HTML/TextCell.js';
 import FrameInputCell from './HTML/FrameInputCell.js';
-import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 
 const constraints = {
 
@@ -107,7 +106,7 @@ export default class Frame {
     this.rightElbowPitchInput = new FrameInputCell( this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch' );
     this.rightElbowYawInput = new FrameInputCell( this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw' );
 
-    this.deleteButton = new DeleteButtonCell( this.row );
+    this.row.appendChild( document.createElement( 'td' ) );
 
   }
 

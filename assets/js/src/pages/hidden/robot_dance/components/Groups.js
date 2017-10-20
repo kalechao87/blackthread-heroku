@@ -17,6 +17,18 @@ export default class Groups {
 
   }
 
+  removeGroup( group ) {
+
+    this.groupsTable.removeChild( group.row );
+
+    this.groups[ group.num ] = null;
+
+    group.reset();
+
+    if ( this.selectedGroup === group ) this.selectedGroup = null;
+
+  }
+
   createGroup( num, details ) {
 
     const group = new Group( num, this.frames );
@@ -29,27 +41,15 @@ export default class Groups {
 
     this.select( group );
 
-    group.row.addEventListener( 'click', ( evt ) => {
+    const select = ( e ) => {
 
-      evt.preventDefault();
+      e.preventDefault();
 
       this.select( group );
 
-    } );
-
-    group.deleteButton.onClick = () => {
-
-      this.groupsTable.removeChild( group.row );
-
-      this.groups[ group.num ] = null;
-
-      group.reset();
-
-      console.log( 'TODO: deleting group should reset animation ' );
-
-      if ( this.selectedGroup === group ) this.selectedGroup = null;
-
     };
+
+    group.row.addEventListener( 'click', select );
 
   }
 
@@ -61,7 +61,17 @@ export default class Groups {
 
       this.createGroup( this.currentGroupNum ++ );
 
+      if ( this.currentGroupNum >= 5 ) {
+
+        this.newGroupButton.innerHTML = 'Limit Reached!';
+
+        this.newGroupButton.disabled = true;
+
+      }
+
     } );
+
+    this.newGroupButton.click();
 
   }
 
@@ -85,7 +95,15 @@ export default class Groups {
 
   deselectAll() {
 
-    this.groups.forEach( ( group ) => { group.selected = false; } );
+    this.groups.forEach( ( g ) => {
+
+      if ( g !== null ) {
+
+        g.selected = false;
+
+      }
+
+    } );
 
   }
 
@@ -99,7 +117,7 @@ export default class Groups {
 
     this.groups.forEach( ( group ) => {
 
-      if ( group !== null ) group.deleteButton.click();
+      if ( group !== null ) this.removeGroup( group );
 
     } );
 

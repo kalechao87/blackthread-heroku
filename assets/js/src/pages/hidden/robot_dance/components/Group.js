@@ -49,7 +49,7 @@ export default class Group {
     this.row = document.createElement( 'tr' );
 
     new TextCell( this.row, this.num );
-    const framesCell = new TextCell( this.row, '<h4>Frames</h4>' );
+    const framesCell = new TextCell( this.row, '<h4>Frames in Group</h4>' );
 
     this.addFrameButton = document.createElement( 'button' );
     this.addFrameButton.classList.add( 'add-selected-frame-button' );
@@ -64,8 +64,7 @@ export default class Group {
     frameTable.appendChild( this.framesInGroup );
     framesCell.appendChild( frameTable );
 
-    this.deleteButton = new DeleteButtonCell( this.row );
-
+    // this.row.appendChild( document.createElement( 'td' ) );
 
   }
 
@@ -102,7 +101,7 @@ export default class Group {
 
       if ( this.lastAddedFrameNum === frame.num ) this.lastAddedFrameNum = null;
 
-      this.containedFrames[ framePos ] = null;
+      this.containedFrames.splice( framePos, 1 );
 
     };
 
@@ -138,7 +137,7 @@ export default class Group {
 
     this.containedFrames.forEach( ( frame ) => {
 
-      if ( frame !== null ) frame.deleteButton.click();
+      if ( frame !== null && frame.deleteButton ) frame.deleteButton.click();
 
     } );
 

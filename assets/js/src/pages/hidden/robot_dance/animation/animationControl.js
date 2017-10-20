@@ -25,9 +25,7 @@ class AnimationControl {
 
   set framerate( value ) {
 
-    console.log( 'AnimationControl.framerate not yet implemented! ' );
-
-    // TODO - probably best to store all actions, then use timeScale to set the speed
+    framerate = value;
 
   }
 
@@ -43,7 +41,7 @@ class AnimationControl {
 
   pauseAllAnimation() {
 
-    this.groups.deselectAll();
+    if ( this.groups ) this.groups.deselectAll();
 
   }
 
@@ -55,7 +53,7 @@ class AnimationControl {
 
   onUpdate( delta ) {
 
-    if ( this.mixer ) this.mixer.update( delta );
+    if ( this.mixer ) this.mixer.update( delta * framerate );
 
   }
 

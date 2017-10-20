@@ -58719,70 +58719,42 @@ function invertMirroredFBX(object) {
 }
 
 var TextCell = function TextCell(row, text) {
-    classCallCheck(this, TextCell);
+  classCallCheck(this, TextCell);
 
 
-    var textCell = document.createElement('td');
-    row.appendChild(textCell);
-    textCell.innerHTML = text;
+  var textCell = document.createElement('td');
+  row.appendChild(textCell);
+  textCell.innerHTML = text;
 
-    return textCell;
+  return textCell;
 };
 
 // create an input cell in a table
 
 var FrameInputCell = function FrameInputCell(row, cell, min, max, text) {
-    classCallCheck(this, FrameInputCell);
+  classCallCheck(this, FrameInputCell);
 
 
-    var span = document.createElement('span');
-    span.innerHTML = text[0].toUpperCase() + text.substr(1, text.length) + ': ';
+  var span = document.createElement('span');
+  span.innerHTML = text[0].toUpperCase() + text.substr(1, text.length) + ': ';
 
-    var input = document.createElement('input');
+  var input = document.createElement('input');
 
-    input.type = 'number';
-    input.min = min;
-    input.max = max;
-    input.step = 1;
-    input.value = '';
+  input.type = 'number';
+  input.min = min;
+  input.max = max;
+  input.step = 1;
+  input.value = '';
 
-    span.appendChild(input);
-    cell.appendChild(span);
+  span.appendChild(input);
+  cell.appendChild(span);
 
-    input.addEventListener('mousedown', function () {
+  input.addEventListener('mousedown', function () {
 
-        row.click();
-    });
+    row.click();
+  });
 
-    return input;
-};
-
-// Append a cell containing a delete button to a table row
-
-var DeleteButtonCell = function DeleteButtonCell(row) {
-    var _this = this;
-
-    classCallCheck(this, DeleteButtonCell);
-
-
-    var deleteButtonCell = document.createElement('td');
-    var deleteButton = document.createElement('button');
-    deleteButton.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-    deleteButtonCell.appendChild(deleteButton);
-    row.appendChild(deleteButtonCell);
-
-    this.onClick = function () {};
-
-    this.click = function (e) {
-
-        if (e) e.preventDefault();
-
-        _this.onClick();
-
-        deleteButton.removeEventListener('click', _this.click);
-    };
-
-    deleteButton.addEventListener('click', this.click);
+  return input;
 };
 
 var constraints = {
@@ -58870,7 +58842,7 @@ var Frame = function () {
     this.rightElbowPitchInput = new FrameInputCell(this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch');
     this.rightElbowYawInput = new FrameInputCell(this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw');
 
-    this.deleteButton = new DeleteButtonCell(this.row);
+    this.row.appendChild(document.createElement('td'));
   };
 
   Frame.prototype.addEventListeners = function addEventListeners() {
@@ -59118,6 +59090,8 @@ var Frame = function () {
   return Frame;
 }();
 
+var framerate = 1;
+
 var AnimationControl = function () {
   function AnimationControl() {
     var _this = this;
@@ -59150,7 +59124,7 @@ var AnimationControl = function () {
 
   AnimationControl.prototype.pauseAllAnimation = function pauseAllAnimation() {
 
-    this.groups.deselectAll();
+    if (this.groups) this.groups.deselectAll();
   };
 
   AnimationControl.prototype.initMixer = function initMixer(object) {
@@ -59160,7 +59134,7 @@ var AnimationControl = function () {
 
   AnimationControl.prototype.onUpdate = function onUpdate(delta) {
 
-    if (this.mixer) this.mixer.update(delta);
+    if (this.mixer) this.mixer.update(delta * framerate);
   };
 
   // create a keyframe track consisting of two keyframes, representing the time span of one frame
@@ -59199,9 +59173,7 @@ var AnimationControl = function () {
     key: 'framerate',
     set: function (value) {
 
-      console.log('AnimationControl.framerate not yet implemented! ');
-
-      // TODO - probably best to store all actions, then use timeScale to set the speed
+      framerate = value;
     }
   }]);
   return AnimationControl;
@@ -59228,6 +59200,20 @@ var Frames = function () {
     this.initNewFrameButton();
   }
 
+  Frames.prototype.removeFrame = function removeFrame(frame) {
+
+    HTMLControl.controls.frames.table.removeChild(frame.row);
+
+    frame.removeEventListeners();
+
+    this.frames[frame.num] = null;
+
+    if (this.selectedFrame === frame) {
+
+      this.selectedFrame = null;
+    }
+  };
+
   Frames.prototype.createFrame = function createFrame(num, detail) {
     var _this = this;
 
@@ -59248,19 +59234,10 @@ var Frames = function () {
       _this.select(frame);
     });
 
-    frame.deleteButton.onClick = function () {
+    // frame.deleteButton.onClick = this.removeFrame;
 
-      HTMLControl.controls.frames.table.removeChild(frame.row);
+    // frame.deleteButton.disabled = true;
 
-      frame.removeEventListeners();
-
-      _this.frames[frame.num] = null;
-
-      if (_this.selectedFrame === frame) {
-
-        _this.selectedFrame = null;
-      }
-    };
 
     return frame;
   };
@@ -59273,7 +59250,17 @@ var Frames = function () {
       e.preventDefault();
 
       _this2.createFrame(_this2.currentFrameNum++);
+
+      if (_this2.currentFrameNum >= 30) {
+
+        _this2.newFrameButton.innerHTML = 'Limit Reached!';
+
+        _this2.newFrameButton.disabled = true;
+      }
     });
+
+    // create the first frame
+    this.newFrameButton.click();
   };
 
   Frames.prototype.select = function select(frame) {
@@ -59291,10 +59278,11 @@ var Frames = function () {
   };
 
   Frames.prototype.reset = function reset() {
+    var _this3 = this;
 
     this.frames.forEach(function (frame) {
 
-      if (frame !== null) frame.deleteButton.click();
+      if (frame !== null) _this3.removeFrame(frame);
     });
 
     this.selectedFrame = null;
@@ -59351,44 +59339,83 @@ var Frames = function () {
   return Frames;
 }();
 
-var LoopInputCell = function LoopInputCell(row) {
+// Append a cell containing a delete button to a table row
+
+var DeleteButtonCell = function () {
+  function DeleteButtonCell(row) {
     var _this = this;
 
-    classCallCheck(this, LoopInputCell);
+    classCallCheck(this, DeleteButtonCell);
 
 
-    var cell = document.createElement('td');
-    cell.innerHTML = 'Loop ';
-    row.appendChild(cell);
+    var deleteButtonCell = document.createElement('td');
+    this.button = document.createElement('button');
+    this.button.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+    deleteButtonCell.appendChild(this.button);
+    row.appendChild(deleteButtonCell);
 
-    var input = document.createElement('input');
-    cell.appendChild(input);
-    input.type = 'number';
-    input.min = '0';
-    input.value = '1';
-    input.step = '1';
+    this.onClick = function () {};
 
-    var text = document.createElement('span');
-    text.style.width = '8em';
-    text.style.textAlign = 'left';
-    text.style.marginLeft = '0.25em';
-    text.innerHTML = ' time';
-    cell.appendChild(text);
+    this.click = function (e) {
 
-    this.onInput = function () {};
+      if (e) e.preventDefault();
 
-    input.addEventListener('input', function (evt) {
+      _this.onClick();
 
-        evt.preventDefault();
+      _this.button.removeEventListener('click', _this.click);
+    };
 
-        var value = parseInt(evt.target.value, 10);
+    this.button.addEventListener('click', this.click);
+  }
 
-        if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
+  createClass(DeleteButtonCell, [{
+    key: 'disabled',
+    set: function (value) {
 
-        if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
+      this.button.disabled = true;
+    }
+  }]);
+  return DeleteButtonCell;
+}();
 
-        _this.onInput(value);
-    });
+var LoopInputCell = function LoopInputCell(row) {
+  var _this = this;
+
+  classCallCheck(this, LoopInputCell);
+
+
+  var cell = document.createElement('td');
+  cell.innerHTML = 'Loop ';
+  row.appendChild(cell);
+
+  var input = document.createElement('input');
+  cell.appendChild(input);
+  input.type = 'number';
+  input.min = '0';
+  input.value = '1';
+  input.step = '1';
+
+  var text = document.createElement('span');
+  text.style.width = '8em';
+  text.style.textAlign = 'left';
+  text.style.marginLeft = '0.25em';
+  text.innerHTML = ' time';
+  cell.appendChild(text);
+
+  this.onInput = function () {};
+
+  input.addEventListener('input', function (evt) {
+
+    evt.preventDefault();
+
+    var value = parseInt(evt.target.value, 10);
+
+    if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
+
+    if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
+
+    _this.onInput(value);
+  });
 };
 
 var GroupAnimation = function () {
@@ -59495,7 +59522,7 @@ var Group$1 = function () {
     this.row = document.createElement('tr');
 
     new TextCell(this.row, this.num);
-    var framesCell = new TextCell(this.row, '<h4>Frames</h4>');
+    var framesCell = new TextCell(this.row, '<h4>Frames in Group</h4>');
 
     this.addFrameButton = document.createElement('button');
     this.addFrameButton.classList.add('add-selected-frame-button');
@@ -59510,7 +59537,7 @@ var Group$1 = function () {
     frameTable.appendChild(this.framesInGroup);
     framesCell.appendChild(frameTable);
 
-    this.deleteButton = new DeleteButtonCell(this.row);
+    // this.row.appendChild( document.createElement( 'td' ) );
   };
 
   Group.prototype.addFrame = function addFrame(frame) {
@@ -59546,7 +59573,7 @@ var Group$1 = function () {
 
       if (_this.lastAddedFrameNum === frame.num) _this.lastAddedFrameNum = null;
 
-      _this.containedFrames[framePos] = null;
+      _this.containedFrames.splice(framePos, 1);
     };
 
     this.animation.createAnimation(this.containedFrames);
@@ -59579,7 +59606,7 @@ var Group$1 = function () {
 
     this.containedFrames.forEach(function (frame) {
 
-      if (frame !== null) frame.deleteButton.click();
+      if (frame !== null && frame.deleteButton) frame.deleteButton.click();
     });
 
     this.containedFrames = [];
@@ -59653,6 +59680,17 @@ var Groups = function () {
     this.initNewGroupButton();
   }
 
+  Groups.prototype.removeGroup = function removeGroup(group) {
+
+    this.groupsTable.removeChild(group.row);
+
+    this.groups[group.num] = null;
+
+    group.reset();
+
+    if (this.selectedGroup === group) this.selectedGroup = null;
+  };
+
   Groups.prototype.createGroup = function createGroup(num, details) {
     var _this = this;
 
@@ -59666,25 +59704,14 @@ var Groups = function () {
 
     this.select(group);
 
-    group.row.addEventListener('click', function (evt) {
+    var select = function (e) {
 
-      evt.preventDefault();
+      e.preventDefault();
 
       _this.select(group);
-    });
-
-    group.deleteButton.onClick = function () {
-
-      _this.groupsTable.removeChild(group.row);
-
-      _this.groups[group.num] = null;
-
-      group.reset();
-
-      console.log('TODO: deleting group should reset animation ');
-
-      if (_this.selectedGroup === group) _this.selectedGroup = null;
     };
+
+    group.row.addEventListener('click', select);
   };
 
   Groups.prototype.initNewGroupButton = function initNewGroupButton() {
@@ -59695,7 +59722,16 @@ var Groups = function () {
       e.preventDefault();
 
       _this2.createGroup(_this2.currentGroupNum++);
+
+      if (_this2.currentGroupNum >= 5) {
+
+        _this2.newGroupButton.innerHTML = 'Limit Reached!';
+
+        _this2.newGroupButton.disabled = true;
+      }
     });
+
+    this.newGroupButton.click();
   };
 
   Groups.prototype.select = function select(group) {
@@ -59715,8 +59751,12 @@ var Groups = function () {
 
   Groups.prototype.deselectAll = function deselectAll() {
 
-    this.groups.forEach(function (group) {
-      group.selected = false;
+    this.groups.forEach(function (g) {
+
+      if (g !== null) {
+
+        g.selected = false;
+      }
     });
   };
 
@@ -59728,10 +59768,11 @@ var Groups = function () {
   };
 
   Groups.prototype.reset = function reset() {
+    var _this3 = this;
 
     this.groups.forEach(function (group) {
 
-      if (group !== null) group.deleteButton.click();
+      if (group !== null) _this3.removeGroup(group);
     });
 
     this.currentGroupNum = 0;
@@ -59791,8 +59832,6 @@ var Dance = function () {
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
 
-    this.framerate = 1;
-
     this.containedElems = [];
 
     this.initAdvancedControlsToggle();
@@ -59846,7 +59885,7 @@ var Dance = function () {
 
       _this.table.removeChild(row);
 
-      _this.containedElems[pos] = null;
+      _this.containedElems.splice(pos, 1);
     };
   };
 
@@ -59939,17 +59978,17 @@ var Dance = function () {
 
     for (var key in object) {
 
-      var elem = object[key];
+      var value = object[key];
 
-      if (elem.type === 'frame') {
+      if (value.type === 'frame') {
 
-        this.add(this.frames.frames[elem.num], elem.loopAmount);
-      } else if (elem.type === 'group') {
+        this.add(this.frames.frames[value.num], value.loopAmount);
+      } else if (value.type === 'group') {
 
-        this.add(this.groups.groups[elem.num], elem.loopAmount);
+        this.add(this.groups.groups[value.num], value.loopAmount);
       } else if (key === 'framerate') {
 
-        console.log('TODO: load framerate from file');
+        HTMLControl.controls.dance.framerate.value = value;
       }
     }
   };
@@ -59984,6 +60023,13 @@ var Dance = function () {
     return output;
   };
 
+  createClass(Dance, [{
+    key: 'framerate',
+    set: function (value) {
+
+      animationControl.framerate = value;
+    }
+  }]);
   return Dance;
 }();
 

@@ -22,6 +22,22 @@ export default class Frames {
 
   }
 
+  removeFrame ( frame ) {
+
+    HTMLControl.controls.frames.table.removeChild( frame.row );
+
+    frame.removeEventListeners();
+
+    this.frames[ frame.num ] = null;
+
+    if ( this.selectedFrame === frame ) {
+
+      this.selectedFrame = null;
+
+    }
+
+  }
+
   createFrame( num, detail ) {
 
     const frame = new Frame( num, this.robot );
@@ -42,21 +58,10 @@ export default class Frames {
 
     } );
 
-    frame.deleteButton.onClick = () => {
+    // frame.deleteButton.onClick = this.removeFrame;
 
-      HTMLControl.controls.frames.table.removeChild( frame.row );
+    // frame.deleteButton.disabled = true;
 
-      frame.removeEventListeners();
-
-      this.frames[ frame.num ] = null;
-
-      if ( this.selectedFrame === frame ) {
-
-        this.selectedFrame = null;
-
-      }
-
-    };
 
     return frame;
 
@@ -70,7 +75,18 @@ export default class Frames {
 
       this.createFrame( this.currentFrameNum ++ );
 
+      if ( this.currentFrameNum >= 30 ) {
+
+        this.newFrameButton.innerHTML = 'Limit Reached!';
+
+        this.newFrameButton.disabled = true;
+
+      }
+
     } );
+
+    // create the first frame
+    this.newFrameButton.click();
 
   }
 
@@ -94,7 +110,7 @@ export default class Frames {
 
     this.frames.forEach( ( frame ) => {
 
-      if ( frame !== null ) frame.deleteButton.click();
+      if ( frame !== null ) this.removeFrame( frame );
 
     } );
 
