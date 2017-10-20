@@ -114,7 +114,7 @@ Object.assign( FBXLoader.prototype, {
 
     }
 
-    // console.log( FBXTree );
+    console.log( FBXTree );
 
     const connections = parseConnections( FBXTree );
     const images = parseImages( FBXTree );
@@ -948,7 +948,7 @@ function genGeometry( geometryNode, deformer ) {
   }
   if ( bufferInfo.uvBuffers.length > 0 ) {
 
-    for ( var i = 0; i < bufferInfo.uvBuffers.length; i++ ) {
+    for ( let i = 0; i < bufferInfo.uvBuffers.length; i++ ) {
 
       let name = 'uv' + ( i + 1 ).toString();
       if ( i == 0 ) {
@@ -985,7 +985,7 @@ function genGeometry( geometryNode, deformer ) {
   let prevMaterialIndex = materialIndexBuffer[ 0 ];
   let startIndex = 0;
 
-  for ( var i = 0; i < materialIndexBuffer.length; ++i ) {
+  for ( let i = 0; i < materialIndexBuffer.length; ++i ) {
 
     if ( materialIndexBuffer[ i ] !== prevMaterialIndex ) {
 
@@ -995,6 +995,27 @@ function genGeometry( geometryNode, deformer ) {
       startIndex = i;
 
     }
+
+  }
+
+	// the loop above doesn't add the last group, do that here.
+  if ( geo.groups.length > 0 ) {
+
+    const lastGroup = geo.groups[ geo.groups.length - 1 ];
+    const lastIndex = lastGroup.start + lastGroup.count;
+
+    if ( lastIndex !== materialIndexBuffer.length ) {
+
+      geo.addGroup( lastIndex, materialIndexBuffer.length - lastIndex, prevMaterialIndex );
+
+    }
+
+  }
+
+    // catch case where the whole geometry has a single non-zero index
+  if ( geo.groups.length === 0 && materialIndexBuffer[ 0 ] !== 0 ) {
+
+    geo.addGroup( 0, materialIndexBuffer.length, materialIndexBuffer[ 0 ] );
 
   }
 
@@ -1959,17 +1980,21 @@ function parseScene( FBXTree, connections, deformers, geometryMap, materialMap )
   // world positions.
   sceneGraph.updateMatrixWorld( true );
 
-  // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
-  // to attach animations to, since FBXs treat animations as animations for the entire scene,
-  // not just for individual objects.
-  sceneGraph.skeleton = {
-    bones: modelArray,
-  };
+  if( 'Takes' in FBXTree ) {
 
-  const animations = parseAnimations( FBXTree, connections, sceneGraph );
 
-  addAnimations( sceneGraph, animations );
+    // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
+    // to attach animations to, since FBXs treat animations as animations for the entire scene,
+    // not just for individual objects.
+    sceneGraph.skeleton = {
+      bones: modelArray,
+    };
 
+    const animations = parseAnimations( FBXTree, connections, sceneGraph );
+
+    addAnimations( sceneGraph, animations );
+
+  }
 
   // Parse ambient color - if it's not set to black (default), create an ambient light
   if ( 'GlobalSettings' in FBXTree && 'AmbientColor' in FBXTree.GlobalSettings.properties ) {

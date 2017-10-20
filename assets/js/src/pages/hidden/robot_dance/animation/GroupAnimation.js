@@ -31,23 +31,23 @@ export default class GroupAnimation {
       const frameStartTime = i - 1;
 
       headTracks.push(
-        animationControl.createKeyFrameTrack( 'headControl.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime )
+        animationControl.createKeyFrameTrack( 'head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime )
       );
 
       leftShoulderTracks.push(
-        animationControl.createKeyFrameTrack( 'shoulderControlLeft.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime )
+        animationControl.createKeyFrameTrack( 'leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime )
       );
 
       rightShoulderTracks.push(
-        animationControl.createKeyFrameTrack( 'shoulderControlRight.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime )
+        animationControl.createKeyFrameTrack( 'rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime )
       );
 
       leftElbowTracks.push(
-        animationControl.createKeyFrameTrack( 'elbowControlLeft.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime )
+        animationControl.createKeyFrameTrack( 'leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime )
       );
 
       rightElbowTracks.push(
-        animationControl.createKeyFrameTrack( 'elbowControlRight.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime )
+        animationControl.createKeyFrameTrack( 'rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime )
       );
 
     }

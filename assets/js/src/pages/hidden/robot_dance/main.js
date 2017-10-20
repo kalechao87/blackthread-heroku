@@ -11,7 +11,6 @@ import HTMLControl from './HTMLControl.js';
 
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
-import Frame from './components/Frames.js';
 import Frames from './components/Frames.js';
 import Groups from './components/Groups.js';
 import Dance from './components/Dance.js';
@@ -141,21 +140,23 @@ class Main {
   // set up the robots moveable parts
   initRobot( robot ) {
 
+    console.log( robot )
+
     this.robot = {
 
-      head: robot.getObjectByName( 'headControl' ),
+      head: robot.getObjectByName( 'head' ),
 
-      leftShoulder: robot.getObjectByName( 'shoulderControlLeft' ),
-      rightShoulder: robot.getObjectByName( 'shoulderControlRight' ),
+      leftShoulder: robot.getObjectByName( 'leftShoulder' ),
+      rightShoulder: robot.getObjectByName( 'rightShoulder' ),
 
-      leftElbow: robot.getObjectByName( 'elbowControlLeft' ),
-      rightElbow: robot.getObjectByName( 'elbowControlRight' ),
+      leftElbow: robot.getObjectByName( 'leftElbow' ),
+      rightElbow: robot.getObjectByName( 'rightElbow' ),
 
     };
 
     // slight hack since the model's head is very slightly rotated at the start
     // so reset that here
-    this.robot.head.rotation.set( 0, 0, 0 );
+    // this.robot.head.rotation.set( 0, 0, 0 );
 
     this.robot.headInitialQuaternion = this.robot.head.quaternion.clone();
     this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();

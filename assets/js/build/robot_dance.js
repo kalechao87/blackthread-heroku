@@ -53392,6 +53392,33 @@ NURBSCurve.prototype.getTangent = function (t) {
 	return tangent;
 };
 
+/**
+* @author Kyle-Larson https://github.com/Kyle-Larson
+* @author Takahiro https://github.com/takahirox
+*
+* Loader loads FBX file and generates Group representing FBX scene.
+* Requires FBX file to be >= 7.0 and in ASCII or to be any version in Binary format.
+*
+* Supports:
+* 	Mesh Generation (Positional Data)
+* 	Normal Data (Per Vertex Drawing Instance)
+*  UV Data (Per Vertex Drawing Instance)
+*  Skinning
+*  Animation
+* 	- Separated Animations based on stacks.
+* 	- Skeletal & Non-Skeletal Animations
+*  NURBS (Open, Closed and Periodic forms)
+*
+* Needs Support:
+* 	Indexed Buffers
+* 	PreRotation support.
+*/
+
+/**
+  * Generates a loader for loading FBX files from URL and parsing into
+  * a THREE.Group.
+  * @param {THREE.LoadingManager} manager - Loading Manager for loader to use.
+  */
 function FBXLoader(manager) {
 
   this.manager = manager !== undefined ? manager : DefaultLoadingManager;
@@ -53468,7 +53495,7 @@ Object.assign(FBXLoader.prototype, {
       FBXTree = new TextParser().parse(FBXText);
     }
 
-    // console.log( FBXTree );
+    console.log(FBXTree);
 
     var connections = parseConnections(FBXTree);
     var images = parseImages(FBXTree);
@@ -54222,15 +54249,15 @@ function genGeometry(geometryNode, deformer) {
   }
   if (bufferInfo.uvBuffers.length > 0) {
 
-    for (var i = 0; i < bufferInfo.uvBuffers.length; i++) {
+    for (var _i = 0; _i < bufferInfo.uvBuffers.length; _i++) {
 
-      var name = 'uv' + (i + 1).toString();
-      if (i == 0) {
+      var name = 'uv' + (_i + 1).toString();
+      if (_i == 0) {
 
         name = 'uv';
       }
 
-      geo.addAttribute(name, new Float32BufferAttribute(bufferInfo.uvBuffers[i], 2));
+      geo.addAttribute(name, new Float32BufferAttribute(bufferInfo.uvBuffers[_i], 2));
     }
   }
 
@@ -54254,15 +54281,33 @@ function genGeometry(geometryNode, deformer) {
   var prevMaterialIndex = materialIndexBuffer[0];
   var startIndex = 0;
 
-  for (var i = 0; i < materialIndexBuffer.length; ++i) {
+  for (var _i2 = 0; _i2 < materialIndexBuffer.length; ++_i2) {
 
-    if (materialIndexBuffer[i] !== prevMaterialIndex) {
+    if (materialIndexBuffer[_i2] !== prevMaterialIndex) {
 
-      geo.addGroup(startIndex, i - startIndex, prevMaterialIndex);
+      geo.addGroup(startIndex, _i2 - startIndex, prevMaterialIndex);
 
-      prevMaterialIndex = materialIndexBuffer[i];
-      startIndex = i;
+      prevMaterialIndex = materialIndexBuffer[_i2];
+      startIndex = _i2;
     }
+  }
+
+  // the loop above doesn't add the last group, do that here.
+  if (geo.groups.length > 0) {
+
+    var lastGroup = geo.groups[geo.groups.length - 1];
+    var lastIndex = lastGroup.start + lastGroup.count;
+
+    if (lastIndex !== materialIndexBuffer.length) {
+
+      geo.addGroup(lastIndex, materialIndexBuffer.length - lastIndex, prevMaterialIndex);
+    }
+  }
+
+  // catch case where the whole geometry has a single non-zero index
+  if (geo.groups.length === 0 && materialIndexBuffer[0] !== 0) {
+
+    geo.addGroup(0, materialIndexBuffer.length, materialIndexBuffer[0]);
   }
 
   return geo;
@@ -55124,16 +55169,19 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   // world positions.
   sceneGraph.updateMatrixWorld(true);
 
-  // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
-  // to attach animations to, since FBXs treat animations as animations for the entire scene,
-  // not just for individual objects.
-  sceneGraph.skeleton = {
-    bones: modelArray
-  };
+  if ('Takes' in FBXTree) {
 
-  var animations = parseAnimations(FBXTree, connections, sceneGraph);
+    // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
+    // to attach animations to, since FBXs treat animations as animations for the entire scene,
+    // not just for individual objects.
+    sceneGraph.skeleton = {
+      bones: modelArray
+    };
 
-  addAnimations(sceneGraph, animations);
+    var animations = parseAnimations(FBXTree, connections, sceneGraph);
+
+    addAnimations(sceneGraph, animations);
+  }
 
   // Parse ambient color - if it's not set to black (default), create an ambient light
   if ('GlobalSettings' in FBXTree && 'AmbientColor' in FBXTree.GlobalSettings.properties) {
@@ -59448,15 +59496,15 @@ var GroupAnimation = function () {
 
       var frameStartTime = i - 1;
 
-      headTracks.push(animationControl.createKeyFrameTrack('headControl.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
+      headTracks.push(animationControl.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
 
-      leftShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlLeft.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
+      leftShoulderTracks.push(animationControl.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
 
-      rightShoulderTracks.push(animationControl.createKeyFrameTrack('shoulderControlRight.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
+      rightShoulderTracks.push(animationControl.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
 
-      leftElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlLeft.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
+      leftElbowTracks.push(animationControl.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
 
-      rightElbowTracks.push(animationControl.createKeyFrameTrack('elbowControlRight.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
+      rightElbowTracks.push(animationControl.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
     }
 
     var headAction = animationControl.createAction('headControl.quaternion', headTracks);
@@ -60978,21 +61026,23 @@ var Main = function () {
 
   Main.prototype.initRobot = function initRobot(robot) {
 
+    console.log(robot);
+
     this.robot = {
 
-      head: robot.getObjectByName('headControl'),
+      head: robot.getObjectByName('head'),
 
-      leftShoulder: robot.getObjectByName('shoulderControlLeft'),
-      rightShoulder: robot.getObjectByName('shoulderControlRight'),
+      leftShoulder: robot.getObjectByName('leftShoulder'),
+      rightShoulder: robot.getObjectByName('rightShoulder'),
 
-      leftElbow: robot.getObjectByName('elbowControlLeft'),
-      rightElbow: robot.getObjectByName('elbowControlRight')
+      leftElbow: robot.getObjectByName('leftElbow'),
+      rightElbow: robot.getObjectByName('rightElbow')
 
     };
 
     // slight hack since the model's head is very slightly rotated at the start
     // so reset that here
-    this.robot.head.rotation.set(0, 0, 0);
+    // this.robot.head.rotation.set( 0, 0, 0 );
 
     this.robot.headInitialQuaternion = this.robot.head.quaternion.clone();
     this.robot.leftShoulderInitialQuaternion = this.robot.leftShoulder.quaternion.clone();
