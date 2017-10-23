@@ -15,6 +15,8 @@ export default class Dance {
     this.frames = groups.frames;
     this.robot = this.frames.robot;
 
+    this.valid = false;
+
     this.animation = new DanceAnimation( this.robot );
 
     this.lastAddedType = null;
@@ -25,7 +27,7 @@ export default class Dance {
     this.initAdvancedControlsToggle();
     this.initAddSelectedFrameButton();
     this.initAddSelectedGroupButton();
-    this.initPlayButton();
+    this.initDanceButton();
     this.initResetButton();
     this.initFramerateInput();
 
@@ -69,13 +71,14 @@ export default class Dance {
     new TextCell( row, elem.num );
     new TextCell( row, elem.type );
 
-    if( elem.type === 'group' ) {
+    if ( elem.type === 'group' ) {
 
       const loopInput = new LoopInputCell( row );
 
       loopInput.onInput = ( value ) => {
 
         detail.loopAmount = value;
+        this.checkDanceIsValid();
 
       };
 
@@ -93,7 +96,15 @@ export default class Dance {
 
       this.containedElems.splice( pos, 1 );
 
+      if ( detail.elem.type === 'group' && detail.elem.num === this.lastAddedGroupNum ) this.lastAddedGroupNum = -1;
+      if ( detail.elem.type === 'frame' && detail.elem.num === this.lastAddedFrameNum ) this.lastAddedFrameNum = -1;
+
+      this.checkDanceIsValid();
+
     };
+
+    this.checkDanceIsValid();
+    HTMLControl.controls.dance.resetButton.disabled = false;
 
     this.animation.createAnimation( this.containedElems );
 
@@ -167,7 +178,7 @@ export default class Dance {
 
   }
 
-  initPlayButton() {
+  initDanceButton() {
 
     HTMLControl.controls.dance.playButton.addEventListener( 'click', ( e ) => {
 
@@ -200,6 +211,34 @@ export default class Dance {
 
   }
 
+  checkDanceIsValid() {
+
+    let containedFramesNum = 0;
+    let containsValidGroups = false;
+
+    this.containedElems.forEach( ( detail ) => {
+
+      console.log( detail.elem )
+
+      if ( detail.elem.type === 'frame' ) containedFramesNum++;
+
+      else if ( detail.elem.type === 'group' ) {
+
+        // this would require a 'change' event added to the group so that the dance can listen
+        // when frames are added or removed to check whether the group becomes valid
+        // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
+        if ( detail.loopAmount > 0 ) containsValidGroups = true;
+
+      }
+
+    } );
+
+    this.valid = ( containedFramesNum > 1 || containsValidGroups );
+
+    HTMLControl.controls.dance.playButton.disabled = !this.valid;
+
+  }
+
   reset() {
 
     this.containedElems.forEach( ( elem ) => {
@@ -208,7 +247,9 @@ export default class Dance {
 
     } );
 
-    this.containedElems = [];
+    this.valid = false;
+    HTMLControl.controls.dance.playButton.disabled = true;
+    HTMLControl.controls.dance.resetButton.disabled = true;
 
   }
 

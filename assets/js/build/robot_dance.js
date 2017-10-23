@@ -59496,6 +59496,8 @@ var Group$1 = function () {
 
     this.containedFrames = [];
 
+    this.valid = false;
+
     this.num = num;
 
     this.animation = new GroupAnimation(this.robot);
@@ -59506,6 +59508,11 @@ var Group$1 = function () {
 
     this._selected = false;
   }
+
+  Group.prototype.checkGroupIsValid = function checkGroupIsValid() {
+
+    return this.containedFrames.length > 1;
+  };
 
   Group.prototype.initTableRow = function initTableRow() {
     var _this = this;
@@ -59529,12 +59536,9 @@ var Group$1 = function () {
     framesCell.appendChild(frameTable);
 
     this.resetButton = new ResetButtonCell(this.row);
-
-    var click = function () {
-
-      _this.reset();
+    this.resetButton.onClick = function () {
+      return _this.reset();
     };
-    this.resetButton.onClick = click;
   };
 
   Group.prototype.addFrame = function addFrame(frame) {
@@ -59560,7 +59564,9 @@ var Group$1 = function () {
 
     detail.deleteButton.onClick = function () {
 
-      if (_this2.framesInGroup.contains(row)) _this2.framesInGroup.removeChild(row);
+      // if ( this.framesInGroup.contains( row ) )
+      console.log(_this2.framesInGroup);
+      _this2.framesInGroup.removeChild(row);
 
       if (_this2.lastAddedFrameNum === frame.num) _this2.lastAddedFrameNum = null;
 
@@ -59596,12 +59602,13 @@ var Group$1 = function () {
 
   Group.prototype.reset = function reset() {
 
-    this.containedFrames.forEach(function (frame) {
+    console.log('TODO: Group.reset doesn\'t remove last frame');
 
-      if (frame !== null && frame.deleteButton) frame.deleteButton.click();
-    });
+    for (var i = 0; i < this.containedFrames.length; i++) {
 
-    this.containedFrames = [];
+      this.containedFrames[i].deleteButton.click();
+    }
+
     this.animation.stop();
     this.animation.reset();
   };
@@ -59914,6 +59921,8 @@ var Dance = function () {
     this.frames = groups.frames;
     this.robot = this.frames.robot;
 
+    this.valid = false;
+
     this.animation = new DanceAnimation(this.robot);
 
     this.lastAddedType = null;
@@ -59924,7 +59933,7 @@ var Dance = function () {
     this.initAdvancedControlsToggle();
     this.initAddSelectedFrameButton();
     this.initAddSelectedGroupButton();
-    this.initPlayButton();
+    this.initDanceButton();
     this.initResetButton();
     this.initFramerateInput();
   }
@@ -59967,6 +59976,7 @@ var Dance = function () {
       loopInput.onInput = function (value) {
 
         detail.loopAmount = value;
+        _this.checkDanceIsValid();
       };
     } else {
 
@@ -59980,7 +59990,15 @@ var Dance = function () {
       _this.table.removeChild(row);
 
       _this.containedElems.splice(pos, 1);
+
+      if (detail.elem.type === 'group' && detail.elem.num === _this.lastAddedGroupNum) _this.lastAddedGroupNum = -1;
+      if (detail.elem.type === 'frame' && detail.elem.num === _this.lastAddedFrameNum) _this.lastAddedFrameNum = -1;
+
+      _this.checkDanceIsValid();
     };
+
+    this.checkDanceIsValid();
+    HTMLControl.controls.dance.resetButton.disabled = false;
 
     this.animation.createAnimation(this.containedElems);
   };
@@ -60046,7 +60064,7 @@ var Dance = function () {
     this.framerate = rate;
   };
 
-  Dance.prototype.initPlayButton = function initPlayButton() {
+  Dance.prototype.initDanceButton = function initDanceButton() {
     var _this5 = this;
 
     HTMLControl.controls.dance.playButton.addEventListener('click', function (e) {
@@ -60076,6 +60094,29 @@ var Dance = function () {
     });
   };
 
+  Dance.prototype.checkDanceIsValid = function checkDanceIsValid() {
+
+    var containedFramesNum = 0;
+    var containsValidGroups = false;
+
+    this.containedElems.forEach(function (detail) {
+
+      console.log(detail.elem);
+
+      if (detail.elem.type === 'frame') containedFramesNum++;else if (detail.elem.type === 'group') {
+
+        // this would require a 'change' event added to the group so that the dance can listen
+        // when frames are added or removed to check whether the group becomes valid
+        // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
+        if (detail.loopAmount > 0) containsValidGroups = true;
+      }
+    });
+
+    this.valid = containedFramesNum > 1 || containsValidGroups;
+
+    HTMLControl.controls.dance.playButton.disabled = !this.valid;
+  };
+
   Dance.prototype.reset = function reset() {
 
     this.containedElems.forEach(function (elem) {
@@ -60083,7 +60124,9 @@ var Dance = function () {
       if (elem !== null && elem.deleteButton) elem.deleteButton.click();
     });
 
-    this.containedElems = [];
+    this.valid = false;
+    HTMLControl.controls.dance.playButton.disabled = true;
+    HTMLControl.controls.dance.resetButton.disabled = true;
   };
 
   Dance.prototype.fromJSON = function fromJSON(object) {
@@ -60600,6 +60643,8 @@ var Audio$1 = function () {
   return Audio;
 }();
 
+// import animationControls from './animationControls.js';
+
 var Main = function () {
   function Main() {
     classCallCheck(this, Main);
@@ -60621,6 +60666,10 @@ var Main = function () {
 
     this.app = new App(HTMLControl.canvas);
     this.app.renderer.setClearColor(0xf7f7f7, 1.0);
+    this.app.renderer.shadowMap.enabled = true;
+    this.app.renderer.shadowMap.renderReverseSided = false;
+    this.app.renderer.shadowMap.renderSingleSided = false;
+    this.app.renderer.shadowMap.type = PCFShadowMap; // THREE.BasicShadowMap // THREE.; // default THREE.PCFShadowMap
 
     // Put any per frame calculations here
     this.app.onUpdate = function () {
@@ -60648,16 +60697,17 @@ var Main = function () {
     var stagePromise = loaders.fbxLoader('/assets/models/robot_dance/stage_camera_lights.fbx').then(function (object) {
 
       _this.stage = object.getObjectByName('Stage');
+
+      object.getObjectByName('scene').receiveShadow = true;
+      object.getObjectByName('curtains top').receiveShadow = true;
+
       _this.camera = object.getObjectByName('Camera');
-      _this.spotlightStageRightLow = object.getObjectByName('Spotstage_right_low');
-      _this.spotlightStageLeftLow = object.getObjectByName('Spotstage_right_low');
-      _this.spotlightStageCenterHigh = object.getObjectByName('Spotstage_center_high');
+      _this.spotLight = object.getObjectByName('Spotstage_center_high');
 
       _this.soundSourceLeft = object.getObjectByName('Stage Left Sound');
       _this.soundSourceRight = object.getObjectByName('Stage Right Sound');
 
       _this.sceneCentre = new Box3().setFromObject(object).getCenter();
-      // this.sceneCentre = object.getObjectByName( 'sceneCenter' ).position.clone();
     });
 
     var naoPromise = loaders.fbxLoader('/assets/models/robot_dance/nao.fbx').then(function (object) {
@@ -60665,6 +60715,13 @@ var Main = function () {
       invertMirroredFBX(object);
 
       _this.robot = new Robot(object);
+
+      object.position.z += 10;
+
+      object.traverse(function (child) {
+
+        if (child instanceof Mesh) child.castShadow = true;
+      });
     });
 
     this.loadingPromises.push(naoPromise, stagePromise);
@@ -60704,15 +60761,29 @@ var Main = function () {
     var ambientLight = new AmbientLight(0xffffff, 0.3);
     this.app.scene.add(ambientLight);
 
-    this.spotlightStageRightLow.distance = 200;
-    this.spotlightStageLeftLow.distance = 200;
-    this.spotlightStageCenterHigh.distance = 400;
+    this.spotLight.castShadow = true;
+    // Set up shadow properties for the light
+    this.spotLight.shadow.mapSize.width = 2048;
+    this.spotLight.shadow.mapSize.height = 2048;
+    this.spotLight.shadow.camera.near = 100;
+    this.spotLight.shadow.camera.far = 300;
 
-    this.spotlightStageRightLow.penumbra = 0.25;
-    this.spotlightStageLeftLow.penumbra = 0.25;
-    this.spotlightStageCenterHigh.penumbra = 0.25;
+    this.spotLight.penumbra = 0.4;
+    this.spotLight.angle = 0.5;
+    this.spotLight.distance = 300;
 
-    this.app.scene.add(this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh);
+    var left = this.spotLight.clone();
+    left.intensity = 0.75;
+    left.position.x -= 100;
+    left.position.y += 20;
+    left.shadow.radius = 3;
+
+    var center = this.spotLight.clone();
+    center.intensity = 1.25;
+    center.position.x += 5;
+    center.shadow.radius = 1;
+
+    this.app.scene.add(left, center);
   };
 
   Main.prototype.initCamera = function initCamera() {
@@ -60741,19 +60812,18 @@ var Main = function () {
     this.app.controls.enableDamping = true;
     this.app.controls.dampingFactor = 0.2;
 
-    // console.log( this.sceneCentre )
     this.app.controls.target.copy(this.sceneCentre);
     this.app.controls.update();
   };
 
   Main.prototype.initBackground = function initBackground() {
 
-    this.app.scene.fog = new Fog(0xf7f7f7, 600, this.app.camera.far);
+    this.app.scene.fog = new Fog(0xf7f7f7, 400, 700);
 
     var geometry = new PlaneBufferGeometry(20000, 20000);
-    var material = new MeshPhongMaterial({ color: 0xb0b0b0, shininess: 0.1 });
+    var material = new MeshBasicMaterial({ color: 0xaaaaaa });
     var ground = new Mesh(geometry, material);
-    ground.position.set(0, -25, 0);
+    ground.position.set(0, -5, 0);
     ground.rotation.x = -Math.PI / 2;
 
     this.app.scene.add(ground);

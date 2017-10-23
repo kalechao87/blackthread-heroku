@@ -15,6 +15,8 @@ export default class Group {
 
     this.containedFrames = [];
 
+    this.valid = false;
+
     this.num = num;
 
     this.animation = new GroupAnimation( this.robot );
@@ -48,6 +50,12 @@ export default class Group {
 
   }
 
+  checkGroupIsValid() {
+
+    return this.containedFrames.length > 1;
+
+  }
+
 
   initTableRow() {
 
@@ -70,13 +78,7 @@ export default class Group {
     framesCell.appendChild( frameTable );
 
     this.resetButton = new ResetButtonCell( this.row );
-
-    const click = () => {
-
-      this.reset();
-
-    };
-    this.resetButton.onClick = click;
+    this.resetButton.onClick = () => this.reset();
 
   }
 
@@ -102,7 +104,9 @@ export default class Group {
 
     detail.deleteButton.onClick = () => {
 
-      if ( this.framesInGroup.contains( row ) ) this.framesInGroup.removeChild( row );
+      // if ( this.framesInGroup.contains( row ) )
+      console.log( this.framesInGroup )
+      this.framesInGroup.removeChild( row );
 
       if ( this.lastAddedFrameNum === frame.num ) this.lastAddedFrameNum = null;
 
@@ -142,13 +146,14 @@ export default class Group {
 
   reset() {
 
-    this.containedFrames.forEach( ( frame ) => {
+    console.log( 'TODO: Group.reset doesn\'t remove last frame' );
 
-      if ( frame !== null && frame.deleteButton ) frame.deleteButton.click();
+    for ( let i = 0; i < this.containedFrames.length; i++ ) {
 
-    } );
+      this.containedFrames[i].deleteButton.click();
 
-    this.containedFrames = [];
+    }
+
     this.animation.stop();
     this.animation.reset();
 

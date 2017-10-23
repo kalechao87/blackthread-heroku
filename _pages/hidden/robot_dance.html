@@ -75,7 +75,7 @@ vendor-js:
               <div>
                 <button id="add-frame-to-dance">Add Selected Frame</button>
                 <button id="add-group-to-dance">Add Selected Group</button>
-                <button id="play-dance">Dance!</button>
+                <button id="play-dance" disabled>Dance!</button>
               </div>
               <div>
                 <div>
@@ -84,7 +84,7 @@ vendor-js:
                   </div>
 
                   <div>
-                    <span>Advanced Control</span><input id="advanced-control-toggle" type="checkbox" >
+                    <span>Advanced Control</span><input id="advanced-control-toggle" type="checkbox" diasbled>
                   </div>
 
                   <div id="advanced-control" class="hide">
@@ -98,7 +98,7 @@ vendor-js:
                         <th>#</th>
                         <th>Type</th>
                         <th>Loop amount</th>
-                        <th><button id="reset-dance"><span class="fa fa-lg fa-undo" aria-hidden="true"></button></span></th>
+                        <th><button id="reset-dance" disabled><span class="fa fa-lg fa-undo" aria-hidden="true"></button></span></th>
                       </tr>
                     </thead>
                     <tbody id="dance-details">

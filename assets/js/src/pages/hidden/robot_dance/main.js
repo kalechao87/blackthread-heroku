@@ -21,8 +21,6 @@ import Audio from './Audio.js';
 
 import animationControl from './animation/animationControl.js';
 
-
-
 // Set up THREE caching
 THREE.Cache.enabled = true;
 
@@ -48,6 +46,10 @@ class Main {
 
     this.app = new App( HTMLControl.canvas );
     this.app.renderer.setClearColor( 0xf7f7f7, 1.0 );
+    this.app.renderer.shadowMap.enabled = true;
+    this.app.renderer.shadowMap.renderReverseSided = false;
+    this.app.renderer.shadowMap.renderSingleSided = false;
+    this.app.renderer.shadowMap.type = THREE.PCFShadowMap; // THREE.BasicShadowMap // THREE.; // default THREE.PCFShadowMap
 
     // Put any per frame calculations here
     this.app.onUpdate = function () {
@@ -80,16 +82,17 @@ class Main {
     const stagePromise = loaders.fbxLoader( '/assets/models/robot_dance/stage_camera_lights.fbx' ).then( ( object ) => {
 
       this.stage = object.getObjectByName( 'Stage' );
+
+      object.getObjectByName( 'scene' ).receiveShadow = true;
+      object.getObjectByName( 'curtains top' ).receiveShadow = true;
+
       this.camera = object.getObjectByName( 'Camera' );
-      this.spotlightStageRightLow = object.getObjectByName( 'Spotstage_right_low' );
-      this.spotlightStageLeftLow = object.getObjectByName( 'Spotstage_right_low' );
-      this.spotlightStageCenterHigh = object.getObjectByName( 'Spotstage_center_high' );
+      this.spotLight = object.getObjectByName( 'Spotstage_center_high' );
 
       this.soundSourceLeft = object.getObjectByName( 'Stage Left Sound' );
       this.soundSourceRight = object.getObjectByName( 'Stage Right Sound' );
 
       this.sceneCentre = new THREE.Box3().setFromObject( object ).getCenter();
-      // this.sceneCentre = object.getObjectByName( 'sceneCenter' ).position.clone();
 
     } );
 
@@ -98,6 +101,14 @@ class Main {
       invertMirroredFBX( object );
 
       this.robot = new Robot( object );
+
+      object.position.z += 10;
+
+      object.traverse( ( child ) => {
+
+        if ( child instanceof THREE.Mesh ) child.castShadow = true;
+
+      } );
 
     } );
 
@@ -143,15 +154,30 @@ class Main {
     const ambientLight = new THREE.AmbientLight( 0xffffff, 0.3 );
     this.app.scene.add( ambientLight );
 
-    this.spotlightStageRightLow.distance = 200;
-    this.spotlightStageLeftLow.distance = 200;
-    this.spotlightStageCenterHigh.distance = 400;
+    this.spotLight.castShadow = true;
+    // Set up shadow properties for the light
+    this.spotLight.shadow.mapSize.width = 2048;
+    this.spotLight.shadow.mapSize.height = 2048;
+    this.spotLight.shadow.camera.near = 100;
+    this.spotLight.shadow.camera.far = 300;
 
-    this.spotlightStageRightLow.penumbra = 0.25;
-    this.spotlightStageLeftLow.penumbra = 0.25;
-    this.spotlightStageCenterHigh.penumbra = 0.25;
+    this.spotLight.penumbra = 0.4;
+    this.spotLight.angle = 0.5;
+    this.spotLight.distance = 300;
 
-    this.app.scene.add( this.spotlightStageRightLow, this.spotlightStageLeftLow, this.spotlightStageCenterHigh );
+    const left = this.spotLight.clone();
+    left.intensity = 0.75;
+    left.position.x -= 100;
+    left.position.y += 20;
+    left.shadow.radius = 3;
+
+    const center = this.spotLight.clone();
+    center.intensity = 1.25;
+    center.position.x += 5;
+    center.shadow.radius = 1;
+
+    this.app.scene.add( left, center );
+
 
   }
 
@@ -182,7 +208,6 @@ class Main {
     this.app.controls.enableDamping = true;
     this.app.controls.dampingFactor = 0.2;
 
-    // console.log( this.sceneCentre )
     this.app.controls.target.copy( this.sceneCentre );
     this.app.controls.update();
 
@@ -191,12 +216,12 @@ class Main {
 
   initBackground() {
 
-    this.app.scene.fog = new THREE.Fog( 0xf7f7f7, 600, this.app.camera.far );
+    this.app.scene.fog = new THREE.Fog( 0xf7f7f7, 400, 700 );
 
     const geometry = new THREE.PlaneBufferGeometry( 20000, 20000 );
-    const material = new THREE.MeshPhongMaterial( { color: 0xb0b0b0, shininess: 0.1 } );
+    const material = new THREE.MeshBasicMaterial( { color: 0xaaaaaa } );
     const ground = new THREE.Mesh( geometry, material );
-    ground.position.set( 0, -25, 0 );
+    ground.position.set( 0, -5, 0 );
     ground.rotation.x = -Math.PI / 2;
 
     this.app.scene.add( ground );
