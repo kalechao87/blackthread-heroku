@@ -79,9 +79,9 @@ class AnimationControl {
 
   }
 
-  // a Clip consists of several keyframe tracks
-  // - for example the movement of an arm over the duration of a group
-  // an Action controls playback of the clip
+  // A Clip consists of several keyframe tracks
+  // - for example the movement of an arm over the duration of a group.
+  // An Action controls playback of the clip
   createAction( name, tracks ) {
 
     const clip = new THREE.AnimationClip( name, -1, tracks );

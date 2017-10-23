@@ -52,6 +52,8 @@ export default class FileControl {
 
     }
 
+    this.resetAll();
+
     this.frames.fromJSON( json.frames );
     this.groups.fromJSON( json.groups );
     this.dance.fromJSON( json.dance );
@@ -143,6 +145,7 @@ export default class FileControl {
     this.frames.reset();
     this.groups.reset();
     this.dance.reset();
+    HTMLControl.controls.music.stop.click();
 
   }
 

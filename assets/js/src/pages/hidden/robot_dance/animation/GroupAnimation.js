@@ -15,6 +15,8 @@ export default class GroupAnimation {
     // we need at least two frames to create the animation
     if ( framesDetails.length < 2 ) return;
 
+    const frames = framesDetails.map( detail => detail.frame );
+
     this.reset();
 
     const headTracks = [];
@@ -23,10 +25,10 @@ export default class GroupAnimation {
     const leftElbowTracks = [];
     const rightElbowTracks = [];
 
-    for ( let i = 1; i < framesDetails.length; i++ ) {
+    for ( let i = 1; i < frames.length; i++ ) {
 
-      const initialFrame = framesDetails[ i - 1 ].frame;
-      const finalFrame = framesDetails[ i ].frame;
+      const initialFrame = frames[ i - 1 ];
+      const finalFrame = frames[ i ];
 
       const frameStartTime = i - 1;
 

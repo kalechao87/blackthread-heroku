@@ -105,7 +105,6 @@ export default class Group {
     detail.deleteButton.onClick = () => {
 
       // if ( this.framesInGroup.contains( row ) )
-      console.log( this.framesInGroup )
       this.framesInGroup.removeChild( row );
 
       if ( this.lastAddedFrameNum === frame.num ) this.lastAddedFrameNum = null;

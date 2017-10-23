@@ -59203,9 +59203,9 @@ var AnimationControl = function () {
     return new QuaternionKeyframeTrack(part, [startTime, startTime + 1], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
   };
 
-  // a Clip consists of several keyframe tracks
-  // - for example the movement of an arm over the duration of a group
-  // an Action controls playback of the clip
+  // A Clip consists of several keyframe tracks
+  // - for example the movement of an arm over the duration of a group.
+  // An Action controls playback of the clip
 
 
   AnimationControl.prototype.createAction = function createAction(name, tracks) {
@@ -59418,6 +59418,10 @@ var GroupAnimation = function () {
     // we need at least two frames to create the animation
     if (framesDetails.length < 2) return;
 
+    var frames = framesDetails.map(function (detail) {
+      return detail.frame;
+    });
+
     this.reset();
 
     var headTracks = [];
@@ -59426,10 +59430,10 @@ var GroupAnimation = function () {
     var leftElbowTracks = [];
     var rightElbowTracks = [];
 
-    for (var i = 1; i < framesDetails.length; i++) {
+    for (var i = 1; i < frames.length; i++) {
 
-      var initialFrame = framesDetails[i - 1].frame;
-      var finalFrame = framesDetails[i].frame;
+      var initialFrame = frames[i - 1];
+      var finalFrame = frames[i];
 
       var frameStartTime = i - 1;
 
@@ -59565,7 +59569,6 @@ var Group$1 = function () {
     detail.deleteButton.onClick = function () {
 
       // if ( this.framesInGroup.contains( row ) )
-      console.log(_this2.framesInGroup);
       _this2.framesInGroup.removeChild(row);
 
       if (_this2.lastAddedFrameNum === frame.num) _this2.lastAddedFrameNum = null;
@@ -59871,42 +59874,108 @@ var DanceAnimation = function () {
 
     this.robot = robot;
 
-    // this.actions = [];
+    this.actions = [];
   }
+
+  // take the details array and flatten it to an array of frames
+
+
+  DanceAnimation.prototype.flattenDetails = function flattenDetails(details) {
+    var _this = this;
+
+    var frames = [];
+
+    details.forEach(function (detail) {
+
+      var elem = detail.elem;
+
+      if (elem.type === 'frame') frames.push(elem);else if (elem.type === 'group') {
+
+        frames = frames.concat(_this.flattenGroup(elem, detail.loopAmount));
+      }
+    });
+
+    return frames;
+  };
+
+  DanceAnimation.prototype.flattenGroup = function flattenGroup(group, loopAmount) {
+
+    var frames = [];
+
+    for (var i = 0; i < loopAmount; i++) {
+
+      frames = frames.concat(group.containedFrames.map(function (detail) {
+        return detail.frame;
+      }));
+    }
+
+    return frames;
+  };
 
   DanceAnimation.prototype.createAnimation = function createAnimation(details) {
 
-    console.log('TODO: createdanceanimation ');
+    this.reset();
+
+    var frames = this.flattenDetails(details);
+
+    // we need at least two frames to create the animation
+    if (frames.length < 2) return;
+
+    var headTracks = [];
+    var leftShoulderTracks = [];
+    var rightShoulderTracks = [];
+    var leftElbowTracks = [];
+    var rightElbowTracks = [];
+
+    for (var i = 1; i < frames.length; i++) {
+
+      var initialFrame = frames[i - 1];
+      var finalFrame = frames[i];
+
+      var frameStartTime = i - 1;
+
+      headTracks.push(animationControl.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
+
+      leftShoulderTracks.push(animationControl.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
+
+      rightShoulderTracks.push(animationControl.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
+
+      leftElbowTracks.push(animationControl.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
+
+      rightElbowTracks.push(animationControl.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
+    }
+
+    var headAction = animationControl.createAction('headControl.quaternion', headTracks);
+    var leftShoulderAction = animationControl.createAction('shoulderControlLeft.quaternion', leftShoulderTracks);
+    var rightShoulderAction = animationControl.createAction('shoulderControlRight.quaternion', rightShoulderTracks);
+    var leftElbowAction = animationControl.createAction('elbowControlLeft.quaternion', leftElbowTracks);
+    var rightElbowAction = animationControl.createAction('elbowControlRight.quaternion', rightElbowTracks);
+
+    this.actions = [headAction, leftShoulderAction, rightShoulderAction, leftElbowAction, rightElbowAction];
   };
 
   DanceAnimation.prototype.play = function play() {
 
-    // this.actions.forEach( ( action ) => {
+    this.actions.forEach(function (action) {
 
-    //   action.play();
-
-    // } );
-
+      action.play();
+    });
   };
 
   DanceAnimation.prototype.stop = function stop() {
 
-    // this.actions.forEach( ( action ) => {
+    this.actions.forEach(function (action) {
 
-    //   action.stop();
-
-    // } );
-
+      action.stop();
+    });
   };
 
   DanceAnimation.prototype.reset = function reset() {
 
-    // this.actions.forEach( ( action ) => {
+    this.actions.forEach(function (action) {
 
-    //   action.reset();
-
-    // } );
-
+      action.reset();
+    });
   };
 
   return DanceAnimation;
@@ -59999,8 +60068,6 @@ var Dance = function () {
 
     this.checkDanceIsValid();
     HTMLControl.controls.dance.resetButton.disabled = false;
-
-    this.animation.createAnimation(this.containedElems);
   };
 
   Dance.prototype.initAddSelectedFrameButton = function initAddSelectedFrameButton() {
@@ -60016,7 +60083,7 @@ var Dance = function () {
 
       if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
 
-      _this2.add(frame, 'Frame');
+      _this2.add(frame);
 
       _this2.lastAddedFrameNum = frame.num;
       _this2.lastAddedType = 'frame';
@@ -60036,7 +60103,7 @@ var Dance = function () {
 
       if (group === null || group.num === _this3.lastAddedGroupNum && _this3.lastAddedType === 'group') return;
 
-      _this3.add(group, 'Group');
+      _this3.add(group);
 
       _this3.lastAddedGroupNum = group.num;
       _this3.lastAddedType = 'group';
@@ -60101,8 +60168,6 @@ var Dance = function () {
 
     this.containedElems.forEach(function (detail) {
 
-      console.log(detail.elem);
-
       if (detail.elem.type === 'frame') containedFramesNum++;else if (detail.elem.type === 'group') {
 
         // this would require a 'change' event added to the group so that the dance can listen
@@ -60141,7 +60206,7 @@ var Dance = function () {
 
       if (value.type === 'frame') {
 
-        this.add(this.frames.frames[value.num], value.loopAmount);
+        this.add(this.frames.frames[value.num]);
       } else if (value.type === 'group') {
 
         this.add(this.groups.groups[value.num], value.loopAmount);
@@ -60150,6 +60215,8 @@ var Dance = function () {
         HTMLControl.controls.dance.framerate.value = value;
       }
     }
+
+    this.checkDanceIsValid();
   };
 
   Dance.prototype.toJSON = function toJSON() {
@@ -60320,6 +60387,8 @@ var FileControl = function () {
       return;
     }
 
+    this.resetAll();
+
     this.frames.fromJSON(json.frames);
     this.groups.fromJSON(json.groups);
     this.dance.fromJSON(json.dance);
@@ -60403,6 +60472,7 @@ var FileControl = function () {
     this.frames.reset();
     this.groups.reset();
     this.dance.reset();
+    HTMLControl.controls.music.stop.click();
   };
 
   FileControl.prototype.initExamples = function initExamples() {
@@ -60643,8 +60713,6 @@ var Audio$1 = function () {
   return Audio;
 }();
 
-// import animationControls from './animationControls.js';
-
 var Main = function () {
   function Main() {
     classCallCheck(this, Main);
@@ -60758,7 +60826,7 @@ var Main = function () {
 
   Main.prototype.initLighting = function initLighting() {
 
-    var ambientLight = new AmbientLight(0xffffff, 0.3);
+    var ambientLight = new AmbientLight(0xffffff, 0.4);
     this.app.scene.add(ambientLight);
 
     this.spotLight.castShadow = true;
@@ -60776,12 +60844,12 @@ var Main = function () {
     left.intensity = 0.75;
     left.position.x -= 100;
     left.position.y += 20;
-    left.shadow.radius = 3;
+    left.shadow.radius = 2;
 
     var center = this.spotLight.clone();
-    center.intensity = 1.25;
-    center.position.x += 5;
-    center.shadow.radius = 1;
+    center.intensity = 1.5;
+    center.position.x += 25;
+    center.shadow.radius = 1.25;
 
     this.app.scene.add(left, center);
   };

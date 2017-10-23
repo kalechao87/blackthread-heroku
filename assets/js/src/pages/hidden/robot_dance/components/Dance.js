@@ -106,8 +106,6 @@ export default class Dance {
     this.checkDanceIsValid();
     HTMLControl.controls.dance.resetButton.disabled = false;
 
-    this.animation.createAnimation( this.containedElems );
-
   }
 
   initAddSelectedFrameButton() {
@@ -122,7 +120,7 @@ export default class Dance {
 
       if ( frame === null || ( frame.num === this.lastAddedFrameNum && this.lastAddedType === 'frame' ) ) return;
 
-      this.add( frame, 'Frame' );
+      this.add( frame );
 
       this.lastAddedFrameNum = frame.num;
       this.lastAddedType = 'frame';
@@ -144,7 +142,7 @@ export default class Dance {
 
       if ( group === null || ( group.num === this.lastAddedGroupNum && this.lastAddedType === 'group' ) ) return;
 
-      this.add( group, 'Group' );
+      this.add( group );
 
       this.lastAddedGroupNum = group.num;
       this.lastAddedType = 'group';
@@ -174,7 +172,6 @@ export default class Dance {
 
     HTMLControl.controls.dance.framerate.value = rate;
     this.framerate = rate;
-
 
   }
 
@@ -217,8 +214,6 @@ export default class Dance {
     let containsValidGroups = false;
 
     this.containedElems.forEach( ( detail ) => {
-
-      console.log( detail.elem )
 
       if ( detail.elem.type === 'frame' ) containedFramesNum++;
 
@@ -265,7 +260,7 @@ export default class Dance {
 
       if ( value.type === 'frame' ) {
 
-        this.add( this.frames.frames[ value.num ], value.loopAmount );
+        this.add( this.frames.frames[ value.num ] );
 
       } else if ( value.type === 'group' ) {
 
@@ -278,6 +273,8 @@ export default class Dance {
       }
 
     }
+
+    this.checkDanceIsValid();
 
   }
 

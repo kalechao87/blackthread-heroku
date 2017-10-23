@@ -151,7 +151,7 @@ class Main {
 
   initLighting() {
 
-    const ambientLight = new THREE.AmbientLight( 0xffffff, 0.3 );
+    const ambientLight = new THREE.AmbientLight( 0xffffff, 0.4 );
     this.app.scene.add( ambientLight );
 
     this.spotLight.castShadow = true;
@@ -169,12 +169,12 @@ class Main {
     left.intensity = 0.75;
     left.position.x -= 100;
     left.position.y += 20;
-    left.shadow.radius = 3;
+    left.shadow.radius = 2;
 
     const center = this.spotLight.clone();
-    center.intensity = 1.25;
-    center.position.x += 5;
-    center.shadow.radius = 1;
+    center.intensity = 1.5;
+    center.position.x += 25;
+    center.shadow.radius = 1.25;
 
     this.app.scene.add( left, center );
 
