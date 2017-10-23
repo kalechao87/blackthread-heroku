@@ -4,6 +4,9 @@ import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 import LoopInputCell from './HTML/LoopInputCell.js';
 import animationControl from '../animation/animationControl.js';
 
+import DanceAnimation from '../animation/DanceAnimation.js';
+
+
 export default class Dance {
 
   constructor( groups ) {
@@ -11,6 +14,8 @@ export default class Dance {
     this.groups = groups;
     this.frames = groups.frames;
     this.robot = this.frames.robot;
+
+    this.animation = new DanceAnimation( this.robot );
 
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
@@ -21,6 +26,7 @@ export default class Dance {
     this.initAddSelectedFrameButton();
     this.initAddSelectedGroupButton();
     this.initPlayButton();
+    this.initResetButton();
     this.initFramerateInput();
 
   }
@@ -63,13 +69,21 @@ export default class Dance {
     new TextCell( row, elem.num );
     new TextCell( row, elem.type );
 
-    const loopInput = new LoopInputCell( row );
+    if( elem.type === 'group' ) {
 
-    loopInput.onInput = ( value ) => {
+      const loopInput = new LoopInputCell( row );
 
-      detail.loopAmount = value;
+      loopInput.onInput = ( value ) => {
 
-    };
+        detail.loopAmount = value;
+
+      };
+
+    } else {
+
+      row.appendChild( document.createElement( 'td' ) );
+
+    }
 
     detail.deleteButton = new DeleteButtonCell( row );
 
@@ -81,6 +95,8 @@ export default class Dance {
 
     };
 
+    this.animation.createAnimation( this.containedElems );
+
   }
 
   initAddSelectedFrameButton() {
@@ -91,7 +107,7 @@ export default class Dance {
 
       e.preventDefault();
 
-      const frame = this.frames.selectedFrame;
+      const frame = this.frames.frames[ this.frames.selectedFrameNum ];
 
       if ( frame === null || ( frame.num === this.lastAddedFrameNum && this.lastAddedType === 'frame' ) ) return;
 
@@ -157,8 +173,28 @@ export default class Dance {
 
       e.preventDefault();
 
-      console.log( 'p ' );
+      this.animation.createAnimation( this.containedElems );
+      this.animation.play();
 
+      if ( HTMLControl.controls.music.play.innerHTML === 'Play' ) {
+
+        HTMLControl.controls.music.play.click();
+
+      }
+
+    } );
+
+  }
+
+  initResetButton() {
+
+    HTMLControl.controls.dance.resetButton.addEventListener( 'click', ( e ) => {
+
+      console.log( 'TODO: reset dance button last elem not removed ' );
+
+      e.preventDefault();
+
+      this.reset();
 
     } );
 

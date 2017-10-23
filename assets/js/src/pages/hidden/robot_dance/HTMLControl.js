@@ -27,6 +27,7 @@ const controls = {
     addFrameButton: document.querySelector( '#add-frame-to-dance' ),
     addGroupButton: document.querySelector( '#add-group-to-dance' ),
     playButton: document.querySelector( '#play-dance' ),
+    resetButton: document.querySelector( '#reset-dance' ),
 
   },
   music: {
@@ -34,7 +35,7 @@ const controls = {
     uploadMP3Input: document.querySelector( '#upload-mp3-input' ),
     tracks: document.querySelector( '#loaded-tracks' ),
     play: document.querySelector( '#play-music' ),
-    positionSlider: document.querySelector( '#track-position-slider' ),
+    stop: document.querySelector( '#stop-music' ),
   },
   file: {
     save: document.querySelector( '#save-dance' ),
@@ -42,7 +43,7 @@ const controls = {
     fileInput: document.querySelector( '#file-input' ),
     examples: document.querySelector( '#examples' ),
     loadExample: document.querySelector( '#load-example' ),
-    resetButton: document.querySelector( '#reset-dance' ),
+    resetButton: document.querySelector( '#reset-all' ),
   },
 };
 

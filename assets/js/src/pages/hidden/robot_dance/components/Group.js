@@ -1,7 +1,6 @@
 import TextCell from './HTML/TextCell.js';
 import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 import ResetButtonCell from './HTML/ResetButtonCell.js';
-import LoopInputCell from './HTML/LoopInputCell.js';
 
 import GroupAnimation from '../animation/GroupAnimation.js';
 

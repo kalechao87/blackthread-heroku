@@ -58509,7 +58509,8 @@ var controls = {
     table: document.querySelector('#dance-details'),
     addFrameButton: document.querySelector('#add-frame-to-dance'),
     addGroupButton: document.querySelector('#add-group-to-dance'),
-    playButton: document.querySelector('#play-dance')
+    playButton: document.querySelector('#play-dance'),
+    resetButton: document.querySelector('#reset-dance')
 
   },
   music: {
@@ -58517,7 +58518,7 @@ var controls = {
     uploadMP3Input: document.querySelector('#upload-mp3-input'),
     tracks: document.querySelector('#loaded-tracks'),
     play: document.querySelector('#play-music'),
-    positionSlider: document.querySelector('#track-position-slider')
+    stop: document.querySelector('#stop-music')
   },
   file: {
     save: document.querySelector('#save-dance'),
@@ -58525,7 +58526,7 @@ var controls = {
     fileInput: document.querySelector('#file-input'),
     examples: document.querySelector('#examples'),
     loadExample: document.querySelector('#load-example'),
-    resetButton: document.querySelector('#reset-dance')
+    resetButton: document.querySelector('#reset-all')
   }
 };
 
@@ -59218,14 +59219,6 @@ var AnimationControl = function () {
     return action;
   };
 
-  AnimationControl.prototype.uncache = function uncache(action) {
-
-    var clip = action.getClip();
-
-    this.mixer.uncacheClip(clip);
-    this.mixer.uncacheAction(clip);
-  };
-
   createClass(AnimationControl, [{
     key: 'framerate',
     set: function (value) {
@@ -59409,46 +59402,6 @@ var DeleteButtonCell = function () {
   }]);
   return DeleteButtonCell;
 }();
-
-var LoopInputCell = function LoopInputCell(row) {
-  var _this = this;
-
-  classCallCheck(this, LoopInputCell);
-
-
-  var cell = document.createElement('td');
-  cell.innerHTML = 'Loop ';
-  row.appendChild(cell);
-
-  var input = document.createElement('input');
-  cell.appendChild(input);
-  input.type = 'number';
-  input.min = '0';
-  input.value = '1';
-  input.step = '1';
-
-  var text = document.createElement('span');
-  text.style.width = '8em';
-  text.style.textAlign = 'left';
-  text.style.marginLeft = '0.25em';
-  text.innerHTML = ' time';
-  cell.appendChild(text);
-
-  this.onInput = function () {};
-
-  input.addEventListener('input', function (e) {
-
-    e.preventDefault();
-
-    var value = parseInt(e.target.value, 10);
-
-    if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
-
-    if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
-
-    _this.onInput(value);
-  });
-};
 
 var GroupAnimation = function () {
   function GroupAnimation(robot) {
@@ -59864,6 +59817,94 @@ var Groups = function () {
   return Groups;
 }();
 
+var LoopInputCell = function LoopInputCell(row) {
+  var _this = this;
+
+  classCallCheck(this, LoopInputCell);
+
+
+  var cell = document.createElement('td');
+  cell.innerHTML = 'Loop ';
+  row.appendChild(cell);
+
+  var input = document.createElement('input');
+  cell.appendChild(input);
+  input.type = 'number';
+  input.min = '0';
+  input.value = '1';
+  input.step = '1';
+
+  var text = document.createElement('span');
+  text.style.width = '8em';
+  text.style.textAlign = 'left';
+  text.style.marginLeft = '0.25em';
+  text.innerHTML = ' time';
+  cell.appendChild(text);
+
+  this.onInput = function () {};
+
+  input.addEventListener('input', function (e) {
+
+    e.preventDefault();
+
+    var value = parseInt(e.target.value, 10);
+
+    if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
+
+    if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
+
+    _this.onInput(value);
+  });
+};
+
+var DanceAnimation = function () {
+  function DanceAnimation(robot) {
+    classCallCheck(this, DanceAnimation);
+
+
+    this.robot = robot;
+
+    // this.actions = [];
+  }
+
+  DanceAnimation.prototype.createAnimation = function createAnimation(details) {
+
+    console.log('TODO: createdanceanimation ');
+  };
+
+  DanceAnimation.prototype.play = function play() {
+
+    // this.actions.forEach( ( action ) => {
+
+    //   action.play();
+
+    // } );
+
+  };
+
+  DanceAnimation.prototype.stop = function stop() {
+
+    // this.actions.forEach( ( action ) => {
+
+    //   action.stop();
+
+    // } );
+
+  };
+
+  DanceAnimation.prototype.reset = function reset() {
+
+    // this.actions.forEach( ( action ) => {
+
+    //   action.reset();
+
+    // } );
+
+  };
+
+  return DanceAnimation;
+}();
+
 var Dance = function () {
   function Dance(groups) {
     classCallCheck(this, Dance);
@@ -59872,6 +59913,8 @@ var Dance = function () {
     this.groups = groups;
     this.frames = groups.frames;
     this.robot = this.frames.robot;
+
+    this.animation = new DanceAnimation(this.robot);
 
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
@@ -59882,6 +59925,7 @@ var Dance = function () {
     this.initAddSelectedFrameButton();
     this.initAddSelectedGroupButton();
     this.initPlayButton();
+    this.initResetButton();
     this.initFramerateInput();
   }
 
@@ -59916,12 +59960,18 @@ var Dance = function () {
     new TextCell(row, elem.num);
     new TextCell(row, elem.type);
 
-    var loopInput = new LoopInputCell(row);
+    if (elem.type === 'group') {
 
-    loopInput.onInput = function (value) {
+      var loopInput = new LoopInputCell(row);
 
-      detail.loopAmount = value;
-    };
+      loopInput.onInput = function (value) {
+
+        detail.loopAmount = value;
+      };
+    } else {
+
+      row.appendChild(document.createElement('td'));
+    }
 
     detail.deleteButton = new DeleteButtonCell(row);
 
@@ -59931,6 +59981,8 @@ var Dance = function () {
 
       _this.containedElems.splice(pos, 1);
     };
+
+    this.animation.createAnimation(this.containedElems);
   };
 
   Dance.prototype.initAddSelectedFrameButton = function initAddSelectedFrameButton() {
@@ -59942,7 +59994,7 @@ var Dance = function () {
 
       e.preventDefault();
 
-      var frame = _this2.frames.selectedFrame;
+      var frame = _this2.frames.frames[_this2.frames.selectedFrameNum];
 
       if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
 
@@ -59995,12 +60047,32 @@ var Dance = function () {
   };
 
   Dance.prototype.initPlayButton = function initPlayButton() {
+    var _this5 = this;
 
     HTMLControl.controls.dance.playButton.addEventListener('click', function (e) {
 
       e.preventDefault();
 
-      console.log('p ');
+      _this5.animation.createAnimation(_this5.containedElems);
+      _this5.animation.play();
+
+      if (HTMLControl.controls.music.play.innerHTML === 'Play') {
+
+        HTMLControl.controls.music.play.click();
+      }
+    });
+  };
+
+  Dance.prototype.initResetButton = function initResetButton() {
+    var _this6 = this;
+
+    HTMLControl.controls.dance.resetButton.addEventListener('click', function (e) {
+
+      console.log('TODO: reset dance button last elem not removed ');
+
+      e.preventDefault();
+
+      _this6.reset();
     });
   };
 
@@ -60141,18 +60213,19 @@ var Robot = function () {
     };
   };
 
-  Robot.prototype.resetPose = function resetPose() {
+  // resetPose() {
 
-    console.log('TODO: robot.resetPose ');
+  //   console.log( 'TODO: robot.resetPose ' );
 
-    // this.head.quaternion.copy( this.headInitialQuaternion );
+  //   // this.head.quaternion.copy( this.headInitialQuaternion );
 
-    // this.leftShoulder.quaternion.copy( this.leftShoulderInitialQuaternion );
-    // this.rightShoulder.quaternion.copy( this.rightShoulderInitialQuaternion );
+  //   // this.leftShoulder.quaternion.copy( this.leftShoulderInitialQuaternion );
+  //   // this.rightShoulder.quaternion.copy( this.rightShoulderInitialQuaternion );
 
-    // this.leftElbow.quaternion.copy( this.leftElbowInitialQuaternion );
-    // this.rightElbow.quaternion.copy( this.rightElbowInitialQuaternion );
-  };
+  //   // this.leftElbow.quaternion.copy( this.leftElbowInitialQuaternion );
+  //   // this.rightElbow.quaternion.copy( this.rightElbowInitialQuaternion );
+
+  // }
 
   return Robot;
 }();
@@ -60313,450 +60386,6 @@ var FileControl = function () {
   return FileControl;
 }();
 
-var index$2 = createCommonjsModule(function (module) {
-/**
- * lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="npm" -o ./`
- * Copyright jQuery Foundation and other contributors <https://jquery.org/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/** Used as the `TypeError` message for "Functions" methods. */
-var FUNC_ERROR_TEXT = 'Expected a function';
-
-/** Used as references for various `Number` constants. */
-var NAN = 0 / 0;
-
-/** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
-
-/** Used to match leading and trailing whitespace. */
-var reTrim = /^\s+|\s+$/g;
-
-/** Used to detect bad signed hexadecimal string values. */
-var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-/** Used to detect binary string values. */
-var reIsBinary = /^0b[01]+$/i;
-
-/** Used to detect octal string values. */
-var reIsOctal = /^0o[0-7]+$/i;
-
-/** Built-in method references without a dependency on `root`. */
-var freeParseInt = parseInt;
-
-/** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString = objectProto.toString;
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeMax = Math.max,
-    nativeMin = Math.min;
-
-/**
- * Gets the timestamp of the number of milliseconds that have elapsed since
- * the Unix epoch (1 January 1970 00:00:00 UTC).
- *
- * @static
- * @memberOf _
- * @since 2.4.0
- * @category Date
- * @returns {number} Returns the timestamp.
- * @example
- *
- * _.defer(function(stamp) {
- *   console.log(_.now() - stamp);
- * }, _.now());
- * // => Logs the number of milliseconds it took for the deferred invocation.
- */
-var now = function() {
-  return root.Date.now();
-};
-
-/**
- * Creates a debounced function that delays invoking `func` until after `wait`
- * milliseconds have elapsed since the last time the debounced function was
- * invoked. The debounced function comes with a `cancel` method to cancel
- * delayed `func` invocations and a `flush` method to immediately invoke them.
- * Provide `options` to indicate whether `func` should be invoked on the
- * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
- * with the last arguments provided to the debounced function. Subsequent
- * calls to the debounced function return the result of the last `func`
- * invocation.
- *
- * **Note:** If `leading` and `trailing` options are `true`, `func` is
- * invoked on the trailing edge of the timeout only if the debounced function
- * is invoked more than once during the `wait` timeout.
- *
- * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
- * until to the next tick, similar to `setTimeout` with a timeout of `0`.
- *
- * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
- * for details over the differences between `_.debounce` and `_.throttle`.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Function
- * @param {Function} func The function to debounce.
- * @param {number} [wait=0] The number of milliseconds to delay.
- * @param {Object} [options={}] The options object.
- * @param {boolean} [options.leading=false]
- *  Specify invoking on the leading edge of the timeout.
- * @param {number} [options.maxWait]
- *  The maximum time `func` is allowed to be delayed before it's invoked.
- * @param {boolean} [options.trailing=true]
- *  Specify invoking on the trailing edge of the timeout.
- * @returns {Function} Returns the new debounced function.
- * @example
- *
- * // Avoid costly calculations while the window size is in flux.
- * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
- *
- * // Invoke `sendMail` when clicked, debouncing subsequent calls.
- * jQuery(element).on('click', _.debounce(sendMail, 300, {
- *   'leading': true,
- *   'trailing': false
- * }));
- *
- * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
- * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
- * var source = new EventSource('/stream');
- * jQuery(source).on('message', debounced);
- *
- * // Cancel the trailing debounced invocation.
- * jQuery(window).on('popstate', debounced.cancel);
- */
-function debounce(func, wait, options) {
-  var lastArgs,
-      lastThis,
-      maxWait,
-      result,
-      timerId,
-      lastCallTime,
-      lastInvokeTime = 0,
-      leading = false,
-      maxing = false,
-      trailing = true;
-
-  if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  wait = toNumber(wait) || 0;
-  if (isObject(options)) {
-    leading = !!options.leading;
-    maxing = 'maxWait' in options;
-    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
-  }
-
-  function invokeFunc(time) {
-    var args = lastArgs,
-        thisArg = lastThis;
-
-    lastArgs = lastThis = undefined;
-    lastInvokeTime = time;
-    result = func.apply(thisArg, args);
-    return result;
-  }
-
-  function leadingEdge(time) {
-    // Reset any `maxWait` timer.
-    lastInvokeTime = time;
-    // Start the timer for the trailing edge.
-    timerId = setTimeout(timerExpired, wait);
-    // Invoke the leading edge.
-    return leading ? invokeFunc(time) : result;
-  }
-
-  function remainingWait(time) {
-    var timeSinceLastCall = time - lastCallTime,
-        timeSinceLastInvoke = time - lastInvokeTime,
-        result = wait - timeSinceLastCall;
-
-    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
-  }
-
-  function shouldInvoke(time) {
-    var timeSinceLastCall = time - lastCallTime,
-        timeSinceLastInvoke = time - lastInvokeTime;
-
-    // Either this is the first call, activity has stopped and we're at the
-    // trailing edge, the system time has gone backwards and we're treating
-    // it as the trailing edge, or we've hit the `maxWait` limit.
-    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
-      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
-  }
-
-  function timerExpired() {
-    var time = now();
-    if (shouldInvoke(time)) {
-      return trailingEdge(time);
-    }
-    // Restart the timer.
-    timerId = setTimeout(timerExpired, remainingWait(time));
-  }
-
-  function trailingEdge(time) {
-    timerId = undefined;
-
-    // Only invoke if we have `lastArgs` which means `func` has been
-    // debounced at least once.
-    if (trailing && lastArgs) {
-      return invokeFunc(time);
-    }
-    lastArgs = lastThis = undefined;
-    return result;
-  }
-
-  function cancel() {
-    if (timerId !== undefined) {
-      clearTimeout(timerId);
-    }
-    lastInvokeTime = 0;
-    lastArgs = lastCallTime = lastThis = timerId = undefined;
-  }
-
-  function flush() {
-    return timerId === undefined ? result : trailingEdge(now());
-  }
-
-  function debounced() {
-    var time = now(),
-        isInvoking = shouldInvoke(time);
-
-    lastArgs = arguments;
-    lastThis = this;
-    lastCallTime = time;
-
-    if (isInvoking) {
-      if (timerId === undefined) {
-        return leadingEdge(lastCallTime);
-      }
-      if (maxing) {
-        // Handle invocations in a tight loop.
-        timerId = setTimeout(timerExpired, wait);
-        return invokeFunc(lastCallTime);
-      }
-    }
-    if (timerId === undefined) {
-      timerId = setTimeout(timerExpired, wait);
-    }
-    return result;
-  }
-  debounced.cancel = cancel;
-  debounced.flush = flush;
-  return debounced;
-}
-
-/**
- * Creates a throttled function that only invokes `func` at most once per
- * every `wait` milliseconds. The throttled function comes with a `cancel`
- * method to cancel delayed `func` invocations and a `flush` method to
- * immediately invoke them. Provide `options` to indicate whether `func`
- * should be invoked on the leading and/or trailing edge of the `wait`
- * timeout. The `func` is invoked with the last arguments provided to the
- * throttled function. Subsequent calls to the throttled function return the
- * result of the last `func` invocation.
- *
- * **Note:** If `leading` and `trailing` options are `true`, `func` is
- * invoked on the trailing edge of the timeout only if the throttled function
- * is invoked more than once during the `wait` timeout.
- *
- * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
- * until to the next tick, similar to `setTimeout` with a timeout of `0`.
- *
- * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
- * for details over the differences between `_.throttle` and `_.debounce`.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Function
- * @param {Function} func The function to throttle.
- * @param {number} [wait=0] The number of milliseconds to throttle invocations to.
- * @param {Object} [options={}] The options object.
- * @param {boolean} [options.leading=true]
- *  Specify invoking on the leading edge of the timeout.
- * @param {boolean} [options.trailing=true]
- *  Specify invoking on the trailing edge of the timeout.
- * @returns {Function} Returns the new throttled function.
- * @example
- *
- * // Avoid excessively updating the position while scrolling.
- * jQuery(window).on('scroll', _.throttle(updatePosition, 100));
- *
- * // Invoke `renewToken` when the click event is fired, but not more than once every 5 minutes.
- * var throttled = _.throttle(renewToken, 300000, { 'trailing': false });
- * jQuery(element).on('click', throttled);
- *
- * // Cancel the trailing throttled invocation.
- * jQuery(window).on('popstate', throttled.cancel);
- */
-function throttle(func, wait, options) {
-  var leading = true,
-      trailing = true;
-
-  if (typeof func != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  if (isObject(options)) {
-    leading = 'leading' in options ? !!options.leading : leading;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
-  }
-  return debounce(func, wait, {
-    'leading': leading,
-    'maxWait': wait,
-    'trailing': trailing
-  });
-}
-
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' ||
-    (isObjectLike(value) && objectToString.call(value) == symbolTag);
-}
-
-/**
- * Converts `value` to a number.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to process.
- * @returns {number} Returns the number.
- * @example
- *
- * _.toNumber(3.2);
- * // => 3.2
- *
- * _.toNumber(Number.MIN_VALUE);
- * // => 5e-324
- *
- * _.toNumber(Infinity);
- * // => Infinity
- *
- * _.toNumber('3.2');
- * // => 3.2
- */
-function toNumber(value) {
-  if (typeof value == 'number') {
-    return value;
-  }
-  if (isSymbol(value)) {
-    return NAN;
-  }
-  if (isObject(value)) {
-    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-    value = isObject(other) ? (other + '') : other;
-  }
-  if (typeof value != 'string') {
-    return value === 0 ? value : +value;
-  }
-  value = value.replace(reTrim, '');
-  var isBinary = reIsBinary.test(value);
-  return (isBinary || reIsOctal.test(value))
-    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-    : (reIsBadHex.test(value) ? NAN : +value);
-}
-
-module.exports = throttle;
-});
-
-interopDefault(index$2);
-
 var Audio$1 = function () {
   function Audio(emitters, camera) {
     var _this = this;
@@ -60770,7 +60399,7 @@ var Audio$1 = function () {
     this.audioDirectory = '/assets/audio/robot_dance/';
 
     this.playButton = HTMLControl.controls.music.play;
-    this.positionSlider = HTMLControl.controls.music.positionSlider;
+    this.stopButton = HTMLControl.controls.music.stop;
 
     this.listener = new AudioListener();
     this.listener.setMasterVolume(10);
@@ -60791,9 +60420,9 @@ var Audio$1 = function () {
     });
 
     this.initPlayButton();
+    this.initStopButton();
     this.initUploadButton();
     this.initSelectionMenu();
-    // this.initSlider();
 
     this.loadExamples();
   }
@@ -60809,6 +60438,8 @@ var Audio$1 = function () {
       optionElem.value = file;
       optionElem.innerHTML = file.replace(/_/g, ' ').replace('.mp3', '');
       HTMLControl.controls.music.tracks.appendChild(optionElem);
+
+      _this2.playButton.disabled = false;
     });
   };
 
@@ -60824,8 +60455,6 @@ var Audio$1 = function () {
   };
 
   Audio.prototype.play = function play() {
-
-    // if ( this.isPlaying && !this.isPaused ) return;
 
     if (this.soundsEmitters[0].source === undefined) {
 
@@ -60862,6 +60491,7 @@ var Audio$1 = function () {
   Audio.prototype.reset = function reset() {
 
     this.playButton.innerHTML = 'Play';
+    this.stopButton.disabled = true;
 
     this.soundsEmitters.forEach(function (sound) {
 
@@ -60878,9 +60508,6 @@ var Audio$1 = function () {
 
     var buffer = this.buffers[name];
 
-    this.positionSlider.value = 0;
-    this.positionSlider.max = Math.ceil(buffer.duration);
-
     this.soundsEmitters.forEach(function (sound) {
 
       sound.setBuffer(buffer);
@@ -60894,6 +60521,8 @@ var Audio$1 = function () {
 
       e.preventDefault();
 
+      _this4.stopButton.disabled = false;
+
       if (!_this4.isPaused && _this4.isPlaying) {
 
         _this4.pause();
@@ -60904,8 +60533,19 @@ var Audio$1 = function () {
     });
   };
 
-  Audio.prototype.initUploadButton = function initUploadButton() {
+  Audio.prototype.initStopButton = function initStopButton() {
     var _this5 = this;
+
+    this.stopButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      _this5.reset();
+    });
+  };
+
+  Audio.prototype.initUploadButton = function initUploadButton() {
+    var _this6 = this;
 
     HTMLControl.controls.music.uploadMP3Button.addEventListener('click', function (e) {
 
@@ -60936,7 +60576,7 @@ var Audio$1 = function () {
 
         context.decodeAudioData(evt.target.result, function (buffer) {
 
-          _this5.buffers[name] = buffer;
+          _this6.buffers[name] = buffer;
 
           optionElem.disabled = false;
         });
@@ -60945,7 +60585,7 @@ var Audio$1 = function () {
   };
 
   Audio.prototype.initSelectionMenu = function initSelectionMenu() {
-    var _this6 = this;
+    var _this7 = this;
 
     HTMLControl.controls.music.tracks.addEventListener('input', function (e) {
 
@@ -60953,44 +60593,8 @@ var Audio$1 = function () {
 
       var track = e.target.options[e.target.selectedIndex].value;
 
-      _this6.setTrack(track);
+      _this7.setTrack(track);
     });
-  };
-
-  Audio.prototype.initSlider = function initSlider() {
-
-    // const sliderMouseDownEvent = ( e ) => {
-
-    //   if ( this.isPlaying ) this.pause();
-
-    // };
-
-    // const sliderMouseupEvent = () => {
-
-    //   if ( this.isPaused ) {
-
-    //     this.play();
-
-    //   }
-
-    // };
-
-    // this.positionSlider.addEventListener( 'mouseup', sliderMouseupEvent, false );
-
-    // this.positionSlider.addEventListener( 'mousedown', sliderMouseDownEvent, false );
-
-    // this.sliderInputEvent = throttle( ( e ) => {
-
-    //   // const oldTime = this.buffer.time;
-    //   // const newTime = this.sliderInputEvent.value;
-    //   console.log( this.sliderInputEvent.value )
-    //   // this.currentMixer.update( newTime - oldTime );
-
-    // }, 250 );
-
-    // this.positionSlider.addEventListener( 'input', this.sliderInputEvent, false ); // throttling at ~17 ms will give approx 60fps while sliding the controls
-
-
   };
 
   return Audio;

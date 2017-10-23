@@ -94,15 +94,6 @@ class AnimationControl {
 
   }
 
-  uncache( action ) {
-
-    const clip = action.getClip();
-
-    this.mixer.uncacheClip( clip );
-    this.mixer.uncacheAction( clip );
-
-  }
-
 }
 
 export default new AnimationControl();

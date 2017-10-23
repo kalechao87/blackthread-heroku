@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import throttle from 'lodash.throttle';
 
 import loaders from './loaders.js';
 import HTMLControl from './HTMLControl.js';
@@ -15,7 +14,7 @@ export default class Audio {
     this.audioDirectory = '/assets/audio/robot_dance/';
 
     this.playButton = HTMLControl.controls.music.play;
-    this.positionSlider = HTMLControl.controls.music.positionSlider;
+    this.stopButton = HTMLControl.controls.music.stop;
 
     this.listener = new THREE.AudioListener();
     this.listener.setMasterVolume( 10 );
@@ -37,9 +36,9 @@ export default class Audio {
     } );
 
     this.initPlayButton();
+    this.initStopButton();
     this.initUploadButton();
     this.initSelectionMenu();
-    // this.initSlider();
 
     this.loadExamples();
 
@@ -55,6 +54,8 @@ export default class Audio {
       optionElem.value = file;
       optionElem.innerHTML = file.replace( /_/g, ' ' ).replace( '.mp3', '' );
       HTMLControl.controls.music.tracks.appendChild( optionElem );
+
+      this.playButton.disabled = false;
 
     } );
 
@@ -78,8 +79,6 @@ export default class Audio {
   }
 
   play() {
-
-    // if ( this.isPlaying && !this.isPaused ) return;
 
     if ( this.soundsEmitters[0].source === undefined ) {
 
@@ -122,6 +121,7 @@ export default class Audio {
   reset() {
 
     this.playButton.innerHTML = 'Play';
+    this.stopButton.disabled = true;
 
     this.soundsEmitters.forEach( ( sound ) => {
 
@@ -140,9 +140,6 @@ export default class Audio {
 
     const buffer = this.buffers[ name ];
 
-    this.positionSlider.value = 0;
-    this.positionSlider.max = Math.ceil( buffer.duration );
-
     this.soundsEmitters.forEach( ( sound ) => {
 
       sound.setBuffer( buffer );
@@ -156,6 +153,8 @@ export default class Audio {
 
       e.preventDefault();
 
+      this.stopButton.disabled = false;
+
       if ( !this.isPaused && this.isPlaying ) {
 
         this.pause();
@@ -165,6 +164,18 @@ export default class Audio {
         this.play();
 
       }
+
+    } );
+
+  }
+
+  initStopButton() {
+
+    this.stopButton.addEventListener( 'click', ( e ) => {
+
+      e.preventDefault();
+
+      this.reset();
 
     } );
 
@@ -225,42 +236,6 @@ export default class Audio {
       this.setTrack( track );
 
     } );
-
-  }
-
-  initSlider() {
-
-    // const sliderMouseDownEvent = ( e ) => {
-
-    //   if ( this.isPlaying ) this.pause();
-
-    // };
-
-    // const sliderMouseupEvent = () => {
-
-    //   if ( this.isPaused ) {
-
-    //     this.play();
-
-    //   }
-
-    // };
-
-    // this.positionSlider.addEventListener( 'mouseup', sliderMouseupEvent, false );
-
-    // this.positionSlider.addEventListener( 'mousedown', sliderMouseDownEvent, false );
-
-    // this.sliderInputEvent = throttle( ( e ) => {
-
-    //   // const oldTime = this.buffer.time;
-    //   // const newTime = this.sliderInputEvent.value;
-    //   console.log( this.sliderInputEvent.value )
-    //   // this.currentMixer.update( newTime - oldTime );
-
-    // }, 250 );
-
-    // this.positionSlider.addEventListener( 'input', this.sliderInputEvent, false ); // throttling at ~17 ms will give approx 60fps while sliding the controls
-
 
   }
 
