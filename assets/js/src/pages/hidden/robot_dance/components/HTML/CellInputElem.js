@@ -1,6 +1,6 @@
-// create an input cell in a table
+// append an input elem to a cell in a table row
 
-export default class FrameInputCell {
+export default class CellInputElem {
 
   constructor( row, cell, min, max, text ) {
 

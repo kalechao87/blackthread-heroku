@@ -5,6 +5,7 @@ export default class Robot {
     this.model = model;
 
     this.initParts();
+    this.initConstraints();
     this.initDefaultPose();
 
   }
@@ -31,15 +32,50 @@ export default class Robot {
 
   }
 
+  initConstraints() {
+
+    this.constraints = {
+
+      headPitchMin: -60,
+      headPitchMax: 60,
+      headYawMin: -30,
+      headYawMax: 30,
+
+      leftShoulderPitchMin: -40,
+      leftShoulderPitchMax: 60,
+      leftShoulderYawMin: 0,
+      leftShoulderYawMax: 60,
+
+      rightShoulderPitchMin: -40,
+      rightShoulderPitchMax: 60,
+      rightShoulderYawMin: 0,
+      rightShoulderYawMax: 60,
+
+      leftElbowPitchMin: 0,
+      leftElbowPitchMax: 60,
+      leftElbowYawMin: -60,
+      leftElbowYawMax: 60,
+
+      rightElbowPitchMin: 0,
+      rightElbowPitchMax: 60,
+      rightElbowYawMin: -60,
+      rightElbowYawMax: 60,
+
+    };
+
+  }
+
   resetPose() {
 
-    this.head.quaternion.copy( this.headInitialQuaternion );
+    console.log( 'TODO: robot.resetPose ' );
 
-    this.leftShoulder.quaternion.copy( this.leftShoulderInitialQuaternion );
-    this.rightShoulder.quaternion.copy( this.rightShoulderInitialQuaternion );
+    // this.head.quaternion.copy( this.headInitialQuaternion );
 
-    this.leftElbow.quaternion.copy( this.leftElbowInitialQuaternion );
-    this.rightElbow.quaternion.copy( this.rightElbowInitialQuaternion );
+    // this.leftShoulder.quaternion.copy( this.leftShoulderInitialQuaternion );
+    // this.rightShoulder.quaternion.copy( this.rightShoulderInitialQuaternion );
+
+    // this.leftElbow.quaternion.copy( this.leftElbowInitialQuaternion );
+    // this.rightElbow.quaternion.copy( this.rightElbowInitialQuaternion );
 
   }
 

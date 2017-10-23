@@ -1,60 +1,31 @@
 import * as THREE from 'three';
 
 import TextCell from './HTML/TextCell.js';
-import FrameInputCell from './HTML/FrameInputCell.js';
-
-const constraints = {
-
-  headPitchMin: -60,
-  headPitchMax: 60,
-  headYawMin: -30,
-  headYawMax: 30,
-
-  leftShoulderPitchMin: -40,
-  leftShoulderPitchMax: 60,
-  leftShoulderYawMin: 0,
-  leftShoulderYawMax: 60,
-
-  rightShoulderPitchMin: -40,
-  rightShoulderPitchMax: 60,
-  rightShoulderYawMin: 0,
-  rightShoulderYawMax: 60,
-
-  leftElbowPitchMin: 0,
-  leftElbowPitchMax: 60,
-  leftElbowYawMin: -60,
-  leftElbowYawMax: 60,
-
-  rightElbowPitchMin: 0,
-  rightElbowPitchMax: 60,
-  rightElbowYawMin: -60,
-  rightElbowYawMax: 60,
-
-};
+import CellInputElem from './HTML/CellInputElem.js';
+import ResetButtonCell from './HTML/ResetButtonCell.js';
 
 export default class Frame {
 
   constructor( robot, num, isBaseFrame = false ) {
 
     this.type = 'frame';
-
     this.num = num;
-
     this.robot = robot;
 
     if ( !isBaseFrame ) {
 
       this.createTableEntry( num );
       this.initControlFunctions();
-      this.initDefaultValues();
-      this.initSetFlags( false );
+      this.setFlags( false );
 
     } else {
 
-      this.initDefaultValues();
-      this.initSetFlags( true );
+      this.setFlags( true );
 
     }
+
+    this.initQuaternions();
+    this.setValues( 0 );
 
   }
 
@@ -77,36 +48,45 @@ export default class Frame {
 
   createTableEntry( num ) {
 
+    const constraints = this.robot.constraints;
+
     this.row = document.createElement( 'tr' );
 
     new TextCell( this.row, num );
 
     const headCell = document.createElement( 'td' );
     this.row.appendChild( headCell );
-    this.headPitchInput = new FrameInputCell( this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch' );
-    this.headYawInput = new FrameInputCell( this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw' );
+    this.headPitchInput = new CellInputElem( this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch' );
+    this.headYawInput = new CellInputElem( this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw' );
 
     const leftShoulderCell = document.createElement( 'td' );
     this.row.appendChild( leftShoulderCell );
-    this.leftShoulderPitchInput = new FrameInputCell( this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch' );
-    this.leftShoulderYawInput = new FrameInputCell( this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw' );
+    this.leftShoulderPitchInput = new CellInputElem( this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch' );
+    this.leftShoulderYawInput = new CellInputElem( this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw' );
 
     const rightShoulderCell = document.createElement( 'td' );
     this.row.appendChild( rightShoulderCell );
-    this.rightShoulderPitchInput = new FrameInputCell( this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch' );
-    this.rightShoulderYawInput = new FrameInputCell( this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw' );
+    this.rightShoulderPitchInput = new CellInputElem( this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch' );
+    this.rightShoulderYawInput = new CellInputElem( this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw' );
 
     const leftElbowCell = document.createElement( 'td' );
     this.row.appendChild( leftElbowCell );
-    this.leftElbowPitchInput = new FrameInputCell( this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch' );
-    this.leftElbowYawInput = new FrameInputCell( this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw' );
+    this.leftElbowPitchInput = new CellInputElem( this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch' );
+    this.leftElbowYawInput = new CellInputElem( this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw' );
 
     const rightElbowCell = document.createElement( 'td' );
     this.row.appendChild( rightElbowCell );
-    this.rightElbowPitchInput = new FrameInputCell( this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch' );
-    this.rightElbowYawInput = new FrameInputCell( this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw' );
+    this.rightElbowPitchInput = new CellInputElem( this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch' );
+    this.rightElbowYawInput = new CellInputElem( this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw' );
 
-    this.row.appendChild( document.createElement( 'td' ) );
+    this.resetButton = new ResetButtonCell( this.row );
+
+    const click = () => {
+
+      this.reset();
+
+    };
+    this.resetButton.onClick = click;
 
   }
 
@@ -148,7 +128,7 @@ export default class Frame {
 
   }
 
-  initSetFlags( value ) {
+  setFlags( value ) {
 
     this.headPitchSet = value;
     this.headYawSet = value;
@@ -163,32 +143,34 @@ export default class Frame {
 
   }
 
-  initDefaultValues() {
-
-    this.headPitchValue = 0;
-    this.headYawValue = 0;
+  initQuaternions() {
 
     this.headQuaternion = this.robot.headInitialQuaternion.clone();
-
-    this.leftShoulderPitchValue = 0;
-    this.leftShoulderYawValue = 0;
-
     this.leftShoulderQuaternion = this.robot.leftShoulderInitialQuaternion.clone();
-
-    this.rightShoulderPitchValue = 0;
-    this.rightShoulderYawValue = 0;
-
     this.rightShoulderQuaternion = this.robot.rightShoulderInitialQuaternion.clone();
-
-    this.leftElbowPitchValue = 0;
-    this.leftElbowYawValue = 0;
-
     this.leftElbowQuaternion = this.robot.leftElbowInitialQuaternion.clone();
-
-    this.rightElbowPitchValue = 0;
-    this.rightElbowYawValue = 0;
-
     this.rightElbowQuaternion = this.robot.rightElbowInitialQuaternion.clone();
+
+  }
+
+  setValues( value ) {
+
+    value = value || 0;
+
+    this.headPitchValue = value;
+    this.headYawValue = value;
+
+    this.leftShoulderPitchValue = value;
+    this.leftShoulderYawValue = value;
+
+    this.rightShoulderPitchValue = value;
+    this.rightShoulderYawValue = value;
+
+    this.leftElbowPitchValue = value;
+    this.leftElbowYawValue = value;
+
+    this.rightElbowPitchValue = value;
+    this.rightElbowYawValue = value;
 
   }
 
@@ -201,6 +183,8 @@ export default class Frame {
     const control = ( e, name, sign, direction, axis ) => {
 
       let value;
+
+      if ( e === '' ) return;
 
       // this function can either be used from an input Event or by passing a number directly
       if ( e instanceof Event ) {
@@ -278,6 +262,27 @@ export default class Frame {
 
   }
 
+  reset() {
+
+    this.headPitchInput.value = '';
+    this.headYawInput.value = '';
+    this.leftShoulderPitchInput.value = '';
+    this.leftShoulderYawInput.value = '';
+    this.rightShoulderPitchInput.value = '';
+    this.rightShoulderYawInput.value = '';
+    this.leftElbowPitchInput.value = '';
+    this.leftElbowYawInput.value = '';
+    this.rightElbowPitchInput.value = '';
+    this.rightElbowYawInput.value = '';
+
+    this.setFlags( false );
+    this.setValues();
+
+    this.initQuaternions();
+    this.setRotations();
+
+  }
+
   fromJSON( object ) {
 
     this.headPitchInput.value = object.headPitch;
@@ -303,7 +308,6 @@ export default class Frame {
     this.rightElbowYawSet = this.headPitchInput.value !== '';
 
     this.setValuesAndQuaternionsFromInputs();
-    this.setRotations();
 
   }
 

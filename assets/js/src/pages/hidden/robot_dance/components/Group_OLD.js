@@ -1,6 +1,5 @@
 import TextCell from './HTML/TextCell.js';
 import DeleteButtonCell from './HTML/DeleteButtonCell.js';
-import ResetButtonCell from './HTML/ResetButtonCell.js';
 import LoopInputCell from './HTML/LoopInputCell.js';
 
 import GroupAnimation from '../animation/GroupAnimation.js';
@@ -70,21 +69,13 @@ export default class Group {
     frameTable.appendChild( this.framesInGroup );
     framesCell.appendChild( frameTable );
 
-    this.resetButton = new ResetButtonCell( this.row );
-
-    const click = () => {
-
-      this.reset();
-
-    };
-    this.resetButton.onClick = click;
-
   }
 
   addFrame( frame ) {
 
     const detail = {
       frame,
+      loopAmount: 1,
       deleteButton: null,
     };
 
@@ -97,13 +88,19 @@ export default class Group {
 
     new TextCell( row, 'Frame #' + frame.num );
 
-    row.appendChild( document.createElement( 'td' ) );
+    const loopInput = new LoopInputCell( row );
+
+    loopInput.onInput = ( value ) => {
+
+      detail.loopAmount = value;
+
+    };
 
     detail.deleteButton = new DeleteButtonCell( row );
 
     detail.deleteButton.onClick = () => {
 
-      if ( this.framesInGroup.contains( row ) ) this.framesInGroup.removeChild( row );
+      this.framesInGroup.removeChild( row );
 
       if ( this.lastAddedFrameNum === frame.num ) this.lastAddedFrameNum = null;
 
@@ -180,6 +177,7 @@ export default class Group {
       output[ i ] = {
 
         frameNum: detail.frame.num,
+        loopAmount: detail.loopAmount,
 
       };
 

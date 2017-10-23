@@ -75,7 +75,6 @@ class AnimationControl {
         finalPos.z,
         finalPos.w,
       ],
-      // THREE.InterpolateSmooth,
     );
 
   }

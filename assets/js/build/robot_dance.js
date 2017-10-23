@@ -58750,10 +58750,10 @@ var TextCell = function TextCell(row, text) {
   return textCell;
 };
 
-// create an input cell in a table
+// append an input elem to a cell in a table row
 
-var FrameInputCell = function FrameInputCell(row, cell, min, max, text) {
-  classCallCheck(this, FrameInputCell);
+var CellInputElem = function CellInputElem(row, cell, min, max, text) {
+  classCallCheck(this, CellInputElem);
 
 
   var span = document.createElement('span');
@@ -58778,34 +58778,42 @@ var FrameInputCell = function FrameInputCell(row, cell, min, max, text) {
   return input;
 };
 
-var constraints = {
+// Append a cell containing a reset button to a table row
 
-  headPitchMin: -60,
-  headPitchMax: 60,
-  headYawMin: -30,
-  headYawMax: 30,
+var ResetButtonCell = function () {
+  function ResetButtonCell(row) {
+    var _this = this;
 
-  leftShoulderPitchMin: -40,
-  leftShoulderPitchMax: 60,
-  leftShoulderYawMin: 0,
-  leftShoulderYawMax: 60,
+    classCallCheck(this, ResetButtonCell);
 
-  rightShoulderPitchMin: -40,
-  rightShoulderPitchMax: 60,
-  rightShoulderYawMin: 0,
-  rightShoulderYawMax: 60,
 
-  leftElbowPitchMin: 0,
-  leftElbowPitchMax: 60,
-  leftElbowYawMin: -60,
-  leftElbowYawMax: 60,
+    var deleteButtonCell = document.createElement('td');
+    this.button = document.createElement('button');
+    this.button.innerHTML = '<span class="fa fa-lg fa-undo" aria-hidden="true"></span>';
+    deleteButtonCell.appendChild(this.button);
+    row.appendChild(deleteButtonCell);
 
-  rightElbowPitchMin: 0,
-  rightElbowPitchMax: 60,
-  rightElbowYawMin: -60,
-  rightElbowYawMax: 60
+    this.onClick = function () {};
 
-};
+    this.click = function (e) {
+
+      if (e) e.preventDefault();
+
+      _this.onClick();
+    };
+
+    this.button.addEventListener('click', this.click);
+  }
+
+  createClass(ResetButtonCell, [{
+    key: 'disabled',
+    set: function (value) {
+
+      this.button.disabled = true;
+    }
+  }]);
+  return ResetButtonCell;
+}();
 
 var Frame = function () {
   function Frame(robot, num) {
@@ -58814,25 +58822,27 @@ var Frame = function () {
 
 
     this.type = 'frame';
-
     this.num = num;
-
     this.robot = robot;
 
     if (!isBaseFrame) {
 
       this.createTableEntry(num);
       this.initControlFunctions();
-      this.initDefaultValues();
-      this.initSetFlags(false);
+      this.setFlags(false);
     } else {
 
-      this.initDefaultValues();
-      this.initSetFlags(true);
+      this.setFlags(true);
     }
+
+    this.initQuaternions();
+    this.setValues(0);
   }
 
   Frame.prototype.createTableEntry = function createTableEntry(num) {
+    var _this = this;
+
+    var constraints = this.robot.constraints;
 
     this.row = document.createElement('tr');
 
@@ -58840,30 +58850,36 @@ var Frame = function () {
 
     var headCell = document.createElement('td');
     this.row.appendChild(headCell);
-    this.headPitchInput = new FrameInputCell(this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch');
-    this.headYawInput = new FrameInputCell(this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw');
+    this.headPitchInput = new CellInputElem(this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch');
+    this.headYawInput = new CellInputElem(this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw');
 
     var leftShoulderCell = document.createElement('td');
     this.row.appendChild(leftShoulderCell);
-    this.leftShoulderPitchInput = new FrameInputCell(this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch');
-    this.leftShoulderYawInput = new FrameInputCell(this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw');
+    this.leftShoulderPitchInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch');
+    this.leftShoulderYawInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw');
 
     var rightShoulderCell = document.createElement('td');
     this.row.appendChild(rightShoulderCell);
-    this.rightShoulderPitchInput = new FrameInputCell(this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch');
-    this.rightShoulderYawInput = new FrameInputCell(this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw');
+    this.rightShoulderPitchInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch');
+    this.rightShoulderYawInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw');
 
     var leftElbowCell = document.createElement('td');
     this.row.appendChild(leftElbowCell);
-    this.leftElbowPitchInput = new FrameInputCell(this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch');
-    this.leftElbowYawInput = new FrameInputCell(this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw');
+    this.leftElbowPitchInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch');
+    this.leftElbowYawInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw');
 
     var rightElbowCell = document.createElement('td');
     this.row.appendChild(rightElbowCell);
-    this.rightElbowPitchInput = new FrameInputCell(this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch');
-    this.rightElbowYawInput = new FrameInputCell(this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw');
+    this.rightElbowPitchInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch');
+    this.rightElbowYawInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw');
 
-    this.row.appendChild(document.createElement('td'));
+    this.resetButton = new ResetButtonCell(this.row);
+
+    var click = function () {
+
+      _this.reset();
+    };
+    this.resetButton.onClick = click;
   };
 
   Frame.prototype.addEventListeners = function addEventListeners() {
@@ -58902,7 +58918,7 @@ var Frame = function () {
     this.rightElbowYawInput.removeEventListener('input', this.controlFunctions.rightElbowYaw);
   };
 
-  Frame.prototype.initSetFlags = function initSetFlags(value) {
+  Frame.prototype.setFlags = function setFlags(value) {
 
     this.headPitchSet = value;
     this.headYawSet = value;
@@ -58916,36 +58932,37 @@ var Frame = function () {
     this.rightElbowYawSet = value;
   };
 
-  Frame.prototype.initDefaultValues = function initDefaultValues() {
-
-    this.headPitchValue = 0;
-    this.headYawValue = 0;
+  Frame.prototype.initQuaternions = function initQuaternions() {
 
     this.headQuaternion = this.robot.headInitialQuaternion.clone();
-
-    this.leftShoulderPitchValue = 0;
-    this.leftShoulderYawValue = 0;
-
     this.leftShoulderQuaternion = this.robot.leftShoulderInitialQuaternion.clone();
-
-    this.rightShoulderPitchValue = 0;
-    this.rightShoulderYawValue = 0;
-
     this.rightShoulderQuaternion = this.robot.rightShoulderInitialQuaternion.clone();
-
-    this.leftElbowPitchValue = 0;
-    this.leftElbowYawValue = 0;
-
     this.leftElbowQuaternion = this.robot.leftElbowInitialQuaternion.clone();
-
-    this.rightElbowPitchValue = 0;
-    this.rightElbowYawValue = 0;
-
     this.rightElbowQuaternion = this.robot.rightElbowInitialQuaternion.clone();
   };
 
+  Frame.prototype.setValues = function setValues(value) {
+
+    value = value || 0;
+
+    this.headPitchValue = value;
+    this.headYawValue = value;
+
+    this.leftShoulderPitchValue = value;
+    this.leftShoulderYawValue = value;
+
+    this.rightShoulderPitchValue = value;
+    this.rightShoulderYawValue = value;
+
+    this.leftElbowPitchValue = value;
+    this.leftElbowYawValue = value;
+
+    this.rightElbowPitchValue = value;
+    this.rightElbowYawValue = value;
+  };
+
   Frame.prototype.initControlFunctions = function initControlFunctions() {
-    var _this = this;
+    var _this2 = this;
 
     var xAxis = new Vector3(1, 0, 0);
     var yAxis = new Vector3(0, 1, 0);
@@ -58954,6 +58971,8 @@ var Frame = function () {
     var control = function (e, name, sign, direction, axis) {
 
       var value = void 0;
+
+      if (e === '') return;
 
       // this function can either be used from an input Event or by passing a number directly
       if (e instanceof Event) {
@@ -58967,16 +58986,16 @@ var Frame = function () {
       }
 
       // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
-      _this.robot[name].rotateOnAxis(axis, _this[name + direction + 'Value'] - value);
+      _this2.robot[name].rotateOnAxis(axis, _this2[name + direction + 'Value'] - value);
 
       // e.g. this.headPitchValue = value;
-      _this[name + direction + 'Value'] = value;
+      _this2[name + direction + 'Value'] = value;
 
       // e.g. this.headPitchSet = true;
-      _this[name + direction + 'Set'] = true;
+      _this2[name + direction + 'Set'] = true;
 
       // e.g. this.headQuaternion.copy(this.robot[ 'head' ].quaternion);
-      _this[name + 'Quaternion'].copy(_this.robot[name].quaternion);
+      _this2[name + 'Quaternion'].copy(_this2.robot[name].quaternion);
     };
 
     this.controlFunctions = {
@@ -59044,6 +59063,26 @@ var Frame = function () {
     this.controlFunctions.rightElbowYaw(this.rightElbowYawInput.value);
   };
 
+  Frame.prototype.reset = function reset() {
+
+    this.headPitchInput.value = '';
+    this.headYawInput.value = '';
+    this.leftShoulderPitchInput.value = '';
+    this.leftShoulderYawInput.value = '';
+    this.rightShoulderPitchInput.value = '';
+    this.rightShoulderYawInput.value = '';
+    this.leftElbowPitchInput.value = '';
+    this.leftElbowYawInput.value = '';
+    this.rightElbowPitchInput.value = '';
+    this.rightElbowYawInput.value = '';
+
+    this.setFlags(false);
+    this.setValues();
+
+    this.initQuaternions();
+    this.setRotations();
+  };
+
   Frame.prototype.fromJSON = function fromJSON(object) {
 
     this.headPitchInput.value = object.headPitch;
@@ -59069,7 +59108,6 @@ var Frame = function () {
     this.rightElbowYawSet = this.headPitchInput.value !== '';
 
     this.setValuesAndQuaternionsFromInputs();
-    this.setRotations();
   };
 
   Frame.prototype.toJSON = function toJSON() {
@@ -59398,11 +59436,11 @@ var LoopInputCell = function LoopInputCell(row) {
 
   this.onInput = function () {};
 
-  input.addEventListener('input', function (evt) {
+  input.addEventListener('input', function (e) {
 
-    evt.preventDefault();
+    e.preventDefault();
 
-    var value = parseInt(evt.target.value, 10);
+    var value = parseInt(e.target.value, 10);
 
     if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
 
@@ -59424,10 +59462,10 @@ var GroupAnimation = function () {
 
   GroupAnimation.prototype.createAnimation = function createAnimation(framesDetails) {
 
-    this.reset();
-
     // we need at least two frames to create the animation
     if (framesDetails.length < 2) return;
+
+    this.reset();
 
     var headTracks = [];
     var leftShoulderTracks = [];
@@ -59482,10 +59520,12 @@ var GroupAnimation = function () {
 
     this.actions.forEach(function (action) {
 
-      animationControl.uncache(action);
+      action.reset();
+
+      // animationControl.uncache( action );
     });
 
-    this.robot.resetPose();
+    // this.robot.resetPose();
   };
 
   return GroupAnimation;
@@ -59515,6 +59555,7 @@ var Group$1 = function () {
   }
 
   Group.prototype.initTableRow = function initTableRow() {
+    var _this = this;
 
     this.row = document.createElement('tr');
 
@@ -59533,14 +59574,21 @@ var Group$1 = function () {
 
     frameTable.appendChild(this.framesInGroup);
     framesCell.appendChild(frameTable);
+
+    this.resetButton = new ResetButtonCell(this.row);
+
+    var click = function () {
+
+      _this.reset();
+    };
+    this.resetButton.onClick = click;
   };
 
   Group.prototype.addFrame = function addFrame(frame) {
-    var _this = this;
+    var _this2 = this;
 
     var detail = {
       frame: frame,
-      loopAmount: 1,
       deleteButton: null
     };
 
@@ -59553,31 +59601,26 @@ var Group$1 = function () {
 
     new TextCell(row, 'Frame #' + frame.num);
 
-    var loopInput = new LoopInputCell(row);
-
-    loopInput.onInput = function (value) {
-
-      detail.loopAmount = value;
-    };
+    row.appendChild(document.createElement('td'));
 
     detail.deleteButton = new DeleteButtonCell(row);
 
     detail.deleteButton.onClick = function () {
 
-      _this.framesInGroup.removeChild(row);
+      if (_this2.framesInGroup.contains(row)) _this2.framesInGroup.removeChild(row);
 
-      if (_this.lastAddedFrameNum === frame.num) _this.lastAddedFrameNum = null;
+      if (_this2.lastAddedFrameNum === frame.num) _this2.lastAddedFrameNum = null;
 
-      _this.containedFrames.splice(framePos, 1);
+      _this2.containedFrames.splice(framePos, 1);
 
-      _this.animation.createAnimation(_this.containedFrames);
+      _this2.animation.createAnimation(_this2.containedFrames);
     };
 
     this.selected = true;
   };
 
   Group.prototype.initAddFrameButton = function initAddFrameButton() {
-    var _this2 = this;
+    var _this3 = this;
 
     this.lastAddedFrameNum = null;
 
@@ -59585,16 +59628,16 @@ var Group$1 = function () {
 
       e.preventDefault();
 
-      var frame = _this2.frames.frames[_this2.frames.selectedFrameNum];
+      var frame = _this3.frames.frames[_this3.frames.selectedFrameNum];
 
       if (frame === undefined || frame === null) return;
 
       // don't add the same frame consecutively (use loop instead)
-      if (_this2.lastAddedFrame === frame) return;
+      if (_this3.lastAddedFrame === frame) return;
 
-      _this2.lastAddedFrameNum = frame;
+      _this3.lastAddedFrameNum = frame;
 
-      _this2.addFrame(frame);
+      _this3.addFrame(frame);
     });
   };
 
@@ -59632,8 +59675,7 @@ var Group$1 = function () {
 
       output[i] = {
 
-        frameNum: detail.frame.num,
-        loopAmount: detail.loopAmount
+        frameNum: detail.frame.num
 
       };
     }
@@ -59724,7 +59766,7 @@ var Groups = function () {
 
       _this2.createGroup(_this2.currentGroupNum++);
 
-      if (_this2.currentGroupNum >= 5) {
+      if (_this2.currentGroupNum >= 29) {
 
         _this2.newGroupButton.innerHTML = 'Limit Reached!';
 
@@ -59754,10 +59796,7 @@ var Groups = function () {
 
     this.groups.forEach(function (g) {
 
-      if (g !== null) {
-
-        g.selected = false;
-      }
+      g.selected = false;
     });
   };
 
@@ -59798,6 +59837,8 @@ var Groups = function () {
         this.currentFrameNum = key;
       }
     }
+
+    this.deselectAll();
   };
 
   Groups.prototype.toJSON = function toJSON() {
@@ -60037,48 +60078,83 @@ var Dance = function () {
 }();
 
 var Robot = function () {
-    function Robot(model) {
-        classCallCheck(this, Robot);
+  function Robot(model) {
+    classCallCheck(this, Robot);
 
 
-        this.model = model;
+    this.model = model;
 
-        this.initParts();
-        this.initDefaultPose();
-    }
+    this.initParts();
+    this.initConstraints();
+    this.initDefaultPose();
+  }
 
-    Robot.prototype.initDefaultPose = function initDefaultPose() {
+  Robot.prototype.initDefaultPose = function initDefaultPose() {
 
-        this.headInitialQuaternion = this.head.quaternion.clone();
-        this.leftShoulderInitialQuaternion = this.leftShoulder.quaternion.clone();
-        this.rightShoulderInitialQuaternion = this.rightShoulder.quaternion.clone();
-        this.leftElbowInitialQuaternion = this.leftElbow.quaternion.clone();
-        this.rightElbowInitialQuaternion = this.rightElbow.quaternion.clone();
+    this.headInitialQuaternion = this.head.quaternion.clone();
+    this.leftShoulderInitialQuaternion = this.leftShoulder.quaternion.clone();
+    this.rightShoulderInitialQuaternion = this.rightShoulder.quaternion.clone();
+    this.leftElbowInitialQuaternion = this.leftElbow.quaternion.clone();
+    this.rightElbowInitialQuaternion = this.rightElbow.quaternion.clone();
+  };
+
+  Robot.prototype.initParts = function initParts() {
+
+    this.head = this.model.getObjectByName('head');
+
+    this.leftShoulder = this.model.getObjectByName('leftShoulder');
+    this.rightShoulder = this.model.getObjectByName('rightShoulder');
+
+    this.leftElbow = this.model.getObjectByName('leftElbow');
+    this.rightElbow = this.model.getObjectByName('rightElbow');
+  };
+
+  Robot.prototype.initConstraints = function initConstraints() {
+
+    this.constraints = {
+
+      headPitchMin: -60,
+      headPitchMax: 60,
+      headYawMin: -30,
+      headYawMax: 30,
+
+      leftShoulderPitchMin: -40,
+      leftShoulderPitchMax: 60,
+      leftShoulderYawMin: 0,
+      leftShoulderYawMax: 60,
+
+      rightShoulderPitchMin: -40,
+      rightShoulderPitchMax: 60,
+      rightShoulderYawMin: 0,
+      rightShoulderYawMax: 60,
+
+      leftElbowPitchMin: 0,
+      leftElbowPitchMax: 60,
+      leftElbowYawMin: -60,
+      leftElbowYawMax: 60,
+
+      rightElbowPitchMin: 0,
+      rightElbowPitchMax: 60,
+      rightElbowYawMin: -60,
+      rightElbowYawMax: 60
+
     };
+  };
 
-    Robot.prototype.initParts = function initParts() {
+  Robot.prototype.resetPose = function resetPose() {
 
-        this.head = this.model.getObjectByName('head');
+    console.log('TODO: robot.resetPose ');
 
-        this.leftShoulder = this.model.getObjectByName('leftShoulder');
-        this.rightShoulder = this.model.getObjectByName('rightShoulder');
+    // this.head.quaternion.copy( this.headInitialQuaternion );
 
-        this.leftElbow = this.model.getObjectByName('leftElbow');
-        this.rightElbow = this.model.getObjectByName('rightElbow');
-    };
+    // this.leftShoulder.quaternion.copy( this.leftShoulderInitialQuaternion );
+    // this.rightShoulder.quaternion.copy( this.rightShoulderInitialQuaternion );
 
-    Robot.prototype.resetPose = function resetPose() {
+    // this.leftElbow.quaternion.copy( this.leftElbowInitialQuaternion );
+    // this.rightElbow.quaternion.copy( this.rightElbowInitialQuaternion );
+  };
 
-        this.head.quaternion.copy(this.headInitialQuaternion);
-
-        this.leftShoulder.quaternion.copy(this.leftShoulderInitialQuaternion);
-        this.rightShoulder.quaternion.copy(this.rightShoulderInitialQuaternion);
-
-        this.leftElbow.quaternion.copy(this.leftElbowInitialQuaternion);
-        this.rightElbow.quaternion.copy(this.rightElbowInitialQuaternion);
-    };
-
-    return Robot;
+  return Robot;
 }();
 
 var link = document.createElement('a');

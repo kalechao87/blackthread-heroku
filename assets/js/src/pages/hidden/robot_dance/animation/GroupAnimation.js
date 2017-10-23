@@ -12,10 +12,10 @@ export default class GroupAnimation {
 
   createAnimation( framesDetails ) {
 
-    this.reset();
-
     // we need at least two frames to create the animation
     if ( framesDetails.length < 2 ) return;
+
+    this.reset();
 
     const headTracks = [];
     const leftShoulderTracks = [];
@@ -92,11 +92,13 @@ export default class GroupAnimation {
 
     this.actions.forEach( ( action ) => {
 
-      animationControl.uncache( action );
+      action.reset();
+
+      // animationControl.uncache( action );
 
     } );
 
-    this.robot.resetPose();
+    // this.robot.resetPose();
 
   }
 

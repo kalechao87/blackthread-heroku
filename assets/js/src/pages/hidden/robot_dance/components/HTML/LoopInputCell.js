@@ -22,11 +22,11 @@ export default class LoopInputCell {
 
     this.onInput = () => {};
 
-    input.addEventListener( 'input', ( evt ) => {
+    input.addEventListener( 'input', ( e ) => {
 
-      evt.preventDefault();
+      e.preventDefault();
 
-      const value = parseInt( evt.target.value, 10 );
+      const value = parseInt( e.target.value, 10 );
 
       if ( value === 0 ) row.style.backgroundColor = 'darkgrey';
       else row.style.backgroundColor = 'initial';

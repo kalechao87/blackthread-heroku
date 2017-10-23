@@ -62,7 +62,7 @@ export default class Groups {
 
       this.createGroup( this.currentGroupNum ++ );
 
-      if ( this.currentGroupNum >= 5 ) {
+      if ( this.currentGroupNum >= 29 ) {
 
         this.newGroupButton.innerHTML = 'Limit Reached!';
 
@@ -98,11 +98,7 @@ export default class Groups {
 
     this.groups.forEach( ( g ) => {
 
-      if ( g !== null ) {
-
-        g.selected = false;
-
-      }
+      g.selected = false;
 
     } );
 
@@ -148,6 +144,8 @@ export default class Groups {
       }
 
     }
+
+    this.deselectAll();
 
   }
 
