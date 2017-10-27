@@ -248,8 +248,6 @@ export default class Dance {
 
   createAnimation() {
 
-    this.reset();
-
     const frames = flattenDetails( this.containedElems );
 
     this.actions = animationControl.createAnimation( frames );
@@ -289,6 +287,8 @@ export default class Dance {
       this.containedElems[i].deleteButton.click();
 
     }
+
+    this.containedElems = [];
 
     this.valid = false;
     HTMLControl.controls.dance.playButton.disabled = true;
