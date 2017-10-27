@@ -5,19 +5,16 @@ import App from 'App/App.js';
 import OrbitControls from 'modules/OrbitControls.module.js';
 
 import loaders from './loaders.js';
-// import animationControls from './animationControls.js';
-
 import HTMLControl from './HTMLControl.js';
+import Robot from './Robot.js';
+import FileControl from './FileControl.js';
+import Audio from './Audio.js';
 
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
 
 import Frames from './components/Frames.js';
 import Groups from './components/Groups.js';
 import Dance from './components/Dance.js';
-
-import Robot from './Robot.js';
-import FileControl from './FileControl.js';
-import Audio from './Audio.js';
 
 import animationControl from './animation/animationControl.js';
 
@@ -78,19 +75,16 @@ class Main {
   }
 
   load() {
-
+    console.time( 'Loading took: ' );
     const stagePromise = loaders.fbxLoader( '/assets/models/robot_dance/stage_camera_lights.fbx' ).then( ( object ) => {
 
       this.stage = object.getObjectByName( 'Stage' );
 
-      object.getObjectByName( 'scene' ).receiveShadow = true;
-      object.getObjectByName( 'curtains top' ).receiveShadow = true;
-
       this.camera = object.getObjectByName( 'Camera' );
-      this.spotLight = object.getObjectByName( 'Spotstage_center_high' );
+      this.spotLight = object.getObjectByName( 'Spot_stage_center_high' );
 
-      this.soundSourceLeft = object.getObjectByName( 'Stage Left Sound' );
-      this.soundSourceRight = object.getObjectByName( 'Stage Right Sound' );
+      this.soundSourceLeft = object.getObjectByName( 'Stage_Left_Sound' );
+      this.soundSourceRight = object.getObjectByName( 'Stage_Right_Sound' );
 
       this.sceneCentre = new THREE.Box3().setFromObject( object ).getCenter();
 
@@ -103,12 +97,6 @@ class Main {
       this.robot = new Robot( object );
 
       object.position.z += 10;
-
-      object.traverse( ( child ) => {
-
-        if ( child instanceof THREE.Mesh ) child.castShadow = true;
-
-      } );
 
     } );
 
@@ -127,6 +115,7 @@ class Main {
 
         this.initBackground();
         this.initLighting();
+        this.initShadows();
         this.initCamera();
         this.initCameraControl();
 
@@ -145,39 +134,117 @@ class Main {
 
         this.app.play();
 
+        console.timeEnd( 'Loading took: ' );
+
       } );
+
+  }
+
+  initShadows() {
+
+    this.stage.getObjectByName( 'scene' ).receiveShadow = true;
+    this.stage.getObjectByName( 'curtains_top' ).receiveShadow = true;
+
+    this.robot.model.traverse( ( child ) => {
+
+      if (
+
+        child.name === 'R_shin'
+        || child.name === 'R_thigh'
+        || child.name === 'L_thigh'
+        || child.name === 'L_shin'
+        || child.name === 'fingers18'
+        || child.name === 'fingers11'
+        || child.name === 'fingers21'
+        || child.name === 'fingers20'
+        || child.name === 'fingers14'
+        || child.name === 'fingers12'
+        || child.name === 'fingers16'
+        || child.name === 'fingers15'
+        || child.name === 'fingers13'
+        || child.name === 'fingers13'
+        || child.name === 'fingers19'
+        || child.name === 'L_forearm'
+        || child.name === 'L_elbow'
+        || child.name === 'L_shoulder'
+        || child.name === 'L_arm_upper'
+        || child.name === 'fingers05'
+        || child.name === 'fingers06'
+        || child.name === 'fingers08'
+        || child.name === 'fingers10'
+        || child.name === 'fingers00'
+        || child.name === 'fingers02'
+        || child.name === 'fingers04'
+        || child.name === 'fingers03'
+        || child.name === 'fingers07'
+        || child.name === 'fingers09'
+        || child.name === 'fingers01'
+        || child.name === 'R_elbow'
+        || child.name === 'R_shoulder'
+        || child.name === 'R_arm_upper'
+        || child.name === 'R_hand'
+        || child.name === 'R_wrist'
+        || child.name === 'body'
+        || child.name === 'neck'
+        || child.name === 'head'
+        || child.name === 'L_hip'
+        || child.name === 'R_hip'
+        || child.name === 'L_hand'
+
+        // ||  child.name === 'R_foot'
+        // || child.name === 'R_knee'
+        // || child.name === 'L_foot'
+        // || child.name === 'chest_detail'
+        // || child.name === 'R_knee_rear'
+        // || child.name === 'R_hip_lower'
+        // || child.name === 'R_hip_cog'
+        // || child.name === 'L_hip_cog'
+        // || child.name === 'L_hip_lower'
+        // || child.name === 'L_knee'
+        // || child.name === 'L_ankle'
+        // || child.name === 'R_ankle'
+        // || child.name === 'L_knee_rear'
+        // || child.name === 'fingers17'
+        // || child.name === 'L_shoulder_joint'
+        // || child.name === 'R_shoulder_joint'
+
+      ) {
+
+        child.castShadow = true;
+
+      }
+
+    } );
 
   }
 
   initLighting() {
 
-    const ambientLight = new THREE.AmbientLight( 0xffffff, 0.4 );
+    const ambientLight = new THREE.AmbientLight( 0xffffff, 0.3 );
     this.app.scene.add( ambientLight );
 
     this.spotLight.castShadow = true;
-    // Set up shadow properties for the light
     this.spotLight.shadow.mapSize.width = 2048;
     this.spotLight.shadow.mapSize.height = 2048;
-    this.spotLight.shadow.camera.near = 100;
+    this.spotLight.shadow.camera.near = 80;
     this.spotLight.shadow.camera.far = 300;
 
-    this.spotLight.penumbra = 0.4;
-    this.spotLight.angle = 0.5;
+    this.spotLight.penumbra = 0.45;
+    this.spotLight.angle = 0.45;
     this.spotLight.distance = 300;
 
     const left = this.spotLight.clone();
-    left.intensity = 0.75;
+    left.intensity = 0.85;
     left.position.x -= 100;
     left.position.y += 20;
-    left.shadow.radius = 2;
+    left.shadow.radius = 1.5;
 
     const center = this.spotLight.clone();
-    center.intensity = 1.5;
+    center.intensity = 1.25;
     center.position.x += 25;
-    center.shadow.radius = 1.25;
+    center.shadow.radius = 1.75;
 
     this.app.scene.add( left, center );
-
 
   }
 

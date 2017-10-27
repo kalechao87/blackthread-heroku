@@ -104,12 +104,6 @@ export default class Groups {
 
   }
 
-  stopPlayingAll() {
-
-    this.groups.forEach( ( group ) => { group.animation.stop(); } );
-
-  }
-
   reset() {
 
     this.groups.forEach( ( group ) => {

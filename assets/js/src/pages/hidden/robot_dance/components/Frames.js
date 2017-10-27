@@ -81,11 +81,20 @@ export default class Frames {
 
   select( num ) {
 
-    animationControl.pauseAllAnimation();
+    if ( this.selectedFrameNum === num ) return;
+
+    console.log( 'frames.select', num );
+
+    animationControl.reset();
 
     const frame = this.frames[ num ];
 
-    frame.selected = true;
+    if ( frame !== undefined ) {
+
+      frame.selected = true;
+
+    }
+
     this.selectedFrameNum = num;
 
     for ( let i = 0; i < this.frames.length; i++ ) {
@@ -93,6 +102,13 @@ export default class Frames {
       if ( i !== num ) this.frames[ i ].selected = false;
 
     }
+
+  }
+
+  deselectAll() {
+
+    this.select( -1 );
+    this.defaultFrame.selected = true;
 
   }
 

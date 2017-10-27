@@ -4,6 +4,8 @@ import TextCell from './HTML/TextCell.js';
 import CellInputElem from './HTML/CellInputElem.js';
 import ResetButtonCell from './HTML/ResetButtonCell.js';
 
+// import animationControl from '../animation/animationControl.js';
+
 export default class Frame {
 
   constructor( robot, num, isBaseFrame = false ) {
@@ -11,6 +13,8 @@ export default class Frame {
     this.type = 'frame';
     this.num = num;
     this.robot = robot;
+
+    this._selected = false;
 
     if ( !isBaseFrame ) {
 
@@ -31,16 +35,23 @@ export default class Frame {
 
   set selected( bool ) {
 
+    if ( this._selected === bool ) return;
+
     if ( bool === true ) {
 
-      this.row.style.backgroundColor = 'aliceBlue';
+      if ( this.row ) this.row.style.backgroundColor = 'aliceBlue';
       this.setRotations();
       this.addEventListeners();
+      // animationControl.reset();
+
+      this._selected = true;
 
     } else {
 
-      this.row.style.backgroundColor = 'initial';
+      if ( this.row ) this.row.style.backgroundColor = 'initial';
       this.removeEventListeners();
+
+      this._selected = false;
 
     }
 

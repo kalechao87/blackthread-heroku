@@ -4,8 +4,41 @@ import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 import LoopInputCell from './HTML/LoopInputCell.js';
 import animationControl from '../animation/animationControl.js';
 
-import DanceAnimation from '../animation/DanceAnimation.js';
+const flattenGroup = ( group, loopAmount ) => {
 
+  let frames = [];
+
+  for ( let i = 0; i < loopAmount; i++ ) {
+
+    frames = frames.concat( group.containedFrames.map( ( detail => detail.frame ) ) );
+
+  }
+
+  return frames;
+
+};
+// take the details array and flatten it to an array of frames
+const flattenDetails = ( details ) => {
+
+  let frames = [];
+
+  details.forEach( ( detail ) => {
+
+    const elem = detail.elem;
+
+    if ( elem.type === 'frame' ) frames.push( elem );
+
+    else if ( elem.type === 'group' ) {
+
+      frames = frames.concat( flattenGroup( elem, detail.loopAmount ) );
+
+    }
+
+  } );
+
+  return frames;
+
+};
 
 export default class Dance {
 
@@ -16,8 +49,6 @@ export default class Dance {
     this.robot = this.frames.robot;
 
     this.valid = false;
-
-    this.animation = new DanceAnimation( this.robot );
 
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
@@ -92,7 +123,7 @@ export default class Dance {
 
     detail.deleteButton.onClick = () => {
 
-      this.table.removeChild( row );
+      if ( this.table.contains( row ) ) this.table.removeChild( row );
 
       this.containedElems.splice( pos, 1 );
 
@@ -117,6 +148,8 @@ export default class Dance {
       e.preventDefault();
 
       const frame = this.frames.frames[ this.frames.selectedFrameNum ];
+      this.groups.deselectAll();
+      animationControl.reset();
 
       if ( frame === null || ( frame.num === this.lastAddedFrameNum && this.lastAddedType === 'frame' ) ) return;
 
@@ -139,6 +172,8 @@ export default class Dance {
       e.preventDefault();
 
       const group = this.groups.selectedGroup;
+      this.groups.deselectAll();
+      animationControl.reset();
 
       if ( group === null || ( group.num === this.lastAddedGroupNum && this.lastAddedType === 'group' ) ) return;
 
@@ -155,6 +190,7 @@ export default class Dance {
 
     HTMLControl.controls.dance.framerate.addEventListener( 'input', ( e ) => {
 
+      this.groups.deselectAll();
       this.framerate = e.target.value;
 
     } );
@@ -181,8 +217,10 @@ export default class Dance {
 
       e.preventDefault();
 
-      this.animation.createAnimation( this.containedElems );
-      this.animation.play();
+      this.groups.deselectAll();
+      animationControl.reset();
+      this.createAnimation();
+      animationControl.play();
 
       if ( HTMLControl.controls.music.play.innerHTML === 'Play' ) {
 
@@ -198,13 +236,23 @@ export default class Dance {
 
     HTMLControl.controls.dance.resetButton.addEventListener( 'click', ( e ) => {
 
-      console.log( 'TODO: reset dance button last elem not removed ' );
-
       e.preventDefault();
 
+      this.groups.deselectAll();
+      animationControl.reset();
       this.reset();
 
     } );
+
+  }
+
+  createAnimation() {
+
+    this.reset();
+
+    const frames = flattenDetails( this.containedElems );
+
+    this.actions = animationControl.createAnimation( frames );
 
   }
 
@@ -236,11 +284,11 @@ export default class Dance {
 
   reset() {
 
-    this.containedElems.forEach( ( elem ) => {
+    for ( let i = this.containedElems.length - 1; i >= 0; i-- ) {
 
-      if ( elem !== null && elem.deleteButton ) elem.deleteButton.click();
+      this.containedElems[i].deleteButton.click();
 
-    } );
+    }
 
     this.valid = false;
     HTMLControl.controls.dance.playButton.disabled = true;

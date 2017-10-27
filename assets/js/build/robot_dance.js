@@ -53395,19 +53395,19 @@ NURBSCurve.prototype.getTangent = function (t) {
 function FBXLoader(manager) {
 
   this.manager = manager !== undefined ? manager : DefaultLoadingManager;
-}
+};
 
 Object.assign(FBXLoader.prototype, {
 
   /**
-    * Loads an ASCII/Binary FBX file from URL and parses into a THREE.Group.
-    * THREE.Group will have an animations property of AnimationClips
-    * of the different animations exported with the FBX.
-    * @param {string} url - URL of the FBX file.
-    * @param {function(THREE.Group):void} onLoad - Callback for when FBX file is loaded and parsed.
-    * @param {function(ProgressEvent):void} onProgress - Callback fired periodically when file is being retrieved from server.
-    * @param {function(Event):void} onError - Callback fired when error occurs (Currently only with retrieving file, not with parsing errors).
-    */
+   * Loads an ASCII/Binary FBX file from URL and parses into a THREE.Group.
+   * THREE.Group will have an animations property of AnimationClips
+   * of the different animations exported with the FBX.
+   * @param {string} url - URL of the FBX file.
+   * @param {function(THREE.Group):void} onLoad - Callback for when FBX file is loaded and parsed.
+   * @param {function(ProgressEvent):void} onProgress - Callback fired periodically when file is being retrieved from server.
+   * @param {function(Event):void} onError - Callback fired when error occurs (Currently only with retrieving file, not with parsing errors).
+   */
   load: function (url, onLoad, onProgress, onError) {
 
     var self = this;
@@ -53437,13 +53437,13 @@ Object.assign(FBXLoader.prototype, {
 
 
   /**
-    * Parses an ASCII/Binary FBX file and returns a THREE.Group.
-    * THREE.Group will have an animations property of AnimationClips
-    * of the different animations within the FBX file.
-    * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
-    * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
-    * @returns {THREE.Group}
-    */
+   * Parses an ASCII/Binary FBX file and returns a THREE.Group.
+   * THREE.Group will have an animations property of AnimationClips
+   * of the different animations within the FBX file.
+   * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
+   * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
+   * @returns {THREE.Group}
+   */
   parse: function (FBXBuffer, resourceDirectory) {
 
     var FBXTree = void 0;
@@ -53483,22 +53483,22 @@ Object.assign(FBXLoader.prototype, {
 });
 
 /**
-  * Parses map of relationships between objects.
-  * @param {{Connections: { properties: { connections: [number, number, string][]}}}} FBXTree
-  * @returns {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
-  */
+ * Parses map of relationships between objects.
+ * @param {{Connections: { properties: { connections: [number, number, string][]}}}} FBXTree
+ * @returns {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
+ */
 function parseConnections(FBXTree) {
 
   /**
-    * @type {Map<number, { parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
-    */
+   * @type {Map<number, { parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
+   */
   var connectionMap = new Map();
 
   if ('Connections' in FBXTree) {
 
     /**
-      * @type {[number, number, string][]}
-      */
+     * @type {[number, number, string][]}
+     */
     var connectionArray = FBXTree.Connections.properties.connections;
     for (var connectionArrayIndex = 0, connectionArrayLength = connectionArray.length; connectionArrayIndex < connectionArrayLength; ++connectionArrayIndex) {
 
@@ -53532,15 +53532,15 @@ function parseConnections(FBXTree) {
 }
 
 /**
-  * Parses map of images referenced in FBXTree.
-  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
-  * @returns {Map<number, string(image blob/data URL)>}
-  */
+ * Parses map of images referenced in FBXTree.
+ * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
+ * @returns {Map<number, string(image blob/data URL)>}
+ */
 function parseImages(FBXTree) {
 
   /**
-    * @type {Map<number, string(image blob/data URL)>}
-    */
+   * @type {Map<number, string(image blob/data URL)>}
+   */
   var imageMap = new Map();
 
   if ('Video' in FBXTree.Objects.subNodes) {
@@ -53564,9 +53564,9 @@ function parseImages(FBXTree) {
 }
 
 /**
-  * @param {videoNode} videoNode - Node to get texture image information from.
-  * @returns {string} - image blob/data URL
-  */
+ * @param {videoNode} videoNode - Node to get texture image information from.
+ * @returns {string} - image blob/data URL
+ */
 function parseImage(videoNode) {
 
   var content = videoNode.properties.Content;
@@ -53583,6 +53583,7 @@ function parseImage(videoNode) {
       break;
 
     case 'jpg':
+    case 'jpeg':
 
       type = 'image/jpeg';
       break;
@@ -53599,7 +53600,7 @@ function parseImage(videoNode) {
 
     default:
 
-      console.warn('FBXLoader: No support image type ' + extension);
+      console.warn('FBXLoader: Image type "' + extension + '" is not supported.');
       return;
 
   }
@@ -53614,18 +53615,18 @@ function parseImage(videoNode) {
 }
 
 /**
-  * Parses map of textures referenced in FBXTree.
-  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
-  * @param {THREE.TextureLoader} loader
-  * @param {Map<number, string(image blob/data URL)>} imageMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {Map<number, THREE.Texture>}
-  */
+ * Parses map of textures referenced in FBXTree.
+ * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
+ * @param {THREE.TextureLoader} loader
+ * @param {Map<number, string(image blob/data URL)>} imageMap
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @returns {Map<number, THREE.Texture>}
+ */
 function parseTextures(FBXTree, loader, imageMap, connections) {
 
   /**
-    * @type {Map<number, THREE.Texture>}
-    */
+   * @type {Map<number, THREE.Texture>}
+   */
   var textureMap = new Map();
 
   if ('Texture' in FBXTree.Objects.subNodes) {
@@ -53642,17 +53643,17 @@ function parseTextures(FBXTree, loader, imageMap, connections) {
 }
 
 /**
-  * @param {textureNode} textureNode - Node to get texture information from.
-  * @param {THREE.TextureLoader} loader
-  * @param {Map<number, string(image blob/data URL)>} imageMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {THREE.Texture}
-  */
+ * @param {textureNode} textureNode - Node to get texture information from.
+ * @param {THREE.TextureLoader} loader
+ * @param {Map<number, string(image blob/data URL)>} imageMap
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @returns {THREE.Texture}
+ */
 function parseTexture(textureNode, loader, imageMap, connections) {
 
   var FBX_ID = textureNode.id;
 
-  var name = textureNode.name;
+  var name = textureNode.attrName;
 
   var fileName = void 0;
 
@@ -53691,8 +53692,8 @@ function parseTexture(textureNode, loader, imageMap, connections) {
   }
 
   /**
-    * @type {THREE.Texture}
-    */
+   * @type {THREE.Texture}
+   */
   var texture = loader.load(fileName);
   texture.name = name;
   texture.FBX_ID = FBX_ID;
@@ -53709,18 +53710,26 @@ function parseTexture(textureNode, loader, imageMap, connections) {
   texture.wrapS = valueU === 0 ? RepeatWrapping : ClampToEdgeWrapping;
   texture.wrapT = valueV === 0 ? RepeatWrapping : ClampToEdgeWrapping;
 
+  if ('Scaling' in textureNode.properties) {
+
+    var values = textureNode.properties.Scaling.value;
+
+    texture.repeat.x = values[0];
+    texture.repeat.y = values[1];
+  }
+
   loader.setPath(currentPath);
 
   return texture;
 }
 
 /**
-  * Parses map of Material information.
-  * @param {{Objects: {subNodes: {Material: Object.<number, FBXMaterialNode>}}}} FBXTree
-  * @param {Map<number, THREE.Texture>} textureMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {Map<number, THREE.Material>}
-  */
+ * Parses map of Material information.
+ * @param {{Objects: {subNodes: {Material: Object.<number, FBXMaterialNode>}}}} FBXTree
+ * @param {Map<number, THREE.Texture>} textureMap
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @returns {Map<number, THREE.Material>}
+ */
 function parseMaterials(FBXTree, textureMap, connections) {
 
   var materialMap = new Map();
@@ -53739,19 +53748,19 @@ function parseMaterials(FBXTree, textureMap, connections) {
 }
 
 /**
-  * Takes information from Material node and returns a generated THREE.Material
-  * @param {FBXMaterialNode} materialNode
-  * @param {Map<number, THREE.Texture>} textureMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {THREE.Material}
-  */
+ * Takes information from Material node and returns a generated THREE.Material
+ * @param {FBXMaterialNode} materialNode
+ * @param {Map<number, THREE.Texture>} textureMap
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @returns {THREE.Material}
+ */
 function parseMaterial(materialNode, textureMap, connections) {
 
   var FBX_ID = materialNode.id;
   var name = materialNode.attrName;
   var type = materialNode.properties.ShadingModel;
 
-  // Case where FBXs wrap shading model in property object.
+  // Case where FBX wraps shading model in property object.
   if (typeof type === 'object') {
 
     type = type.value;
@@ -53776,8 +53785,8 @@ function parseMaterial(materialNode, textureMap, connections) {
       material = new MeshLambertMaterial();
       break;
     default:
-      console.warn('THREE.FBXLoader: No implementation given for material type %s in FBXLoader.js. Defaulting to standard material.', type);
-      material = new MeshStandardMaterial({ color: 0x3300ff });
+      console.warn('THREE.FBXLoader: unknown material type "%s". Defaulting to MeshPhongMaterial.', type);
+      material = new MeshPhongMaterial({ color: 0x3300ff });
       break;
 
   }
@@ -53789,28 +53798,36 @@ function parseMaterial(materialNode, textureMap, connections) {
 }
 
 /**
-  * @typedef {{Diffuse: FBXVector3, Specular: FBXVector3, Shininess: FBXValue, Emissive: FBXVector3, EmissiveFactor: FBXValue, Opacity: FBXValue}} FBXMaterialProperties
-  */
+ * @typedef {{Diffuse: FBXVector3, Specular: FBXVector3, Shininess: FBXValue, Emissive: FBXVector3, EmissiveFactor: FBXValue, Opacity: FBXValue}} FBXMaterialProperties
+ */
 /**
-  * @typedef {{color: THREE.Color=, specular: THREE.Color=, shininess: number=, emissive: THREE.Color=, emissiveIntensity: number=, opacity: number=, transparent: boolean=, map: THREE.Texture=}} THREEMaterialParameterPack
-  */
+ * @typedef {{color: THREE.Color=, specular: THREE.Color=, shininess: number=, emissive: THREE.Color=, emissiveIntensity: number=, opacity: number=, transparent: boolean=, map: THREE.Texture=}} THREEMaterialParameterPack
+ */
 /**
-  * @param {FBXMaterialProperties} properties
-  * @param {Map<number, THREE.Texture>} textureMap
-  * @param {{ID: number, relationship: string}[]} childrenRelationships
-  * @returns {THREEMaterialParameterPack}
-  */
+ * @param {FBXMaterialProperties} properties
+ * @param {Map<number, THREE.Texture>} textureMap
+ * @param {{ID: number, relationship: string}[]} childrenRelationships
+ * @returns {THREEMaterialParameterPack}
+ */
 function parseParameters(properties, textureMap, childrenRelationships) {
 
   var parameters = {};
 
   if (properties.BumpFactor) {
 
-    parameters.bumpScale = parseFloat(properties.BumpFactor.value);
+    parameters.bumpScale = properties.BumpFactor.value;
   }
   if (properties.Diffuse) {
 
     parameters.color = parseColor(properties.Diffuse);
+  }
+  if (properties.DisplacementFactor) {
+
+    parameters.displacementScale = properties.DisplacementFactor.value;
+  }
+  if (properties.ReflectionFactor) {
+
+    parameters.reflectivity = properties.ReflectionFactor.value;
   }
   if (properties.Specular) {
 
@@ -53830,7 +53847,7 @@ function parseParameters(properties, textureMap, childrenRelationships) {
   }
   if (properties.Opacity) {
 
-    parameters.opacity = properties.Opacity.value;
+    parameters.opacity = parseFloat(properties.Opacity.value);
   }
   if (parameters.opacity < 1.0) {
 
@@ -53845,27 +53862,46 @@ function parseParameters(properties, textureMap, childrenRelationships) {
 
     switch (type) {
 
-      case 'DiffuseColor':
-      case ' "DiffuseColor':
-        parameters.map = textureMap.get(relationship.ID);
-        break;
-
       case 'Bump':
-      case ' "Bump':
         parameters.bumpMap = textureMap.get(relationship.ID);
         break;
 
+      case 'DiffuseColor':
+        parameters.map = textureMap.get(relationship.ID);
+        break;
+
+      case 'DisplacementColor':
+        parameters.displacementMap = textureMap.get(relationship.ID);
+        break;
+
+      case 'EmissiveColor':
+        parameters.emissiveMap = textureMap.get(relationship.ID);
+        break;
+
       case 'NormalMap':
-      case ' "NormalMap':
         parameters.normalMap = textureMap.get(relationship.ID);
         break;
 
+      case 'ReflectionColor':
+        parameters.envMap = textureMap.get(relationship.ID);
+        parameters.envMap.mapping = EquirectangularReflectionMapping;
+        break;
+
+      case 'SpecularColor':
+        parameters.specularMap = textureMap.get(relationship.ID);
+        break;
+
+      case 'TransparentColor':
+        parameters.alphaMap = textureMap.get(relationship.ID);
+        parameters.transparent = true;
+        break;
+
       case 'AmbientColor':
-      case 'EmissiveColor':
-      case ' "AmbientColor':
-      case ' "EmissiveColor':
+      case 'ShininessExponent': // AKA glossiness map
+      case 'SpecularFactor': // AKA specularLevel
+      case 'VectorDisplacementColor': // NOTE: Seems to be a copy of DisplacementColor
       default:
-        console.warn('THREE.FBXLoader: Unknown texture application of type %s, skipping texture.', type);
+        console.warn('THREE.FBXLoader: %s map is not supported in three.js, skipping texture.', type);
         break;
 
     }
@@ -53875,11 +53911,11 @@ function parseParameters(properties, textureMap, childrenRelationships) {
 }
 
 /**
-  * Generates map of Skeleton-like objects for use later when generating and binding skeletons.
-  * @param {{Objects: {subNodes: {Deformer: Object.<number, FBXSubDeformerNode>}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>}
-  */
+ * Generates map of Skeleton-like objects for use later when generating and binding skeletons.
+ * @param {{Objects: {subNodes: {Deformer: Object.<number, FBXSubDeformerNode>}}}} FBXTree
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @returns {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>}
+ */
 function parseDeformers(FBXTree, connections) {
 
   var deformers = {};
@@ -53907,11 +53943,11 @@ function parseDeformers(FBXTree, connections) {
 }
 
 /**
-  * Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections and an object containing SubDeformer nodes.
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} connections
-  * @param {Object.<number, FBXSubDeformerNode>} DeformerNodes
-  * @returns {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}}
-  */
+ * Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections and an object containing SubDeformer nodes.
+ * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} connections
+ * @param {Object.<number, FBXSubDeformerNode>} DeformerNodes
+ * @returns {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}}
+ */
 function parseSkeleton(connections, DeformerNodes) {
 
   var subDeformers = {};
@@ -53928,15 +53964,15 @@ function parseSkeleton(connections, DeformerNodes) {
       index: i,
       indices: [],
       weights: [],
-      transform: parseMatrixArray(subDeformerNode.subNodes.Transform.properties.a),
-      transformLink: parseMatrixArray(subDeformerNode.subNodes.TransformLink.properties.a),
+      transform: subDeformerNode.subNodes.Transform.properties.a,
+      transformLink: subDeformerNode.subNodes.TransformLink.properties.a,
       linkMode: subDeformerNode.properties.Mode
     };
 
     if ('Indexes' in subDeformerNode.subNodes) {
 
-      subDeformer.indices = parseIntArray(subDeformerNode.subNodes.Indexes.properties.a);
-      subDeformer.weights = parseFloatArray(subDeformerNode.subNodes.Weights.properties.a);
+      subDeformer.indices = parseNumberArray(subDeformerNode.subNodes.Indexes.properties.a);
+      subDeformer.weights = parseNumberArray(subDeformerNode.subNodes.Weights.properties.a);
     }
 
     subDeformers[child.ID] = subDeformer;
@@ -53949,12 +53985,12 @@ function parseSkeleton(connections, DeformerNodes) {
 }
 
 /**
-  * Generates Buffer geometries from geometry information in FBXTree, and generates map of THREE.BufferGeometries
-  * @param {{Objects: {subNodes: {Geometry: Object.<number, FBXGeometryNode}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
-  * @returns {Map<number, THREE.BufferGeometry>}
-  */
+ * Generates Buffer geometries from geometry information in FBXTree, and generates map of THREE.BufferGeometries
+ * @param {{Objects: {subNodes: {Geometry: Object.<number, FBXGeometryNode}}}} FBXTree
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
+ * @returns {Map<number, THREE.BufferGeometry>}
+ */
 function parseGeometries(FBXTree, connections, deformers) {
 
   var geometryMap = new Map();
@@ -53975,12 +54011,12 @@ function parseGeometries(FBXTree, connections, deformers) {
 }
 
 /**
-  * Generates BufferGeometry from FBXGeometryNode.
-  * @param {FBXGeometryNode} geometryNode
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers
-  * @returns {THREE.BufferGeometry}
-  */
+ * Generates BufferGeometry from FBXGeometryNode.
+ * @param {FBXGeometryNode} geometryNode
+ * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
+ * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers
+ * @returns {THREE.BufferGeometry}
+ */
 function parseGeometry(geometryNode, relationships, deformers) {
 
   switch (geometryNode.attrType) {
@@ -53997,12 +54033,12 @@ function parseGeometry(geometryNode, relationships, deformers) {
 }
 
 /**
-  * Specialty function for parsing Mesh based Geometry Nodes.
-  * @param {FBXGeometryNode} geometryNode
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships - Object representing relationships between specific geometry node and other nodes.
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers - Map object of deformers and subDeformers by ID.
-  * @returns {THREE.BufferGeometry}
-  */
+ * Specialty function for parsing Mesh based Geometry Nodes.
+ * @param {FBXGeometryNode} geometryNode
+ * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships - Object representing relationships between specific geometry node and other nodes.
+ * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers - Map object of deformers and subDeformers by ID.
+ * @returns {THREE.BufferGeometry}
+ */
 function parseMeshGeometry(geometryNode, relationships, deformers) {
 
   for (var i = 0; i < relationships.children.length; ++i) {
@@ -54015,9 +54051,9 @@ function parseMeshGeometry(geometryNode, relationships, deformers) {
 }
 
 /**
-  * @param {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}} deformer - Skeleton representation for geometry instance.
-  * @returns {THREE.BufferGeometry}
-  */
+ * @param {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}} deformer - Skeleton representation for geometry instance.
+ * @returns {THREE.BufferGeometry}
+ */
 function genGeometry(geometryNode, deformer) {
 
   var geometry = new Geometry$1();
@@ -54026,8 +54062,8 @@ function genGeometry(geometryNode, deformer) {
 
   // First, each index is going to be its own vertex.
 
-  var vertexBuffer = parseFloatArray(subNodes.Vertices.properties.a);
-  var indexBuffer = parseIntArray(subNodes.PolygonVertexIndex.properties.a);
+  var vertexBuffer = parseNumberArray(subNodes.Vertices.properties.a);
+  var indexBuffer = parseNumberArray(subNodes.PolygonVertexIndex.properties.a);
 
   if (subNodes.LayerElementNormal) {
 
@@ -54168,10 +54204,9 @@ function genGeometry(geometryNode, deformer) {
 
     if (uvInfo) {
 
-      var uvTemp = new Vector2();
-
       for (var i = 0; i < uvInfo.length; i++) {
 
+        var uvTemp = new Vector2();
         vertex.uv.push(uvTemp.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, uvInfo[i])));
       }
     }
@@ -54208,8 +54243,8 @@ function genGeometry(geometryNode, deformer) {
   }
 
   /**
-    * @type {{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-    */
+   * @type {{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
+   */
   var bufferInfo = geometry.flattenToBuffers();
 
   var geo = new BufferGeometry();
@@ -54222,15 +54257,15 @@ function genGeometry(geometryNode, deformer) {
   }
   if (bufferInfo.uvBuffers.length > 0) {
 
-    for (var _i = 0; _i < bufferInfo.uvBuffers.length; _i++) {
+    for (var i = 0; i < bufferInfo.uvBuffers.length; i++) {
 
-      var name = 'uv' + (_i + 1).toString();
-      if (_i == 0) {
+      var name = 'uv' + (i + 1).toString();
+      if (i == 0) {
 
         name = 'uv';
       }
 
-      geo.addAttribute(name, new Float32BufferAttribute(bufferInfo.uvBuffers[_i], 2));
+      geo.addAttribute(name, new Float32BufferAttribute(bufferInfo.uvBuffers[i], 2));
     }
   }
 
@@ -54248,63 +54283,66 @@ function genGeometry(geometryNode, deformer) {
     geo.FBX_Deformer = deformer;
   }
 
-  // Convert the material indices of each vertex into rendering groups on the geometry.
+  if (materialInfo.mappingType !== 'AllSame') {
 
-  var materialIndexBuffer = bufferInfo.materialIndexBuffer;
-  var prevMaterialIndex = materialIndexBuffer[0];
-  var startIndex = 0;
+    // Convert the material indices of each vertex into rendering groups on the geometry.
+    var materialIndexBuffer = bufferInfo.materialIndexBuffer;
+    var prevMaterialIndex = materialIndexBuffer[0];
+    var startIndex = 0;
 
-  for (var _i2 = 0; _i2 < materialIndexBuffer.length; ++_i2) {
+    for (var i = 0; i < materialIndexBuffer.length; ++i) {
 
-    if (materialIndexBuffer[_i2] !== prevMaterialIndex) {
+      if (materialIndexBuffer[i] !== prevMaterialIndex) {
 
-      geo.addGroup(startIndex, _i2 - startIndex, prevMaterialIndex);
+        geo.addGroup(startIndex, i - startIndex, prevMaterialIndex);
 
-      prevMaterialIndex = materialIndexBuffer[_i2];
-      startIndex = _i2;
+        prevMaterialIndex = materialIndexBuffer[i];
+        startIndex = i;
+      }
     }
-  }
 
-  // the loop above doesn't add the last group, do that here.
-  if (geo.groups.length > 0) {
+    // the loop above doesn't add the last group, do that here.
+    if (geo.groups.length > 0) {
 
-    var lastGroup = geo.groups[geo.groups.length - 1];
-    var lastIndex = lastGroup.start + lastGroup.count;
+      var lastGroup = geo.groups[geo.groups.length - 1];
+      var lastIndex = lastGroup.start + lastGroup.count;
 
-    if (lastIndex !== materialIndexBuffer.length) {
+      if (lastIndex !== materialIndexBuffer.length) {
 
-      geo.addGroup(lastIndex, materialIndexBuffer.length - lastIndex, prevMaterialIndex);
+        geo.addGroup(lastIndex, materialIndexBuffer.length - lastIndex, prevMaterialIndex);
+      }
     }
-  }
 
-  // catch case where the whole geometry has a single non-zero index
-  if (geo.groups.length === 0 && materialIndexBuffer[0] !== 0) {
+    // case where there are multiple materials but the whole geometry is only
+    // using one of them
+    if (geo.groups.length === 0) {
 
-    geo.addGroup(0, materialIndexBuffer.length, materialIndexBuffer[0]);
+      geo.addGroup(0, materialIndexBuffer.length, materialIndexBuffer[0]);
+    }
   }
 
   return geo;
 }
 
 /**
-  * Parses normal information for geometry.
-  * @param {FBXGeometryNode} geometryNode
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+ * Parses normal information for geometry.
+ * @param {FBXGeometryNode} geometryNode
+ * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+ */
 function getNormals(NormalNode) {
 
   var mappingType = NormalNode.properties.MappingInformationType;
   var referenceType = NormalNode.properties.ReferenceInformationType;
-  var buffer = parseFloatArray(NormalNode.subNodes.Normals.properties.a);
+  var buffer = parseNumberArray(NormalNode.subNodes.Normals.properties.a);
   var indexBuffer = [];
   if (referenceType === 'IndexToDirect') {
 
     if ('NormalIndex' in NormalNode.subNodes) {
 
-      indexBuffer = parseIntArray(NormalNode.subNodes.NormalIndex.properties.a);
+      indexBuffer = parseNumberArray(NormalNode.subNodes.NormalIndex.properties.a);
     } else if ('NormalsIndex' in NormalNode.subNodes) {
 
-      indexBuffer = parseIntArray(NormalNode.subNodes.NormalsIndex.properties.a);
+      indexBuffer = NormalNode.subNodes.NormalsIndex.properties.a;
     }
   }
 
@@ -54318,19 +54356,19 @@ function getNormals(NormalNode) {
 }
 
 /**
-  * Parses UV information for geometry.
-  * @param {FBXGeometryNode} geometryNode
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+ * Parses UV information for geometry.
+ * @param {FBXGeometryNode} geometryNode
+ * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+ */
 function getUVs(UVNode) {
 
   var mappingType = UVNode.properties.MappingInformationType;
   var referenceType = UVNode.properties.ReferenceInformationType;
-  var buffer = parseFloatArray(UVNode.subNodes.UV.properties.a);
+  var buffer = parseNumberArray(UVNode.subNodes.UV.properties.a);
   var indexBuffer = [];
   if (referenceType === 'IndexToDirect') {
 
-    indexBuffer = parseIntArray(UVNode.subNodes.UVIndex.properties.a);
+    indexBuffer = parseNumberArray(UVNode.subNodes.UVIndex.properties.a);
   }
 
   return {
@@ -54343,19 +54381,19 @@ function getUVs(UVNode) {
 }
 
 /**
-  * Parses Vertex Color information for geometry.
-  * @param {FBXGeometryNode} geometryNode
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+ * Parses Vertex Color information for geometry.
+ * @param {FBXGeometryNode} geometryNode
+ * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+ */
 function getColors(ColorNode) {
 
   var mappingType = ColorNode.properties.MappingInformationType;
   var referenceType = ColorNode.properties.ReferenceInformationType;
-  var buffer = parseFloatArray(ColorNode.subNodes.Colors.properties.a);
+  var buffer = ColorNode.subNodes.Colors.properties.a;
   var indexBuffer = [];
   if (referenceType === 'IndexToDirect') {
 
-    indexBuffer = parseFloatArray(ColorNode.subNodes.ColorIndex.properties.a);
+    indexBuffer = ColorNode.subNodes.ColorIndex.properties.a;
   }
 
   return {
@@ -54368,10 +54406,10 @@ function getColors(ColorNode) {
 }
 
 /**
-  * Parses material application information for geometry.
-  * @param {FBXGeometryNode}
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+ * Parses material application information for geometry.
+ * @param {FBXGeometryNode}
+ * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
+ */
 function getMaterials(MaterialNode) {
 
   var mappingType = MaterialNode.properties.MappingInformationType;
@@ -54388,7 +54426,7 @@ function getMaterials(MaterialNode) {
     };
   }
 
-  var materialIndexBuffer = parseIntArray(MaterialNode.subNodes.Materials.properties.a);
+  var materialIndexBuffer = parseNumberArray(MaterialNode.subNodes.Materials.properties.a);
 
   // Since materials are stored as indices, there's a bit of a mismatch between FBX and what
   // we expect.  So we create an intermediate buffer that points to the index in the buffer,
@@ -54410,13 +54448,13 @@ function getMaterials(MaterialNode) {
 }
 
 /**
-  * Function uses the infoObject and given indices to return value array of object.
-  * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-  * @param {number} polygonIndex - Index of polygon in geometry.
-  * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-  * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-  * @returns {number[]}
-  */
+ * Function uses the infoObject and given indices to return value array of object.
+ * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+ * @param {number} polygonIndex - Index of polygon in geometry.
+ * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+ * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+ * @returns {number[]}
+ */
 
 var dataArray = [];
 
@@ -54425,13 +54463,13 @@ var GetData = {
   ByPolygonVertex: {
 
     /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
+     * Function uses the infoObject and given indices to return value array of object.
+     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+     * @param {number} polygonIndex - Index of polygon in geometry.
+     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+     * @returns {number[]}
+     */
     Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonVertexIndex * infoObject.dataSize;
@@ -54443,13 +54481,13 @@ var GetData = {
 
 
     /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
+     * Function uses the infoObject and given indices to return value array of object.
+     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+     * @param {number} polygonIndex - Index of polygon in geometry.
+     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+     * @returns {number[]}
+     */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonVertexIndex];
@@ -54464,13 +54502,13 @@ var GetData = {
   ByPolygon: {
 
     /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
+     * Function uses the infoObject and given indices to return value array of object.
+     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+     * @param {number} polygonIndex - Index of polygon in geometry.
+     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+     * @returns {number[]}
+     */
     Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonIndex * infoObject.dataSize;
@@ -54482,13 +54520,13 @@ var GetData = {
 
 
     /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
+     * Function uses the infoObject and given indices to return value array of object.
+     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+     * @param {number} polygonIndex - Index of polygon in geometry.
+     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+     * @returns {number[]}
+     */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonIndex];
@@ -54514,13 +54552,13 @@ var GetData = {
   AllSame: {
 
     /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
+     * Function uses the infoObject and given indices to return value array of object.
+     * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+     * @param {number} polygonIndex - Index of polygon in geometry.
+     * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
+     * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
+     * @returns {number[]}
+     */
     IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = infoObject.indices[0] * infoObject.dataSize;
@@ -54539,11 +54577,11 @@ function getData(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 }
 
 /**
-  * Specialty function for parsing NurbsCurve based Geometry Nodes.
-  * @param {FBXGeometryNode} geometryNode
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
-  * @returns {THREE.BufferGeometry}
-  */
+ * Specialty function for parsing NurbsCurve based Geometry Nodes.
+ * @param {FBXGeometryNode} geometryNode
+ * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
+ * @returns {THREE.BufferGeometry}
+ */
 function parseNurbsGeometry(geometryNode) {
 
   if (NURBSCurve === undefined) {
@@ -54562,9 +54600,9 @@ function parseNurbsGeometry(geometryNode) {
 
   var degree = order - 1;
 
-  var knots = parseFloatArray(geometryNode.subNodes.KnotVector.properties.a);
+  var knots = geometryNode.subNodes.KnotVector.properties.a;
   var controlPoints = [];
-  var pointsValues = parseFloatArray(geometryNode.subNodes.Points.properties.a);
+  var pointsValues = geometryNode.subNodes.Points.properties.a;
 
   for (var i = 0, l = pointsValues.length; i < l; i += 4) {
 
@@ -54605,14 +54643,14 @@ function parseNurbsGeometry(geometryNode) {
 }
 
 /**
-  * Finally generates Scene graph and Scene graph Objects.
-  * @param {{Objects: {subNodes: {Model: Object.<number, FBXModelNode>}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
-  * @param {Map<number, THREE.BufferGeometry>} geometryMap
-  * @param {Map<number, THREE.Material>} materialMap
-  * @returns {THREE.Group}
-  */
+ * Finally generates Scene graph and Scene graph Objects.
+ * @param {{Objects: {subNodes: {Model: Object.<number, FBXModelNode>}}}} FBXTree
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
+ * @param {Map<number, THREE.BufferGeometry>} geometryMap
+ * @param {Map<number, THREE.Material>} materialMap
+ * @returns {THREE.Group}
+ */
 function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
   var sceneGraph = new Group();
@@ -54620,13 +54658,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   var ModelNode = FBXTree.Objects.subNodes.Model;
 
   /**
-    * @type {Array.<THREE.Object3D>}
-    */
+   * @type {Array.<THREE.Object3D>}
+   */
   var modelArray = [];
 
   /**
-    * @type {Map.<number, THREE.Object3D>}
-    */
+   * @type {Map.<number, THREE.Object3D>}
+   */
   var modelMap = new Map();
 
   for (var nodeID in ModelNode) {
@@ -54687,7 +54725,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
           } else {
 
             var type = 0;
-            if (cameraAttribute.CameraProjectionType !== undefined && (cameraAttribute.CameraProjectionType.value === '1' || cameraAttribute.CameraProjectionType.value === 1)) {
+            if (cameraAttribute.CameraProjectionType !== undefined && cameraAttribute.CameraProjectionType.value === 1) {
 
               type = 1;
             }
@@ -54709,8 +54747,8 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
             if (cameraAttribute.AspectWidth !== undefined && cameraAttribute.AspectHeight !== undefined) {
 
-              width = parseFloat(cameraAttribute.AspectWidth.value);
-              height = parseFloat(cameraAttribute.AspectHeight.value);
+              width = cameraAttribute.AspectWidth.value;
+              height = cameraAttribute.AspectHeight.value;
             }
 
             var aspect = width / height;
@@ -54718,18 +54756,18 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
             var fov = 45;
             if (cameraAttribute.FieldOfView !== undefined) {
 
-              fov = parseFloat(cameraAttribute.FieldOfView.value);
+              fov = cameraAttribute.FieldOfView.value;
             }
 
             switch (type) {
 
-              case '0': // Perspective
               case 0:
+                // Perspective
                 model = new PerspectiveCamera(fov, aspect, nearClippingPlane, farClippingPlane);
                 break;
 
-              case '1': // Orthographic
               case 1:
+                // Orthographic
                 model = new OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, nearClippingPlane, farClippingPlane);
                 break;
 
@@ -54785,19 +54823,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
             if (lightAttribute.Color !== undefined) {
 
-              var temp = lightAttribute.Color.value.split(',');
-
-              var r = parseFloat(temp[0]);
-              var g = parseFloat(temp[1]);
-              var b = parseFloat(temp[1]);
-
-              color = new Color(r, g, b);
+              color = parseColor(lightAttribute.Color.value);
             }
 
             var intensity = lightAttribute.Intensity === undefined ? 1 : lightAttribute.Intensity.value / 100;
 
             // light disabled
-            if (lightAttribute.CastLightOnObject !== undefined && (lightAttribute.CastLightOnObject.value === '0' || lightAttribute.CastLightOnObject.value === 0)) {
+            if (lightAttribute.CastLightOnObject !== undefined && lightAttribute.CastLightOnObject.value === 0) {
 
               intensity = 0;
             }
@@ -54805,7 +54837,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
             var distance = 0;
             if (lightAttribute.FarAttenuationEnd !== undefined) {
 
-              if (lightAttribute.EnableFarAttenuation !== undefined && (lightAttribute.EnableFarAttenuation.value === '0' || lightAttribute.EnableFarAttenuation.value === 0)) {
+              if (lightAttribute.EnableFarAttenuation !== undefined && lightAttribute.EnableFarAttenuation.value === 0) {
 
                 distance = 0;
               } else {
@@ -54820,18 +54852,18 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
             switch (type) {
 
-              case '0': // Point
               case 0:
+                // Point
                 model = new PointLight(color, intensity, distance, decay);
                 break;
 
-              case '1': // Directional
               case 1:
+                // Directional
                 model = new DirectionalLight(color, intensity);
                 break;
 
-              case '2': // Spot
               case 2:
+                // Spot
                 var angle = Math.PI / 3;
 
                 if (lightAttribute.InnerAngle !== undefined) {
@@ -54859,7 +54891,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
             }
 
-            if (lightAttribute.CastShadows !== undefined && (lightAttribute.CastShadows.value === '1' || lightAttribute.CastShadows.value === 1)) {
+            if (lightAttribute.CastShadows !== undefined && lightAttribute.CastShadows.value === 1) {
 
               model.castShadow = true;
             }
@@ -54869,18 +54901,18 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
         case 'Mesh':
           /**
-            * @type {?THREE.BufferGeometry}
-            */
+           * @type {?THREE.BufferGeometry}
+           */
           var geometry = null;
 
           /**
-            * @type {THREE.MultiMaterial|THREE.Material}
-            */
+           * @type {THREE.MultiMaterial|THREE.Material}
+           */
           var material = null;
 
           /**
-            * @type {Array.<THREE.Material>}
-            */
+           * @type {Array.<THREE.Material>}
+           */
           var materials = [];
 
           for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
@@ -54905,7 +54937,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
             material = materials[0];
           } else {
 
-            material = new MeshStandardMaterial({ color: 0x3300ff });
+            material = new MeshPhongMaterial({ color: 0xcccccc });
             materials.push(material);
           }
           if ('color' in geometry.attributes) {
@@ -54947,13 +54979,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
           break;
 
         default:
-          model = new Object3D();
+          model = new Group();
           break;
 
       }
     }
 
-    model.name = node.attrName.replace(/:/, '').replace(/_/, '').replace(/-/, '');
+    model.name = PropertyBinding.sanitizeNodeName(node.attrName);
     model.FBX_ID = id;
 
     modelArray.push(model);
@@ -54968,19 +55000,19 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
     if ('Lcl_Translation' in node.properties) {
 
-      model.position.fromArray(parseFloatArray(node.properties.Lcl_Translation.value));
+      model.position.fromArray(node.properties.Lcl_Translation.value);
     }
 
     if ('Lcl_Rotation' in node.properties) {
 
-      var rotation = parseFloatArray(node.properties.Lcl_Rotation.value).map(degreeToRadian);
+      var rotation = node.properties.Lcl_Rotation.value.map(degreeToRadian);
       rotation.push('ZYX');
       model.rotation.fromArray(rotation);
     }
 
     if ('Lcl_Scaling' in node.properties) {
 
-      model.scale.fromArray(parseFloatArray(node.properties.Lcl_Scaling.value));
+      model.scale.fromArray(node.properties.Lcl_Scaling.value);
     }
 
     if ('PreRotation' in node.properties) {
@@ -55014,16 +55046,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
         var child = conns.children[childrenIndex];
 
-        if (child.relationship === 'LookAtProperty' || child.relationship === ' "LookAtProperty') {
+        if (child.relationship === 'LookAtProperty') {
 
           var lookAtTarget = FBXTree.Objects.subNodes.Model[child.ID];
 
           if ('Lcl_Translation' in lookAtTarget.properties) {
 
-            var pos = lookAtTarget.properties.Lcl_Translation.value.split(',').map(function (val) {
-
-              return parseFloat(val);
-            });
+            var pos = lookAtTarget.properties.Lcl_Translation.value;
 
             // DirectionalLight, SpotLight
             if (model.target !== undefined) {
@@ -55062,26 +55091,28 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   // Now with the bones created, we can update the skeletons and bind them to the skinned meshes.
   sceneGraph.updateMatrixWorld(true);
 
+  var worldMatrices = new Map();
+
   // Put skeleton into bind pose.
-  var BindPoseNode = FBXTree.Objects.subNodes.Pose;
-  for (var nodeID in BindPoseNode) {
+  if ('Pose' in FBXTree.Objects.subNodes) {
 
-    if (BindPoseNode[nodeID].attrType === 'BindPose') {
+    var BindPoseNode = FBXTree.Objects.subNodes.Pose;
+    for (var nodeID in BindPoseNode) {
 
-      BindPoseNode = BindPoseNode[nodeID];
-      break;
+      if (BindPoseNode[nodeID].attrType === 'BindPose') {
+
+        BindPoseNode = BindPoseNode[nodeID];
+        break;
+      }
     }
-  }
-  if (BindPoseNode) {
 
     var PoseNode = BindPoseNode.subNodes.PoseNode;
-    var worldMatrices = new Map();
 
     for (var PoseNodeIndex = 0, PoseNodeLength = PoseNode.length; PoseNodeIndex < PoseNodeLength; ++PoseNodeIndex) {
 
       var node = PoseNode[PoseNodeIndex];
 
-      var rawMatWrd = parseMatrixArray(node.subNodes.Matrix.properties.a);
+      var rawMatWrd = node.subNodes.Matrix.properties.a;
 
       worldMatrices.set(parseInt(node.id), rawMatWrd);
     }
@@ -55098,8 +55129,8 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
       var subDeformerIndex = subDeformer.index;
 
       /**
-        * @type {THREE.Bone}
-        */
+       * @type {THREE.Bone}
+       */
       var bone = deformer.bones[subDeformerIndex];
       if (!worldMatrices.has(bone.FBX_ID)) {
 
@@ -55142,19 +55173,16 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   // world positions.
   sceneGraph.updateMatrixWorld(true);
 
-  if ('Takes' in FBXTree) {
+  // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
+  // to attach animations to, since FBX treats animations as animations for the entire scene,
+  // not just for individual objects.
+  sceneGraph.skeleton = {
+    bones: modelArray
+  };
 
-    // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
-    // to attach animations to, since FBXs treat animations as animations for the entire scene,
-    // not just for individual objects.
-    sceneGraph.skeleton = {
-      bones: modelArray
-    };
+  var animations = parseAnimations(FBXTree, connections, sceneGraph);
 
-    var animations = parseAnimations(FBXTree, connections, sceneGraph);
-
-    addAnimations(sceneGraph, animations);
-  }
+  addAnimations(sceneGraph, animations);
 
   // Parse ambient color - if it's not set to black (default), create an ambient light
   if ('GlobalSettings' in FBXTree && 'AmbientColor' in FBXTree.GlobalSettings.properties) {
@@ -55175,10 +55203,10 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 }
 
 /**
-  * Parses animation information from FBXTree and generates an AnimationInfoObject.
-  * @param {{Objects: {subNodes: {AnimationCurveNode: any, AnimationCurve: any, AnimationLayer: any, AnimationStack: any}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  */
+ * Parses animation information from FBXTree and generates an AnimationInfoObject.
+ * @param {{Objects: {subNodes: {AnimationCurveNode: any, AnimationCurve: any, AnimationLayer: any, AnimationStack: any}}}} FBXTree
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ */
 function parseAnimations(FBXTree, connections, sceneGraph) {
 
   var rawNodes = FBXTree.Objects.subNodes.AnimationCurveNode;
@@ -55186,10 +55214,53 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   var rawLayers = FBXTree.Objects.subNodes.AnimationLayer;
   var rawStacks = FBXTree.Objects.subNodes.AnimationStack;
 
+  var fps = 30; // default framerate
+
+  if ('GlobalSettings' in FBXTree && 'TimeMode' in FBXTree.GlobalSettings.properties) {
+
+    /* Autodesk time mode documentation can be found here:
+    *	http://docs.autodesk.com/FBX/2014/ENU/FBX-SDK-Documentation/index.html?url=cpp_ref/class_fbx_time.html,topicNumber=cpp_ref_class_fbx_time_html
+    */
+    var timeModeEnum = [30, // 0: eDefaultMode
+    120, // 1: eFrames120
+    100, // 2: eFrames100
+    60, // 3: eFrames60
+    50, // 4: eFrames50
+    48, // 5: eFrames48
+    30, // 6: eFrames30 (black and white NTSC )
+    30, // 7: eFrames30Drop
+    29.97, // 8: eNTSCDropFrame
+    29.97, // 90: eNTSCFullFrame
+    25, // 10: ePal ( PAL/SECAM )
+    24, // 11: eFrames24 (Film/Cinema)
+    1, // 12: eFrames1000 (use for date time))
+    23.976, // 13: eFilmFullFrame
+    30, // 14: eCustom: use GlobalSettings.properties.CustomFrameRate.value
+    96, // 15: eFrames96
+    72, // 16:  eFrames72
+    59.94];
+
+    var eMode = FBXTree.GlobalSettings.properties.TimeMode.value;
+
+    if (eMode === 14) {
+
+      if ('CustomFrameRate' in FBXTree.GlobalSettings.properties) {
+
+        fps = FBXTree.GlobalSettings.properties.CustomFrameRate.value;
+
+        fps = fps === -1 ? 30 : fps;
+      }
+    } else if (eMode <= 17) {
+      // for future proofing - if more eModes get added, they will default to 30fps
+
+      fps = timeModeEnum[eMode];
+    }
+  }
+
   /**
-    * @type {{
-        curves: Map<number, {
-        T: {
+   * @type {{
+       curves: Map<number, {
+       T: {
         id: number;
         attr: string;
         internalID: number;
@@ -55559,12 +55630,12 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
     layers: {},
     stacks: {},
     length: 0,
-    fps: 30,
+    fps: fps,
     frames: 0
   };
 
   /**
-    * @type {Array.<{
+   * @type {Array.<{
       id: number;
       attr: string;
       internalID: number;
@@ -55586,7 +55657,7 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   }
 
   /**
-    * @type {Map.<number, {
+   * @type {Map.<number, {
       id: number,
       attr: string,
       internalID: number,
@@ -55637,7 +55708,7 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   }
 
   /**
-    * @type {{
+   * @type {{
       version: any,
       id: number,
       internalID: number,
@@ -55690,6 +55761,7 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
       returnObject.curves.set(id, { T: null, R: null, S: null });
     }
     returnObject.curves.get(id)[curveNode.attr] = curveNode;
+
     if (curveNode.attr === 'R') {
 
       var curves = curveNode.curves;
@@ -55751,7 +55823,7 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   for (var nodeID in rawLayers) {
 
     /**
-      * @type {{
+     * @type {{
       T: {
         id: number;
         attr: string;
@@ -55930,7 +56002,7 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
         name: rawStacks[nodeID].attrName,
         layers: layers,
         length: timestamps.max - timestamps.min,
-        frames: (timestamps.max - timestamps.min) * 30
+        frames: (timestamps.max - timestamps.min) * returnObject.fps
       };
     }
   }
@@ -55939,54 +56011,54 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
 }
 
 /**
-  * @param {Object} FBXTree
-  * @param {{id: number, attrName: string, properties: Object<string, any>}} animationCurveNode
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @param {{skeleton: {bones: {FBX_ID: number}[]}}} sceneGraph
-  */
+ * @param {Object} FBXTree
+ * @param {{id: number, attrName: string, properties: Object<string, any>}} animationCurveNode
+ * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
+ * @param {{skeleton: {bones: {FBX_ID: number}[]}}} sceneGraph
+ */
 function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph) {
 
   var rawModels = FBXTree.Objects.subNodes.Model;
 
   var returnObject = {
     /**
-      * @type {number}
-      */
+     * @type {number}
+     */
     id: animationCurveNode.id,
 
     /**
-      * @type {string}
-      */
+     * @type {string}
+     */
     attr: animationCurveNode.attrName,
 
     /**
-      * @type {number}
-      */
+     * @type {number}
+     */
     internalID: animationCurveNode.id,
 
     /**
-      * @type {boolean}
-      */
+     * @type {boolean}
+     */
     attrX: false,
 
     /**
-      * @type {boolean}
-      */
+     * @type {boolean}
+     */
     attrY: false,
 
     /**
-      * @type {boolean}
-      */
+     * @type {boolean}
+     */
     attrZ: false,
 
     /**
-      * @type {number}
-      */
+     * @type {number}
+     */
     containerBoneID: -1,
 
     /**
-      * @type {number}
-      */
+     * @type {number}
+     */
     containerID: -1,
 
     curves: {
@@ -55996,8 +56068,8 @@ function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph
     },
 
     /**
-      * @type {number[]}
-      */
+     * @type {number[]}
+     */
     preRotations: null
   };
 
@@ -56049,26 +56121,26 @@ function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph
 }
 
 /**
-  * @param {{id: number, subNodes: {KeyTime: {properties: {a: string}}, KeyValueFloat: {properties: {a: string}}, KeyAttrFlags: {properties: {a: string}}, KeyAttrDataFloat: {properties: {a: string}}}}} animationCurve
-  */
+ * @param {{id: number, subNodes: {KeyTime: {properties: {a: string}}, KeyValueFloat: {properties: {a: string}}, KeyAttrFlags: {properties: {a: string}}, KeyAttrDataFloat: {properties: {a: string}}}}} animationCurve
+ */
 function parseAnimationCurve(animationCurve) {
 
   return {
     version: null,
     id: animationCurve.id,
     internalID: animationCurve.id,
-    times: parseFloatArray(animationCurve.subNodes.KeyTime.properties.a).map(convertFBXTimeToSeconds),
-    values: parseFloatArray(animationCurve.subNodes.KeyValueFloat.properties.a),
+    times: parseNumberArray(animationCurve.subNodes.KeyTime.properties.a).map(convertFBXTimeToSeconds),
+    values: parseNumberArray(animationCurve.subNodes.KeyValueFloat.properties.a),
 
-    attrFlag: parseIntArray(animationCurve.subNodes.KeyAttrFlags.properties.a),
-    attrData: parseFloatArray(animationCurve.subNodes.KeyAttrDataFloat.properties.a)
+    attrFlag: parseNumberArray(animationCurve.subNodes.KeyAttrFlags.properties.a),
+    attrData: animationCurve.subNodes.KeyAttrDataFloat.properties.a
   };
 }
 
 /**
-  * Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
-  * than the max or min respectively.
-  * @param {{
+ * Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
+ * than the max or min respectively.
+ * @param {{
       T: {
           id: number,
           attr: string,
@@ -56205,9 +56277,9 @@ function getCurveNodeMaxMinTimeStamps(layer, timestamps) {
 }
 
 /**
-  * Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
-  * exceeds the maximum or minimum.
-  * @param {{
+ * Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
+ * exceeds the maximum or minimum.
+ * @param {{
       x: {
           version: any,
           id: number,
@@ -56254,9 +56326,9 @@ function getCurveMaxMinTimeStamp(curve, timestamps) {
 }
 
 /**
-  * Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
-  * @param {{times: number[]}} axis
-  */
+ * Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
+ * @param {{times: number[]}} axis
+ */
 function getCurveAxisMaxMinTimeStamps(axis, timestamps) {
 
   timestamps.max = axis.times[axis.times.length - 1] > timestamps.max ? axis.times[axis.times.length - 1] : timestamps.max;
@@ -56264,7 +56336,7 @@ function getCurveAxisMaxMinTimeStamps(axis, timestamps) {
 }
 
 /**
-  * @param {{
+ * @param {{
   curves: Map<number, {
     T: {
       id: number;
@@ -56647,25 +56719,25 @@ function addAnimations(group, animations) {
     var stack = stacks[key];
 
     /**
-      * @type {{
-      * name: string,
-      * fps: number,
-      * length: number,
-      * hierarchy: Array.<{
-      * 	parent: number,
-      * 	name: string,
-      * 	keys: Array.<{
-      * 		time: number,
-      * 		pos: Array.<number>,
-      * 		rot: Array.<number>,
-      * 		scl: Array.<number>
-      * 	}>
-      * }>
-      * }}
-      */
+     * @type {{
+     * name: string,
+     * fps: number,
+     * length: number,
+     * hierarchy: Array.<{
+     * 	parent: number,
+     * 	name: string,
+     * 	keys: Array.<{
+     * 		time: number,
+     * 		pos: Array.<number>,
+     * 		rot: Array.<number>,
+     * 		scl: Array.<number>
+     * 	}>
+     * }>
+     * }}
+     */
     var animationData = {
       name: stack.name,
-      fps: 30,
+      fps: animations.fps,
       length: stack.length,
       hierarchy: []
     };
@@ -56713,8 +56785,8 @@ var euler = new Euler();
 var quaternion = new Quaternion();
 
 /**
-  * @param {THREE.Bone} bone
-  */
+ * @param {THREE.Bone} bone
+ */
 function generateKey(animations, animationNode, bone, frame) {
 
   var key = {
@@ -56726,6 +56798,8 @@ function generateKey(animations, animationNode, bone, frame) {
 
   if (animationNode === undefined) return key;
 
+  euler.setFromQuaternion(bone.quaternion, 'ZYX', false);
+
   try {
 
     if (hasCurve(animationNode, 'T') && hasKeyOnFrame(animationNode.T, frame)) {
@@ -56735,11 +56809,23 @@ function generateKey(animations, animationNode, bone, frame) {
 
     if (hasCurve(animationNode, 'R') && hasKeyOnFrame(animationNode.R, frame)) {
 
-      var rotationX = animationNode.R.curves.x.values[frame];
-      var rotationY = animationNode.R.curves.y.values[frame];
-      var rotationZ = animationNode.R.curves.z.values[frame];
+      // Only update the euler's values if rotation is defined for the axis on this frame
+      if (animationNode.R.curves.x.values[frame]) {
 
-      quaternion.setFromEuler(euler.set(rotationX, rotationY, rotationZ, 'ZYX'));
+        euler.x = animationNode.R.curves.x.values[frame];
+      }
+
+      if (animationNode.R.curves.y.values[frame]) {
+
+        euler.y = animationNode.R.curves.y.values[frame];
+      }
+
+      if (animationNode.R.curves.z.values[frame]) {
+
+        euler.z = animationNode.R.curves.z.values[frame];
+      }
+
+      quaternion.setFromEuler(euler);
       key.rot = quaternion.toArray();
     }
 
@@ -56793,45 +56879,45 @@ function isKeyExistOnFrame(curve, frame) {
 }
 
 /**
-  * An instance of a Vertex with data for drawing vertices to the screen.
-  * @constructor
-  */
+ * An instance of a Vertex with data for drawing vertices to the screen.
+ * @constructor
+ */
 function Vertex$1() {
 
   /**
-    * Position of the vertex.
-    * @type {THREE.Vector3}
-    */
+   * Position of the vertex.
+   * @type {THREE.Vector3}
+   */
   this.position = new Vector3();
 
   /**
-    * Normal of the vertex
-    * @type {THREE.Vector3}
-    */
+   * Normal of the vertex
+   * @type {THREE.Vector3}
+   */
   this.normal = new Vector3();
 
   /**
-    * Array of UV coordinates of the vertex.
-    * @type {Array of THREE.Vector2}
-    */
+   * Array of UV coordinates of the vertex.
+   * @type {Array of THREE.Vector2}
+   */
   this.uv = [];
 
   /**
-    * Color of the vertex
-    * @type {THREE.Vector3}
-    */
+   * Color of the vertex
+   * @type {THREE.Vector3}
+   */
   this.color = new Vector3();
 
   /**
-    * Indices of the bones vertex is influenced by.
-    * @type {THREE.Vector4}
-    */
+   * Indices of the bones vertex is influenced by.
+   * @type {THREE.Vector4}
+   */
   this.skinIndices = new Vector4(0, 0, 0, 0);
 
   /**
-    * Weights that each bone influences the vertex.
-    * @type {THREE.Vector4}
-    */
+   * Weights that each bone influences the vertex.
+   * @type {THREE.Vector4}
+   */
   this.skinWeights = new Vector4(0, 0, 0, 0);
 }
 
@@ -56852,6 +56938,7 @@ Object.assign(Vertex$1.prototype, {
 
     this.position.toArray(vertexBuffer, vertexBuffer.length);
     this.normal.toArray(normalBuffer, normalBuffer.length);
+
     for (var i = 0; i < this.uv.length; i++) {
 
       this.uv[i].toArray(uvBuffers[i], uvBuffers[i].length);
@@ -56863,13 +56950,13 @@ Object.assign(Vertex$1.prototype, {
 });
 
 /**
-  * @constructor
-  */
+ * @constructor
+ */
 function Triangle$1() {
 
   /**
-    * @type {{position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}
-    */
+   * @type {{position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}
+   */
   this.vertices = [];
 }
 
@@ -56897,13 +56984,13 @@ Object.assign(Triangle$1.prototype, {
 });
 
 /**
-  * @constructor
-  */
+ * @constructor
+ */
 function Face() {
 
   /**
-    * @type {{vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[]}
-    */
+   * @type {{vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[]}
+   */
   this.triangles = [];
   this.materialIndex = 0;
 }
@@ -56947,26 +57034,26 @@ Object.assign(Face.prototype, {
 });
 
 /**
-  * @constructor
-  */
+ * @constructor
+ */
 function Geometry$1() {
 
   /**
-    * @type {{triangles: {vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: Array of THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[], materialIndex: number}[]}
-    */
+   * @type {{triangles: {vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: Array of THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[], materialIndex: number}[]}
+   */
   this.faces = [];
 
   /**
-    * @type {{}|THREE.Skeleton}
-    */
+   * @type {{}|THREE.Skeleton}
+   */
   this.skeleton = null;
 }
 
 Object.assign(Geometry$1.prototype, {
 
   /**
-    * @returns	{{vertexBuffer: number[], normalBuffer: number[], uvBuffers: Array of number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-    */
+   * @returns	{{vertexBuffer: number[], normalBuffer: number[], uvBuffers: Array of number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
+   */
   flattenToBuffers: function () {
 
     var vertexBuffer = [];
@@ -56985,6 +57072,7 @@ Object.assign(Geometry$1.prototype, {
     }
 
     for (var i = 0, l = faces.length; i < l; ++i) {
+
       faces[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer);
     }
 
@@ -57091,7 +57179,7 @@ Object.assign(TextParser.prototype, {
         //	 "iVB..."
         if (propName === 'Content' && propValue === ',') {
 
-          propValue = split[++lineNum].replace(/"/g, '').trim();
+          propValue = split[++lineNum].replace(/"/g, '').replace(/,$/, '').trim();
         }
 
         this.parseNodeProperty(l, propName, propValue);
@@ -57115,7 +57203,7 @@ Object.assign(TextParser.prototype, {
       // 0.12490539252758,13.7450733184814,-0.454119384288788,0.09272.....
       // 0.0836158767342567,13.5432004928589,-0.435397416353226,0.028.....
       //
-      // these case the lines must contiue with previous line
+      // in these case the lines must continue from the previous line
       if (l.match(/^[^\s\t}]/)) {
 
         this.parseNodePropertyContinued(l);
@@ -57126,7 +57214,6 @@ Object.assign(TextParser.prototype, {
   },
   parseNodeBegin: function (line, nodeName, nodeAttrs) {
 
-    // var nodeName = match[1];
     var node = { name: nodeName, properties: {}, subNodes: {} };
     var attrs = this.parseNodeAttr(nodeAttrs);
     var currentNode = this.getCurrentNode();
@@ -57136,10 +57223,9 @@ Object.assign(TextParser.prototype, {
 
       this.allNodes.add(nodeName, node);
     } else {
-
       // a subnode
 
-      // already exists subnode, then append it
+      // if the subnode already exists, append it
       if (nodeName in currentNode.subNodes) {
 
         var tmp = currentNode.subNodes[nodeName];
@@ -57217,8 +57303,8 @@ Object.assign(TextParser.prototype, {
     var currentNode = this.getCurrentNode();
     var parentName = currentNode.name;
 
-    // special case parent node's is like "Properties70"
-    // these children nodes must treat with careful
+    // special case where the parent node is something like "Properties70"
+    // these children nodes must treated carefully
     if (parentName !== undefined) {
 
       var propMatch = parentName.match(/Properties(\d)+/);
@@ -57229,7 +57315,43 @@ Object.assign(TextParser.prototype, {
       }
     }
 
-    // special case Connections
+    // ...parentName.properties.a
+    if (propName === 'a') {
+
+      switch (parentName) {
+
+        case 'Matrix':
+        case 'TransformLink':
+        case 'Transform':
+          propValue = new Matrix4().fromArray(parseNumberArray(propValue));
+          break;
+
+        case 'ColorIndex':
+        case 'Colors':
+        case 'KeyAttrDataFloat':
+        case 'KnotVector':
+        case 'NormalIndex':
+        case 'NormalsIndex':
+        case 'Points':
+          propValue = parseNumberArray(propValue);
+          break;
+
+        // TODO: for the following properties this check is not catching all occurences
+        // case 'KeyTime':
+        // case 'Normals':
+        // case 'UV':
+        // case 'Vertices':
+        // case 'KeyValueFloat':
+        // case 'Weights':
+
+        // case 'Materials':
+        // case 'PolygonVertexIndex':
+        // case 'UVIndex':
+
+      }
+    }
+
+    // Connections
     if (propName === 'C') {
 
       var connProps = propValue.split(',').slice(1);
@@ -57237,6 +57359,11 @@ Object.assign(TextParser.prototype, {
       var to = parseInt(connProps[1]);
 
       var rest = propValue.split(',').slice(3);
+
+      rest = rest.map(function (elem) {
+
+        return elem.trim().replace(/^"/, '');
+      });
 
       propName = 'connections';
       propValue = [from, to];
@@ -57248,7 +57375,7 @@ Object.assign(TextParser.prototype, {
       }
     }
 
-    // special case Connections
+    // Node
     if (propName === 'Node') {
 
       var id = parseInt(propValue);
@@ -57259,7 +57386,6 @@ Object.assign(TextParser.prototype, {
     // already exists in properties, then append this
     if (propName in currentNode.properties) {
 
-      // console.log( "duped entry found\nkey: " + propName + "\nvalue: " + propValue );
       if (Array.isArray(currentNode.properties[propName])) {
 
         currentNode.properties[propName].push(propValue);
@@ -57267,16 +57393,12 @@ Object.assign(TextParser.prototype, {
 
         currentNode.properties[propName] += propValue;
       }
+    } else if (Array.isArray(currentNode.properties[propName])) {
+
+      currentNode.properties[propName].push(propValue);
     } else {
 
-      // console.log( propName + ":  " + propValue );
-      if (Array.isArray(currentNode.properties[propName])) {
-
-        currentNode.properties[propName].push(propValue);
-      } else {
-
-        currentNode.properties[propName] = propValue;
-      }
+      currentNode.properties[propName] = propValue;
     }
 
     this.setCurrentProp(currentNode.properties, propName);
@@ -57313,20 +57435,28 @@ Object.assign(TextParser.prototype, {
     }
     */
 
-    // cast value in its type
+    // cast value to its type
     switch (innerPropType1) {
 
       case 'int':
+      case 'enum':
+      case 'bool':
+      case 'ULongLong':
         innerPropValue = parseInt(innerPropValue);
         break;
 
       case 'double':
+      case 'Number':
+      case 'FieldOfView':
         innerPropValue = parseFloat(innerPropValue);
         break;
 
       case 'ColorRGB':
       case 'Vector3D':
-        innerPropValue = parseFloatArray(innerPropValue);
+      case 'Lcl_Translation':
+      case 'Lcl_Rotation':
+      case 'Lcl_Scaling':
+        innerPropValue = parseNumberArray(innerPropValue);
         break;
 
     }
@@ -57365,10 +57495,10 @@ function BinaryParser() {}
 Object.assign(BinaryParser.prototype, {
 
   /**
-    * Parses binary data and builds FBXTree as much compatible as possible with the one built by TextParser.
-    * @param {ArrayBuffer} buffer
-    * @returns {THREE.FBXTree}
-    */
+   * Parses binary data and builds FBXTree as much compatible as possible with the one built by TextParser.
+   * @param {ArrayBuffer} buffer
+   * @returns {THREE.FBXTree}
+   */
   parse: function (buffer) {
 
     var reader = new BinaryReader(buffer);
@@ -57391,10 +57521,10 @@ Object.assign(BinaryParser.prototype, {
 
 
   /**
-    * Checks if reader has reached the end of content.
-    * @param {BinaryReader} reader
-    * @returns {boolean}
-    */
+   * Checks if reader has reached the end of content.
+   * @param {BinaryReader} reader
+   * @returns {boolean}
+   */
   endOfContent: function (reader) {
 
     // footer size: 160bytes + 16-byte alignment padding
@@ -57415,12 +57545,12 @@ Object.assign(BinaryParser.prototype, {
 
 
   /**
-    * Parses Node as much compatible as possible with the one parsed by TextParser
-    * TODO: could be optimized more?
-    * @param {BinaryReader} reader
-    * @param {number} version
-    * @returns {Object} - Returns an Object as node, or null if NULL-record.
-    */
+   * Parses Node as much compatible as possible with the one parsed by TextParser
+   * TODO: could be optimized more?
+   * @param {BinaryReader} reader
+   * @param {number} version
+   * @returns {Object} - Returns an Object as node, or null if NULL-record.
+   */
   parseNode: function (reader, version) {
 
     // The first three data sizes depends on version.
@@ -57479,9 +57609,19 @@ Object.assign(BinaryParser.prototype, {
           node.properties[node.name] = node.propertyList[0];
           subNodes[node.name] = node;
 
-          // Later phase expects single property array is in node.properties.a as String.
-          // TODO: optimize
-          node.properties.a = value.toString();
+          switch (node.name) {
+
+            case 'Matrix':
+            case 'TransformLink':
+            case 'Transform':
+              node.properties.a = new Matrix4().fromArray(value);
+              break;
+
+            default:
+              node.properties.a = value;
+              break;
+
+          }
         } else {
 
           // node represents
@@ -57552,11 +57692,6 @@ Object.assign(BinaryParser.prototype, {
           innerPropValue = node.propertyList[4];
         }
 
-        if (innerPropType1.indexOf('Lcl_') === 0) {
-
-          innerPropValue = innerPropValue.toString();
-        }
-
         // this will be copied to parent. see above.
         properties[innerPropName] = {
 
@@ -57625,29 +57760,38 @@ Object.assign(BinaryParser.prototype, {
 
     switch (type) {
 
-      case 'F':
-        return reader.getFloat32();
+      case 'C':
+        return reader.getBoolean();
 
       case 'D':
         return reader.getFloat64();
 
-      case 'L':
-        return reader.getInt64();
+      case 'F':
+        return reader.getFloat32();
 
       case 'I':
         return reader.getInt32();
 
+      case 'L':
+        return reader.getInt64();
+
+      case 'R':
+        var length = reader.getUint32();
+        return reader.getArrayBuffer(length);
+
+      case 'S':
+        var length = reader.getUint32();
+        return reader.getString(length);
+
       case 'Y':
         return reader.getInt16();
 
-      case 'C':
-        return reader.getBoolean();
-
-      case 'f':
-      case 'd':
-      case 'l':
-      case 'i':
       case 'b':
+      case 'c':
+      case 'd':
+      case 'f':
+      case 'i':
+      case 'l':
 
         var arrayLength = reader.getUint32();
         var encoding = reader.getUint32(); // 0: non-compressed, 1: compressed
@@ -57657,20 +57801,21 @@ Object.assign(BinaryParser.prototype, {
 
           switch (type) {
 
-            case 'f':
-              return reader.getFloat32Array(arrayLength);
+            case 'b':
+            case 'c':
+              return reader.getBooleanArray(arrayLength);
 
             case 'd':
               return reader.getFloat64Array(arrayLength);
 
-            case 'l':
-              return reader.getInt64Array(arrayLength);
+            case 'f':
+              return reader.getFloat32Array(arrayLength);
 
             case 'i':
               return reader.getInt32Array(arrayLength);
 
-            case 'b':
-              return reader.getBooleanArray(arrayLength);
+            case 'l':
+              return reader.getInt64Array(arrayLength);
 
           }
         }
@@ -57685,30 +57830,23 @@ Object.assign(BinaryParser.prototype, {
 
         switch (type) {
 
-          case 'f':
-            return reader2.getFloat32Array(arrayLength);
+          case 'b':
+          case 'c':
+            return reader2.getBooleanArray(arrayLength);
 
           case 'd':
             return reader2.getFloat64Array(arrayLength);
 
-          case 'l':
-            return reader2.getInt64Array(arrayLength);
+          case 'f':
+            return reader2.getFloat32Array(arrayLength);
 
           case 'i':
             return reader2.getInt32Array(arrayLength);
 
-          case 'b':
-            return reader2.getBooleanArray(arrayLength);
+          case 'l':
+            return reader2.getInt64Array(arrayLength);
 
         }
-
-      case 'S':
-        var length = reader.getUint32();
-        return reader.getString(length);
-
-      case 'R':
-        var length = reader.getUint32();
-        return reader.getArrayBuffer(length);
 
       default:
         throw new Error('THREE.FBXLoader: Unknown property type ' + type);
@@ -58117,9 +58255,9 @@ Object.assign(FBXTree.prototype, {
 });
 
 /**
-  * @param {ArrayBuffer} buffer
-  * @returns {boolean}
-  */
+ * @param {ArrayBuffer} buffer
+ * @returns {boolean}
+ */
 function isFbxFormatBinary(buffer) {
 
   var CORRECT = 'Kaydara FBX Binary  \0';
@@ -58128,8 +58266,8 @@ function isFbxFormatBinary(buffer) {
 }
 
 /**
-  * @returns {boolean}
-  */
+ * @returns {boolean}
+ */
 function isFbxFormatASCII(text) {
 
   var CORRECT = ['K', 'a', 'y', 'd', 'a', 'r', 'a', '\\', 'F', 'B', 'X', '\\', 'B', 'i', 'n', 'a', 'r', 'y', '\\', '\\'];
@@ -58157,8 +58295,8 @@ function isFbxFormatASCII(text) {
 }
 
 /**
-  * @returns {number}
-  */
+ * @returns {number}
+ */
 function getFbxVersion(text) {
 
   var versionRegExp = /FBXVersion: (\d+)/;
@@ -58172,10 +58310,10 @@ function getFbxVersion(text) {
 }
 
 /**
-  * Converts FBX ticks into real time seconds.
-  * @param {number} time - FBX tick timestamp to convert.
-  * @returns {number} - FBX tick in real world time.
-  */
+ * Converts FBX ticks into real time seconds.
+ * @param {number} time - FBX tick timestamp to convert.
+ * @returns {number} - FBX tick in real world time.
+ */
 function convertFBXTimeToSeconds(time) {
 
   // Constant is FBX ticks per second.
@@ -58183,15 +58321,20 @@ function convertFBXTimeToSeconds(time) {
 }
 
 /**
-  * Parses comma separated list of float numbers and returns them in an array.
-  * @example
-  * // Returns [ 5.6, 9.4, 2.5, 1.4 ]
-  * parseFloatArray( "5.6,9.4,2.5,1.4" )
-  * @returns {number[]}
-  */
-function parseFloatArray(string) {
+ * Parses comma separated list of numbers and returns them in an array.
+ * If an array is passed just return it - this is because the TextParser sometimes
+ * returns strings instead of arrays, while the BinaryParser always returns arrays
+ * TODO: this function should only need to be called from inside the TextParser
+ * @example
+ * // Returns [ 5.6, 9.4, 2.5, 1.4 ]
+ * parseNumberArray( "5.6,9.4,2.5,1.4" )
+ * @returns {number[]}
+ */
+function parseNumberArray(value) {
 
-  var array = string.split(',');
+  if (Array.isArray(value)) return value;
+
+  var array = value.split(',');
 
   for (var i = 0, l = array.length; i < l; i++) {
 
@@ -58202,56 +58345,32 @@ function parseFloatArray(string) {
 }
 
 /**
-  * Parses comma separated list of int numbers and returns them in an array.
-  * @example
-  * // Returns [ 5, 8, 2, 3 ]
-  * parseFloatArray( "5,8,2,3" )
-  * @returns {number[]}
-  */
-function parseIntArray(string) {
-
-  var array = string.split(',');
-
-  for (var i = 0, l = array.length; i < l; i++) {
-
-    array[i] = parseInt(array[i]);
-  }
-
-  return array;
-}
-
-/**
-  * Parses Vector3 property from FBXTree.  Property is given as .value.x, .value.y, etc.
-  * @param {FBXVector3} property - Property to parse as Vector3.
-  * @returns {THREE.Vector3}
-  */
+ * Parses Vector3 property from FBXTree.  Property is given as .value.x, .value.y, etc.
+ * @param {FBXVector3} property - Property to parse as Vector3.
+ * @returns {THREE.Vector3}
+ */
 function parseVector3(property) {
 
   return new Vector3().fromArray(property.value);
 }
 
 /**
-  * Parses Color property from FBXTree.  Property is given as .value.x, .value.y, etc.
-  * @param {FBXVector3} property - Property to parse as Color.
-  * @returns {THREE.Color}
-  */
+ * Parses Color property from FBXTree.  Property is given as .value.x, .value.y, etc.
+ * @param {FBXVector3} property - Property to parse as Color.
+ * @returns {THREE.Color}
+ */
 function parseColor(property) {
 
   return new Color().fromArray(property.value);
 }
 
-function parseMatrixArray(floatString) {
-
-  return new Matrix4().fromArray(parseFloatArray(floatString));
-}
-
 /**
-  * Converts ArrayBuffer to String.
-  * @param {ArrayBuffer} buffer
-  * @param {number} from
-  * @param {number} to
-  * @returns {String}
-  */
+ * Converts ArrayBuffer to String.
+ * @param {ArrayBuffer} buffer
+ * @param {number} from
+ * @param {number} to
+ * @returns {String}
+ */
 function convertArrayBufferToString(buffer, from, to) {
 
   if (from === undefined) from = 0;
@@ -58275,10 +58394,10 @@ function convertArrayBufferToString(buffer, from, to) {
 }
 
 /**
-  * Converts number from degrees into radians.
-  * @param {number} value
-  * @returns {number}
-  */
+ * Converts number from degrees into radians.
+ * @param {number} value
+ * @returns {number}
+ */
 function degreeToRadian(value) {
 
   return value * DEG2RAD;
@@ -58697,1568 +58816,6 @@ var Loaders = function Loaders() {
 
 var loaders = new Loaders();
 
-function invertMirroredFBX(object) {
-
-  object.traverse(function (child) {
-
-    if (child instanceof Mesh) {
-
-      if (child.matrixWorld.determinant() < 0) {
-
-        var l = child.geometry.attributes.position.array.length;
-
-        for (var i = 0; i < l; i += 9) {
-
-          // reverse winding order
-          var tempX = child.geometry.attributes.position.array[i];
-          var tempY = child.geometry.attributes.position.array[i + 1];
-          var tempZ = child.geometry.attributes.position.array[i + 2];
-
-          child.geometry.attributes.position.array[i] = child.geometry.attributes.position.array[i + 6];
-          child.geometry.attributes.position.array[i + 1] = child.geometry.attributes.position.array[i + 7];
-          child.geometry.attributes.position.array[i + 2] = child.geometry.attributes.position.array[i + 8];
-
-          child.geometry.attributes.position.array[i + 6] = tempX;
-          child.geometry.attributes.position.array[i + 7] = tempY;
-          child.geometry.attributes.position.array[i + 8] = tempZ;
-
-          // switch vertex normals
-          var tempNX = child.geometry.attributes.normal.array[i];
-          var tempNY = child.geometry.attributes.normal.array[i + 1];
-          var tempNZ = child.geometry.attributes.normal.array[i + 2];
-
-          child.geometry.attributes.normal.array[i] = child.geometry.attributes.normal.array[i + 6];
-          child.geometry.attributes.normal.array[i + 1] = child.geometry.attributes.normal.array[i + 7];
-          child.geometry.attributes.normal.array[i + 2] = child.geometry.attributes.normal.array[i + 8];
-
-          child.geometry.attributes.normal.array[i + 6] = tempNX;
-          child.geometry.attributes.normal.array[i + 7] = tempNY;
-          child.geometry.attributes.normal.array[i + 8] = tempNZ;
-        }
-      }
-    }
-  });
-}
-
-var TextCell = function TextCell(row, text) {
-  classCallCheck(this, TextCell);
-
-
-  var textCell = document.createElement('td');
-  row.appendChild(textCell);
-  textCell.innerHTML = text;
-
-  return textCell;
-};
-
-// append an input elem to a cell in a table row
-
-var CellInputElem = function CellInputElem(row, cell, min, max, text) {
-  classCallCheck(this, CellInputElem);
-
-
-  var span = document.createElement('span');
-  span.innerHTML = text[0].toUpperCase() + text.substr(1, text.length) + ': ';
-
-  var input = document.createElement('input');
-
-  input.type = 'number';
-  input.min = min;
-  input.max = max;
-  input.step = 1;
-  input.value = '';
-
-  span.appendChild(input);
-  cell.appendChild(span);
-
-  input.addEventListener('mousedown', function () {
-
-    row.click();
-  });
-
-  return input;
-};
-
-// Append a cell containing a reset button to a table row
-
-var ResetButtonCell = function () {
-  function ResetButtonCell(row) {
-    var _this = this;
-
-    classCallCheck(this, ResetButtonCell);
-
-
-    var deleteButtonCell = document.createElement('td');
-    this.button = document.createElement('button');
-    this.button.innerHTML = '<span class="fa fa-lg fa-undo" aria-hidden="true"></span>';
-    deleteButtonCell.appendChild(this.button);
-    row.appendChild(deleteButtonCell);
-
-    this.onClick = function () {};
-
-    this.click = function (e) {
-
-      if (e) e.preventDefault();
-
-      _this.onClick();
-    };
-
-    this.button.addEventListener('click', this.click);
-  }
-
-  createClass(ResetButtonCell, [{
-    key: 'disabled',
-    set: function (value) {
-
-      this.button.disabled = true;
-    }
-  }]);
-  return ResetButtonCell;
-}();
-
-var Frame = function () {
-  function Frame(robot, num) {
-    var isBaseFrame = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-    classCallCheck(this, Frame);
-
-
-    this.type = 'frame';
-    this.num = num;
-    this.robot = robot;
-
-    if (!isBaseFrame) {
-
-      this.createTableEntry(num);
-      this.initControlFunctions();
-      this.setFlags(false);
-    } else {
-
-      this.setFlags(true);
-    }
-
-    this.initQuaternions();
-    this.setValues(0);
-  }
-
-  Frame.prototype.createTableEntry = function createTableEntry(num) {
-    var _this = this;
-
-    var constraints = this.robot.constraints;
-
-    this.row = document.createElement('tr');
-
-    new TextCell(this.row, num);
-
-    var headCell = document.createElement('td');
-    this.row.appendChild(headCell);
-    this.headPitchInput = new CellInputElem(this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch');
-    this.headYawInput = new CellInputElem(this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw');
-
-    var leftShoulderCell = document.createElement('td');
-    this.row.appendChild(leftShoulderCell);
-    this.leftShoulderPitchInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch');
-    this.leftShoulderYawInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw');
-
-    var rightShoulderCell = document.createElement('td');
-    this.row.appendChild(rightShoulderCell);
-    this.rightShoulderPitchInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch');
-    this.rightShoulderYawInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw');
-
-    var leftElbowCell = document.createElement('td');
-    this.row.appendChild(leftElbowCell);
-    this.leftElbowPitchInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch');
-    this.leftElbowYawInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw');
-
-    var rightElbowCell = document.createElement('td');
-    this.row.appendChild(rightElbowCell);
-    this.rightElbowPitchInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch');
-    this.rightElbowYawInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw');
-
-    this.resetButton = new ResetButtonCell(this.row);
-
-    var click = function () {
-
-      _this.reset();
-    };
-    this.resetButton.onClick = click;
-  };
-
-  Frame.prototype.addEventListeners = function addEventListeners() {
-
-    this.headPitchInput.addEventListener('input', this.controlFunctions.headPitch);
-    this.headYawInput.addEventListener('input', this.controlFunctions.headYaw);
-
-    this.leftShoulderPitchInput.addEventListener('input', this.controlFunctions.leftShoulderPitch);
-    this.leftShoulderYawInput.addEventListener('input', this.controlFunctions.leftShoulderYaw);
-
-    this.rightShoulderPitchInput.addEventListener('input', this.controlFunctions.rightShoulderPitch);
-    this.rightShoulderYawInput.addEventListener('input', this.controlFunctions.rightShoulderYaw);
-
-    this.leftElbowPitchInput.addEventListener('input', this.controlFunctions.leftElbowPitch);
-    this.leftElbowYawInput.addEventListener('input', this.controlFunctions.leftElbowYaw);
-
-    this.rightElbowPitchInput.addEventListener('input', this.controlFunctions.rightElbowPitch);
-    this.rightElbowYawInput.addEventListener('input', this.controlFunctions.rightElbowYaw);
-  };
-
-  Frame.prototype.removeEventListeners = function removeEventListeners() {
-
-    this.headPitchInput.removeEventListener('input', this.controlFunctions.headPitch);
-    this.headYawInput.removeEventListener('input', this.controlFunctions.headYaw);
-
-    this.leftShoulderPitchInput.removeEventListener('input', this.controlFunctions.leftShoulderPitch);
-    this.leftShoulderYawInput.removeEventListener('input', this.controlFunctions.leftShoulderYaw);
-
-    this.rightShoulderPitchInput.removeEventListener('input', this.controlFunctions.rightShoulderPitch);
-    this.rightShoulderYawInput.removeEventListener('input', this.controlFunctions.rightShoulderYaw);
-
-    this.leftElbowPitchInput.removeEventListener('input', this.controlFunctions.leftElbowPitch);
-    this.leftElbowYawInput.removeEventListener('input', this.controlFunctions.leftElbowYaw);
-
-    this.rightElbowPitchInput.removeEventListener('input', this.controlFunctions.rightElbowPitch);
-    this.rightElbowYawInput.removeEventListener('input', this.controlFunctions.rightElbowYaw);
-  };
-
-  Frame.prototype.setFlags = function setFlags(value) {
-
-    this.headPitchSet = value;
-    this.headYawSet = value;
-    this.leftShoulderPitchSet = value;
-    this.leftShoulderYawSet = value;
-    this.rightShoulderPitchSet = value;
-    this.rightShoulderYawSet = value;
-    this.leftElbowPitchSet = value;
-    this.leftElbowYawSet = value;
-    this.rightElbowPitchSet = value;
-    this.rightElbowYawSet = value;
-  };
-
-  Frame.prototype.initQuaternions = function initQuaternions() {
-
-    this.headQuaternion = this.robot.headInitialQuaternion.clone();
-    this.leftShoulderQuaternion = this.robot.leftShoulderInitialQuaternion.clone();
-    this.rightShoulderQuaternion = this.robot.rightShoulderInitialQuaternion.clone();
-    this.leftElbowQuaternion = this.robot.leftElbowInitialQuaternion.clone();
-    this.rightElbowQuaternion = this.robot.rightElbowInitialQuaternion.clone();
-  };
-
-  Frame.prototype.setValues = function setValues(value) {
-
-    value = value || 0;
-
-    this.headPitchValue = value;
-    this.headYawValue = value;
-
-    this.leftShoulderPitchValue = value;
-    this.leftShoulderYawValue = value;
-
-    this.rightShoulderPitchValue = value;
-    this.rightShoulderYawValue = value;
-
-    this.leftElbowPitchValue = value;
-    this.leftElbowYawValue = value;
-
-    this.rightElbowPitchValue = value;
-    this.rightElbowYawValue = value;
-  };
-
-  Frame.prototype.initControlFunctions = function initControlFunctions() {
-    var _this2 = this;
-
-    var xAxis = new Vector3(1, 0, 0);
-    var yAxis = new Vector3(0, 1, 0);
-    var zAxis = new Vector3(0, 0, 1);
-
-    var control = function (e, name, sign, direction, axis) {
-
-      var value = void 0;
-
-      if (e === '') return;
-
-      // this function can either be used from an input Event or by passing a number directly
-      if (e instanceof Event) {
-
-        e.preventDefault();
-
-        value = _Math.degToRad(sign * e.target.value);
-      } else {
-
-        value = _Math.degToRad(sign * e);
-      }
-
-      // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
-      _this2.robot[name].rotateOnAxis(axis, _this2[name + direction + 'Value'] - value);
-
-      // e.g. this.headPitchValue = value;
-      _this2[name + direction + 'Value'] = value;
-
-      // e.g. this.headPitchSet = true;
-      _this2[name + direction + 'Set'] = true;
-
-      // e.g. this.headQuaternion.copy(this.robot[ 'head' ].quaternion);
-      _this2[name + 'Quaternion'].copy(_this2.robot[name].quaternion);
-    };
-
-    this.controlFunctions = {
-
-      headPitch: function (e) {
-        return control(e, 'head', 1, 'Pitch', zAxis);
-      },
-      headYaw: function (e) {
-        return control(e, 'head', 1, 'Yaw', xAxis);
-      },
-
-      leftShoulderPitch: function (e) {
-        return control(e, 'leftShoulder', -1, 'Pitch', zAxis);
-      },
-      leftShoulderYaw: function (e) {
-        return control(e, 'leftShoulder', -1, 'Yaw', yAxis);
-      },
-
-      rightShoulderPitch: function (e) {
-        return control(e, 'rightShoulder', -1, 'Pitch', zAxis);
-      },
-      rightShoulderYaw: function (e) {
-        return control(e, 'rightShoulder', 1, 'Yaw', yAxis);
-      },
-
-      leftElbowPitch: function (e) {
-        return control(e, 'leftElbow', 1, 'Pitch', yAxis);
-      },
-      leftElbowYaw: function (e) {
-        return control(e, 'leftElbow', -1, 'Yaw', zAxis);
-      },
-
-      rightElbowPitch: function (e) {
-        return control(e, 'rightElbow', -1, 'Pitch', yAxis);
-      },
-      rightElbowYaw: function (e) {
-        return control(e, 'rightElbow', -1, 'Yaw', zAxis);
-      }
-
-    };
-  };
-
-  Frame.prototype.setRotations = function setRotations() {
-
-    this.robot.head.quaternion.copy(this.headQuaternion);
-    this.robot.leftShoulder.quaternion.copy(this.leftShoulderQuaternion);
-    this.robot.rightShoulder.quaternion.copy(this.rightShoulderQuaternion);
-    this.robot.leftElbow.quaternion.copy(this.leftElbowQuaternion);
-    this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
-  };
-
-  Frame.prototype.setValuesAndQuaternionsFromInputs = function setValuesAndQuaternionsFromInputs() {
-
-    this.controlFunctions.headPitch(this.headPitchInput.value);
-    this.controlFunctions.headYaw(this.headYawInput.value);
-    this.controlFunctions.leftShoulderPitch(this.leftShoulderPitchInput.value);
-    this.controlFunctions.leftShoulderYaw(this.leftShoulderYawInput.value);
-
-    this.controlFunctions.rightShoulderPitch(this.rightShoulderPitchInput.value);
-    this.controlFunctions.rightShoulderYaw(this.rightShoulderYawInput.value);
-    this.controlFunctions.leftElbowPitch(this.leftElbowPitchInput.value);
-    this.controlFunctions.leftElbowYaw(this.leftElbowYawInput.value);
-
-    this.controlFunctions.rightElbowPitch(this.rightElbowPitchInput.value);
-    this.controlFunctions.rightElbowYaw(this.rightElbowYawInput.value);
-  };
-
-  Frame.prototype.reset = function reset() {
-
-    this.headPitchInput.value = '';
-    this.headYawInput.value = '';
-    this.leftShoulderPitchInput.value = '';
-    this.leftShoulderYawInput.value = '';
-    this.rightShoulderPitchInput.value = '';
-    this.rightShoulderYawInput.value = '';
-    this.leftElbowPitchInput.value = '';
-    this.leftElbowYawInput.value = '';
-    this.rightElbowPitchInput.value = '';
-    this.rightElbowYawInput.value = '';
-
-    this.setFlags(false);
-    this.setValues();
-
-    this.initQuaternions();
-    this.setRotations();
-  };
-
-  Frame.prototype.fromJSON = function fromJSON(object) {
-
-    this.headPitchInput.value = object.headPitch;
-    this.headYawInput.value = object.headYaw;
-    this.leftShoulderPitchInput.value = object.leftShoulderPitch;
-    this.leftShoulderYawInput.value = object.leftShoulderYaw;
-    this.rightShoulderPitchInput.value = object.rightShoulderPitch;
-    this.rightShoulderYawInput.value = object.rightShoulderYaw;
-    this.leftElbowPitchInput.value = object.leftElbowPitch;
-    this.leftElbowYawInput.value = object.leftElbowYaw;
-    this.rightElbowPitchInput.value = object.rightElbowPitch;
-    this.rightElbowYawInput.value = object.rightElbowYaw;
-
-    this.headPitchSet = this.headPitchInput.value !== '';
-    this.headYawSet = this.headYawInput.value !== '';
-    this.leftShoulderPitchSet = this.leftShoulderPitchInput.value !== '';
-    this.leftShoulderYawSet = this.leftShoulderYawInput.value !== '';
-    this.rightShoulderPitchSet = this.rightShoulderPitchInput.value !== '';
-    this.rightShoulderYawSet = this.rightShoulderYawInput.value !== '';
-    this.leftElbowPitchSet = this.leftElbowPitchInput.value !== '';
-    this.leftElbowYawSet = this.leftElbowYawInput.value !== '';
-    this.rightElbowPitchSet = this.rightElbowPitchInput.value !== '';
-    this.rightElbowYawSet = this.headPitchInput.value !== '';
-
-    this.setValuesAndQuaternionsFromInputs();
-  };
-
-  Frame.prototype.toJSON = function toJSON() {
-
-    return {
-
-      headPitch: this.headPitchInput.value,
-      headYaw: this.headYawInput.value,
-      leftShoulderPitch: this.leftShoulderPitchInput.value,
-      leftShoulderYaw: this.leftShoulderYawInput.value,
-      rightShoulderPitch: this.rightShoulderPitchInput.value,
-      rightShoulderYaw: this.rightShoulderYawInput.value,
-      leftElbowPitch: this.leftElbowPitchInput.value,
-      leftElbowYaw: this.leftElbowYawInput.value,
-      rightElbowPitch: this.rightElbowPitchInput.value,
-      rightElbowYaw: this.rightElbowYawInput.value
-
-    };
-  };
-
-  createClass(Frame, [{
-    key: 'selected',
-    set: function (bool) {
-
-      if (bool === true) {
-
-        this.row.style.backgroundColor = 'aliceBlue';
-        this.setRotations();
-        this.addEventListeners();
-      } else {
-
-        this.row.style.backgroundColor = 'initial';
-        this.removeEventListeners();
-      }
-    }
-  }]);
-  return Frame;
-}();
-
-var framerate = 1;
-
-var AnimationControl = function () {
-  function AnimationControl() {
-    var _this = this;
-
-    classCallCheck(this, AnimationControl);
-
-
-    this.defaultFrame = null;
-
-    this.frames = null;
-    this.groups = null;
-    this.dance = null;
-
-    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
-
-      e.preventDefault();
-
-      _this.framerate = e.target.value;
-    });
-  }
-
-  AnimationControl.prototype.setDance = function setDance(dance) {
-
-    this.dance = dance;
-    this.frames = dance.frames;
-    this.groups = dance.groups;
-
-    return this;
-  };
-
-  AnimationControl.prototype.pauseAllAnimation = function pauseAllAnimation() {
-
-    if (this.groups) this.groups.deselectAll();
-  };
-
-  AnimationControl.prototype.initMixer = function initMixer(object) {
-
-    this.mixer = new AnimationMixer(object);
-  };
-
-  AnimationControl.prototype.onUpdate = function onUpdate(delta) {
-
-    if (this.mixer) this.mixer.update(delta * framerate);
-  };
-
-  // create a keyframe track consisting of two keyframes, representing the time span of one frame
-
-
-  AnimationControl.prototype.createKeyFrameTrack = function createKeyFrameTrack(part, initialPos, finalPos, startTime) {
-
-    return new QuaternionKeyframeTrack(part, [startTime, startTime + 1], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
-  };
-
-  // A Clip consists of several keyframe tracks
-  // - for example the movement of an arm over the duration of a group.
-  // An Action controls playback of the clip
-
-
-  AnimationControl.prototype.createAction = function createAction(name, tracks) {
-
-    var clip = new AnimationClip(name, -1, tracks);
-
-    var action = this.mixer.clipAction(clip);
-
-    action.name = clip.name;
-
-    return action;
-  };
-
-  createClass(AnimationControl, [{
-    key: 'framerate',
-    set: function (value) {
-
-      framerate = value;
-    }
-  }]);
-  return AnimationControl;
-}();
-
-var animationControl = new AnimationControl();
-
-var Frames = function () {
-  function Frames(robot) {
-    classCallCheck(this, Frames);
-
-
-    this.robot = robot;
-
-    // used as the default standing pose for the robot, all dances start here
-    this.defaultFrame = new Frame(this.robot, true);
-
-    this.currentFrameNum = 0;
-    this.selectedFrameNum = -1;
-    this.frames = [];
-
-    this.framesTable = HTMLControl.controls.frames.table;
-    this.newFrameButton = HTMLControl.controls.frames.createButton;
-    this.initNewFrameButton();
-  }
-
-  Frames.prototype.removeFrame = function removeFrame(frame) {
-
-    HTMLControl.controls.frames.table.removeChild(frame.row);
-
-    frame.removeEventListeners();
-  };
-
-  Frames.prototype.createFrame = function createFrame(detail) {
-    var _this = this;
-
-    var frame = new Frame(this.robot, this.currentFrameNum);
-
-    if (detail !== undefined) frame.fromJSON(detail);
-
-    this.frames[this.currentFrameNum] = frame;
-
-    this.framesTable.appendChild(frame.row);
-
-    this.select(this.currentFrameNum);
-
-    frame.row.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      _this.select(frame.num);
-    });
-
-    this.currentFrameNum++;
-
-    return frame;
-  };
-
-  Frames.prototype.initNewFrameButton = function initNewFrameButton() {
-    var _this2 = this;
-
-    this.newFrameButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      _this2.createFrame();
-
-      if (_this2.currentFrameNum >= 30) {
-
-        _this2.newFrameButton.innerHTML = 'Limit Reached!';
-
-        _this2.newFrameButton.disabled = true;
-      }
-    });
-
-    // create the first frame
-    this.newFrameButton.click();
-  };
-
-  Frames.prototype.select = function select(num) {
-
-    animationControl.pauseAllAnimation();
-
-    var frame = this.frames[num];
-
-    frame.selected = true;
-    this.selectedFrameNum = num;
-
-    for (var i = 0; i < this.frames.length; i++) {
-
-      if (i !== num) this.frames[i].selected = false;
-    }
-  };
-
-  Frames.prototype.reset = function reset() {
-    var _this3 = this;
-
-    this.frames.forEach(function (frame) {
-
-      _this3.removeFrame(frame);
-    });
-
-    this.selectedFrameNum = -1;
-    this.currentFrameNum = 0;
-    this.frames = [];
-  };
-
-  Frames.prototype.fromJSON = function fromJSON(object) {
-
-    this.reset();
-
-    for (var key in object) {
-
-      this.createFrame(object[key]);
-    }
-  };
-
-  Frames.prototype.toJSON = function toJSON() {
-
-    var output = {};
-
-    for (var i = 0; i < this.frames.length; i++) {
-
-      var frame = this.frames[i];
-
-      if (frame !== null) {
-
-        output[i] = frame.toJSON();
-      } else {
-
-        output[i] = null;
-      }
-    }
-
-    return output;
-  };
-
-  return Frames;
-}();
-
-// Append a cell containing a delete button to a table row
-
-var DeleteButtonCell = function () {
-  function DeleteButtonCell(row) {
-    var _this = this;
-
-    classCallCheck(this, DeleteButtonCell);
-
-
-    var deleteButtonCell = document.createElement('td');
-    this.button = document.createElement('button');
-    this.button.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
-    deleteButtonCell.appendChild(this.button);
-    row.appendChild(deleteButtonCell);
-
-    this.onClick = function () {};
-
-    this.click = function (e) {
-
-      if (e) e.preventDefault();
-
-      _this.onClick();
-
-      _this.button.removeEventListener('click', _this.click);
-    };
-
-    this.button.addEventListener('click', this.click);
-  }
-
-  createClass(DeleteButtonCell, [{
-    key: 'disabled',
-    set: function (value) {
-
-      this.button.disabled = true;
-    }
-  }]);
-  return DeleteButtonCell;
-}();
-
-var GroupAnimation = function () {
-  function GroupAnimation(robot) {
-    classCallCheck(this, GroupAnimation);
-
-
-    this.robot = robot;
-
-    this.actions = [];
-  }
-
-  GroupAnimation.prototype.createAnimation = function createAnimation(framesDetails) {
-
-    // we need at least two frames to create the animation
-    if (framesDetails.length < 2) return;
-
-    var frames = framesDetails.map(function (detail) {
-      return detail.frame;
-    });
-
-    this.reset();
-
-    var headTracks = [];
-    var leftShoulderTracks = [];
-    var rightShoulderTracks = [];
-    var leftElbowTracks = [];
-    var rightElbowTracks = [];
-
-    for (var i = 1; i < frames.length; i++) {
-
-      var initialFrame = frames[i - 1];
-      var finalFrame = frames[i];
-
-      var frameStartTime = i - 1;
-
-      headTracks.push(animationControl.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
-
-      leftShoulderTracks.push(animationControl.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
-
-      rightShoulderTracks.push(animationControl.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
-
-      leftElbowTracks.push(animationControl.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
-
-      rightElbowTracks.push(animationControl.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
-    }
-
-    var headAction = animationControl.createAction('headControl.quaternion', headTracks);
-    var leftShoulderAction = animationControl.createAction('shoulderControlLeft.quaternion', leftShoulderTracks);
-    var rightShoulderAction = animationControl.createAction('shoulderControlRight.quaternion', rightShoulderTracks);
-    var leftElbowAction = animationControl.createAction('elbowControlLeft.quaternion', leftElbowTracks);
-    var rightElbowAction = animationControl.createAction('elbowControlRight.quaternion', rightElbowTracks);
-
-    this.actions = [headAction, leftShoulderAction, rightShoulderAction, leftElbowAction, rightElbowAction];
-  };
-
-  GroupAnimation.prototype.play = function play() {
-
-    this.actions.forEach(function (action) {
-
-      action.play();
-    });
-  };
-
-  GroupAnimation.prototype.stop = function stop() {
-
-    this.actions.forEach(function (action) {
-
-      action.stop();
-    });
-  };
-
-  GroupAnimation.prototype.reset = function reset() {
-
-    this.actions.forEach(function (action) {
-
-      action.reset();
-
-      // animationControl.uncache( action );
-    });
-
-    // this.robot.resetPose();
-  };
-
-  return GroupAnimation;
-}();
-
-var Group$1 = function () {
-  function Group(num, frames) {
-    classCallCheck(this, Group);
-
-
-    this.type = 'group';
-
-    this.frames = frames;
-    this.robot = frames.robot;
-
-    this.containedFrames = [];
-
-    this.valid = false;
-
-    this.num = num;
-
-    this.animation = new GroupAnimation(this.robot);
-
-    this.initTableRow();
-
-    this.initAddFrameButton();
-
-    this._selected = false;
-  }
-
-  Group.prototype.checkGroupIsValid = function checkGroupIsValid() {
-
-    return this.containedFrames.length > 1;
-  };
-
-  Group.prototype.initTableRow = function initTableRow() {
-    var _this = this;
-
-    this.row = document.createElement('tr');
-
-    new TextCell(this.row, this.num);
-    var framesCell = new TextCell(this.row, '<h4>Frames in Group</h4>');
-
-    this.addFrameButton = document.createElement('button');
-    this.addFrameButton.classList.add('add-selected-frame-button');
-    this.addFrameButton.innerHTML = 'Add Selected Frame';
-
-    framesCell.appendChild(this.addFrameButton);
-
-    var frameTable = document.createElement('table');
-    this.framesInGroup = document.createElement('tbody');
-    this.framesInGroup.classList.add('frames-in-group');
-
-    frameTable.appendChild(this.framesInGroup);
-    framesCell.appendChild(frameTable);
-
-    this.resetButton = new ResetButtonCell(this.row);
-    this.resetButton.onClick = function () {
-      return _this.reset();
-    };
-  };
-
-  Group.prototype.addFrame = function addFrame(frame) {
-    var _this2 = this;
-
-    var detail = {
-      frame: frame,
-      deleteButton: null
-    };
-
-    this.containedFrames.push(detail);
-    var framePos = this.containedFrames.length - 1;
-
-    var row = document.createElement('tr');
-
-    this.framesInGroup.appendChild(row);
-
-    new TextCell(row, 'Frame #' + frame.num);
-
-    row.appendChild(document.createElement('td'));
-
-    detail.deleteButton = new DeleteButtonCell(row);
-
-    detail.deleteButton.onClick = function () {
-
-      // if ( this.framesInGroup.contains( row ) )
-      _this2.framesInGroup.removeChild(row);
-
-      if (_this2.lastAddedFrameNum === frame.num) _this2.lastAddedFrameNum = null;
-
-      _this2.containedFrames.splice(framePos, 1);
-
-      _this2.animation.createAnimation(_this2.containedFrames);
-    };
-
-    this.selected = true;
-  };
-
-  Group.prototype.initAddFrameButton = function initAddFrameButton() {
-    var _this3 = this;
-
-    this.lastAddedFrameNum = null;
-
-    this.addFrameButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      var frame = _this3.frames.frames[_this3.frames.selectedFrameNum];
-
-      if (frame === undefined || frame === null) return;
-
-      // don't add the same frame consecutively (use loop instead)
-      if (_this3.lastAddedFrame === frame) return;
-
-      _this3.lastAddedFrameNum = frame;
-
-      _this3.addFrame(frame);
-    });
-  };
-
-  Group.prototype.reset = function reset() {
-
-    console.log('TODO: Group.reset doesn\'t remove last frame');
-
-    for (var i = 0; i < this.containedFrames.length; i++) {
-
-      this.containedFrames[i].deleteButton.click();
-    }
-
-    this.animation.stop();
-    this.animation.reset();
-  };
-
-  Group.prototype.fromJSON = function fromJSON(object) {
-
-    this.reset();
-
-    for (var key in object) {
-
-      var detail = object[key];
-
-      this.addFrame(this.frames.frames[detail.frameNum]);
-    }
-  };
-
-  Group.prototype.toJSON = function toJSON() {
-
-    var output = {};
-
-    for (var i = 0; i < this.containedFrames.length; i++) {
-
-      var detail = this.containedFrames[i];
-
-      output[i] = {
-
-        frameNum: detail.frame.num
-
-      };
-    }
-
-    return output;
-  };
-
-  createClass(Group, [{
-    key: 'selected',
-    set: function (bool) {
-
-      if (this._selected === bool) return;
-
-      if (bool === true) {
-
-        this.row.style.backgroundColor = 'aliceBlue';
-        this.animation.createAnimation(this.containedFrames);
-        this.animation.play();
-        this._selected = true;
-      } else {
-
-        this.row.style.backgroundColor = 'initial';
-        this.animation.stop();
-        this._selected = false;
-      }
-    }
-  }]);
-  return Group;
-}();
-
-var Groups = function () {
-  function Groups(frames) {
-    classCallCheck(this, Groups);
-
-
-    this.frames = frames;
-    this.robot = frames.robot;
-
-    this.currentGroupNum = 0;
-    this.selectedGroup = null;
-    this.groups = [];
-
-    this.groupsTable = HTMLControl.controls.groups.table;
-    this.newGroupButton = HTMLControl.controls.groups.createButton;
-    this.initNewGroupButton();
-  }
-
-  Groups.prototype.removeGroup = function removeGroup(group) {
-
-    this.groupsTable.removeChild(group.row);
-
-    this.groups[group.num] = null;
-
-    group.reset();
-
-    if (this.selectedGroup === group) this.selectedGroup = null;
-  };
-
-  Groups.prototype.createGroup = function createGroup(num, details) {
-    var _this = this;
-
-    var group = new Group$1(num, this.frames);
-
-    if (details !== undefined) group.fromJSON(details);
-
-    this.groups.push(group);
-
-    this.groupsTable.appendChild(group.row);
-
-    this.select(group);
-
-    var select = function (e) {
-
-      e.preventDefault();
-
-      _this.select(group);
-    };
-
-    group.row.addEventListener('click', select);
-  };
-
-  Groups.prototype.initNewGroupButton = function initNewGroupButton() {
-    var _this2 = this;
-
-    this.newGroupButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      _this2.createGroup(_this2.currentGroupNum++);
-
-      if (_this2.currentGroupNum >= 29) {
-
-        _this2.newGroupButton.innerHTML = 'Limit Reached!';
-
-        _this2.newGroupButton.disabled = true;
-      }
-    });
-
-    this.newGroupButton.click();
-  };
-
-  Groups.prototype.select = function select(group) {
-
-    group.selected = true;
-
-    this.selectedGroup = group;
-
-    this.groups.forEach(function (g) {
-
-      if (g !== null && g.num !== group.num) {
-
-        g.selected = false;
-      }
-    });
-  };
-
-  Groups.prototype.deselectAll = function deselectAll() {
-
-    this.groups.forEach(function (g) {
-
-      g.selected = false;
-    });
-  };
-
-  Groups.prototype.stopPlayingAll = function stopPlayingAll() {
-
-    this.groups.forEach(function (group) {
-      group.animation.stop();
-    });
-  };
-
-  Groups.prototype.reset = function reset() {
-    var _this3 = this;
-
-    this.groups.forEach(function (group) {
-
-      if (group !== null) _this3.removeGroup(group);
-    });
-
-    this.currentGroupNum = 0;
-    this.selectedGroup = null;
-    this.groups = [];
-  };
-
-  Groups.prototype.fromJSON = function fromJSON(object) {
-
-    this.reset();
-
-    for (var key in object) {
-
-      var detail = object[key];
-
-      if (detail === null) {
-
-        this.frames[key] = null;
-      } else {
-
-        this.createGroup(key, detail);
-        this.currentFrameNum = key;
-      }
-    }
-
-    this.deselectAll();
-  };
-
-  Groups.prototype.toJSON = function toJSON() {
-
-    var output = {};
-
-    for (var i = 0; i < this.groups.length; i++) {
-
-      var group = this.groups[i];
-
-      if (group !== null) {
-
-        output[i] = group.toJSON();
-      } else {
-
-        output[i] = null;
-      }
-    }
-
-    return output;
-  };
-
-  return Groups;
-}();
-
-var LoopInputCell = function LoopInputCell(row) {
-  var _this = this;
-
-  classCallCheck(this, LoopInputCell);
-
-
-  var cell = document.createElement('td');
-  cell.innerHTML = 'Loop ';
-  row.appendChild(cell);
-
-  var input = document.createElement('input');
-  cell.appendChild(input);
-  input.type = 'number';
-  input.min = '0';
-  input.value = '1';
-  input.step = '1';
-
-  var text = document.createElement('span');
-  text.style.width = '8em';
-  text.style.textAlign = 'left';
-  text.style.marginLeft = '0.25em';
-  text.innerHTML = ' time';
-  cell.appendChild(text);
-
-  this.onInput = function () {};
-
-  input.addEventListener('input', function (e) {
-
-    e.preventDefault();
-
-    var value = parseInt(e.target.value, 10);
-
-    if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
-
-    if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
-
-    _this.onInput(value);
-  });
-};
-
-var DanceAnimation = function () {
-  function DanceAnimation(robot) {
-    classCallCheck(this, DanceAnimation);
-
-
-    this.robot = robot;
-
-    this.actions = [];
-  }
-
-  // take the details array and flatten it to an array of frames
-
-
-  DanceAnimation.prototype.flattenDetails = function flattenDetails(details) {
-    var _this = this;
-
-    var frames = [];
-
-    details.forEach(function (detail) {
-
-      var elem = detail.elem;
-
-      if (elem.type === 'frame') frames.push(elem);else if (elem.type === 'group') {
-
-        frames = frames.concat(_this.flattenGroup(elem, detail.loopAmount));
-      }
-    });
-
-    return frames;
-  };
-
-  DanceAnimation.prototype.flattenGroup = function flattenGroup(group, loopAmount) {
-
-    var frames = [];
-
-    for (var i = 0; i < loopAmount; i++) {
-
-      frames = frames.concat(group.containedFrames.map(function (detail) {
-        return detail.frame;
-      }));
-    }
-
-    return frames;
-  };
-
-  DanceAnimation.prototype.createAnimation = function createAnimation(details) {
-
-    this.reset();
-
-    var frames = this.flattenDetails(details);
-
-    // we need at least two frames to create the animation
-    if (frames.length < 2) return;
-
-    var headTracks = [];
-    var leftShoulderTracks = [];
-    var rightShoulderTracks = [];
-    var leftElbowTracks = [];
-    var rightElbowTracks = [];
-
-    for (var i = 1; i < frames.length; i++) {
-
-      var initialFrame = frames[i - 1];
-      var finalFrame = frames[i];
-
-      var frameStartTime = i - 1;
-
-      headTracks.push(animationControl.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
-
-      leftShoulderTracks.push(animationControl.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
-
-      rightShoulderTracks.push(animationControl.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
-
-      leftElbowTracks.push(animationControl.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
-
-      rightElbowTracks.push(animationControl.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
-    }
-
-    var headAction = animationControl.createAction('headControl.quaternion', headTracks);
-    var leftShoulderAction = animationControl.createAction('shoulderControlLeft.quaternion', leftShoulderTracks);
-    var rightShoulderAction = animationControl.createAction('shoulderControlRight.quaternion', rightShoulderTracks);
-    var leftElbowAction = animationControl.createAction('elbowControlLeft.quaternion', leftElbowTracks);
-    var rightElbowAction = animationControl.createAction('elbowControlRight.quaternion', rightElbowTracks);
-
-    this.actions = [headAction, leftShoulderAction, rightShoulderAction, leftElbowAction, rightElbowAction];
-  };
-
-  DanceAnimation.prototype.play = function play() {
-
-    this.actions.forEach(function (action) {
-
-      action.play();
-    });
-  };
-
-  DanceAnimation.prototype.stop = function stop() {
-
-    this.actions.forEach(function (action) {
-
-      action.stop();
-    });
-  };
-
-  DanceAnimation.prototype.reset = function reset() {
-
-    this.actions.forEach(function (action) {
-
-      action.reset();
-    });
-  };
-
-  return DanceAnimation;
-}();
-
-var Dance = function () {
-  function Dance(groups) {
-    classCallCheck(this, Dance);
-
-
-    this.groups = groups;
-    this.frames = groups.frames;
-    this.robot = this.frames.robot;
-
-    this.valid = false;
-
-    this.animation = new DanceAnimation(this.robot);
-
-    this.lastAddedType = null;
-    this.table = HTMLControl.controls.dance.table;
-
-    this.containedElems = [];
-
-    this.initAdvancedControlsToggle();
-    this.initAddSelectedFrameButton();
-    this.initAddSelectedGroupButton();
-    this.initDanceButton();
-    this.initResetButton();
-    this.initFramerateInput();
-  }
-
-  Dance.prototype.initAdvancedControlsToggle = function initAdvancedControlsToggle() {
-
-    HTMLControl.controls.dance.advancedControlToggle.addEventListener('change', function (e) {
-
-      e.preventDefault();
-
-      HTMLControl.controls.dance.advancedControlSection.classList.toggle('hide');
-    });
-  };
-
-  Dance.prototype.add = function add(elem, loop) {
-    var _this = this;
-
-    var loopAmount = loop || 1;
-
-    var detail = {
-      elem: elem,
-      loopAmount: loopAmount,
-      deleteButton: null
-    };
-
-    this.containedElems.push(detail);
-
-    var pos = this.containedElems.length - 1;
-
-    var row = document.createElement('tr');
-    this.table.appendChild(row);
-
-    new TextCell(row, elem.num);
-    new TextCell(row, elem.type);
-
-    if (elem.type === 'group') {
-
-      var loopInput = new LoopInputCell(row);
-
-      loopInput.onInput = function (value) {
-
-        detail.loopAmount = value;
-        _this.checkDanceIsValid();
-      };
-    } else {
-
-      row.appendChild(document.createElement('td'));
-    }
-
-    detail.deleteButton = new DeleteButtonCell(row);
-
-    detail.deleteButton.onClick = function () {
-
-      _this.table.removeChild(row);
-
-      _this.containedElems.splice(pos, 1);
-
-      if (detail.elem.type === 'group' && detail.elem.num === _this.lastAddedGroupNum) _this.lastAddedGroupNum = -1;
-      if (detail.elem.type === 'frame' && detail.elem.num === _this.lastAddedFrameNum) _this.lastAddedFrameNum = -1;
-
-      _this.checkDanceIsValid();
-    };
-
-    this.checkDanceIsValid();
-    HTMLControl.controls.dance.resetButton.disabled = false;
-  };
-
-  Dance.prototype.initAddSelectedFrameButton = function initAddSelectedFrameButton() {
-    var _this2 = this;
-
-    this.lastAddedFrameNum = null;
-
-    HTMLControl.controls.dance.addFrameButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      var frame = _this2.frames.frames[_this2.frames.selectedFrameNum];
-
-      if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
-
-      _this2.add(frame);
-
-      _this2.lastAddedFrameNum = frame.num;
-      _this2.lastAddedType = 'frame';
-    });
-  };
-
-  Dance.prototype.initAddSelectedGroupButton = function initAddSelectedGroupButton() {
-    var _this3 = this;
-
-    this.lastAddedGroupNum = null;
-
-    HTMLControl.controls.dance.addGroupButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      var group = _this3.groups.selectedGroup;
-
-      if (group === null || group.num === _this3.lastAddedGroupNum && _this3.lastAddedType === 'group') return;
-
-      _this3.add(group);
-
-      _this3.lastAddedGroupNum = group.num;
-      _this3.lastAddedType = 'group';
-    });
-  };
-
-  Dance.prototype.initFramerateInput = function initFramerateInput() {
-    var _this4 = this;
-
-    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
-
-      _this4.framerate = e.target.value;
-    });
-  };
-
-  Dance.prototype.setFramerate = function setFramerate(rate) {
-
-    if (rate < 0.1 || rate > 10) {
-
-      console.warn('Attempting to set frame rate outside of allowed range [0.1, 10]!');
-      rate = 1;
-    }
-
-    HTMLControl.controls.dance.framerate.value = rate;
-    this.framerate = rate;
-  };
-
-  Dance.prototype.initDanceButton = function initDanceButton() {
-    var _this5 = this;
-
-    HTMLControl.controls.dance.playButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      _this5.animation.createAnimation(_this5.containedElems);
-      _this5.animation.play();
-
-      if (HTMLControl.controls.music.play.innerHTML === 'Play') {
-
-        HTMLControl.controls.music.play.click();
-      }
-    });
-  };
-
-  Dance.prototype.initResetButton = function initResetButton() {
-    var _this6 = this;
-
-    HTMLControl.controls.dance.resetButton.addEventListener('click', function (e) {
-
-      console.log('TODO: reset dance button last elem not removed ');
-
-      e.preventDefault();
-
-      _this6.reset();
-    });
-  };
-
-  Dance.prototype.checkDanceIsValid = function checkDanceIsValid() {
-
-    var containedFramesNum = 0;
-    var containsValidGroups = false;
-
-    this.containedElems.forEach(function (detail) {
-
-      if (detail.elem.type === 'frame') containedFramesNum++;else if (detail.elem.type === 'group') {
-
-        // this would require a 'change' event added to the group so that the dance can listen
-        // when frames are added or removed to check whether the group becomes valid
-        // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
-        if (detail.loopAmount > 0) containsValidGroups = true;
-      }
-    });
-
-    this.valid = containedFramesNum > 1 || containsValidGroups;
-
-    HTMLControl.controls.dance.playButton.disabled = !this.valid;
-  };
-
-  Dance.prototype.reset = function reset() {
-
-    this.containedElems.forEach(function (elem) {
-
-      if (elem !== null && elem.deleteButton) elem.deleteButton.click();
-    });
-
-    this.valid = false;
-    HTMLControl.controls.dance.playButton.disabled = true;
-    HTMLControl.controls.dance.resetButton.disabled = true;
-  };
-
-  Dance.prototype.fromJSON = function fromJSON(object) {
-
-    this.reset();
-
-    this.setFramerate(object.framerate || 1);
-
-    for (var key in object) {
-
-      var value = object[key];
-
-      if (value.type === 'frame') {
-
-        this.add(this.frames.frames[value.num]);
-      } else if (value.type === 'group') {
-
-        this.add(this.groups.groups[value.num], value.loopAmount);
-      } else if (key === 'framerate') {
-
-        HTMLControl.controls.dance.framerate.value = value;
-      }
-    }
-
-    this.checkDanceIsValid();
-  };
-
-  Dance.prototype.toJSON = function toJSON() {
-
-    var output = {
-
-      framerate: this.framerate
-
-    };
-
-    for (var i = 0; i < this.containedElems.length; i++) {
-
-      var detail = this.containedElems[i];
-
-      if (detail !== null) {
-
-        output[i] = {
-
-          type: detail.elem.type,
-          num: detail.elem.num,
-          loopAmount: detail.loopAmount
-
-        };
-      } else {
-
-        output[i] = null;
-      }
-    }
-
-    return output;
-  };
-
-  createClass(Dance, [{
-    key: 'framerate',
-    set: function (value) {
-
-      animationControl.framerate = value;
-    }
-  }]);
-  return Dance;
-}();
-
 var Robot = function () {
   function Robot(model) {
     classCallCheck(this, Robot);
@@ -60322,20 +58879,6 @@ var Robot = function () {
 
     };
   };
-
-  // resetPose() {
-
-  //   console.log( 'TODO: robot.resetPose ' );
-
-  //   // this.head.quaternion.copy( this.headInitialQuaternion );
-
-  //   // this.leftShoulder.quaternion.copy( this.leftShoulderInitialQuaternion );
-  //   // this.rightShoulder.quaternion.copy( this.rightShoulderInitialQuaternion );
-
-  //   // this.leftElbow.quaternion.copy( this.leftElbowInitialQuaternion );
-  //   // this.rightElbow.quaternion.copy( this.rightElbowInitialQuaternion );
-
-  // }
 
   return Robot;
 }();
@@ -60713,6 +59256,1500 @@ var Audio$1 = function () {
   return Audio;
 }();
 
+function invertMirroredFBX(object) {
+
+  object.traverse(function (child) {
+
+    if (child instanceof Mesh) {
+
+      if (child.matrixWorld.determinant() < 0) {
+
+        var l = child.geometry.attributes.position.array.length;
+
+        for (var i = 0; i < l; i += 9) {
+
+          // reverse winding order
+          var tempX = child.geometry.attributes.position.array[i];
+          var tempY = child.geometry.attributes.position.array[i + 1];
+          var tempZ = child.geometry.attributes.position.array[i + 2];
+
+          child.geometry.attributes.position.array[i] = child.geometry.attributes.position.array[i + 6];
+          child.geometry.attributes.position.array[i + 1] = child.geometry.attributes.position.array[i + 7];
+          child.geometry.attributes.position.array[i + 2] = child.geometry.attributes.position.array[i + 8];
+
+          child.geometry.attributes.position.array[i + 6] = tempX;
+          child.geometry.attributes.position.array[i + 7] = tempY;
+          child.geometry.attributes.position.array[i + 8] = tempZ;
+
+          // switch vertex normals
+          var tempNX = child.geometry.attributes.normal.array[i];
+          var tempNY = child.geometry.attributes.normal.array[i + 1];
+          var tempNZ = child.geometry.attributes.normal.array[i + 2];
+
+          child.geometry.attributes.normal.array[i] = child.geometry.attributes.normal.array[i + 6];
+          child.geometry.attributes.normal.array[i + 1] = child.geometry.attributes.normal.array[i + 7];
+          child.geometry.attributes.normal.array[i + 2] = child.geometry.attributes.normal.array[i + 8];
+
+          child.geometry.attributes.normal.array[i + 6] = tempNX;
+          child.geometry.attributes.normal.array[i + 7] = tempNY;
+          child.geometry.attributes.normal.array[i + 8] = tempNZ;
+        }
+      }
+    }
+  });
+}
+
+var TextCell = function TextCell(row, text) {
+  classCallCheck(this, TextCell);
+
+
+  var textCell = document.createElement('td');
+  row.appendChild(textCell);
+  textCell.innerHTML = text;
+
+  return textCell;
+};
+
+// append an input elem to a cell in a table row
+
+var CellInputElem = function CellInputElem(row, cell, min, max, text) {
+  classCallCheck(this, CellInputElem);
+
+
+  var span = document.createElement('span');
+  span.innerHTML = text[0].toUpperCase() + text.substr(1, text.length) + ': ';
+
+  var input = document.createElement('input');
+
+  input.type = 'number';
+  input.min = min;
+  input.max = max;
+  input.step = 1;
+  input.value = '';
+
+  span.appendChild(input);
+  cell.appendChild(span);
+
+  input.addEventListener('mousedown', function () {
+
+    row.click();
+  });
+
+  return input;
+};
+
+// Append a cell containing a reset button to a table row
+
+var ResetButtonCell = function () {
+  function ResetButtonCell(row) {
+    var _this = this;
+
+    classCallCheck(this, ResetButtonCell);
+
+
+    var deleteButtonCell = document.createElement('td');
+    this.button = document.createElement('button');
+    this.button.innerHTML = '<span class="fa fa-lg fa-undo" aria-hidden="true"></span>';
+    deleteButtonCell.appendChild(this.button);
+    row.appendChild(deleteButtonCell);
+
+    this.onClick = function () {};
+
+    this.click = function (e) {
+
+      if (e) e.preventDefault();
+
+      _this.onClick();
+    };
+
+    this.button.addEventListener('click', this.click);
+  }
+
+  createClass(ResetButtonCell, [{
+    key: 'disabled',
+    set: function (value) {
+
+      this.button.disabled = true;
+    }
+  }]);
+  return ResetButtonCell;
+}();
+
+var Frame = function () {
+  function Frame(robot, num) {
+    var isBaseFrame = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+    classCallCheck(this, Frame);
+
+
+    this.type = 'frame';
+    this.num = num;
+    this.robot = robot;
+
+    this._selected = false;
+
+    if (!isBaseFrame) {
+
+      this.createTableEntry(num);
+      this.initControlFunctions();
+      this.setFlags(false);
+    } else {
+
+      this.setFlags(true);
+    }
+
+    this.initQuaternions();
+    this.setValues(0);
+  }
+
+  Frame.prototype.createTableEntry = function createTableEntry(num) {
+    var _this = this;
+
+    var constraints = this.robot.constraints;
+
+    this.row = document.createElement('tr');
+
+    new TextCell(this.row, num);
+
+    var headCell = document.createElement('td');
+    this.row.appendChild(headCell);
+    this.headPitchInput = new CellInputElem(this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch');
+    this.headYawInput = new CellInputElem(this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw');
+
+    var leftShoulderCell = document.createElement('td');
+    this.row.appendChild(leftShoulderCell);
+    this.leftShoulderPitchInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch');
+    this.leftShoulderYawInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw');
+
+    var rightShoulderCell = document.createElement('td');
+    this.row.appendChild(rightShoulderCell);
+    this.rightShoulderPitchInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch');
+    this.rightShoulderYawInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw');
+
+    var leftElbowCell = document.createElement('td');
+    this.row.appendChild(leftElbowCell);
+    this.leftElbowPitchInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch');
+    this.leftElbowYawInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw');
+
+    var rightElbowCell = document.createElement('td');
+    this.row.appendChild(rightElbowCell);
+    this.rightElbowPitchInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch');
+    this.rightElbowYawInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw');
+
+    this.resetButton = new ResetButtonCell(this.row);
+
+    var click = function () {
+
+      _this.reset();
+    };
+    this.resetButton.onClick = click;
+  };
+
+  Frame.prototype.addEventListeners = function addEventListeners() {
+
+    this.headPitchInput.addEventListener('input', this.controlFunctions.headPitch);
+    this.headYawInput.addEventListener('input', this.controlFunctions.headYaw);
+
+    this.leftShoulderPitchInput.addEventListener('input', this.controlFunctions.leftShoulderPitch);
+    this.leftShoulderYawInput.addEventListener('input', this.controlFunctions.leftShoulderYaw);
+
+    this.rightShoulderPitchInput.addEventListener('input', this.controlFunctions.rightShoulderPitch);
+    this.rightShoulderYawInput.addEventListener('input', this.controlFunctions.rightShoulderYaw);
+
+    this.leftElbowPitchInput.addEventListener('input', this.controlFunctions.leftElbowPitch);
+    this.leftElbowYawInput.addEventListener('input', this.controlFunctions.leftElbowYaw);
+
+    this.rightElbowPitchInput.addEventListener('input', this.controlFunctions.rightElbowPitch);
+    this.rightElbowYawInput.addEventListener('input', this.controlFunctions.rightElbowYaw);
+  };
+
+  Frame.prototype.removeEventListeners = function removeEventListeners() {
+
+    this.headPitchInput.removeEventListener('input', this.controlFunctions.headPitch);
+    this.headYawInput.removeEventListener('input', this.controlFunctions.headYaw);
+
+    this.leftShoulderPitchInput.removeEventListener('input', this.controlFunctions.leftShoulderPitch);
+    this.leftShoulderYawInput.removeEventListener('input', this.controlFunctions.leftShoulderYaw);
+
+    this.rightShoulderPitchInput.removeEventListener('input', this.controlFunctions.rightShoulderPitch);
+    this.rightShoulderYawInput.removeEventListener('input', this.controlFunctions.rightShoulderYaw);
+
+    this.leftElbowPitchInput.removeEventListener('input', this.controlFunctions.leftElbowPitch);
+    this.leftElbowYawInput.removeEventListener('input', this.controlFunctions.leftElbowYaw);
+
+    this.rightElbowPitchInput.removeEventListener('input', this.controlFunctions.rightElbowPitch);
+    this.rightElbowYawInput.removeEventListener('input', this.controlFunctions.rightElbowYaw);
+  };
+
+  Frame.prototype.setFlags = function setFlags(value) {
+
+    this.headPitchSet = value;
+    this.headYawSet = value;
+    this.leftShoulderPitchSet = value;
+    this.leftShoulderYawSet = value;
+    this.rightShoulderPitchSet = value;
+    this.rightShoulderYawSet = value;
+    this.leftElbowPitchSet = value;
+    this.leftElbowYawSet = value;
+    this.rightElbowPitchSet = value;
+    this.rightElbowYawSet = value;
+  };
+
+  Frame.prototype.initQuaternions = function initQuaternions() {
+
+    this.headQuaternion = this.robot.headInitialQuaternion.clone();
+    this.leftShoulderQuaternion = this.robot.leftShoulderInitialQuaternion.clone();
+    this.rightShoulderQuaternion = this.robot.rightShoulderInitialQuaternion.clone();
+    this.leftElbowQuaternion = this.robot.leftElbowInitialQuaternion.clone();
+    this.rightElbowQuaternion = this.robot.rightElbowInitialQuaternion.clone();
+  };
+
+  Frame.prototype.setValues = function setValues(value) {
+
+    value = value || 0;
+
+    this.headPitchValue = value;
+    this.headYawValue = value;
+
+    this.leftShoulderPitchValue = value;
+    this.leftShoulderYawValue = value;
+
+    this.rightShoulderPitchValue = value;
+    this.rightShoulderYawValue = value;
+
+    this.leftElbowPitchValue = value;
+    this.leftElbowYawValue = value;
+
+    this.rightElbowPitchValue = value;
+    this.rightElbowYawValue = value;
+  };
+
+  Frame.prototype.initControlFunctions = function initControlFunctions() {
+    var _this2 = this;
+
+    var xAxis = new Vector3(1, 0, 0);
+    var yAxis = new Vector3(0, 1, 0);
+    var zAxis = new Vector3(0, 0, 1);
+
+    var control = function (e, name, sign, direction, axis) {
+
+      var value = void 0;
+
+      if (e === '') return;
+
+      // this function can either be used from an input Event or by passing a number directly
+      if (e instanceof Event) {
+
+        e.preventDefault();
+
+        value = _Math.degToRad(sign * e.target.value);
+      } else {
+
+        value = _Math.degToRad(sign * e);
+      }
+
+      // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
+      _this2.robot[name].rotateOnAxis(axis, _this2[name + direction + 'Value'] - value);
+
+      // e.g. this.headPitchValue = value;
+      _this2[name + direction + 'Value'] = value;
+
+      // e.g. this.headPitchSet = true;
+      _this2[name + direction + 'Set'] = true;
+
+      // e.g. this.headQuaternion.copy(this.robot[ 'head' ].quaternion);
+      _this2[name + 'Quaternion'].copy(_this2.robot[name].quaternion);
+    };
+
+    this.controlFunctions = {
+
+      headPitch: function (e) {
+        return control(e, 'head', 1, 'Pitch', zAxis);
+      },
+      headYaw: function (e) {
+        return control(e, 'head', 1, 'Yaw', xAxis);
+      },
+
+      leftShoulderPitch: function (e) {
+        return control(e, 'leftShoulder', -1, 'Pitch', zAxis);
+      },
+      leftShoulderYaw: function (e) {
+        return control(e, 'leftShoulder', -1, 'Yaw', yAxis);
+      },
+
+      rightShoulderPitch: function (e) {
+        return control(e, 'rightShoulder', -1, 'Pitch', zAxis);
+      },
+      rightShoulderYaw: function (e) {
+        return control(e, 'rightShoulder', 1, 'Yaw', yAxis);
+      },
+
+      leftElbowPitch: function (e) {
+        return control(e, 'leftElbow', 1, 'Pitch', yAxis);
+      },
+      leftElbowYaw: function (e) {
+        return control(e, 'leftElbow', -1, 'Yaw', zAxis);
+      },
+
+      rightElbowPitch: function (e) {
+        return control(e, 'rightElbow', -1, 'Pitch', yAxis);
+      },
+      rightElbowYaw: function (e) {
+        return control(e, 'rightElbow', -1, 'Yaw', zAxis);
+      }
+
+    };
+  };
+
+  Frame.prototype.setRotations = function setRotations() {
+
+    this.robot.head.quaternion.copy(this.headQuaternion);
+    this.robot.leftShoulder.quaternion.copy(this.leftShoulderQuaternion);
+    this.robot.rightShoulder.quaternion.copy(this.rightShoulderQuaternion);
+    this.robot.leftElbow.quaternion.copy(this.leftElbowQuaternion);
+    this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
+  };
+
+  Frame.prototype.setValuesAndQuaternionsFromInputs = function setValuesAndQuaternionsFromInputs() {
+
+    this.controlFunctions.headPitch(this.headPitchInput.value);
+    this.controlFunctions.headYaw(this.headYawInput.value);
+    this.controlFunctions.leftShoulderPitch(this.leftShoulderPitchInput.value);
+    this.controlFunctions.leftShoulderYaw(this.leftShoulderYawInput.value);
+
+    this.controlFunctions.rightShoulderPitch(this.rightShoulderPitchInput.value);
+    this.controlFunctions.rightShoulderYaw(this.rightShoulderYawInput.value);
+    this.controlFunctions.leftElbowPitch(this.leftElbowPitchInput.value);
+    this.controlFunctions.leftElbowYaw(this.leftElbowYawInput.value);
+
+    this.controlFunctions.rightElbowPitch(this.rightElbowPitchInput.value);
+    this.controlFunctions.rightElbowYaw(this.rightElbowYawInput.value);
+  };
+
+  Frame.prototype.reset = function reset() {
+
+    this.headPitchInput.value = '';
+    this.headYawInput.value = '';
+    this.leftShoulderPitchInput.value = '';
+    this.leftShoulderYawInput.value = '';
+    this.rightShoulderPitchInput.value = '';
+    this.rightShoulderYawInput.value = '';
+    this.leftElbowPitchInput.value = '';
+    this.leftElbowYawInput.value = '';
+    this.rightElbowPitchInput.value = '';
+    this.rightElbowYawInput.value = '';
+
+    this.setFlags(false);
+    this.setValues();
+
+    this.initQuaternions();
+    this.setRotations();
+  };
+
+  Frame.prototype.fromJSON = function fromJSON(object) {
+
+    this.headPitchInput.value = object.headPitch;
+    this.headYawInput.value = object.headYaw;
+    this.leftShoulderPitchInput.value = object.leftShoulderPitch;
+    this.leftShoulderYawInput.value = object.leftShoulderYaw;
+    this.rightShoulderPitchInput.value = object.rightShoulderPitch;
+    this.rightShoulderYawInput.value = object.rightShoulderYaw;
+    this.leftElbowPitchInput.value = object.leftElbowPitch;
+    this.leftElbowYawInput.value = object.leftElbowYaw;
+    this.rightElbowPitchInput.value = object.rightElbowPitch;
+    this.rightElbowYawInput.value = object.rightElbowYaw;
+
+    this.headPitchSet = this.headPitchInput.value !== '';
+    this.headYawSet = this.headYawInput.value !== '';
+    this.leftShoulderPitchSet = this.leftShoulderPitchInput.value !== '';
+    this.leftShoulderYawSet = this.leftShoulderYawInput.value !== '';
+    this.rightShoulderPitchSet = this.rightShoulderPitchInput.value !== '';
+    this.rightShoulderYawSet = this.rightShoulderYawInput.value !== '';
+    this.leftElbowPitchSet = this.leftElbowPitchInput.value !== '';
+    this.leftElbowYawSet = this.leftElbowYawInput.value !== '';
+    this.rightElbowPitchSet = this.rightElbowPitchInput.value !== '';
+    this.rightElbowYawSet = this.headPitchInput.value !== '';
+
+    this.setValuesAndQuaternionsFromInputs();
+  };
+
+  Frame.prototype.toJSON = function toJSON() {
+
+    return {
+
+      headPitch: this.headPitchInput.value,
+      headYaw: this.headYawInput.value,
+      leftShoulderPitch: this.leftShoulderPitchInput.value,
+      leftShoulderYaw: this.leftShoulderYawInput.value,
+      rightShoulderPitch: this.rightShoulderPitchInput.value,
+      rightShoulderYaw: this.rightShoulderYawInput.value,
+      leftElbowPitch: this.leftElbowPitchInput.value,
+      leftElbowYaw: this.leftElbowYawInput.value,
+      rightElbowPitch: this.rightElbowPitchInput.value,
+      rightElbowYaw: this.rightElbowYawInput.value
+
+    };
+  };
+
+  createClass(Frame, [{
+    key: 'selected',
+    set: function (bool) {
+
+      if (this._selected === bool) return;
+
+      if (bool === true) {
+
+        if (this.row) this.row.style.backgroundColor = 'aliceBlue';
+        this.setRotations();
+        this.addEventListeners();
+        // animationControl.reset();
+
+        this._selected = true;
+      } else {
+
+        if (this.row) this.row.style.backgroundColor = 'initial';
+        this.removeEventListeners();
+
+        this._selected = false;
+      }
+    }
+  }]);
+  return Frame;
+}();
+
+var framerate = 1;
+
+var AnimationControl = function () {
+  function AnimationControl() {
+    var _this = this;
+
+    classCallCheck(this, AnimationControl);
+
+
+    this.defaultFrame = null;
+
+    this.frames = null;
+    this.groups = null;
+    this.dance = null;
+
+    this.actions = [];
+
+    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
+
+      e.preventDefault();
+
+      _this.framerate = e.target.value;
+    });
+  }
+
+  AnimationControl.prototype.setDance = function setDance(dance) {
+
+    this.dance = dance;
+    this.frames = dance.frames;
+    this.groups = dance.groups;
+
+    return this;
+  };
+
+  // pauseAllAnimation() {
+
+  //   if ( this.groups ) this.groups.deselectAll();
+
+  // }
+
+  AnimationControl.prototype.initMixer = function initMixer(object) {
+
+    this.mixer = new AnimationMixer(object);
+  };
+
+  AnimationControl.prototype.onUpdate = function onUpdate(delta) {
+
+    if (this.mixer) this.mixer.update(delta * framerate);
+  };
+
+  AnimationControl.prototype.createAnimation = function createAnimation(frames) {
+
+    this.reset();
+
+    if (frames.length < 2) return [];
+
+    var headTracks = [];
+    var leftShoulderTracks = [];
+    var rightShoulderTracks = [];
+    var leftElbowTracks = [];
+    var rightElbowTracks = [];
+
+    for (var i = 1; i < frames.length; i++) {
+
+      var initialFrame = frames[i - 1];
+      var finalFrame = frames[i];
+
+      var frameStartTime = i - 1;
+
+      headTracks.push(this.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
+
+      leftShoulderTracks.push(this.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
+
+      rightShoulderTracks.push(this.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
+
+      leftElbowTracks.push(this.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
+
+      rightElbowTracks.push(this.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
+    }
+
+    this.actions = [this.createAction('headControl.quaternion', headTracks), this.createAction('shoulderControlLeft.quaternion', leftShoulderTracks), this.createAction('shoulderControlRight.quaternion', rightShoulderTracks), this.createAction('elbowControlLeft.quaternion', leftElbowTracks), this.createAction('elbowControlRight.quaternion', rightElbowTracks)];
+  };
+
+  // create a keyframe track consisting of two keyframes, representing the time span of one frame
+
+
+  AnimationControl.prototype.createKeyFrameTrack = function createKeyFrameTrack(part, initialPos, finalPos, startTime) {
+
+    return new QuaternionKeyframeTrack(part, [startTime, startTime + 1], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
+  };
+
+  // A Clip consists of several keyframe tracks
+  // - for example the movement of an arm over the duration of a group.
+  // An Action controls playback of the clip
+
+
+  AnimationControl.prototype.createAction = function createAction(name, tracks) {
+
+    var clip = new AnimationClip(name, -1, tracks);
+
+    var action = this.mixer.clipAction(clip);
+
+    action.name = clip.name;
+
+    return action;
+  };
+
+  AnimationControl.prototype.play = function play() {
+
+    console.log('animationControl.play');
+
+    this.actions.forEach(function (action) {
+
+      action.play();
+    });
+  };
+
+  AnimationControl.prototype.reset = function reset() {
+
+    console.log('animationControl.reset');
+
+    this.actions.forEach(function (action) {
+
+      action.stop();
+    });
+
+    this.actions = [];
+
+    if (this.groups) this.groups.deselectAll();
+  };
+
+  createClass(AnimationControl, [{
+    key: 'framerate',
+    set: function (value) {
+
+      framerate = value;
+    }
+  }]);
+  return AnimationControl;
+}();
+
+var animationControl = new AnimationControl();
+
+var Frames = function () {
+  function Frames(robot) {
+    classCallCheck(this, Frames);
+
+
+    this.robot = robot;
+
+    // used as the default standing pose for the robot, all dances start here
+    this.defaultFrame = new Frame(this.robot, true);
+
+    this.currentFrameNum = 0;
+    this.selectedFrameNum = -1;
+    this.frames = [];
+
+    this.framesTable = HTMLControl.controls.frames.table;
+    this.newFrameButton = HTMLControl.controls.frames.createButton;
+    this.initNewFrameButton();
+  }
+
+  Frames.prototype.removeFrame = function removeFrame(frame) {
+
+    HTMLControl.controls.frames.table.removeChild(frame.row);
+
+    frame.removeEventListeners();
+  };
+
+  Frames.prototype.createFrame = function createFrame(detail) {
+    var _this = this;
+
+    var frame = new Frame(this.robot, this.currentFrameNum);
+
+    if (detail !== undefined) frame.fromJSON(detail);
+
+    this.frames[this.currentFrameNum] = frame;
+
+    this.framesTable.appendChild(frame.row);
+
+    this.select(this.currentFrameNum);
+
+    frame.row.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      _this.select(frame.num);
+    });
+
+    this.currentFrameNum++;
+
+    return frame;
+  };
+
+  Frames.prototype.initNewFrameButton = function initNewFrameButton() {
+    var _this2 = this;
+
+    this.newFrameButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      _this2.createFrame();
+
+      if (_this2.currentFrameNum >= 30) {
+
+        _this2.newFrameButton.innerHTML = 'Limit Reached!';
+
+        _this2.newFrameButton.disabled = true;
+      }
+    });
+
+    // create the first frame
+    this.newFrameButton.click();
+  };
+
+  Frames.prototype.select = function select(num) {
+
+    if (this.selectedFrameNum === num) return;
+
+    console.log('frames.select', num);
+
+    animationControl.reset();
+
+    var frame = this.frames[num];
+
+    if (frame !== undefined) {
+
+      frame.selected = true;
+    }
+
+    this.selectedFrameNum = num;
+
+    for (var i = 0; i < this.frames.length; i++) {
+
+      if (i !== num) this.frames[i].selected = false;
+    }
+  };
+
+  Frames.prototype.deselectAll = function deselectAll() {
+
+    this.select(-1);
+    this.defaultFrame.selected = true;
+  };
+
+  Frames.prototype.reset = function reset() {
+    var _this3 = this;
+
+    this.frames.forEach(function (frame) {
+
+      _this3.removeFrame(frame);
+    });
+
+    this.selectedFrameNum = -1;
+    this.currentFrameNum = 0;
+    this.frames = [];
+  };
+
+  Frames.prototype.fromJSON = function fromJSON(object) {
+
+    this.reset();
+
+    for (var key in object) {
+
+      this.createFrame(object[key]);
+    }
+  };
+
+  Frames.prototype.toJSON = function toJSON() {
+
+    var output = {};
+
+    for (var i = 0; i < this.frames.length; i++) {
+
+      var frame = this.frames[i];
+
+      if (frame !== null) {
+
+        output[i] = frame.toJSON();
+      } else {
+
+        output[i] = null;
+      }
+    }
+
+    return output;
+  };
+
+  return Frames;
+}();
+
+// Append a cell containing a delete button to a table row
+
+var DeleteButtonCell = function () {
+  function DeleteButtonCell(row) {
+    var _this = this;
+
+    classCallCheck(this, DeleteButtonCell);
+
+
+    var deleteButtonCell = document.createElement('td');
+    this.button = document.createElement('button');
+    this.button.innerHTML = '<span class="fa fa-lg fa-trash-o" aria-hidden="true"></span>';
+    deleteButtonCell.appendChild(this.button);
+    row.appendChild(deleteButtonCell);
+
+    this.onClick = function () {};
+
+    this.click = function (e) {
+
+      if (e) e.preventDefault();
+
+      _this.onClick();
+
+      _this.button.removeEventListener('click', _this.click);
+    };
+
+    this.button.addEventListener('click', this.click);
+  }
+
+  createClass(DeleteButtonCell, [{
+    key: 'disabled',
+    set: function (value) {
+
+      this.button.disabled = true;
+    }
+  }]);
+  return DeleteButtonCell;
+}();
+
+var Group$1 = function () {
+  function Group(num, frames) {
+    classCallCheck(this, Group);
+
+
+    this.type = 'group';
+
+    this.frames = frames;
+    this.robot = frames.robot;
+
+    this.containedFrames = [];
+
+    this.valid = false;
+
+    this.num = num;
+
+    this.initTableRow();
+
+    this.initAddFrameButton();
+
+    this._selected = false;
+  }
+
+  Group.prototype.checkGroupIsValid = function checkGroupIsValid() {
+
+    return this.containedFrames.length > 1;
+  };
+
+  Group.prototype.initTableRow = function initTableRow() {
+    var _this = this;
+
+    this.row = document.createElement('tr');
+
+    new TextCell(this.row, this.num);
+    var framesCell = new TextCell(this.row, '<h4>Frames in Group</h4>');
+
+    this.addFrameButton = document.createElement('button');
+    this.addFrameButton.classList.add('add-selected-frame-button');
+    this.addFrameButton.innerHTML = 'Add Selected Frame';
+
+    framesCell.appendChild(this.addFrameButton);
+
+    var frameTable = document.createElement('table');
+    this.framesInGroup = document.createElement('tbody');
+    this.framesInGroup.classList.add('frames-in-group');
+
+    frameTable.appendChild(this.framesInGroup);
+    framesCell.appendChild(frameTable);
+
+    this.resetButton = new ResetButtonCell(this.row);
+    this.resetButton.onClick = function () {
+      return _this.reset();
+    };
+  };
+
+  Group.prototype.addFrame = function addFrame(frame) {
+    var _this2 = this;
+
+    var detail = {
+      frame: frame,
+      deleteButton: null
+    };
+
+    this.containedFrames.push(detail);
+    var framePos = this.containedFrames.length - 1;
+
+    var row = document.createElement('tr');
+
+    this.framesInGroup.appendChild(row);
+
+    new TextCell(row, 'Frame #' + frame.num);
+
+    row.appendChild(document.createElement('td'));
+
+    detail.deleteButton = new DeleteButtonCell(row);
+
+    detail.deleteButton.onClick = function () {
+
+      if (_this2.framesInGroup.contains(row)) _this2.framesInGroup.removeChild(row);
+
+      if (_this2.lastAddedFrameNum === frame.num) _this2.lastAddedFrameNum = null;
+
+      _this2.containedFrames.splice(framePos, 1);
+
+      _this2.createAnimation();
+    };
+
+    this.selected = true;
+  };
+
+  Group.prototype.initAddFrameButton = function initAddFrameButton() {
+    var _this3 = this;
+
+    this.lastAddedFrameNum = null;
+
+    this.addFrameButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      var frame = _this3.frames.frames[_this3.frames.selectedFrameNum];
+
+      if (frame === undefined || frame === null) return;
+
+      // don't add the same frame consecutively (use loop instead)
+      if (_this3.lastAddedFrame === frame) return;
+
+      _this3.lastAddedFrameNum = frame;
+
+      _this3.addFrame(frame);
+
+      _this3.createAnimation();
+      animationControl.play();
+    });
+  };
+
+  Group.prototype.createAnimation = function createAnimation() {
+
+    var frames = this.containedFrames.map(function (detail) {
+      return detail.frame;
+    });
+
+    animationControl.createAnimation(frames);
+  };
+
+  Group.prototype.reset = function reset() {
+
+    // console.log( this.containedFrames )
+    for (var i = this.containedFrames.length - 1; i >= 0; i--) {
+
+      this.containedFrames[i].deleteButton.click();
+    }
+
+    this.containedFrames = [];
+    console.log(this.containedFrames.length);
+
+    animationControl.reset();
+    this.selected = false;
+  };
+
+  Group.prototype.fromJSON = function fromJSON(object) {
+
+    this.reset();
+
+    for (var key in object) {
+
+      var detail = object[key];
+
+      this.addFrame(this.frames.frames[detail.frameNum]);
+    }
+  };
+
+  Group.prototype.toJSON = function toJSON() {
+
+    var output = {};
+
+    for (var i = 0; i < this.containedFrames.length; i++) {
+
+      var detail = this.containedFrames[i];
+
+      output[i] = {
+
+        frameNum: detail.frame.num
+
+      };
+    }
+
+    return output;
+  };
+
+  createClass(Group, [{
+    key: 'selected',
+    set: function (bool) {
+
+      if (this._selected === bool) return;
+
+      if (bool === true) {
+
+        this.row.style.backgroundColor = 'aliceBlue';
+        this.createAnimation(this.containedFrames);
+        animationControl.play();
+        this._selected = true;
+      } else {
+
+        this.row.style.backgroundColor = 'initial';
+        this._selected = false;
+      }
+    }
+  }]);
+  return Group;
+}();
+
+var Groups = function () {
+  function Groups(frames) {
+    classCallCheck(this, Groups);
+
+
+    this.frames = frames;
+    this.robot = frames.robot;
+
+    this.currentGroupNum = 0;
+    this.selectedGroup = null;
+    this.groups = [];
+
+    this.groupsTable = HTMLControl.controls.groups.table;
+    this.newGroupButton = HTMLControl.controls.groups.createButton;
+    this.initNewGroupButton();
+  }
+
+  Groups.prototype.removeGroup = function removeGroup(group) {
+
+    this.groupsTable.removeChild(group.row);
+
+    this.groups[group.num] = null;
+
+    group.reset();
+
+    if (this.selectedGroup === group) this.selectedGroup = null;
+  };
+
+  Groups.prototype.createGroup = function createGroup(num, details) {
+    var _this = this;
+
+    var group = new Group$1(num, this.frames);
+
+    if (details !== undefined) group.fromJSON(details);
+
+    this.groups.push(group);
+
+    this.groupsTable.appendChild(group.row);
+
+    this.select(group);
+
+    var select = function (e) {
+
+      e.preventDefault();
+
+      _this.select(group);
+    };
+
+    group.row.addEventListener('click', select);
+  };
+
+  Groups.prototype.initNewGroupButton = function initNewGroupButton() {
+    var _this2 = this;
+
+    this.newGroupButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      _this2.createGroup(_this2.currentGroupNum++);
+
+      if (_this2.currentGroupNum >= 29) {
+
+        _this2.newGroupButton.innerHTML = 'Limit Reached!';
+
+        _this2.newGroupButton.disabled = true;
+      }
+    });
+
+    this.newGroupButton.click();
+  };
+
+  Groups.prototype.select = function select(group) {
+
+    group.selected = true;
+
+    this.selectedGroup = group;
+
+    this.groups.forEach(function (g) {
+
+      if (g !== null && g.num !== group.num) {
+
+        g.selected = false;
+      }
+    });
+  };
+
+  Groups.prototype.deselectAll = function deselectAll() {
+
+    this.groups.forEach(function (g) {
+
+      g.selected = false;
+    });
+  };
+
+  Groups.prototype.reset = function reset() {
+    var _this3 = this;
+
+    this.groups.forEach(function (group) {
+
+      if (group !== null) _this3.removeGroup(group);
+    });
+
+    this.currentGroupNum = 0;
+    this.selectedGroup = null;
+    this.groups = [];
+  };
+
+  Groups.prototype.fromJSON = function fromJSON(object) {
+
+    this.reset();
+
+    for (var key in object) {
+
+      var detail = object[key];
+
+      if (detail === null) {
+
+        this.frames[key] = null;
+      } else {
+
+        this.createGroup(key, detail);
+        this.currentFrameNum = key;
+      }
+    }
+
+    this.deselectAll();
+  };
+
+  Groups.prototype.toJSON = function toJSON() {
+
+    var output = {};
+
+    for (var i = 0; i < this.groups.length; i++) {
+
+      var group = this.groups[i];
+
+      if (group !== null) {
+
+        output[i] = group.toJSON();
+      } else {
+
+        output[i] = null;
+      }
+    }
+
+    return output;
+  };
+
+  return Groups;
+}();
+
+var LoopInputCell = function LoopInputCell(row) {
+  var _this = this;
+
+  classCallCheck(this, LoopInputCell);
+
+
+  var cell = document.createElement('td');
+  cell.innerHTML = 'Loop ';
+  row.appendChild(cell);
+
+  var input = document.createElement('input');
+  cell.appendChild(input);
+  input.type = 'number';
+  input.min = '0';
+  input.value = '1';
+  input.step = '1';
+
+  var text = document.createElement('span');
+  text.style.width = '8em';
+  text.style.textAlign = 'left';
+  text.style.marginLeft = '0.25em';
+  text.innerHTML = ' time';
+  cell.appendChild(text);
+
+  this.onInput = function () {};
+
+  input.addEventListener('input', function (e) {
+
+    e.preventDefault();
+
+    var value = parseInt(e.target.value, 10);
+
+    if (value === 0) row.style.backgroundColor = 'darkgrey';else row.style.backgroundColor = 'initial';
+
+    if (value !== 1) text.innerHTML = ' times';else text.nodeValue = text.innerHTML = ' time';
+
+    _this.onInput(value);
+  });
+};
+
+var flattenGroup = function (group, loopAmount) {
+
+  var frames = [];
+
+  for (var i = 0; i < loopAmount; i++) {
+
+    frames = frames.concat(group.containedFrames.map(function (detail) {
+      return detail.frame;
+    }));
+  }
+
+  return frames;
+};
+// take the details array and flatten it to an array of frames
+var flattenDetails = function (details) {
+
+  var frames = [];
+
+  details.forEach(function (detail) {
+
+    var elem = detail.elem;
+
+    if (elem.type === 'frame') frames.push(elem);else if (elem.type === 'group') {
+
+      frames = frames.concat(flattenGroup(elem, detail.loopAmount));
+    }
+  });
+
+  return frames;
+};
+
+var Dance = function () {
+  function Dance(groups) {
+    classCallCheck(this, Dance);
+
+
+    this.groups = groups;
+    this.frames = groups.frames;
+    this.robot = this.frames.robot;
+
+    this.valid = false;
+
+    this.lastAddedType = null;
+    this.table = HTMLControl.controls.dance.table;
+
+    this.containedElems = [];
+
+    this.initAdvancedControlsToggle();
+    this.initAddSelectedFrameButton();
+    this.initAddSelectedGroupButton();
+    this.initDanceButton();
+    this.initResetButton();
+    this.initFramerateInput();
+  }
+
+  Dance.prototype.initAdvancedControlsToggle = function initAdvancedControlsToggle() {
+
+    HTMLControl.controls.dance.advancedControlToggle.addEventListener('change', function (e) {
+
+      e.preventDefault();
+
+      HTMLControl.controls.dance.advancedControlSection.classList.toggle('hide');
+    });
+  };
+
+  Dance.prototype.add = function add(elem, loop) {
+    var _this = this;
+
+    var loopAmount = loop || 1;
+
+    var detail = {
+      elem: elem,
+      loopAmount: loopAmount,
+      deleteButton: null
+    };
+
+    this.containedElems.push(detail);
+
+    var pos = this.containedElems.length - 1;
+
+    var row = document.createElement('tr');
+    this.table.appendChild(row);
+
+    new TextCell(row, elem.num);
+    new TextCell(row, elem.type);
+
+    if (elem.type === 'group') {
+
+      var loopInput = new LoopInputCell(row);
+
+      loopInput.onInput = function (value) {
+
+        detail.loopAmount = value;
+        _this.checkDanceIsValid();
+      };
+    } else {
+
+      row.appendChild(document.createElement('td'));
+    }
+
+    detail.deleteButton = new DeleteButtonCell(row);
+
+    detail.deleteButton.onClick = function () {
+
+      if (_this.table.contains(row)) _this.table.removeChild(row);
+
+      _this.containedElems.splice(pos, 1);
+
+      if (detail.elem.type === 'group' && detail.elem.num === _this.lastAddedGroupNum) _this.lastAddedGroupNum = -1;
+      if (detail.elem.type === 'frame' && detail.elem.num === _this.lastAddedFrameNum) _this.lastAddedFrameNum = -1;
+
+      _this.checkDanceIsValid();
+    };
+
+    this.checkDanceIsValid();
+    HTMLControl.controls.dance.resetButton.disabled = false;
+  };
+
+  Dance.prototype.initAddSelectedFrameButton = function initAddSelectedFrameButton() {
+    var _this2 = this;
+
+    this.lastAddedFrameNum = null;
+
+    HTMLControl.controls.dance.addFrameButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      var frame = _this2.frames.frames[_this2.frames.selectedFrameNum];
+      _this2.groups.deselectAll();
+      animationControl.reset();
+
+      if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
+
+      _this2.add(frame);
+
+      _this2.lastAddedFrameNum = frame.num;
+      _this2.lastAddedType = 'frame';
+    });
+  };
+
+  Dance.prototype.initAddSelectedGroupButton = function initAddSelectedGroupButton() {
+    var _this3 = this;
+
+    this.lastAddedGroupNum = null;
+
+    HTMLControl.controls.dance.addGroupButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      var group = _this3.groups.selectedGroup;
+      _this3.groups.deselectAll();
+      animationControl.reset();
+
+      if (group === null || group.num === _this3.lastAddedGroupNum && _this3.lastAddedType === 'group') return;
+
+      _this3.add(group);
+
+      _this3.lastAddedGroupNum = group.num;
+      _this3.lastAddedType = 'group';
+    });
+  };
+
+  Dance.prototype.initFramerateInput = function initFramerateInput() {
+    var _this4 = this;
+
+    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
+
+      _this4.groups.deselectAll();
+      _this4.framerate = e.target.value;
+    });
+  };
+
+  Dance.prototype.setFramerate = function setFramerate(rate) {
+
+    if (rate < 0.1 || rate > 10) {
+
+      console.warn('Attempting to set frame rate outside of allowed range [0.1, 10]!');
+      rate = 1;
+    }
+
+    HTMLControl.controls.dance.framerate.value = rate;
+    this.framerate = rate;
+  };
+
+  Dance.prototype.initDanceButton = function initDanceButton() {
+    var _this5 = this;
+
+    HTMLControl.controls.dance.playButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      _this5.groups.deselectAll();
+      animationControl.reset();
+      _this5.createAnimation();
+      animationControl.play();
+
+      if (HTMLControl.controls.music.play.innerHTML === 'Play') {
+
+        HTMLControl.controls.music.play.click();
+      }
+    });
+  };
+
+  Dance.prototype.initResetButton = function initResetButton() {
+    var _this6 = this;
+
+    HTMLControl.controls.dance.resetButton.addEventListener('click', function (e) {
+
+      e.preventDefault();
+
+      _this6.groups.deselectAll();
+      animationControl.reset();
+      _this6.reset();
+    });
+  };
+
+  Dance.prototype.createAnimation = function createAnimation() {
+
+    this.reset();
+
+    var frames = flattenDetails(this.containedElems);
+
+    this.actions = animationControl.createAnimation(frames);
+  };
+
+  Dance.prototype.checkDanceIsValid = function checkDanceIsValid() {
+
+    var containedFramesNum = 0;
+    var containsValidGroups = false;
+
+    this.containedElems.forEach(function (detail) {
+
+      if (detail.elem.type === 'frame') containedFramesNum++;else if (detail.elem.type === 'group') {
+
+        // this would require a 'change' event added to the group so that the dance can listen
+        // when frames are added or removed to check whether the group becomes valid
+        // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
+        if (detail.loopAmount > 0) containsValidGroups = true;
+      }
+    });
+
+    this.valid = containedFramesNum > 1 || containsValidGroups;
+
+    HTMLControl.controls.dance.playButton.disabled = !this.valid;
+  };
+
+  Dance.prototype.reset = function reset() {
+
+    for (var i = this.containedElems.length - 1; i >= 0; i--) {
+
+      this.containedElems[i].deleteButton.click();
+    }
+
+    this.valid = false;
+    HTMLControl.controls.dance.playButton.disabled = true;
+    HTMLControl.controls.dance.resetButton.disabled = true;
+  };
+
+  Dance.prototype.fromJSON = function fromJSON(object) {
+
+    this.reset();
+
+    this.setFramerate(object.framerate || 1);
+
+    for (var key in object) {
+
+      var value = object[key];
+
+      if (value.type === 'frame') {
+
+        this.add(this.frames.frames[value.num]);
+      } else if (value.type === 'group') {
+
+        this.add(this.groups.groups[value.num], value.loopAmount);
+      } else if (key === 'framerate') {
+
+        HTMLControl.controls.dance.framerate.value = value;
+      }
+    }
+
+    this.checkDanceIsValid();
+  };
+
+  Dance.prototype.toJSON = function toJSON() {
+
+    var output = {
+
+      framerate: this.framerate
+
+    };
+
+    for (var i = 0; i < this.containedElems.length; i++) {
+
+      var detail = this.containedElems[i];
+
+      if (detail !== null) {
+
+        output[i] = {
+
+          type: detail.elem.type,
+          num: detail.elem.num,
+          loopAmount: detail.loopAmount
+
+        };
+      } else {
+
+        output[i] = null;
+      }
+    }
+
+    return output;
+  };
+
+  createClass(Dance, [{
+    key: 'framerate',
+    set: function (value) {
+
+      animationControl.framerate = value;
+    }
+  }]);
+  return Dance;
+}();
+
 var Main = function () {
   function Main() {
     classCallCheck(this, Main);
@@ -60762,18 +60799,16 @@ var Main = function () {
   Main.prototype.load = function load() {
     var _this = this;
 
+    console.time('Loading took: ');
     var stagePromise = loaders.fbxLoader('/assets/models/robot_dance/stage_camera_lights.fbx').then(function (object) {
 
       _this.stage = object.getObjectByName('Stage');
 
-      object.getObjectByName('scene').receiveShadow = true;
-      object.getObjectByName('curtains top').receiveShadow = true;
-
       _this.camera = object.getObjectByName('Camera');
-      _this.spotLight = object.getObjectByName('Spotstage_center_high');
+      _this.spotLight = object.getObjectByName('Spot_stage_center_high');
 
-      _this.soundSourceLeft = object.getObjectByName('Stage Left Sound');
-      _this.soundSourceRight = object.getObjectByName('Stage Right Sound');
+      _this.soundSourceLeft = object.getObjectByName('Stage_Left_Sound');
+      _this.soundSourceRight = object.getObjectByName('Stage_Right_Sound');
 
       _this.sceneCentre = new Box3().setFromObject(object).getCenter();
     });
@@ -60785,11 +60820,6 @@ var Main = function () {
       _this.robot = new Robot(object);
 
       object.position.z += 10;
-
-      object.traverse(function (child) {
-
-        if (child instanceof Mesh) child.castShadow = true;
-      });
     });
 
     this.loadingPromises.push(naoPromise, stagePromise);
@@ -60805,6 +60835,7 @@ var Main = function () {
 
       _this2.initBackground();
       _this2.initLighting();
+      _this2.initShadows();
       _this2.initCamera();
       _this2.initCameraControl();
 
@@ -60821,35 +60852,69 @@ var Main = function () {
       new FileControl(frames, groups, dance);
 
       _this2.app.play();
+
+      console.timeEnd('Loading took: ');
+    });
+  };
+
+  Main.prototype.initShadows = function initShadows() {
+
+    this.stage.getObjectByName('scene').receiveShadow = true;
+    this.stage.getObjectByName('curtains_top').receiveShadow = true;
+
+    this.robot.model.traverse(function (child) {
+
+      if (child.name === 'R_shin' || child.name === 'R_thigh' || child.name === 'L_thigh' || child.name === 'L_shin' || child.name === 'fingers18' || child.name === 'fingers11' || child.name === 'fingers21' || child.name === 'fingers20' || child.name === 'fingers14' || child.name === 'fingers12' || child.name === 'fingers16' || child.name === 'fingers15' || child.name === 'fingers13' || child.name === 'fingers13' || child.name === 'fingers19' || child.name === 'L_forearm' || child.name === 'L_elbow' || child.name === 'L_shoulder' || child.name === 'L_arm_upper' || child.name === 'fingers05' || child.name === 'fingers06' || child.name === 'fingers08' || child.name === 'fingers10' || child.name === 'fingers00' || child.name === 'fingers02' || child.name === 'fingers04' || child.name === 'fingers03' || child.name === 'fingers07' || child.name === 'fingers09' || child.name === 'fingers01' || child.name === 'R_elbow' || child.name === 'R_shoulder' || child.name === 'R_arm_upper' || child.name === 'R_hand' || child.name === 'R_wrist' || child.name === 'body' || child.name === 'neck' || child.name === 'head' || child.name === 'L_hip' || child.name === 'R_hip' || child.name === 'L_hand'
+
+      // ||  child.name === 'R_foot'
+      // || child.name === 'R_knee'
+      // || child.name === 'L_foot'
+      // || child.name === 'chest_detail'
+      // || child.name === 'R_knee_rear'
+      // || child.name === 'R_hip_lower'
+      // || child.name === 'R_hip_cog'
+      // || child.name === 'L_hip_cog'
+      // || child.name === 'L_hip_lower'
+      // || child.name === 'L_knee'
+      // || child.name === 'L_ankle'
+      // || child.name === 'R_ankle'
+      // || child.name === 'L_knee_rear'
+      // || child.name === 'fingers17'
+      // || child.name === 'L_shoulder_joint'
+      // || child.name === 'R_shoulder_joint'
+
+      ) {
+
+          child.castShadow = true;
+        }
     });
   };
 
   Main.prototype.initLighting = function initLighting() {
 
-    var ambientLight = new AmbientLight(0xffffff, 0.4);
+    var ambientLight = new AmbientLight(0xffffff, 0.3);
     this.app.scene.add(ambientLight);
 
     this.spotLight.castShadow = true;
-    // Set up shadow properties for the light
     this.spotLight.shadow.mapSize.width = 2048;
     this.spotLight.shadow.mapSize.height = 2048;
-    this.spotLight.shadow.camera.near = 100;
+    this.spotLight.shadow.camera.near = 80;
     this.spotLight.shadow.camera.far = 300;
 
-    this.spotLight.penumbra = 0.4;
-    this.spotLight.angle = 0.5;
+    this.spotLight.penumbra = 0.45;
+    this.spotLight.angle = 0.45;
     this.spotLight.distance = 300;
 
     var left = this.spotLight.clone();
-    left.intensity = 0.75;
+    left.intensity = 0.85;
     left.position.x -= 100;
     left.position.y += 20;
-    left.shadow.radius = 2;
+    left.shadow.radius = 1.5;
 
     var center = this.spotLight.clone();
-    center.intensity = 1.5;
+    center.intensity = 1.25;
     center.position.x += 25;
-    center.shadow.radius = 1.25;
+    center.shadow.radius = 1.75;
 
     this.app.scene.add(left, center);
   };

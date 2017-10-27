@@ -1,0 +1,55 @@
+import animationControl from './animationControl.js';
+
+export default class GroupAnimation {
+
+  constructor( robot ) {
+
+    this.robot = robot;
+
+    this.actions = [];
+
+  }
+
+  createAnimation( framesDetails ) {
+
+    const frames = framesDetails.map( detail => detail.frame );
+
+    this.reset();
+
+    this.actions = animationControl.createActions( frames );
+
+  }
+
+  play() {
+
+    this.actions.forEach( ( action ) => {
+
+      action.play();
+
+    } );
+
+  }
+
+  stop() {
+
+    this.actions.forEach( ( action ) => {
+
+      action.stop();
+
+    } );
+
+  }
+
+  reset() {
+
+    // set robot back to initial pose
+
+    this.actions.forEach( ( action ) => {
+
+      action.reset();
+
+    } );
+
+  }
+
+}

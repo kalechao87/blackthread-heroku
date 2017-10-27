@@ -65,18 +65,4 @@ export default class Robot {
 
   }
 
-  // resetPose() {
-
-  //   console.log( 'TODO: robot.resetPose ' );
-
-  //   // this.head.quaternion.copy( this.headInitialQuaternion );
-
-  //   // this.leftShoulder.quaternion.copy( this.leftShoulderInitialQuaternion );
-  //   // this.rightShoulder.quaternion.copy( this.rightShoulderInitialQuaternion );
-
-  //   // this.leftElbow.quaternion.copy( this.leftElbowInitialQuaternion );
-  //   // this.rightElbow.quaternion.copy( this.rightElbowInitialQuaternion );
-
-  // }
-
 }

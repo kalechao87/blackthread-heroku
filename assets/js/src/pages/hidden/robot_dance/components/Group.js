@@ -2,7 +2,7 @@ import TextCell from './HTML/TextCell.js';
 import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 import ResetButtonCell from './HTML/ResetButtonCell.js';
 
-import GroupAnimation from '../animation/GroupAnimation.js';
+import animationControl from '../animation/animationControl.js';
 
 export default class Group {
 
@@ -19,8 +19,6 @@ export default class Group {
 
     this.num = num;
 
-    this.animation = new GroupAnimation( this.robot );
-
     this.initTableRow();
 
     this.initAddFrameButton();
@@ -36,14 +34,13 @@ export default class Group {
     if ( bool === true ) {
 
       this.row.style.backgroundColor = 'aliceBlue';
-      this.animation.createAnimation( this.containedFrames );
-      this.animation.play();
+      this.createAnimation( this.containedFrames );
+      animationControl.play();
       this._selected = true;
 
     } else {
 
       this.row.style.backgroundColor = 'initial';
-      this.animation.stop();
       this._selected = false;
 
     }
@@ -104,14 +101,13 @@ export default class Group {
 
     detail.deleteButton.onClick = () => {
 
-      // if ( this.framesInGroup.contains( row ) )
-      this.framesInGroup.removeChild( row );
+      if ( this.framesInGroup.contains( row ) ) this.framesInGroup.removeChild( row );
 
       if ( this.lastAddedFrameNum === frame.num ) this.lastAddedFrameNum = null;
 
       this.containedFrames.splice( framePos, 1 );
 
-      this.animation.createAnimation( this.containedFrames );
+      this.createAnimation();
 
     };
 
@@ -139,22 +135,35 @@ export default class Group {
 
       this.addFrame( frame );
 
+      this.createAnimation();
+      animationControl.play();
+
     } );
+
+  }
+
+  createAnimation() {
+
+    const frames = this.containedFrames.map( detail => detail.frame );
+
+    animationControl.createAnimation( frames );
 
   }
 
   reset() {
 
-    console.log( 'TODO: Group.reset doesn\'t remove last frame' );
-
-    for ( let i = 0; i < this.containedFrames.length; i++ ) {
+    // console.log( this.containedFrames )
+    for ( let i = this.containedFrames.length - 1; i >= 0; i-- ) {
 
       this.containedFrames[i].deleteButton.click();
 
     }
 
-    this.animation.stop();
-    this.animation.reset();
+    this.containedFrames = [];
+    console.log( this.containedFrames.length )
+
+    animationControl.reset();
+    this.selected = false;
 
   }
 

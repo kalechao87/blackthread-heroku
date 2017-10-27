@@ -13,6 +13,8 @@ class AnimationControl {
     this.groups = null;
     this.dance = null;
 
+    this.actions = [];
+
     HTMLControl.controls.dance.framerate.addEventListener( 'input', ( e ) => {
 
       e.preventDefault();
@@ -39,11 +41,11 @@ class AnimationControl {
 
   }
 
-  pauseAllAnimation() {
+  // pauseAllAnimation() {
 
-    if ( this.groups ) this.groups.deselectAll();
+  //   if ( this.groups ) this.groups.deselectAll();
 
-  }
+  // }
 
   initMixer( object ) {
 
@@ -54,6 +56,57 @@ class AnimationControl {
   onUpdate( delta ) {
 
     if ( this.mixer ) this.mixer.update( delta * framerate );
+
+  }
+
+  createAnimation( frames ) {
+
+    this.reset();
+
+    if ( frames.length < 2 ) return [];
+
+    const headTracks = [];
+    const leftShoulderTracks = [];
+    const rightShoulderTracks = [];
+    const leftElbowTracks = [];
+    const rightElbowTracks = [];
+
+    for ( let i = 1; i < frames.length; i++ ) {
+
+      const initialFrame = frames[ i - 1 ];
+      const finalFrame = frames[ i ];
+
+      const frameStartTime = i - 1;
+
+      headTracks.push(
+        this.createKeyFrameTrack( 'head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime ),
+      );
+
+      leftShoulderTracks.push(
+        this.createKeyFrameTrack( 'leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime ),
+      );
+
+      rightShoulderTracks.push(
+        this.createKeyFrameTrack( 'rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime ),
+      );
+
+      leftElbowTracks.push(
+        this.createKeyFrameTrack( 'leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime ),
+      );
+
+      rightElbowTracks.push(
+        this.createKeyFrameTrack( 'rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime ),
+      );
+
+    }
+
+    this.actions = [
+      this.createAction( 'headControl.quaternion', headTracks ),
+      this.createAction( 'shoulderControlLeft.quaternion', leftShoulderTracks ),
+      this.createAction( 'shoulderControlRight.quaternion', rightShoulderTracks ),
+      this.createAction( 'elbowControlLeft.quaternion', leftElbowTracks ),
+      this.createAction( 'elbowControlRight.quaternion', rightElbowTracks ),
+    ];
 
   }
 
@@ -91,6 +144,35 @@ class AnimationControl {
     action.name = clip.name;
 
     return action;
+
+  }
+
+  play() {
+
+    console.log( 'animationControl.play' )
+
+    this.actions.forEach( ( action ) => {
+
+      action.play();
+
+    } );
+
+  }
+
+  reset() {
+
+    console.log( 'animationControl.reset' );
+
+    this.actions.forEach( ( action ) => {
+
+      action.stop();
+
+    } );
+
+    this.actions = [];
+
+    if ( this.groups ) this.groups.deselectAll();
+
 
   }
 
