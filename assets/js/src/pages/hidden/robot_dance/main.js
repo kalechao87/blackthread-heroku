@@ -142,8 +142,38 @@ class Main {
 
   initShadows() {
 
-    this.stage.getObjectByName( 'scene' ).receiveShadow = true;
-    this.stage.getObjectByName( 'curtains_top' ).receiveShadow = true;
+    // this.stage.getObjectByName( 'scene' ).receiveShadow = true;
+    // this.stage.getObjectByName( 'curtains_top' ).receiveShadow = true;
+
+    this.stage.traverse( ( child ) => {
+
+      if(
+        child.name === 'scene'
+        || child.name === 'curtains_top'
+        // || child.name === 'curtains'
+       ) {
+
+         child.receiveShadow = true;
+
+       }
+
+      if(
+
+        child.name === 'side'
+        // || child.name === 'curtains'
+
+        || child.name === 'speaker_cone'
+        || child.name === 'speaker_cone_edge'
+        || child.name === 'speaker_cone_outer'
+        || child.name === 'Speaker_body'
+        || child.name === 'tassle04'
+        || child.name === 'tassle02'
+
+      ) {
+        child.castShadow = true;
+      }
+
+    } );
 
     this.robot.model.traverse( ( child ) => {
 
@@ -224,8 +254,8 @@ class Main {
     this.app.scene.add( ambientLight );
 
     this.spotLight.castShadow = true;
-    this.spotLight.shadow.mapSize.width = 2048;
-    this.spotLight.shadow.mapSize.height = 2048;
+    this.spotLight.shadow.mapSize.width = 1024;
+    this.spotLight.shadow.mapSize.height = 1024;
     this.spotLight.shadow.camera.near = 80;
     this.spotLight.shadow.camera.far = 300;
 
@@ -234,13 +264,13 @@ class Main {
     this.spotLight.distance = 300;
 
     const left = this.spotLight.clone();
-    left.intensity = 0.85;
+    left.intensity = 0.9;
     left.position.x -= 100;
     left.position.y += 20;
     left.shadow.radius = 1.5;
 
     const center = this.spotLight.clone();
-    center.intensity = 1.25;
+    center.intensity = 1.2;
     center.position.x += 25;
     center.shadow.radius = 1.75;
 

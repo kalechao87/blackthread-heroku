@@ -81,7 +81,7 @@ export default class Frames {
 
   select( num ) {
 
-    if ( this.selectedFrameNum === num ) return;
+    // if ( this.selectedFrameNum === num ) return;
 
     console.log( 'frames.select', num );
 

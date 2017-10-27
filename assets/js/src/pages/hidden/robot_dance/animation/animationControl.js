@@ -137,7 +137,7 @@ class AnimationControl {
   // An Action controls playback of the clip
   createAction( name, tracks ) {
 
-    const clip = new THREE.AnimationClip( name, -1, tracks );
+    const clip = new THREE.AnimationClip( name, tracks.length, tracks );
 
     const action = this.mixer.clipAction( clip );
 
