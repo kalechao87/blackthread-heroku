@@ -5,7 +5,7 @@ require 'pony'
 use Rack::Cors do |config|
   config.allow do |allow|
     allow.origins '*'
-    allow.resource '/send_email', :methods => [:post]
+    allow.resource '/sendgrid.rb', :methods => [:post]
   end
 end
 
