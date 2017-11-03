@@ -1,4 +1,7 @@
 <?php
+
+require( "./sendgrid-/sendgrid-php.php" );
+
 /* Set e-mail recipient */
 $myemail  = "looeee@gmail.com";
 
@@ -9,11 +12,6 @@ $message  = check_input($_POST['message'], "No message entered");
 $subject = "Black Thread Message";
 $mailheader = "From: $email \r\n";
 
-/* If e-mail is not valid show error message */
-if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/", $email))
-{
-    show_error("E-mail address not valid");
-}
 
 /* Let's prepare the message for the e-mail */
 $emailContent = "Black Thread Message
@@ -24,38 +22,34 @@ Message: $message
 
 ";
 
-/* Send the message using mail() function */
-mail( $myemail, $subject, $emailContent, $mailheader ) or die("Sorry, the mailing server encountered an error. Please email directly to looeee@gmail.com");
-
-/* Redirect visitor to the thank you page */
-header('Location: /thanks.html');
-exit();
-
-
-function check_input($data, $problem='')
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    if ($problem && strlen($data) == 0)
+$request_body = json_decode('{
+  "personalizations": [
     {
-        show_error($problem);
+      "to": [
+        {
+          "email": $myemail
+        }
+      ],
+      "subject": "Hello World from the SendGrid PHP Library!"
     }
-    return $data;
-}
+  ],
+  "from": {
+    "email": $myemail
+  },
+  "content": [
+    {
+      "type": "text/plain",
+      "value": "Hello, Email!"
+    }
+  ]
+}');
 
-function show_error($myError)
-{
-?>
-    <html>
-    <body>
+$apiKey = getenv('SENDGRID_API_KEY');
+$sg = new \SendGrid($apiKey);
 
-    <b>Please correct the following error:</b><br />
-    <?php echo $myError; ?>
+$response = $sg->client->mail()->send()->post($request_body);
+echo $response->statusCode();
+echo $response->body();
+echo $response->headers();
 
-    </body>
-    </html>
-<?php
-exit();
-}
 ?>
