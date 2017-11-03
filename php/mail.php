@@ -2,7 +2,7 @@
 
 require( "./sendgrid/sendgrid-php.php" );
 
-$myemail = "looeee@gmail.com";
+$myemail  = "looeee@gmail.com";
 
 /* Check all form inputs using check_input function */
 $name = check_input($_POST['name'], "Please enter your name");
@@ -46,27 +46,27 @@ Message: $message
 
 ";
 
-$request_body = json_decode("{
-  'personalizations': [
+$request_body = json_decode('{
+  "personalizations": [
     {
-      'to': [
+      "to": [
         {
-          'email': '$myemail'
+          "email": "'.$myemail.'"
         }
       ],
-      'subject': '$subject'
+      "subject": "'.$subject.'"
     }
   ],
-  'from': {
-    'email': '$myemail'
+  "from": {
+    "email": "'.$myemail.'"
   },
-  'content': [
+  "content": [
     {
-      'type': 'text/plain',
-      'value': '$emailContent'
+      "type": "text/plain",
+      "value": "'.$emailContent.'"
     }
   ]
-}");
+}');
 
 $apiKey = getenv('SENDGRID_API_KEY');
 $sg = new SendGrid($apiKey);
