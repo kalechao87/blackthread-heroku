@@ -78,4 +78,8 @@ echo $response->statusCode();
 echo $response->body();
 echo $response->headers();
 
+/* Redirect visitor to the thank you page */
+header('Location: /thanks');
+exit();
+
 ?>
