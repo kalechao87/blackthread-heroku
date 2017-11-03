@@ -9,9 +9,35 @@ $myemail  = "looeee@gmail.com";
 $name = check_input($_POST['name'], "Please enter your name");
 $email    = check_input($_POST['email']);
 $message  = check_input($_POST['message'], "No message entered");
-$subject = "Black Thread Message";
+$subject = check_input($_POST['subject'], "No subject entered");
 $mailheader = "From: $email \r\n";
 
+function check_input($data, $problem='')
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    if ($problem && strlen($data) == 0)
+    {
+        show_error($problem);
+    }
+    return $data;
+}
+
+function show_error($myError)
+{
+?>
+    <html>
+    <body>
+
+    <b>Please correct the following error:</b><br />
+    <?php echo $myError; ?>
+
+    </body>
+    </html>
+<?php
+exit();
+}
 
 /* Let's prepare the message for the e-mail */
 $emailContent = "Black Thread Message
@@ -30,7 +56,7 @@ $request_body = json_decode('{
           "email": $myemail
         }
       ],
-      "subject": "Hello World from the SendGrid PHP Library!"
+      "subject": $subject
     }
   ],
   "from": {
@@ -39,7 +65,7 @@ $request_body = json_decode('{
   "content": [
     {
       "type": "text/plain",
-      "value": "Hello, Email!"
+      "value": $emailContent
     }
   ]
 }');
