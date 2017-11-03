@@ -1,6 +1,6 @@
 <?php
 
-require( "./sendgrid-/sendgrid-php.php" );
+require( "./sendgrid/sendgrid-php.php" );
 
 /* Set e-mail recipient */
 $myemail  = "looeee@gmail.com";
