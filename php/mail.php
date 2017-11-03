@@ -51,19 +51,19 @@ $request_body = json_decode('{
     {
       "to": [
         {
-          "email": "'.$myemail.'"
+          "email": '.$myemail.'
         }
       ],
-      "subject": "'.$subject.'"
+      "subject": '.$subject.'
     }
   ],
   "from": {
-    "email": "'.$myemail.'"
+    "email": '.$myemail.'
   },
   "content": [
     {
       "type": "text/plain",
-      "value": "'.$emailContent.'"
+      "value": '.$message.'
     }
   ]
 }');
