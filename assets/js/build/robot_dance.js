@@ -58567,6 +58567,8 @@ var AnimationControl = function () {
 
   AnimationControl.prototype.createAnimation = function createAnimation(frames) {
 
+    console.log(frames);
+
     this.reset();
 
     if (frames.length < 2) return [];
@@ -58616,6 +58618,9 @@ var AnimationControl = function () {
     var clip = new AnimationClip(name, tracks.length, tracks);
 
     var action = this.mixer.clipAction(clip);
+
+    action.zeroSlopeAtStart = false;
+    action.zeroSlopeAtEnd = false;
 
     action.name = clip.name;
 

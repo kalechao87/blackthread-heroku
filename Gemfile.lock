@@ -58,7 +58,10 @@ GEM
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+    mail (2.7.0)
+      mini_mime (>= 0.1.1)
     mercenary (0.3.6)
+    mini_mime (0.1.4)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
     multipart-post (2.0.0)
@@ -72,8 +75,11 @@ GEM
       rake (>= 0.8.1)
     pathutil (0.14.0)
       forwardable-extended (~> 2.6)
+    pony (1.11)
+      mail (>= 2.0)
     public_suffix (3.0.0)
     rack (2.0.3)
+    rack-cors (1.0.2)
     rack-protection (2.0.0)
       rack
     rake (12.1.0)
@@ -81,6 +87,7 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     rouge (1.11.1)
+    ruby_http_client (3.3.0)
     safe_yaml (1.0.4)
     sass (3.5.1)
       sass-listen (~> 4.0.0)
@@ -90,6 +97,9 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
+    sendgrid-ruby (5.2.0)
+      ruby_http_client (~> 3.2)
+      sinatra (>= 1.4.7, < 3)
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -114,6 +124,9 @@ DEPENDENCIES
   jekyll-sitemap
   jemoji
   passenger
+  pony
+  rack-cors
+  sendgrid-ruby
   sinatra
   tzinfo-data
 

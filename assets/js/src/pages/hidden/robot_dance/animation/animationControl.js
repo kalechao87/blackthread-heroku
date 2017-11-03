@@ -61,6 +61,8 @@ class AnimationControl {
 
   createAnimation( frames ) {
 
+    console.log( frames )
+
     this.reset();
 
     if ( frames.length < 2 ) return [];
@@ -140,6 +142,10 @@ class AnimationControl {
     const clip = new THREE.AnimationClip( name, tracks.length, tracks );
 
     const action = this.mixer.clipAction( clip );
+
+    action.zeroSlopeAtStart = false;
+    action.zeroSlopeAtEnd = false;
+
 
     action.name = clip.name;
 

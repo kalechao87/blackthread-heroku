@@ -16,6 +16,11 @@ gem "jekyll", "3.5.2"
 gem "passenger" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
 gem "sinatra" if RbConfig::CONFIG['target_os'] != /mswin|mingw|cygwin/i
 
+# sendgrid
+gem 'rack-cors', :require => 'rack/cors'
+gem 'pony'
+gem 'sendgrid-ruby'
+
 # letsencrypt
 gem 'acme_challenge'
 
