@@ -37,7 +37,7 @@ function show_error($myError)
 exit();
 }
 
-$emailContent = "Black Thread Message\n\nName: $name\nE-mail: $email\nMessage: $message\n";
+$emailContent = "Subject: $subject\n\nName: $name\nE-mail: $email\nMessage: $message\n";
 
 $request_body = json_decode('{
   "personalizations": [
@@ -47,7 +47,7 @@ $request_body = json_decode('{
           "email": "looeee@gmail.com"
         }
       ],
-      "subject": '.$subject.'
+      "subject": "Black Thread Message."
     }
   ],
   "from": {
@@ -56,7 +56,7 @@ $request_body = json_decode('{
   "content": [
     {
       "type": "text/plain",
-      "value": '.$emailContent.'
+      "value": "Testing"
     }
   ]
 }');
