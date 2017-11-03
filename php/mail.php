@@ -56,7 +56,7 @@ $request_body = json_decode('{
           "email": "looeee@gmail.com"
         }
       ],
-      "subject": "$subject"
+      "subject": $subject
     }
   ],
   "from": {
@@ -65,13 +65,13 @@ $request_body = json_decode('{
   "content": [
     {
       "type": "text/plain",
-      "value": "$emailContent"
+      "value": $emailContent
     }
   ]
 }');
 
 $apiKey = getenv('SENDGRID_API_KEY');
-$sg = new \SendGrid($apiKey);
+$sg = new SendGrid($apiKey);
 
 $response = $sg->client->mail()->send()->post($request_body);
 echo $response->statusCode();
