@@ -2,8 +2,7 @@
 
 require( "./sendgrid/sendgrid-php.php" );
 
-/* Set e-mail recipient */
-$myemail  = "looeee@gmail.com";
+$myemail = "looeee@gmail.com";
 
 /* Check all form inputs using check_input function */
 $name = check_input($_POST['name'], "Please enter your name");
@@ -39,7 +38,6 @@ function show_error($myError)
 exit();
 }
 
-/* Let's prepare the message for the e-mail */
 $emailContent = "Black Thread Message
 
 Name: $name
@@ -48,27 +46,27 @@ Message: $message
 
 ";
 
-$request_body = json_decode('{
-  "personalizations": [
+$request_body = json_decode("{
+  'personalizations': [
     {
-      "to": [
+      'to': [
         {
-          "email": "looeee@gmail.com"
+          'email': '$myemail'
         }
       ],
-      "subject": "test"
+      'subject': '$subject'
     }
   ],
-  "from": {
-    "email": "looeee@gmail.com"
+  'from': {
+    'email': '$myemail'
   },
-  "content": [
+  'content': [
     {
-      "type": "text/plain",
-      "value": "$test"
+      'type': 'text/plain',
+      'value': '$emailContent'
     }
   ]
-}');
+}");
 
 $apiKey = getenv('SENDGRID_API_KEY');
 $sg = new SendGrid($apiKey);
@@ -78,7 +76,7 @@ echo $response->statusCode();
 echo $response->body();
 echo $response->headers();
 
-/* Redirect visitor to the thank you page */
+// redirect to thank you page
 header('Location: /thanks');
 exit();
 
