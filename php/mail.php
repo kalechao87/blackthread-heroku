@@ -56,7 +56,7 @@ $request_body = json_decode('{
   "content": [
     {
       "type": "text/plain",
-      "value": '.$emailContent.'
+      "value": "'.$emailContent.'"
     }
   ]
 }');
