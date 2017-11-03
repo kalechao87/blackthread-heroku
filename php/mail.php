@@ -37,7 +37,7 @@ function show_error($myError)
 exit();
 }
 
-$emailContent =mb_convert_encoding("Subject: $subject\n\nName: $name\nE-mail: $email\nMessage: $message\n", 'UTF-8', 'UTF-8');
+$emailContent = "Subject: $subject\n\nName: $name\nE-mail: $email\nMessage: $message\n";
 
 $request_body = json_decode('{
   "personalizations": [
