@@ -1,5 +1,6 @@
 require 'acme_challenge'
 require 'sinatra'
+require './sendgrid.rb'
 
 use AcmeChallenge, ENV['ACME_CHALLENGE'] if ENV['ACME_CHALLENGE']
 

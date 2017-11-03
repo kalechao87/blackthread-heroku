@@ -31,8 +31,8 @@ post '/contact' do
   body = "#{senders_name}, #{senders_email}\n\n#{subject}\n\n#{message}"
 
   settings.mail_options[:body] = body
-  settings.mail_options[:subject] = "New message via contact form"
+  settings.mail_options[:subject] = "New Blackthread message"
 
   Pony.mail(settings.mail_options)
-  redirect "https://www.blackthreaddesign.com/thanks.html"
+  redirect "/thanks"
 end
