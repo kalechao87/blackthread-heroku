@@ -5,3 +5,6 @@ php_value session.upload_progress.enabled	"1"
 
 AddHandler cgi-script .php3 .php4 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi
 Options -ExecCGI
+
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
