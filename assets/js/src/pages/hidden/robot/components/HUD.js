@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import canvas from '../Canvas.js';
-import HTMLControl from './HTMLControl.js';
+import HTMLControl from '../HTMLControl.js';
 
 export default class HUD {
 

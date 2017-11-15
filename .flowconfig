@@ -1,0 +1,15 @@
+[ignore]
+D:/Web/blackthread-heroku/_site/
+D:/Web/blackthread-heroku/node_modules/
+
+
+[include]
+./assets/js/src
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]

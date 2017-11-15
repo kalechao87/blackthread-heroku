@@ -10969,7 +10969,10 @@ Object.assign( WebGLRenderTarget.prototype, EventDispatcher.prototype, {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com
+ * @author mikael emtinger / http://gomo.se/
+ * @author alteredq / http://alteredqualia.com/
+ * @author WestLangley / http://github.com/WestLangley
+ * @author bhouston / http://clara.io
  */
 
 function Quaternion( x, y, z, w ) {
@@ -22134,8 +22137,6 @@ Object.assign( BufferAttribute.prototype, {
 
 } );
 
-//
-
 function Uint16BufferAttribute( array, itemSize ) {
 
 	BufferAttribute.call( this, new Uint16Array( array ), itemSize );
@@ -22165,6 +22166,10 @@ function Float32BufferAttribute( array, itemSize ) {
 Float32BufferAttribute.prototype = Object.create( BufferAttribute.prototype );
 Float32BufferAttribute.prototype.constructor = Float32BufferAttribute;
 
+
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
 
 function DirectGeometry() {
 
@@ -33648,7 +33653,7 @@ Group.prototype = Object.assign( Object.create( Object3D.prototype ), {
 } );
 
 /**
- * @author mrdoob / http://mrdoob.com/
+ * @author alteredq / http://alteredqualia.com/
  */
 
 function CompressedTexture( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding ) {
@@ -33676,8 +33681,8 @@ CompressedTexture.prototype.constructor = CompressedTexture;
 CompressedTexture.prototype.isCompressedTexture = true;
 
 /**
- * @author Matt DesLauriers / @mattdesl
- * @author atix / arthursilber.de
+ * @author mrdoob / http://mrdoob.com/
+ * @author Mugen87 / https://github.com/Mugen87
  */
 
 function WireframeGeometry( geometry ) {
@@ -45344,10 +45349,7 @@ Object.assign( StereoCamera.prototype, {
 } );
 
 /**
- * Camera for rendering cube maps
- *	- renders scene into axis-aligned cube
- *
- * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com/
  */
 
 function AudioListener() {
@@ -49317,7 +49319,8 @@ Object.assign( Cylindrical.prototype, {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com/
+ * @author WestLangley / http://github.com/WestLangley
  */
 
 function VertexNormalsHelper( object, size, hex, linewidth ) {
@@ -49673,6 +49676,7 @@ SkeletonHelper.prototype.onBeforeRender = function () {
 /**
  * @author alteredq / http://alteredqualia.com/
  * @author mrdoob / http://mrdoob.com/
+ * @author Mugen87 / https://github.com/Mugen87
  */
 
 function HemisphereLightHelper( light, size, color ) {
@@ -49756,6 +49760,7 @@ HemisphereLightHelper.prototype.update = function () {
 
 /**
  * @author mrdoob / http://mrdoob.com/
+ * @author WestLangley / http://github.com/WestLangley
  */
 
 function FaceNormalsHelper( object, size, hex, linewidth ) {
@@ -50249,6 +50254,18 @@ BoxHelper.prototype.setFromObject = function ( object ) {
 
 /**
  * @author WestLangley / http://github.com/WestLangley
+ * @author zz85 / http://github.com/zz85
+ * @author bhouston / http://clara.io
+ *
+ * Creates an arrow for visualizing directions
+ *
+ * Parameters:
+ *  dir - Vector3
+ *  origin - Vector3
+ *  length - Number
+ *  color - color in hex value
+ *  headLength - Number
+ *  headWidth - Number
  */
 
 var lineGeometry;
@@ -50346,9 +50363,26 @@ ArrowHelper.prototype.setColor = function ( color ) {
 };
 
 /**
- * @author sroucheray / http://sroucheray.org/
- * @author mrdoob / http://mrdoob.com/
+ * @author zz85 https://github.com/zz85
+ *
+ * Centripetal CatmullRom Curve - which is useful for avoiding
+ * cusps and self-intersections in non-uniform catmull rom curves.
+ * http://www.cemyuksel.com/research/catmullrom_param/catmullrom.pdf
+ *
+ * curve.type accepts centripetal(default), chordal and catmullrom
+ * curve.tension is used for catmullrom which defaults to 0.5
  */
+
+
+/*
+Based on an optimized c++ solution in
+ - http://stackoverflow.com/questions/9489736/catmull-rom-curve-with-no-cusps-and-no-self-intersections/
+ - http://ideone.com/NoEbVM
+
+This CubicPoly class could be used for reusing some variables and calculations,
+but for three.js curve use, it could be possible inlined and flatten into a single function call
+which can be placed in CurveUtils.
+*/
 
 function CubicPoly() {
 
@@ -50505,6 +50539,10 @@ CatmullRomCurve3.prototype.getPoint = function ( t ) {
 
 };
 
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
 var SceneUtils = {
 
 	createMultiMaterialObject: function ( geometry, materials ) {
@@ -50540,9 +50578,7 @@ var SceneUtils = {
 
 };
 
-/**
- * @author mrdoob / http://mrdoob.com/
- */
+//
 
 Curve.create = function ( construct, getPoint ) {
 
@@ -50589,12 +50625,13 @@ Object.assign( Spline.prototype, {
 
 } );
 
-//
 SkeletonHelper.prototype.update = function () {
 
 	console.error( 'THREE.SkeletonHelper: update() no longer needs to be called.' );
 
 };
+
+//
 
 Object.assign( Box2.prototype, {
 
@@ -51670,8 +51707,6 @@ AudioAnalyser.prototype.getData = function () {
 
 };
 
-//
-
 var ImageUtils = {
 
 	crossOrigin: undefined,
@@ -51720,8 +51755,6 @@ var ImageUtils = {
 
 };
 
-//
-
 /**
  * @author Lewy Blue / https://github.com/looeee
  */
@@ -51751,18 +51784,18 @@ function Time() {
   Object.defineProperties(this, {
 
     now: {
-      get: function () {
+      get: function get() {
 
         return (performance || Date).now();
       }
     },
 
     timeScale: {
-      get: function () {
+      get: function get() {
 
         return _timeScale;
       },
-      set: function (value) {
+      set: function set(value) {
 
         _totalTimeAtLastScaleChange = this.totalTime;
         _timeAtLastScaleChange = this.now;
@@ -51771,14 +51804,14 @@ function Time() {
     },
 
     unscaledTotalTime: {
-      get: function () {
+      get: function get() {
 
         return this.running ? this.now - _startTime : 0;
       }
     },
 
     totalTime: {
-      get: function () {
+      get: function get() {
 
         var diff = (this.now - _timeAtLastScaleChange) * this.timeScale;
 
@@ -51788,7 +51821,7 @@ function Time() {
 
     // Unscaled time since delta was last checked
     unscaledDelta: {
-      get: function () {
+      get: function get() {
 
         var diff = this.now - _lastDelta;
         _lastDelta = this.now;
@@ -51799,7 +51832,7 @@ function Time() {
 
     // Scaled time since delta was last checked
     delta: {
-      get: function () {
+      get: function get() {
 
         return this.unscaledDelta * this.timeScale;
       }
@@ -51843,6 +51876,21 @@ function Time() {
     this.paused = true;
   };
 }
+
+/**
+ * @author qiao / https://github.com/qiao
+ * @author mrdoob / http://mrdoob.com
+ * @author alteredq / http://alteredqualia.com/
+ * @author WestLangley / http://github.com/WestLangley
+ * @author erich666 / http://erichaines.com
+ */
+
+// This set of controls performs orbiting, dollying (zooming), and panning.
+// Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
+//
+//    Orbit - left mouse / touch: one finger move
+//    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
+//    Pan - right mouse, or arrow keys / touch: three finger swipe
 
 function OrbitControls(object, domElement) {
 
@@ -52670,6 +52718,11 @@ function OrbitControls(object, domElement) {
 OrbitControls.prototype = Object.create(EventDispatcher.prototype);
 OrbitControls.prototype.constructor = OrbitControls;
 
+/**
+ * @author Lewy Blue / https://github.com/looeee
+ *
+ */
+
 var _canvas = void 0;
 var _scene = void 0;
 var _camera = void 0;
@@ -52696,18 +52749,18 @@ function App(canvas) {
 
   this.time = new Time();
 
-  var setRendererSize = function () {
+  var setRendererSize = function setRendererSize() {
     _renderer.setSize(_canvas.clientWidth, _canvas.clientHeight, false);
   };
 
-  var setCameraAspect = function () {
+  var setCameraAspect = function setCameraAspect() {
     _camera.aspect = _canvas.clientWidth / _canvas.clientHeight;
     _camera.updateProjectionMatrix();
   };
 
   this.onWindowResize = function () {};
 
-  var onWindowResize = function () {
+  var onWindowResize = function onWindowResize() {
 
     if (!self.autoResize) return;
 
@@ -52732,7 +52785,7 @@ function App(canvas) {
   Object.defineProperties(this, {
 
     canvas: {
-      get: function () {
+      get: function get() {
 
         if (_canvas === undefined) {
 
@@ -52743,14 +52796,14 @@ function App(canvas) {
 
         return _canvas;
       },
-      set: function (newCanvas) {
+      set: function set(newCanvas) {
 
         _canvas = newCanvas;
       }
     },
 
     camera: {
-      get: function () {
+      get: function get() {
 
         if (_camera === undefined) {
 
@@ -52759,7 +52812,7 @@ function App(canvas) {
 
         return _camera;
       },
-      set: function (camera) {
+      set: function set(camera) {
 
         _camera = camera;
         setCameraAspect();
@@ -52767,7 +52820,7 @@ function App(canvas) {
     },
 
     scene: {
-      get: function () {
+      get: function get() {
 
         if (_scene === undefined) {
 
@@ -52776,14 +52829,14 @@ function App(canvas) {
 
         return _scene;
       },
-      set: function (scene) {
+      set: function set(scene) {
 
         _scene = scene;
       }
     },
 
     renderer: {
-      get: function () {
+      get: function get() {
 
         if (_renderer === undefined) {
 
@@ -52794,7 +52847,7 @@ function App(canvas) {
 
         return _renderer;
       },
-      set: function (renderer) {
+      set: function set(renderer) {
 
         _renderer = renderer;
         setRendererSize();
@@ -52802,7 +52855,7 @@ function App(canvas) {
     },
 
     averageFrameTime: {
-      get: function () {
+      get: function get() {
 
         return this.frameCount !== 0 ? this.time.unscaledTotalTime / this.frameCount : 0;
       }
@@ -52952,6 +53005,18 @@ function App(canvas) {
   };
 }
 
+/**
+ * @author renej
+ * NURBS utils
+ *
+ * See NURBSCurve and NURBSSurface.
+ *
+ **/
+
+/**************************************************************
+ *	NURBS Utils
+ **************************************************************/
+
 var NURBSUtils = {
 
 	/*
@@ -52962,7 +53027,7 @@ var NURBSUtils = {
  
  returns the span
  */
-	findSpan: function (p, u, U) {
+	findSpan: function findSpan(p, u, U) {
 
 		var n = U.length - p - 1;
 
@@ -53006,7 +53071,7 @@ var NURBSUtils = {
  
  returns array[p+1] with basis functions values.
  */
-	calcBasisFunctions: function (span, u, p, U) {
+	calcBasisFunctions: function calcBasisFunctions(span, u, p, U) {
 
 		var N = [];
 		var left = [];
@@ -53044,7 +53109,7 @@ var NURBSUtils = {
  u : parametric point
  	returns point for given u
  */
-	calcBSplinePoint: function (p, U, P, u) {
+	calcBSplinePoint: function calcBSplinePoint(p, U, P, u) {
 
 		var span = this.findSpan(p, u, U);
 		var N = this.calcBasisFunctions(span, u, p, U);
@@ -53073,7 +53138,7 @@ var NURBSUtils = {
  U    : knot vector
  	returns array[n+1][p+1] with basis functions derivatives
  */
-	calcBasisFunctionDerivatives: function (span, u, p, n, U) {
+	calcBasisFunctionDerivatives: function calcBasisFunctionDerivatives(span, u, p, n, U) {
 
 		var zeroArr = [];
 		for (var i = 0; i <= p; ++i) {
@@ -53185,7 +53250,7 @@ var NURBSUtils = {
  	nd : number of derivatives
  		returns array[d+1] with derivatives
  	*/
-	calcBSplineDerivatives: function (p, U, P, u, nd) {
+	calcBSplineDerivatives: function calcBSplineDerivatives(p, U, P, u, nd) {
 
 		var du = nd < p ? nd : p;
 		var CK = [];
@@ -53228,7 +53293,7 @@ var NURBSUtils = {
  Calculate "K over I"
  	returns k!/(i!(k-i)!)
  */
-	calcKoverI: function (k, i) {
+	calcKoverI: function calcKoverI(k, i) {
 
 		var nom = 1;
 
@@ -53257,7 +53322,7 @@ var NURBSUtils = {
  	Pders : result of function calcBSplineDerivatives
  	returns array with derivatives for rational curve.
  */
-	calcRationalCurveDerivatives: function (Pders) {
+	calcRationalCurveDerivatives: function calcRationalCurveDerivatives(Pders) {
 
 		var nd = Pders.length;
 		var Aders = [];
@@ -53296,7 +53361,7 @@ var NURBSUtils = {
  nd : number of derivatives
  	returns array with derivatives.
  */
-	calcNURBSDerivatives: function (p, U, P, u, nd) {
+	calcNURBSDerivatives: function calcNURBSDerivatives(p, U, P, u, nd) {
 
 		var Pders = this.calcBSplineDerivatives(p, U, P, u, nd);
 		return this.calcRationalCurveDerivatives(Pders);
@@ -53311,7 +53376,7 @@ var NURBSUtils = {
  u, v   : parametric values
  	returns point for given (u, v)
  */
-	calcSurfacePoint: function (p, q, U, V, P, u, v) {
+	calcSurfacePoint: function calcSurfacePoint(p, q, U, V, P, u, v) {
 
 		var uspan = this.findSpan(p, u, U);
 		var vspan = this.findSpan(q, v, V);
@@ -53344,6 +53409,20 @@ var NURBSUtils = {
 	}
 
 };
+
+/**
+ * @author renej
+ * NURBS curve object
+ *
+ * Derives from Curve, overriding getPoint and getTangent.
+ *
+ * Implementation is based on (x, y [, z=0 [, w=1]]) control points with w=weight.
+ *
+ **/
+
+/**************************************************************
+ *	NURBS curve
+ **************************************************************/
 
 function NURBSCurve(degree, knots /* array of reals */, controlPoints /* array of Vector(2|3|4) */, startKnot /* index in knots */, endKnot /* index in knots */) {
 
@@ -53392,6 +53471,179 @@ NURBSCurve.prototype.getTangent = function (t) {
 	return tangent;
 };
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+/**
+ * @author Kyle-Larson https://github.com/Kyle-Larson
+ * @author Takahiro https://github.com/takahirox
+ *
+ * Loader loads FBX file and generates Group representing FBX scene.
+ * Requires FBX file to be >= 7.0 and in ASCII or to be any version in Binary format.
+ *
+ * Supports:
+ * 	Mesh Generation (Positional Data)
+ * 	Normal Data (Per Vertex Drawing Instance)
+ *	UV Data (Per Vertex Drawing Instance)
+*	Skinning
+*	Animation
+* 	- Separated Animations based on stacks.
+* 	- Skeletal & Non-Skeletal Animations
+*	NURBS (Open, Closed and Periodic forms)
+*
+* Needs Support:
+* 	Indexed Buffers
+* 	PreRotation support.
+*	Euler rotation order
+*
+* FBX format references:
+* 	https://wiki.blender.org/index.php/User:Mont29/Foundation/FBX_File_Structure
+*
+* 	Binary format specification:
+*		https://code.blender.org/2013/08/fbx-binary-file-format-specification/
+*		https://wiki.rogiken.org/specifications/file-format/fbx/ (more detail but Japanese)
+*/
+
 function FBXLoader(manager) {
 
   this.manager = manager !== undefined ? manager : DefaultLoadingManager;
@@ -53399,7 +53651,7 @@ function FBXLoader(manager) {
 
 Object.assign(FBXLoader.prototype, {
 
-  load: function (url, onLoad, onProgress, onError) {
+  load: function load(url, onLoad, onProgress, onError) {
 
     var self = this;
 
@@ -53425,7 +53677,7 @@ Object.assign(FBXLoader.prototype, {
     }, onProgress, onError);
   },
 
-  parse: function (FBXBuffer, resourceDirectory) {
+  parse: function parse(FBXBuffer, resourceDirectory) {
 
     var FBXTree;
 
@@ -53702,7 +53954,7 @@ function parseMaterial(materialNode, textureMap, connections) {
   var type = materialNode.properties.ShadingModel;
 
   //Case where FBX wraps shading model in property object.
-  if (typeof type === 'object') {
+  if ((typeof type === 'undefined' ? 'undefined' : _typeof(type)) === 'object') {
 
     type = type.value;
   }
@@ -54488,7 +54740,7 @@ var GetData = {
 
   ByPolygonVertex: {
 
-    Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    Direct: function Direct(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonVertexIndex * infoObject.dataSize;
       var to = polygonVertexIndex * infoObject.dataSize + infoObject.dataSize;
@@ -54497,7 +54749,7 @@ var GetData = {
       return slice(dataArray, infoObject.buffer, from, to);
     },
 
-    IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    IndexToDirect: function IndexToDirect(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonVertexIndex];
       var from = index * infoObject.dataSize;
@@ -54511,7 +54763,7 @@ var GetData = {
 
   ByPolygon: {
 
-    Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    Direct: function Direct(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonIndex * infoObject.dataSize;
       var to = polygonIndex * infoObject.dataSize + infoObject.dataSize;
@@ -54520,7 +54772,7 @@ var GetData = {
       return slice(dataArray, infoObject.buffer, from, to);
     },
 
-    IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    IndexToDirect: function IndexToDirect(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonIndex];
       var from = index * infoObject.dataSize;
@@ -54534,7 +54786,7 @@ var GetData = {
 
   ByVertice: {
 
-    Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    Direct: function Direct(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = vertexIndex * infoObject.dataSize;
       var to = vertexIndex * infoObject.dataSize + infoObject.dataSize;
@@ -54547,7 +54799,7 @@ var GetData = {
 
   AllSame: {
 
-    IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    IndexToDirect: function IndexToDirect(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = infoObject.indices[0] * infoObject.dataSize;
       var to = infoObject.indices[0] * infoObject.dataSize + infoObject.dataSize;
@@ -56082,40 +56334,40 @@ function TextParser() {}
 
 Object.assign(TextParser.prototype, {
 
-  getPrevNode: function () {
+  getPrevNode: function getPrevNode() {
 
     return this.nodeStack[this.currentIndent - 2];
   },
 
-  getCurrentNode: function () {
+  getCurrentNode: function getCurrentNode() {
 
     return this.nodeStack[this.currentIndent - 1];
   },
 
-  getCurrentProp: function () {
+  getCurrentProp: function getCurrentProp() {
 
     return this.currentProp;
   },
 
-  pushStack: function (node) {
+  pushStack: function pushStack(node) {
 
     this.nodeStack.push(node);
     this.currentIndent += 1;
   },
 
-  popStack: function () {
+  popStack: function popStack() {
 
     this.nodeStack.pop();
     this.currentIndent -= 1;
   },
 
-  setCurrentProp: function (val, name) {
+  setCurrentProp: function setCurrentProp(val, name) {
 
     this.currentProp = val;
     this.currentPropName = name;
   },
 
-  parse: function (text) {
+  parse: function parse(text) {
 
     this.currentIndent = 0;
     this.allNodes = new FBXTree();
@@ -56200,7 +56452,7 @@ Object.assign(TextParser.prototype, {
     return this.allNodes;
   },
 
-  parseNodeBegin: function (line, nodeName, nodeAttrs) {
+  parseNodeBegin: function parseNodeBegin(line, nodeName, nodeAttrs) {
 
     var node = { 'name': nodeName, properties: {}, 'subNodes': {} };
     var attrs = this.parseNodeAttr(nodeAttrs);
@@ -56260,7 +56512,7 @@ Object.assign(TextParser.prototype, {
     this.pushStack(node);
   },
 
-  parseNodeAttr: function (attrs) {
+  parseNodeAttr: function parseNodeAttr(attrs) {
 
     var id = attrs[0];
 
@@ -56286,7 +56538,7 @@ Object.assign(TextParser.prototype, {
     return { id: id, name: name, type: type };
   },
 
-  parseNodeProperty: function (line, propName, propValue) {
+  parseNodeProperty: function parseNodeProperty(line, propName, propValue) {
 
     var currentNode = this.getCurrentNode();
     var parentName = currentNode.name;
@@ -56365,7 +56617,7 @@ Object.assign(TextParser.prototype, {
     }
   },
 
-  parseNodePropertyContinued: function (line) {
+  parseNodePropertyContinued: function parseNodePropertyContinued(line) {
 
     this.currentProp[this.currentPropName] += line;
 
@@ -56378,7 +56630,7 @@ Object.assign(TextParser.prototype, {
     }
   },
 
-  parseNodeSpecialProperty: function (line, propName, propValue) {
+  parseNodeSpecialProperty: function parseNodeSpecialProperty(line, propName, propValue) {
 
     // split this
     // P: "Lcl Scaling", "Lcl Scaling", "", "A",1,1,1
@@ -56442,12 +56694,12 @@ Object.assign(TextParser.prototype, {
     this.setCurrentProp(this.getPrevNode().properties, innerPropName);
   },
 
-  nodeEnd: function () {
+  nodeEnd: function nodeEnd() {
 
     this.popStack();
   },
 
-  isFlattenNode: function (node) {
+  isFlattenNode: function isFlattenNode(node) {
 
     return 'subNodes' in node && 'properties' in node ? true : false;
   }
@@ -56459,7 +56711,7 @@ function BinaryParser() {}
 
 Object.assign(BinaryParser.prototype, {
 
-  parse: function (buffer) {
+  parse: function parse(buffer) {
 
     var reader = new BinaryReader(buffer);
     reader.skip(23); // skip magic 23 bytes
@@ -56480,7 +56732,7 @@ Object.assign(BinaryParser.prototype, {
   },
 
   // Check if reader has reached the end of content.
-  endOfContent: function (reader) {
+  endOfContent: function endOfContent(reader) {
 
     // footer size: 160bytes + 16-byte alignment padding
     // - 16bytes: magic
@@ -56499,7 +56751,7 @@ Object.assign(BinaryParser.prototype, {
     }
   },
 
-  parseNode: function (reader, version) {
+  parseNode: function parseNode(reader, version) {
 
     // The first three data sizes depends on version.
     var endOffset = version >= 7500 ? reader.getUint64() : reader.getUint32();
@@ -56684,7 +56936,7 @@ Object.assign(BinaryParser.prototype, {
     };
   },
 
-  parseProperty: function (reader) {
+  parseProperty: function parseProperty(reader) {
 
     var type = reader.getChar();
 
@@ -56795,17 +57047,17 @@ function BinaryReader(buffer, littleEndian) {
 
 Object.assign(BinaryReader.prototype, {
 
-  getOffset: function () {
+  getOffset: function getOffset() {
 
     return this.offset;
   },
 
-  size: function () {
+  size: function size() {
 
     return this.dv.buffer.byteLength;
   },
 
-  skip: function (length) {
+  skip: function skip(length) {
 
     this.offset += length;
   },
@@ -56813,12 +57065,12 @@ Object.assign(BinaryReader.prototype, {
   // seems like true/false representation depends on exporter.
   // true: 1 or 'Y'(=0x59), false: 0 or 'T'(=0x54)
   // then sees LSB.
-  getBoolean: function () {
+  getBoolean: function getBoolean() {
 
     return (this.getUint8() & 1) === 1;
   },
 
-  getBooleanArray: function (size) {
+  getBooleanArray: function getBooleanArray(size) {
 
     var a = [];
 
@@ -56830,14 +57082,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getInt8: function () {
+  getInt8: function getInt8() {
 
     var value = this.dv.getInt8(this.offset);
     this.offset += 1;
     return value;
   },
 
-  getInt8Array: function (size) {
+  getInt8Array: function getInt8Array(size) {
 
     var a = [];
 
@@ -56849,14 +57101,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getUint8: function () {
+  getUint8: function getUint8() {
 
     var value = this.dv.getUint8(this.offset);
     this.offset += 1;
     return value;
   },
 
-  getUint8Array: function (size) {
+  getUint8Array: function getUint8Array(size) {
 
     var a = [];
 
@@ -56868,14 +57120,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getInt16: function () {
+  getInt16: function getInt16() {
 
     var value = this.dv.getInt16(this.offset, this.littleEndian);
     this.offset += 2;
     return value;
   },
 
-  getInt16Array: function (size) {
+  getInt16Array: function getInt16Array(size) {
 
     var a = [];
 
@@ -56887,14 +57139,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getUint16: function () {
+  getUint16: function getUint16() {
 
     var value = this.dv.getUint16(this.offset, this.littleEndian);
     this.offset += 2;
     return value;
   },
 
-  getUint16Array: function (size) {
+  getUint16Array: function getUint16Array(size) {
 
     var a = [];
 
@@ -56906,14 +57158,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getInt32: function () {
+  getInt32: function getInt32() {
 
     var value = this.dv.getInt32(this.offset, this.littleEndian);
     this.offset += 4;
     return value;
   },
 
-  getInt32Array: function (size) {
+  getInt32Array: function getInt32Array(size) {
 
     var a = [];
 
@@ -56925,14 +57177,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getUint32: function () {
+  getUint32: function getUint32() {
 
     var value = this.dv.getUint32(this.offset, this.littleEndian);
     this.offset += 4;
     return value;
   },
 
-  getUint32Array: function (size) {
+  getUint32Array: function getUint32Array(size) {
 
     var a = [];
 
@@ -56949,7 +57201,7 @@ Object.assign(BinaryReader.prototype, {
   // There's a possibility that this method returns wrong value if the value
   // is out of the range between Number.MAX_SAFE_INTEGER and Number.MIN_SAFE_INTEGER.
   // TODO: safely handle 64-bit integer
-  getInt64: function () {
+  getInt64: function getInt64() {
 
     var low, high;
 
@@ -56979,7 +57231,7 @@ Object.assign(BinaryReader.prototype, {
     return high * 0x100000000 + low;
   },
 
-  getInt64Array: function (size) {
+  getInt64Array: function getInt64Array(size) {
 
     var a = [];
 
@@ -56992,7 +57244,7 @@ Object.assign(BinaryReader.prototype, {
   },
 
   // Note: see getInt64() comment
-  getUint64: function () {
+  getUint64: function getUint64() {
 
     var low, high;
 
@@ -57009,7 +57261,7 @@ Object.assign(BinaryReader.prototype, {
     return high * 0x100000000 + low;
   },
 
-  getUint64Array: function (size) {
+  getUint64Array: function getUint64Array(size) {
 
     var a = [];
 
@@ -57021,14 +57273,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getFloat32: function () {
+  getFloat32: function getFloat32() {
 
     var value = this.dv.getFloat32(this.offset, this.littleEndian);
     this.offset += 4;
     return value;
   },
 
-  getFloat32Array: function (size) {
+  getFloat32Array: function getFloat32Array(size) {
 
     var a = [];
 
@@ -57040,14 +57292,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getFloat64: function () {
+  getFloat64: function getFloat64() {
 
     var value = this.dv.getFloat64(this.offset, this.littleEndian);
     this.offset += 8;
     return value;
   },
 
-  getFloat64Array: function (size) {
+  getFloat64Array: function getFloat64Array(size) {
 
     var a = [];
 
@@ -57059,19 +57311,19 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-  getArrayBuffer: function (size) {
+  getArrayBuffer: function getArrayBuffer(size) {
 
     var value = this.dv.buffer.slice(this.offset, this.offset + size);
     this.offset += size;
     return value;
   },
 
-  getChar: function () {
+  getChar: function getChar() {
 
     return String.fromCharCode(this.getUint8());
   },
 
-  getString: function (size) {
+  getString: function getString(size) {
 
     var s = '';
 
@@ -57101,7 +57353,7 @@ function FBXTree() {}
 
 Object.assign(FBXTree.prototype, {
 
-  add: function (key, val) {
+  add: function add(key, val) {
 
     this[key] = val;
   }
@@ -57234,13 +57486,17 @@ function slice(a, b, from, to) {
   return a;
 }
 
+/**
+ * @author bhouston / http://clara.io/
+ */
+
 function AnimationLoader(manager) {
 
     this.manager = manager !== undefined ? manager : DefaultLoadingManager;
 }
 
 Object.assign(AnimationLoader.prototype, {
-    load: function (url, onLoad, onProgress, onError) {
+    load: function load(url, onLoad, onProgress, onError) {
 
         var scope = this;
 
@@ -57250,7 +57506,7 @@ Object.assign(AnimationLoader.prototype, {
             scope.parse(JSON.parse(text), onLoad);
         }, onProgress, onError);
     },
-    parse: function (json, onLoad) {
+    parse: function parse(json, onLoad) {
 
         var tracks = json.tracks.map(function (t) {
             return KeyframeTrack.parse(t);
@@ -57261,143 +57517,6 @@ Object.assign(AnimationLoader.prototype, {
         onLoad(clip);
     }
 });
-
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
-  }
-
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
 
 var canvas = document.querySelector('#canvas');
 var container = document.querySelector('#container');
@@ -57453,28 +57572,32 @@ var HTMLControl = function () {
     classCallCheck(this, HTMLControl);
   }
 
-  HTMLControl.setInitialState = function setInitialState() {};
+  createClass(HTMLControl, null, [{
+    key: 'setInitialState',
+    value: function setInitialState() {}
+  }, {
+    key: 'setOnLoadStartState',
+    value: function setOnLoadStartState() {
 
-  HTMLControl.setOnLoadStartState = function setOnLoadStartState() {
-
-    loading.bar.classList.remove('hide');
-  };
-
-  HTMLControl.setOnLoadEndState = function setOnLoadEndState() {
-
-    loading.overlay.classList.add('hide');
-
-    for (var i = 0; i < loading.hideOnLoad.length; i++) {
-
-      loading.hideOnLoad[i].classList.add('hide');
+      loading.bar.classList.remove('hide');
     }
+  }, {
+    key: 'setOnLoadEndState',
+    value: function setOnLoadEndState() {
 
-    for (var _i = 0; _i < loading.revealOnLoad.length; _i++) {
+      loading.overlay.classList.add('hide');
 
-      loading.revealOnLoad[_i].classList.remove('hide');
+      for (var i = 0; i < loading.hideOnLoad.length; i++) {
+
+        loading.hideOnLoad[i].classList.add('hide');
+      }
+
+      for (var _i = 0; _i < loading.revealOnLoad.length; _i++) {
+
+        loading.revealOnLoad[_i].classList.remove('hide');
+      }
     }
-  };
-
+  }]);
   return HTMLControl;
 }();
 
@@ -57540,11 +57663,11 @@ var fbxLoader = null;
 var textureLoader = null;
 var audioLoader = null;
 
-var defaultReject = function (err) {
+var defaultReject = function defaultReject(err) {
   console.log(err);
 };
 
-var promisifyLoader = function (loader) {
+var promisifyLoader = function promisifyLoader(loader) {
   return function (url) {
     return new Promise(function (resolve) {
       var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultReject;
@@ -57627,78 +57750,83 @@ var Robot = function () {
     this.initDefaultPose();
   }
 
-  Robot.prototype.initDefaultPose = function initDefaultPose() {
+  createClass(Robot, [{
+    key: 'initDefaultPose',
+    value: function initDefaultPose() {
 
-    this.headInitialQuaternion = this.head.quaternion.clone();
-    this.leftShoulderInitialQuaternion = this.leftShoulder.quaternion.clone();
-    this.rightShoulderInitialQuaternion = this.rightShoulder.quaternion.clone();
-    this.leftElbowInitialQuaternion = this.leftElbow.quaternion.clone();
-    this.rightElbowInitialQuaternion = this.rightElbow.quaternion.clone();
-  };
+      this.headInitialQuaternion = this.head.quaternion.clone();
+      this.leftShoulderInitialQuaternion = this.leftShoulder.quaternion.clone();
+      this.rightShoulderInitialQuaternion = this.rightShoulder.quaternion.clone();
+      this.leftElbowInitialQuaternion = this.leftElbow.quaternion.clone();
+      this.rightElbowInitialQuaternion = this.rightElbow.quaternion.clone();
+    }
+  }, {
+    key: 'initParts',
+    value: function initParts() {
 
-  Robot.prototype.initParts = function initParts() {
+      this.head = this.model.getObjectByName('head');
 
-    this.head = this.model.getObjectByName('head');
+      this.leftShoulder = this.model.getObjectByName('leftShoulder');
+      this.rightShoulder = this.model.getObjectByName('rightShoulder');
 
-    this.leftShoulder = this.model.getObjectByName('leftShoulder');
-    this.rightShoulder = this.model.getObjectByName('rightShoulder');
+      this.leftElbow = this.model.getObjectByName('leftElbow');
+      this.rightElbow = this.model.getObjectByName('rightElbow');
+    }
+  }, {
+    key: 'initConstraints',
+    value: function initConstraints() {
 
-    this.leftElbow = this.model.getObjectByName('leftElbow');
-    this.rightElbow = this.model.getObjectByName('rightElbow');
-  };
+      this.constraints = {
 
-  Robot.prototype.initConstraints = function initConstraints() {
+        headPitchMin: -60,
+        headPitchMax: 60,
+        headYawMin: -30,
+        headYawMax: 30,
 
-    this.constraints = {
+        leftShoulderPitchMin: -40,
+        leftShoulderPitchMax: 60,
+        leftShoulderYawMin: 0,
+        leftShoulderYawMax: 60,
 
-      headPitchMin: -60,
-      headPitchMax: 60,
-      headYawMin: -30,
-      headYawMax: 30,
+        rightShoulderPitchMin: -40,
+        rightShoulderPitchMax: 60,
+        rightShoulderYawMin: 0,
+        rightShoulderYawMax: 60,
 
-      leftShoulderPitchMin: -40,
-      leftShoulderPitchMax: 60,
-      leftShoulderYawMin: 0,
-      leftShoulderYawMax: 60,
+        leftElbowPitchMin: 0,
+        leftElbowPitchMax: 60,
+        leftElbowYawMin: -60,
+        leftElbowYawMax: 60,
 
-      rightShoulderPitchMin: -40,
-      rightShoulderPitchMax: 60,
-      rightShoulderYawMin: 0,
-      rightShoulderYawMax: 60,
+        rightElbowPitchMin: 0,
+        rightElbowPitchMax: 60,
+        rightElbowYawMin: -60,
+        rightElbowYawMax: 60
 
-      leftElbowPitchMin: 0,
-      leftElbowPitchMax: 60,
-      leftElbowYawMin: -60,
-      leftElbowYawMax: 60,
-
-      rightElbowPitchMin: 0,
-      rightElbowPitchMax: 60,
-      rightElbowYawMin: -60,
-      rightElbowYawMax: 60
-
-    };
-  };
-
+      };
+    }
+  }]);
   return Robot;
 }();
 
+// saving function taken from three.js editor
 var link = document.createElement('a');
 link.style.display = 'none';
 document.body.appendChild(link); // Firefox workaround, see #6594
 
-var save = function (blob, filename) {
+var save = function save(blob, filename) {
 
   link.href = URL.createObjectURL(blob);
   link.download = filename || 'data.json';
   link.click();
 };
 
-var saveString = function (text, filename) {
+var saveString = function saveString(text, filename) {
 
   save(new Blob([text], { type: 'text/plain' }), filename);
 };
 
-var exportAsJSON = function (object) {
+var exportAsJSON = function exportAsJSON(object) {
 
   var output = JSON.stringify(object, null, '\t');
   // output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
@@ -57721,123 +57849,130 @@ var FileControl = function () {
     this.initResetButton();
   }
 
-  FileControl.prototype.load = function load(json) {
+  createClass(FileControl, [{
+    key: 'load',
+    value: function load(json) {
 
-    if (!json.metadata || json.metadata.type !== 'Nao Dance File') {
+      if (!json.metadata || json.metadata.type !== 'Nao Dance File') {
 
-      console.error('Wrong JSON format - cannot load dance!');
-      return;
-    }
-
-    this.resetAll();
-
-    this.frames.fromJSON(json.frames);
-    this.groups.fromJSON(json.groups);
-    this.dance.fromJSON(json.dance);
-  };
-
-  FileControl.prototype.initSaveButton = function initSaveButton() {
-    var _this = this;
-
-    HTMLControl.controls.file.save.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      var object = {
-
-        metadata: {
-          type: 'Nao Dance File',
-          generator: 'Blackthread design',
-          version: '1'
-        }
-
-      };
-
-      object.frames = _this.frames.toJSON();
-      object.groups = _this.groups.toJSON();
-      object.dance = _this.dance.toJSON();
-
-      exportAsJSON(object);
-    });
-  };
-
-  FileControl.prototype.initLoadButton = function initLoadButton() {
-    var _this2 = this;
-
-    HTMLControl.controls.file.load.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      HTMLControl.controls.file.fileInput.click();
-    });
-
-    HTMLControl.controls.file.fileInput.addEventListener('change', function (e) {
-
-      var file = e.target.files[0];
-
-      var fileReader = new FileReader();
-
-      fileReader.readAsText(file);
-
-      fileReader.onload = function (evt) {
-
-        try {
-
-          var json = JSON.parse(evt.target.result);
-
-          _this2.load(json);
-        } catch (error) {
-
-          console.error('Error while trying to read ' + file.name + ' as JSON: ' + error);
-        }
-      };
-    });
-  };
-
-  FileControl.prototype.initResetButton = function initResetButton() {
-    var _this3 = this;
-
-    HTMLControl.controls.file.resetButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      /* eslint no-alert: 0 */
-      if (confirm('This will reset everything! Are you sure?')) {
-
-        _this3.resetAll();
+        console.error('Wrong JSON format - cannot load dance!');
+        return;
       }
-    });
-  };
 
-  FileControl.prototype.resetAll = function resetAll() {
+      this.resetAll();
 
-    this.frames.reset();
-    this.groups.reset();
-    this.dance.reset();
-    HTMLControl.controls.music.stop.click();
-  };
+      this.frames.fromJSON(json.frames);
+      this.groups.fromJSON(json.groups);
+      this.dance.fromJSON(json.dance);
+    }
+  }, {
+    key: 'initSaveButton',
+    value: function initSaveButton() {
+      var _this = this;
 
-  FileControl.prototype.initExamples = function initExamples() {
-    var _this4 = this;
+      HTMLControl.controls.file.save.addEventListener('click', function (e) {
 
-    var examples = HTMLControl.controls.file.examples;
+        e.preventDefault();
 
-    HTMLControl.controls.file.loadExample.addEventListener('click', function (e) {
+        var object = {
 
-      e.preventDefault();
+          metadata: {
+            type: 'Nao Dance File',
+            generator: 'Blackthread design',
+            version: '1'
+          }
 
-      var path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
+        };
 
-      fetch(path).then(function (response) {
-        return response.json();
-      }).then(function (json) {
-        return _this4.load(json);
-      }).catch(function (err) {
-        return console.log(err);
+        object.frames = _this.frames.toJSON();
+        object.groups = _this.groups.toJSON();
+        object.dance = _this.dance.toJSON();
+
+        exportAsJSON(object);
       });
-    });
-  };
+    }
+  }, {
+    key: 'initLoadButton',
+    value: function initLoadButton() {
+      var _this2 = this;
 
+      HTMLControl.controls.file.load.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        HTMLControl.controls.file.fileInput.click();
+      });
+
+      HTMLControl.controls.file.fileInput.addEventListener('change', function (e) {
+
+        var file = e.target.files[0];
+
+        var fileReader = new FileReader();
+
+        fileReader.readAsText(file);
+
+        fileReader.onload = function (evt) {
+
+          try {
+
+            var json = JSON.parse(evt.target.result);
+
+            _this2.load(json);
+          } catch (error) {
+
+            console.error('Error while trying to read ' + file.name + ' as JSON: ' + error);
+          }
+        };
+      });
+    }
+  }, {
+    key: 'initResetButton',
+    value: function initResetButton() {
+      var _this3 = this;
+
+      HTMLControl.controls.file.resetButton.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        /* eslint no-alert: 0 */
+        if (confirm('This will reset everything! Are you sure?')) {
+
+          _this3.resetAll();
+        }
+      });
+    }
+  }, {
+    key: 'resetAll',
+    value: function resetAll() {
+
+      this.frames.reset();
+      this.groups.reset();
+      this.dance.reset();
+      HTMLControl.controls.music.stop.click();
+    }
+  }, {
+    key: 'initExamples',
+    value: function initExamples() {
+      var _this4 = this;
+
+      var examples = HTMLControl.controls.file.examples;
+
+      HTMLControl.controls.file.loadExample.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        var path = '/assets/models/robot_dance/examples/' + examples.options[examples.selectedIndex].value + '.json';
+
+        fetch(path).then(function (response) {
+          return response.json();
+        }).then(function (json) {
+          return _this4.load(json);
+        }).catch(function (err) {
+          return console.log(err);
+        });
+      });
+    }
+  }]);
   return FileControl;
 }();
 
@@ -57882,179 +58017,193 @@ var Audio$1 = function () {
     this.loadExamples();
   }
 
-  Audio.prototype.load = function load(file) {
-    var _this2 = this;
+  createClass(Audio, [{
+    key: 'load',
+    value: function load(file) {
+      var _this2 = this;
 
-    loaders.audioLoader(this.audioDirectory + file).then(function (buffer) {
+      loaders.audioLoader(this.audioDirectory + file).then(function (buffer) {
 
-      _this2.buffers[file] = buffer;
+        _this2.buffers[file] = buffer;
 
-      var optionElem = document.createElement('option');
-      optionElem.value = file;
-      optionElem.innerHTML = file.replace(/_/g, ' ').replace('.mp3', '');
-      HTMLControl.controls.music.tracks.appendChild(optionElem);
+        var optionElem = document.createElement('option');
+        optionElem.value = file;
+        optionElem.innerHTML = file.replace(/_/g, ' ').replace('.mp3', '');
+        HTMLControl.controls.music.tracks.appendChild(optionElem);
 
-      _this2.playButton.disabled = false;
-    });
-  };
-
-  Audio.prototype.loadExamples = function loadExamples() {
-    var _this3 = this;
-
-    var exampleTrackNames = ['Chinese_Man_Miss_Chang', 'DJ_Kormac_Rainstorm', 'Gramatik_Day_Of_The_So_Called_Glory', 'Lindsey_Stirling_Crystalize'];
-
-    exampleTrackNames.forEach(function (name) {
-
-      _this3.load(name + '.mp3');
-    });
-  };
-
-  Audio.prototype.play = function play() {
-
-    if (this.soundsEmitters[0].source === undefined) {
-
-      var option = HTMLControl.controls.music.tracks.options[HTMLControl.controls.music.tracks.selectedIndex];
-
-      if (option !== undefined) this.setTrack(option.value);
+        _this2.playButton.disabled = false;
+      });
     }
+  }, {
+    key: 'loadExamples',
+    value: function loadExamples() {
+      var _this3 = this;
 
-    this.soundsEmitters.forEach(function (sound) {
+      var exampleTrackNames = ['Chinese_Man_Miss_Chang', 'DJ_Kormac_Rainstorm', 'Gramatik_Day_Of_The_So_Called_Glory', 'Lindsey_Stirling_Crystalize'];
 
-      sound.play();
-    });
+      exampleTrackNames.forEach(function (name) {
 
-    this.playButton.innerHTML = 'Pause';
+        _this3.load(name + '.mp3');
+      });
+    }
+  }, {
+    key: 'play',
+    value: function play() {
 
-    this.isPlaying = true;
-    this.isPaused = false;
-  };
+      if (this.soundsEmitters[0].source === undefined) {
 
-  Audio.prototype.pause = function pause() {
+        var option = HTMLControl.controls.music.tracks.options[HTMLControl.controls.music.tracks.selectedIndex];
 
-    if (!this.isPlaying) return;
-
-    this.soundsEmitters.forEach(function (sound) {
-
-      sound.pause();
-    });
-
-    this.playButton.innerHTML = 'Play';
-
-    this.isPaused = true;
-  };
-
-  Audio.prototype.reset = function reset() {
-
-    this.playButton.innerHTML = 'Play';
-    this.stopButton.disabled = true;
-
-    this.soundsEmitters.forEach(function (sound) {
-
-      if (sound.source !== undefined) sound.stop();
-    });
-
-    this.isPlaying = false;
-    this.isPaused = false;
-  };
-
-  Audio.prototype.setTrack = function setTrack(name) {
-
-    this.reset();
-
-    var buffer = this.buffers[name];
-
-    this.soundsEmitters.forEach(function (sound) {
-
-      sound.setBuffer(buffer);
-    });
-  };
-
-  Audio.prototype.initPlayButton = function initPlayButton() {
-    var _this4 = this;
-
-    this.playButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      _this4.stopButton.disabled = false;
-
-      if (!_this4.isPaused && _this4.isPlaying) {
-
-        _this4.pause();
-      } else {
-
-        _this4.play();
+        if (option !== undefined) this.setTrack(option.value);
       }
-    });
-  };
 
-  Audio.prototype.initStopButton = function initStopButton() {
-    var _this5 = this;
+      this.soundsEmitters.forEach(function (sound) {
 
-    this.stopButton.addEventListener('click', function (e) {
+        sound.play();
+      });
 
-      e.preventDefault();
+      this.playButton.innerHTML = 'Pause';
 
-      _this5.reset();
-    });
-  };
+      this.isPlaying = true;
+      this.isPaused = false;
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
 
-  Audio.prototype.initUploadButton = function initUploadButton() {
-    var _this6 = this;
+      if (!this.isPlaying) return;
 
-    HTMLControl.controls.music.uploadMP3Button.addEventListener('click', function (e) {
+      this.soundsEmitters.forEach(function (sound) {
 
-      e.preventDefault();
+        sound.pause();
+      });
 
-      HTMLControl.controls.music.uploadMP3Input.click();
-    });
+      this.playButton.innerHTML = 'Play';
 
-    HTMLControl.controls.music.uploadMP3Input.addEventListener('change', function (e) {
+      this.isPaused = true;
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
 
-      var file = e.target.files[0];
+      this.playButton.innerHTML = 'Play';
+      this.stopButton.disabled = true;
 
-      var name = file.name;
+      this.soundsEmitters.forEach(function (sound) {
 
-      var optionElem = document.createElement('option');
-      optionElem.value = name;
-      optionElem.disabled = true;
-      optionElem.innerHTML = name.replace('.mp3', '');
-      HTMLControl.controls.music.tracks.appendChild(optionElem);
+        if (sound.source !== undefined) sound.stop();
+      });
 
-      var fileReader = new FileReader();
+      this.isPlaying = false;
+      this.isPaused = false;
+    }
+  }, {
+    key: 'setTrack',
+    value: function setTrack(name) {
 
-      fileReader.readAsArrayBuffer(file);
+      this.reset();
 
-      fileReader.onload = function (evt) {
+      var buffer = this.buffers[name];
 
-        var context = AudioContext.getContext();
+      this.soundsEmitters.forEach(function (sound) {
 
-        context.decodeAudioData(evt.target.result, function (buffer) {
+        sound.setBuffer(buffer);
+      });
+    }
+  }, {
+    key: 'initPlayButton',
+    value: function initPlayButton() {
+      var _this4 = this;
 
-          _this6.buffers[name] = buffer;
+      this.playButton.addEventListener('click', function (e) {
 
-          optionElem.disabled = false;
-        });
-      };
-    });
-  };
+        e.preventDefault();
 
-  Audio.prototype.initSelectionMenu = function initSelectionMenu() {
-    var _this7 = this;
+        _this4.stopButton.disabled = false;
 
-    HTMLControl.controls.music.tracks.addEventListener('input', function (e) {
+        if (!_this4.isPaused && _this4.isPlaying) {
 
-      e.preventDefault();
+          _this4.pause();
+        } else {
 
-      var track = e.target.options[e.target.selectedIndex].value;
+          _this4.play();
+        }
+      });
+    }
+  }, {
+    key: 'initStopButton',
+    value: function initStopButton() {
+      var _this5 = this;
 
-      _this7.setTrack(track);
-    });
-  };
+      this.stopButton.addEventListener('click', function (e) {
 
+        e.preventDefault();
+
+        _this5.reset();
+      });
+    }
+  }, {
+    key: 'initUploadButton',
+    value: function initUploadButton() {
+      var _this6 = this;
+
+      HTMLControl.controls.music.uploadMP3Button.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        HTMLControl.controls.music.uploadMP3Input.click();
+      });
+
+      HTMLControl.controls.music.uploadMP3Input.addEventListener('change', function (e) {
+
+        var file = e.target.files[0];
+
+        var name = file.name;
+
+        var optionElem = document.createElement('option');
+        optionElem.value = name;
+        optionElem.disabled = true;
+        optionElem.innerHTML = name.replace('.mp3', '');
+        HTMLControl.controls.music.tracks.appendChild(optionElem);
+
+        var fileReader = new FileReader();
+
+        fileReader.readAsArrayBuffer(file);
+
+        fileReader.onload = function (evt) {
+
+          var context = AudioContext.getContext();
+
+          context.decodeAudioData(evt.target.result, function (buffer) {
+
+            _this6.buffers[name] = buffer;
+
+            optionElem.disabled = false;
+          });
+        };
+      });
+    }
+  }, {
+    key: 'initSelectionMenu',
+    value: function initSelectionMenu() {
+      var _this7 = this;
+
+      HTMLControl.controls.music.tracks.addEventListener('input', function (e) {
+
+        e.preventDefault();
+
+        var track = e.target.options[e.target.selectedIndex].value;
+
+        _this7.setTrack(track);
+      });
+    }
+  }]);
   return Audio;
 }();
 
+// Fix for bug in FBXLoader
+// https://github.com/mrdoob/three.js/issues/11911
+// This will hopefully be added to the FBXLoader eventually, in the meantime...
 function invertMirroredFBX(object) {
 
   object.traverse(function (child) {
@@ -58166,13 +58315,15 @@ var ResetButtonCell = function () {
 
   createClass(ResetButtonCell, [{
     key: 'disabled',
-    set: function (value) {
+    set: function set(value) {
 
       this.button.disabled = true;
     }
   }]);
   return ResetButtonCell;
 }();
+
+// import animationControl from '../animation/animationControl.js';
 
 var Frame = function () {
   function Frame(robot, num) {
@@ -58200,298 +58351,310 @@ var Frame = function () {
     this.setValues(0);
   }
 
-  Frame.prototype.createTableEntry = function createTableEntry(num) {
-    var _this = this;
-
-    var constraints = this.robot.constraints;
-
-    this.row = document.createElement('tr');
-
-    new TextCell(this.row, num);
-
-    var headCell = document.createElement('td');
-    this.row.appendChild(headCell);
-    this.headPitchInput = new CellInputElem(this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch');
-    this.headYawInput = new CellInputElem(this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw');
-
-    var leftShoulderCell = document.createElement('td');
-    this.row.appendChild(leftShoulderCell);
-    this.leftShoulderPitchInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch');
-    this.leftShoulderYawInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw');
-
-    var rightShoulderCell = document.createElement('td');
-    this.row.appendChild(rightShoulderCell);
-    this.rightShoulderPitchInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch');
-    this.rightShoulderYawInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw');
-
-    var leftElbowCell = document.createElement('td');
-    this.row.appendChild(leftElbowCell);
-    this.leftElbowPitchInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch');
-    this.leftElbowYawInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw');
-
-    var rightElbowCell = document.createElement('td');
-    this.row.appendChild(rightElbowCell);
-    this.rightElbowPitchInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch');
-    this.rightElbowYawInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw');
-
-    this.resetButton = new ResetButtonCell(this.row);
-
-    var click = function () {
-
-      _this.reset();
-    };
-    this.resetButton.onClick = click;
-  };
-
-  Frame.prototype.addEventListeners = function addEventListeners() {
-
-    this.headPitchInput.addEventListener('input', this.controlFunctions.headPitch);
-    this.headYawInput.addEventListener('input', this.controlFunctions.headYaw);
-
-    this.leftShoulderPitchInput.addEventListener('input', this.controlFunctions.leftShoulderPitch);
-    this.leftShoulderYawInput.addEventListener('input', this.controlFunctions.leftShoulderYaw);
-
-    this.rightShoulderPitchInput.addEventListener('input', this.controlFunctions.rightShoulderPitch);
-    this.rightShoulderYawInput.addEventListener('input', this.controlFunctions.rightShoulderYaw);
-
-    this.leftElbowPitchInput.addEventListener('input', this.controlFunctions.leftElbowPitch);
-    this.leftElbowYawInput.addEventListener('input', this.controlFunctions.leftElbowYaw);
-
-    this.rightElbowPitchInput.addEventListener('input', this.controlFunctions.rightElbowPitch);
-    this.rightElbowYawInput.addEventListener('input', this.controlFunctions.rightElbowYaw);
-  };
-
-  Frame.prototype.removeEventListeners = function removeEventListeners() {
-
-    this.headPitchInput.removeEventListener('input', this.controlFunctions.headPitch);
-    this.headYawInput.removeEventListener('input', this.controlFunctions.headYaw);
-
-    this.leftShoulderPitchInput.removeEventListener('input', this.controlFunctions.leftShoulderPitch);
-    this.leftShoulderYawInput.removeEventListener('input', this.controlFunctions.leftShoulderYaw);
-
-    this.rightShoulderPitchInput.removeEventListener('input', this.controlFunctions.rightShoulderPitch);
-    this.rightShoulderYawInput.removeEventListener('input', this.controlFunctions.rightShoulderYaw);
-
-    this.leftElbowPitchInput.removeEventListener('input', this.controlFunctions.leftElbowPitch);
-    this.leftElbowYawInput.removeEventListener('input', this.controlFunctions.leftElbowYaw);
-
-    this.rightElbowPitchInput.removeEventListener('input', this.controlFunctions.rightElbowPitch);
-    this.rightElbowYawInput.removeEventListener('input', this.controlFunctions.rightElbowYaw);
-  };
-
-  Frame.prototype.setFlags = function setFlags(value) {
-
-    this.headPitchSet = value;
-    this.headYawSet = value;
-    this.leftShoulderPitchSet = value;
-    this.leftShoulderYawSet = value;
-    this.rightShoulderPitchSet = value;
-    this.rightShoulderYawSet = value;
-    this.leftElbowPitchSet = value;
-    this.leftElbowYawSet = value;
-    this.rightElbowPitchSet = value;
-    this.rightElbowYawSet = value;
-  };
-
-  Frame.prototype.initQuaternions = function initQuaternions() {
-
-    this.headQuaternion = this.robot.headInitialQuaternion.clone();
-    this.leftShoulderQuaternion = this.robot.leftShoulderInitialQuaternion.clone();
-    this.rightShoulderQuaternion = this.robot.rightShoulderInitialQuaternion.clone();
-    this.leftElbowQuaternion = this.robot.leftElbowInitialQuaternion.clone();
-    this.rightElbowQuaternion = this.robot.rightElbowInitialQuaternion.clone();
-  };
-
-  Frame.prototype.setValues = function setValues(value) {
-
-    value = value || 0;
-
-    this.headPitchValue = value;
-    this.headYawValue = value;
-
-    this.leftShoulderPitchValue = value;
-    this.leftShoulderYawValue = value;
-
-    this.rightShoulderPitchValue = value;
-    this.rightShoulderYawValue = value;
-
-    this.leftElbowPitchValue = value;
-    this.leftElbowYawValue = value;
-
-    this.rightElbowPitchValue = value;
-    this.rightElbowYawValue = value;
-  };
-
-  Frame.prototype.initControlFunctions = function initControlFunctions() {
-    var _this2 = this;
-
-    var xAxis = new Vector3(1, 0, 0);
-    var yAxis = new Vector3(0, 1, 0);
-    var zAxis = new Vector3(0, 0, 1);
-
-    var control = function (e, name, sign, direction, axis) {
-
-      var value = void 0;
-
-      if (e === '') return;
-
-      // this function can either be used from an input Event or by passing a number directly
-      if (e instanceof Event) {
-
-        e.preventDefault();
-
-        value = _Math.degToRad(sign * e.target.value);
-      } else {
-
-        value = _Math.degToRad(sign * e);
-      }
-
-      // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
-      _this2.robot[name].rotateOnAxis(axis, _this2[name + direction + 'Value'] - value);
-
-      // e.g. this.headPitchValue = value;
-      _this2[name + direction + 'Value'] = value;
-
-      // e.g. this.headPitchSet = true;
-      _this2[name + direction + 'Set'] = true;
-
-      // e.g. this.headQuaternion.copy(this.robot[ 'head' ].quaternion);
-      _this2[name + 'Quaternion'].copy(_this2.robot[name].quaternion);
-    };
-
-    this.controlFunctions = {
-
-      headPitch: function (e) {
-        return control(e, 'head', 1, 'Pitch', zAxis);
-      },
-      headYaw: function (e) {
-        return control(e, 'head', 1, 'Yaw', xAxis);
-      },
-
-      leftShoulderPitch: function (e) {
-        return control(e, 'leftShoulder', -1, 'Pitch', zAxis);
-      },
-      leftShoulderYaw: function (e) {
-        return control(e, 'leftShoulder', -1, 'Yaw', yAxis);
-      },
-
-      rightShoulderPitch: function (e) {
-        return control(e, 'rightShoulder', -1, 'Pitch', zAxis);
-      },
-      rightShoulderYaw: function (e) {
-        return control(e, 'rightShoulder', 1, 'Yaw', yAxis);
-      },
-
-      leftElbowPitch: function (e) {
-        return control(e, 'leftElbow', 1, 'Pitch', yAxis);
-      },
-      leftElbowYaw: function (e) {
-        return control(e, 'leftElbow', -1, 'Yaw', zAxis);
-      },
-
-      rightElbowPitch: function (e) {
-        return control(e, 'rightElbow', -1, 'Pitch', yAxis);
-      },
-      rightElbowYaw: function (e) {
-        return control(e, 'rightElbow', -1, 'Yaw', zAxis);
-      }
-
-    };
-  };
-
-  Frame.prototype.setRotations = function setRotations() {
-
-    this.robot.head.quaternion.copy(this.headQuaternion);
-    this.robot.leftShoulder.quaternion.copy(this.leftShoulderQuaternion);
-    this.robot.rightShoulder.quaternion.copy(this.rightShoulderQuaternion);
-    this.robot.leftElbow.quaternion.copy(this.leftElbowQuaternion);
-    this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
-  };
-
-  Frame.prototype.setValuesAndQuaternionsFromInputs = function setValuesAndQuaternionsFromInputs() {
-
-    this.controlFunctions.headPitch(this.headPitchInput.value);
-    this.controlFunctions.headYaw(this.headYawInput.value);
-    this.controlFunctions.leftShoulderPitch(this.leftShoulderPitchInput.value);
-    this.controlFunctions.leftShoulderYaw(this.leftShoulderYawInput.value);
-
-    this.controlFunctions.rightShoulderPitch(this.rightShoulderPitchInput.value);
-    this.controlFunctions.rightShoulderYaw(this.rightShoulderYawInput.value);
-    this.controlFunctions.leftElbowPitch(this.leftElbowPitchInput.value);
-    this.controlFunctions.leftElbowYaw(this.leftElbowYawInput.value);
-
-    this.controlFunctions.rightElbowPitch(this.rightElbowPitchInput.value);
-    this.controlFunctions.rightElbowYaw(this.rightElbowYawInput.value);
-  };
-
-  Frame.prototype.reset = function reset() {
-
-    this.headPitchInput.value = '';
-    this.headYawInput.value = '';
-    this.leftShoulderPitchInput.value = '';
-    this.leftShoulderYawInput.value = '';
-    this.rightShoulderPitchInput.value = '';
-    this.rightShoulderYawInput.value = '';
-    this.leftElbowPitchInput.value = '';
-    this.leftElbowYawInput.value = '';
-    this.rightElbowPitchInput.value = '';
-    this.rightElbowYawInput.value = '';
-
-    this.setFlags(false);
-    this.setValues();
-
-    this.initQuaternions();
-    this.setRotations();
-  };
-
-  Frame.prototype.fromJSON = function fromJSON(object) {
-
-    this.headPitchInput.value = object.headPitch;
-    this.headYawInput.value = object.headYaw;
-    this.leftShoulderPitchInput.value = object.leftShoulderPitch;
-    this.leftShoulderYawInput.value = object.leftShoulderYaw;
-    this.rightShoulderPitchInput.value = object.rightShoulderPitch;
-    this.rightShoulderYawInput.value = object.rightShoulderYaw;
-    this.leftElbowPitchInput.value = object.leftElbowPitch;
-    this.leftElbowYawInput.value = object.leftElbowYaw;
-    this.rightElbowPitchInput.value = object.rightElbowPitch;
-    this.rightElbowYawInput.value = object.rightElbowYaw;
-
-    this.headPitchSet = this.headPitchInput.value !== '';
-    this.headYawSet = this.headYawInput.value !== '';
-    this.leftShoulderPitchSet = this.leftShoulderPitchInput.value !== '';
-    this.leftShoulderYawSet = this.leftShoulderYawInput.value !== '';
-    this.rightShoulderPitchSet = this.rightShoulderPitchInput.value !== '';
-    this.rightShoulderYawSet = this.rightShoulderYawInput.value !== '';
-    this.leftElbowPitchSet = this.leftElbowPitchInput.value !== '';
-    this.leftElbowYawSet = this.leftElbowYawInput.value !== '';
-    this.rightElbowPitchSet = this.rightElbowPitchInput.value !== '';
-    this.rightElbowYawSet = this.headPitchInput.value !== '';
-
-    this.setValuesAndQuaternionsFromInputs();
-  };
-
-  Frame.prototype.toJSON = function toJSON() {
-
-    return {
-
-      headPitch: this.headPitchInput.value,
-      headYaw: this.headYawInput.value,
-      leftShoulderPitch: this.leftShoulderPitchInput.value,
-      leftShoulderYaw: this.leftShoulderYawInput.value,
-      rightShoulderPitch: this.rightShoulderPitchInput.value,
-      rightShoulderYaw: this.rightShoulderYawInput.value,
-      leftElbowPitch: this.leftElbowPitchInput.value,
-      leftElbowYaw: this.leftElbowYawInput.value,
-      rightElbowPitch: this.rightElbowPitchInput.value,
-      rightElbowYaw: this.rightElbowYawInput.value
-
-    };
-  };
-
   createClass(Frame, [{
+    key: 'createTableEntry',
+    value: function createTableEntry(num) {
+      var _this = this;
+
+      var constraints = this.robot.constraints;
+
+      this.row = document.createElement('tr');
+
+      new TextCell(this.row, num);
+
+      var headCell = document.createElement('td');
+      this.row.appendChild(headCell);
+      this.headPitchInput = new CellInputElem(this.row, headCell, constraints.headPitchMin, constraints.headPitchMax, 'pitch');
+      this.headYawInput = new CellInputElem(this.row, headCell, constraints.headYawMin, constraints.headYawMax, 'yaw');
+
+      var leftShoulderCell = document.createElement('td');
+      this.row.appendChild(leftShoulderCell);
+      this.leftShoulderPitchInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderPitchMin, constraints.headPitchMax, 'pitch');
+      this.leftShoulderYawInput = new CellInputElem(this.row, leftShoulderCell, constraints.leftShoulderYawMin, constraints.headYawMax, 'yaw');
+
+      var rightShoulderCell = document.createElement('td');
+      this.row.appendChild(rightShoulderCell);
+      this.rightShoulderPitchInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderPitchMin, constraints.headPitchMax, 'pitch');
+      this.rightShoulderYawInput = new CellInputElem(this.row, rightShoulderCell, constraints.rightShoulderYawMin, constraints.headYawMax, 'yaw');
+
+      var leftElbowCell = document.createElement('td');
+      this.row.appendChild(leftElbowCell);
+      this.leftElbowPitchInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowPitchMin, constraints.headPitchMax, 'pitch');
+      this.leftElbowYawInput = new CellInputElem(this.row, leftElbowCell, constraints.leftElbowYawMin, constraints.headYawMax, 'yaw');
+
+      var rightElbowCell = document.createElement('td');
+      this.row.appendChild(rightElbowCell);
+      this.rightElbowPitchInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowPitchMin, constraints.headPitchMax, 'pitch');
+      this.rightElbowYawInput = new CellInputElem(this.row, rightElbowCell, constraints.rightElbowYawMin, constraints.headYawMax, 'yaw');
+
+      this.resetButton = new ResetButtonCell(this.row);
+
+      var click = function click() {
+
+        _this.reset();
+      };
+      this.resetButton.onClick = click;
+    }
+  }, {
+    key: 'addEventListeners',
+    value: function addEventListeners() {
+
+      this.headPitchInput.addEventListener('input', this.controlFunctions.headPitch);
+      this.headYawInput.addEventListener('input', this.controlFunctions.headYaw);
+
+      this.leftShoulderPitchInput.addEventListener('input', this.controlFunctions.leftShoulderPitch);
+      this.leftShoulderYawInput.addEventListener('input', this.controlFunctions.leftShoulderYaw);
+
+      this.rightShoulderPitchInput.addEventListener('input', this.controlFunctions.rightShoulderPitch);
+      this.rightShoulderYawInput.addEventListener('input', this.controlFunctions.rightShoulderYaw);
+
+      this.leftElbowPitchInput.addEventListener('input', this.controlFunctions.leftElbowPitch);
+      this.leftElbowYawInput.addEventListener('input', this.controlFunctions.leftElbowYaw);
+
+      this.rightElbowPitchInput.addEventListener('input', this.controlFunctions.rightElbowPitch);
+      this.rightElbowYawInput.addEventListener('input', this.controlFunctions.rightElbowYaw);
+    }
+  }, {
+    key: 'removeEventListeners',
+    value: function removeEventListeners() {
+
+      this.headPitchInput.removeEventListener('input', this.controlFunctions.headPitch);
+      this.headYawInput.removeEventListener('input', this.controlFunctions.headYaw);
+
+      this.leftShoulderPitchInput.removeEventListener('input', this.controlFunctions.leftShoulderPitch);
+      this.leftShoulderYawInput.removeEventListener('input', this.controlFunctions.leftShoulderYaw);
+
+      this.rightShoulderPitchInput.removeEventListener('input', this.controlFunctions.rightShoulderPitch);
+      this.rightShoulderYawInput.removeEventListener('input', this.controlFunctions.rightShoulderYaw);
+
+      this.leftElbowPitchInput.removeEventListener('input', this.controlFunctions.leftElbowPitch);
+      this.leftElbowYawInput.removeEventListener('input', this.controlFunctions.leftElbowYaw);
+
+      this.rightElbowPitchInput.removeEventListener('input', this.controlFunctions.rightElbowPitch);
+      this.rightElbowYawInput.removeEventListener('input', this.controlFunctions.rightElbowYaw);
+    }
+  }, {
+    key: 'setFlags',
+    value: function setFlags(value) {
+
+      this.headPitchSet = value;
+      this.headYawSet = value;
+      this.leftShoulderPitchSet = value;
+      this.leftShoulderYawSet = value;
+      this.rightShoulderPitchSet = value;
+      this.rightShoulderYawSet = value;
+      this.leftElbowPitchSet = value;
+      this.leftElbowYawSet = value;
+      this.rightElbowPitchSet = value;
+      this.rightElbowYawSet = value;
+    }
+  }, {
+    key: 'initQuaternions',
+    value: function initQuaternions() {
+
+      this.headQuaternion = this.robot.headInitialQuaternion.clone();
+      this.leftShoulderQuaternion = this.robot.leftShoulderInitialQuaternion.clone();
+      this.rightShoulderQuaternion = this.robot.rightShoulderInitialQuaternion.clone();
+      this.leftElbowQuaternion = this.robot.leftElbowInitialQuaternion.clone();
+      this.rightElbowQuaternion = this.robot.rightElbowInitialQuaternion.clone();
+    }
+  }, {
+    key: 'setValues',
+    value: function setValues(value) {
+
+      value = value || 0;
+
+      this.headPitchValue = value;
+      this.headYawValue = value;
+
+      this.leftShoulderPitchValue = value;
+      this.leftShoulderYawValue = value;
+
+      this.rightShoulderPitchValue = value;
+      this.rightShoulderYawValue = value;
+
+      this.leftElbowPitchValue = value;
+      this.leftElbowYawValue = value;
+
+      this.rightElbowPitchValue = value;
+      this.rightElbowYawValue = value;
+    }
+  }, {
+    key: 'initControlFunctions',
+    value: function initControlFunctions() {
+      var _this2 = this;
+
+      var xAxis = new Vector3(1, 0, 0);
+      var yAxis = new Vector3(0, 1, 0);
+      var zAxis = new Vector3(0, 0, 1);
+
+      var control = function control(e, name, sign, direction, axis) {
+
+        var value = void 0;
+
+        if (e === '') return;
+
+        // this function can either be used from an input Event or by passing a number directly
+        if (e instanceof Event) {
+
+          e.preventDefault();
+
+          value = _Math.degToRad(sign * e.target.value);
+        } else {
+
+          value = _Math.degToRad(sign * e);
+        }
+
+        // e.g.  this.robot[ 'head' ].rotateOnAxis( zAxis, this[ 'headPitchValue' ] - value );
+        _this2.robot[name].rotateOnAxis(axis, _this2[name + direction + 'Value'] - value);
+
+        // e.g. this.headPitchValue = value;
+        _this2[name + direction + 'Value'] = value;
+
+        // e.g. this.headPitchSet = true;
+        _this2[name + direction + 'Set'] = true;
+
+        // e.g. this.headQuaternion.copy(this.robot[ 'head' ].quaternion);
+        _this2[name + 'Quaternion'].copy(_this2.robot[name].quaternion);
+      };
+
+      this.controlFunctions = {
+
+        headPitch: function headPitch(e) {
+          return control(e, 'head', 1, 'Pitch', zAxis);
+        },
+        headYaw: function headYaw(e) {
+          return control(e, 'head', 1, 'Yaw', xAxis);
+        },
+
+        leftShoulderPitch: function leftShoulderPitch(e) {
+          return control(e, 'leftShoulder', -1, 'Pitch', zAxis);
+        },
+        leftShoulderYaw: function leftShoulderYaw(e) {
+          return control(e, 'leftShoulder', -1, 'Yaw', yAxis);
+        },
+
+        rightShoulderPitch: function rightShoulderPitch(e) {
+          return control(e, 'rightShoulder', -1, 'Pitch', zAxis);
+        },
+        rightShoulderYaw: function rightShoulderYaw(e) {
+          return control(e, 'rightShoulder', 1, 'Yaw', yAxis);
+        },
+
+        leftElbowPitch: function leftElbowPitch(e) {
+          return control(e, 'leftElbow', 1, 'Pitch', yAxis);
+        },
+        leftElbowYaw: function leftElbowYaw(e) {
+          return control(e, 'leftElbow', -1, 'Yaw', zAxis);
+        },
+
+        rightElbowPitch: function rightElbowPitch(e) {
+          return control(e, 'rightElbow', -1, 'Pitch', yAxis);
+        },
+        rightElbowYaw: function rightElbowYaw(e) {
+          return control(e, 'rightElbow', -1, 'Yaw', zAxis);
+        }
+
+      };
+    }
+  }, {
+    key: 'setRotations',
+    value: function setRotations() {
+
+      this.robot.head.quaternion.copy(this.headQuaternion);
+      this.robot.leftShoulder.quaternion.copy(this.leftShoulderQuaternion);
+      this.robot.rightShoulder.quaternion.copy(this.rightShoulderQuaternion);
+      this.robot.leftElbow.quaternion.copy(this.leftElbowQuaternion);
+      this.robot.rightElbow.quaternion.copy(this.rightElbowQuaternion);
+    }
+  }, {
+    key: 'setValuesAndQuaternionsFromInputs',
+    value: function setValuesAndQuaternionsFromInputs() {
+
+      this.controlFunctions.headPitch(this.headPitchInput.value);
+      this.controlFunctions.headYaw(this.headYawInput.value);
+      this.controlFunctions.leftShoulderPitch(this.leftShoulderPitchInput.value);
+      this.controlFunctions.leftShoulderYaw(this.leftShoulderYawInput.value);
+
+      this.controlFunctions.rightShoulderPitch(this.rightShoulderPitchInput.value);
+      this.controlFunctions.rightShoulderYaw(this.rightShoulderYawInput.value);
+      this.controlFunctions.leftElbowPitch(this.leftElbowPitchInput.value);
+      this.controlFunctions.leftElbowYaw(this.leftElbowYawInput.value);
+
+      this.controlFunctions.rightElbowPitch(this.rightElbowPitchInput.value);
+      this.controlFunctions.rightElbowYaw(this.rightElbowYawInput.value);
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+
+      this.headPitchInput.value = '';
+      this.headYawInput.value = '';
+      this.leftShoulderPitchInput.value = '';
+      this.leftShoulderYawInput.value = '';
+      this.rightShoulderPitchInput.value = '';
+      this.rightShoulderYawInput.value = '';
+      this.leftElbowPitchInput.value = '';
+      this.leftElbowYawInput.value = '';
+      this.rightElbowPitchInput.value = '';
+      this.rightElbowYawInput.value = '';
+
+      this.setFlags(false);
+      this.setValues();
+
+      this.initQuaternions();
+      this.setRotations();
+    }
+  }, {
+    key: 'fromJSON',
+    value: function fromJSON(object) {
+
+      this.headPitchInput.value = object.headPitch;
+      this.headYawInput.value = object.headYaw;
+      this.leftShoulderPitchInput.value = object.leftShoulderPitch;
+      this.leftShoulderYawInput.value = object.leftShoulderYaw;
+      this.rightShoulderPitchInput.value = object.rightShoulderPitch;
+      this.rightShoulderYawInput.value = object.rightShoulderYaw;
+      this.leftElbowPitchInput.value = object.leftElbowPitch;
+      this.leftElbowYawInput.value = object.leftElbowYaw;
+      this.rightElbowPitchInput.value = object.rightElbowPitch;
+      this.rightElbowYawInput.value = object.rightElbowYaw;
+
+      this.headPitchSet = this.headPitchInput.value !== '';
+      this.headYawSet = this.headYawInput.value !== '';
+      this.leftShoulderPitchSet = this.leftShoulderPitchInput.value !== '';
+      this.leftShoulderYawSet = this.leftShoulderYawInput.value !== '';
+      this.rightShoulderPitchSet = this.rightShoulderPitchInput.value !== '';
+      this.rightShoulderYawSet = this.rightShoulderYawInput.value !== '';
+      this.leftElbowPitchSet = this.leftElbowPitchInput.value !== '';
+      this.leftElbowYawSet = this.leftElbowYawInput.value !== '';
+      this.rightElbowPitchSet = this.rightElbowPitchInput.value !== '';
+      this.rightElbowYawSet = this.headPitchInput.value !== '';
+
+      this.setValuesAndQuaternionsFromInputs();
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+
+      return {
+
+        headPitch: this.headPitchInput.value,
+        headYaw: this.headYawInput.value,
+        leftShoulderPitch: this.leftShoulderPitchInput.value,
+        leftShoulderYaw: this.leftShoulderYawInput.value,
+        rightShoulderPitch: this.rightShoulderPitchInput.value,
+        rightShoulderYaw: this.rightShoulderYawInput.value,
+        leftElbowPitch: this.leftElbowPitchInput.value,
+        leftElbowYaw: this.leftElbowYawInput.value,
+        rightElbowPitch: this.rightElbowPitchInput.value,
+        rightElbowYaw: this.rightElbowYawInput.value
+
+      };
+    }
+  }, {
     key: 'selected',
-    set: function (bool) {
+    set: function set(bool) {
 
       if (this._selected === bool) return;
 
@@ -58540,120 +58703,129 @@ var AnimationControl = function () {
     });
   }
 
-  AnimationControl.prototype.setDance = function setDance(dance) {
+  createClass(AnimationControl, [{
+    key: 'setDance',
+    value: function setDance(dance) {
 
-    this.dance = dance;
-    this.frames = dance.frames;
-    this.groups = dance.groups;
+      this.dance = dance;
+      this.frames = dance.frames;
+      this.groups = dance.groups;
 
-    return this;
-  };
-
-  // pauseAllAnimation() {
-
-  //   if ( this.groups ) this.groups.deselectAll();
-
-  // }
-
-  AnimationControl.prototype.initMixer = function initMixer(object) {
-
-    this.mixer = new AnimationMixer(object);
-  };
-
-  AnimationControl.prototype.onUpdate = function onUpdate(delta) {
-
-    if (this.mixer) this.mixer.update(delta * framerate);
-  };
-
-  AnimationControl.prototype.createAnimation = function createAnimation(frames) {
-
-    console.log(frames);
-
-    this.reset();
-
-    if (frames.length < 2) return [];
-
-    var headTracks = [];
-    var leftShoulderTracks = [];
-    var rightShoulderTracks = [];
-    var leftElbowTracks = [];
-    var rightElbowTracks = [];
-
-    for (var i = 1; i < frames.length; i++) {
-
-      var initialFrame = frames[i - 1];
-      var finalFrame = frames[i];
-
-      var frameStartTime = i - 1;
-
-      headTracks.push(this.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
-
-      leftShoulderTracks.push(this.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
-
-      rightShoulderTracks.push(this.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
-
-      leftElbowTracks.push(this.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
-
-      rightElbowTracks.push(this.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
+      return this;
     }
 
-    this.actions = [this.createAction('headControl.quaternion', headTracks), this.createAction('shoulderControlLeft.quaternion', leftShoulderTracks), this.createAction('shoulderControlRight.quaternion', rightShoulderTracks), this.createAction('elbowControlLeft.quaternion', leftElbowTracks), this.createAction('elbowControlRight.quaternion', rightElbowTracks)];
-  };
+    // pauseAllAnimation() {
 
-  // create a keyframe track consisting of two keyframes, representing the time span of one frame
+    //   if ( this.groups ) this.groups.deselectAll();
 
+    // }
 
-  AnimationControl.prototype.createKeyFrameTrack = function createKeyFrameTrack(part, initialPos, finalPos, startTime) {
+  }, {
+    key: 'initMixer',
+    value: function initMixer(object) {
 
-    return new QuaternionKeyframeTrack(part, [startTime, startTime + 1], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
-  };
+      this.mixer = new AnimationMixer(object);
+    }
+  }, {
+    key: 'onUpdate',
+    value: function onUpdate(delta) {
 
-  // A Clip consists of several keyframe tracks
-  // - for example the movement of an arm over the duration of a group.
-  // An Action controls playback of the clip
+      if (this.mixer) this.mixer.update(delta * framerate);
+    }
+  }, {
+    key: 'createAnimation',
+    value: function createAnimation(frames) {
 
+      console.log(frames);
 
-  AnimationControl.prototype.createAction = function createAction(name, tracks) {
+      this.reset();
 
-    var clip = new AnimationClip(name, tracks.length, tracks);
+      if (frames.length < 2) return [];
 
-    var action = this.mixer.clipAction(clip);
+      var headTracks = [];
+      var leftShoulderTracks = [];
+      var rightShoulderTracks = [];
+      var leftElbowTracks = [];
+      var rightElbowTracks = [];
 
-    action.zeroSlopeAtStart = false;
-    action.zeroSlopeAtEnd = false;
+      for (var i = 1; i < frames.length; i++) {
 
-    action.name = clip.name;
+        var initialFrame = frames[i - 1];
+        var finalFrame = frames[i];
 
-    return action;
-  };
+        var frameStartTime = i - 1;
 
-  AnimationControl.prototype.play = function play() {
+        headTracks.push(this.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
 
-    console.log('animationControl.play');
+        leftShoulderTracks.push(this.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
 
-    this.actions.forEach(function (action) {
+        rightShoulderTracks.push(this.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
 
-      action.play();
-    });
-  };
+        leftElbowTracks.push(this.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
 
-  AnimationControl.prototype.reset = function reset() {
+        rightElbowTracks.push(this.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
+      }
 
-    console.log('animationControl.reset');
+      this.actions = [this.createAction('headControl.quaternion', headTracks), this.createAction('shoulderControlLeft.quaternion', leftShoulderTracks), this.createAction('shoulderControlRight.quaternion', rightShoulderTracks), this.createAction('elbowControlLeft.quaternion', leftElbowTracks), this.createAction('elbowControlRight.quaternion', rightElbowTracks)];
+    }
 
-    this.actions.forEach(function (action) {
+    // create a keyframe track consisting of two keyframes, representing the time span of one frame
 
-      action.stop();
-    });
+  }, {
+    key: 'createKeyFrameTrack',
+    value: function createKeyFrameTrack(part, initialPos, finalPos, startTime) {
 
-    this.actions = [];
+      return new QuaternionKeyframeTrack(part, [startTime, startTime + 1], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
+    }
 
-    if (this.groups) this.groups.deselectAll();
-  };
+    // A Clip consists of several keyframe tracks
+    // - for example the movement of an arm over the duration of a group.
+    // An Action controls playback of the clip
 
-  createClass(AnimationControl, [{
+  }, {
+    key: 'createAction',
+    value: function createAction(name, tracks) {
+
+      var clip = new AnimationClip(name, tracks.length, tracks);
+
+      var action = this.mixer.clipAction(clip);
+
+      action.zeroSlopeAtStart = false;
+      action.zeroSlopeAtEnd = false;
+
+      action.name = clip.name;
+
+      return action;
+    }
+  }, {
+    key: 'play',
+    value: function play() {
+
+      console.log('animationControl.play');
+
+      this.actions.forEach(function (action) {
+
+        action.play();
+      });
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+
+      console.log('animationControl.reset');
+
+      this.actions.forEach(function (action) {
+
+        action.stop();
+      });
+
+      this.actions = [];
+
+      if (this.groups) this.groups.deselectAll();
+    }
+  }, {
     key: 'framerate',
-    set: function (value) {
+    set: function set(value) {
 
       framerate = value;
     }
@@ -58682,131 +58854,140 @@ var Frames = function () {
     this.initNewFrameButton();
   }
 
-  Frames.prototype.removeFrame = function removeFrame(frame) {
+  createClass(Frames, [{
+    key: 'removeFrame',
+    value: function removeFrame(frame) {
 
-    HTMLControl.controls.frames.table.removeChild(frame.row);
+      HTMLControl.controls.frames.table.removeChild(frame.row);
 
-    frame.removeEventListeners();
-  };
+      frame.removeEventListeners();
+    }
+  }, {
+    key: 'createFrame',
+    value: function createFrame(detail) {
+      var _this = this;
 
-  Frames.prototype.createFrame = function createFrame(detail) {
-    var _this = this;
+      var frame = new Frame(this.robot, this.currentFrameNum);
 
-    var frame = new Frame(this.robot, this.currentFrameNum);
+      if (detail !== undefined) frame.fromJSON(detail);
 
-    if (detail !== undefined) frame.fromJSON(detail);
+      this.frames[this.currentFrameNum] = frame;
 
-    this.frames[this.currentFrameNum] = frame;
+      this.framesTable.appendChild(frame.row);
 
-    this.framesTable.appendChild(frame.row);
+      this.select(this.currentFrameNum);
 
-    this.select(this.currentFrameNum);
+      frame.row.addEventListener('click', function (e) {
 
-    frame.row.addEventListener('click', function (e) {
+        e.preventDefault();
 
-      e.preventDefault();
+        _this.select(frame.num);
+      });
 
-      _this.select(frame.num);
-    });
+      this.currentFrameNum++;
 
-    this.currentFrameNum++;
+      return frame;
+    }
+  }, {
+    key: 'initNewFrameButton',
+    value: function initNewFrameButton() {
+      var _this2 = this;
 
-    return frame;
-  };
+      this.newFrameButton.addEventListener('click', function (e) {
 
-  Frames.prototype.initNewFrameButton = function initNewFrameButton() {
-    var _this2 = this;
+        e.preventDefault();
 
-    this.newFrameButton.addEventListener('click', function (e) {
+        _this2.createFrame();
 
-      e.preventDefault();
+        if (_this2.currentFrameNum >= 30) {
 
-      _this2.createFrame();
+          _this2.newFrameButton.innerHTML = 'Limit Reached!';
 
-      if (_this2.currentFrameNum >= 30) {
+          _this2.newFrameButton.disabled = true;
+        }
+      });
 
-        _this2.newFrameButton.innerHTML = 'Limit Reached!';
+      // create the first frame
+      this.newFrameButton.click();
+    }
+  }, {
+    key: 'select',
+    value: function select(num) {
 
-        _this2.newFrameButton.disabled = true;
+      // if ( this.selectedFrameNum === num ) return;
+
+      console.log('frames.select', num);
+
+      animationControl.reset();
+
+      var frame = this.frames[num];
+
+      if (frame !== undefined) {
+
+        frame.selected = true;
       }
-    });
 
-    // create the first frame
-    this.newFrameButton.click();
-  };
+      this.selectedFrameNum = num;
 
-  Frames.prototype.select = function select(num) {
+      for (var i = 0; i < this.frames.length; i++) {
 
-    // if ( this.selectedFrameNum === num ) return;
-
-    console.log('frames.select', num);
-
-    animationControl.reset();
-
-    var frame = this.frames[num];
-
-    if (frame !== undefined) {
-
-      frame.selected = true;
-    }
-
-    this.selectedFrameNum = num;
-
-    for (var i = 0; i < this.frames.length; i++) {
-
-      if (i !== num) this.frames[i].selected = false;
-    }
-  };
-
-  Frames.prototype.deselectAll = function deselectAll() {
-
-    this.select(-1);
-    this.defaultFrame.selected = true;
-  };
-
-  Frames.prototype.reset = function reset() {
-    var _this3 = this;
-
-    this.frames.forEach(function (frame) {
-
-      _this3.removeFrame(frame);
-    });
-
-    this.selectedFrameNum = -1;
-    this.currentFrameNum = 0;
-    this.frames = [];
-  };
-
-  Frames.prototype.fromJSON = function fromJSON(object) {
-
-    this.reset();
-
-    for (var key in object) {
-
-      this.createFrame(object[key]);
-    }
-  };
-
-  Frames.prototype.toJSON = function toJSON() {
-
-    var output = {};
-
-    for (var i = 0; i < this.frames.length; i++) {
-
-      var frame = this.frames[i];
-
-      if (frame !== null) {
-
-        output[i] = frame.toJSON();
-      } else {
-
-        output[i] = null;
+        if (i !== num) this.frames[i].selected = false;
       }
     }
+  }, {
+    key: 'deselectAll',
+    value: function deselectAll() {
 
-    return output;
-  };
+      this.select(-1);
+      this.defaultFrame.selected = true;
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      var _this3 = this;
 
+      this.frames.forEach(function (frame) {
+
+        _this3.removeFrame(frame);
+      });
+
+      this.selectedFrameNum = -1;
+      this.currentFrameNum = 0;
+      this.frames = [];
+    }
+  }, {
+    key: 'fromJSON',
+    value: function fromJSON(object) {
+
+      this.reset();
+
+      for (var key in object) {
+
+        this.createFrame(object[key]);
+      }
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+
+      var output = {};
+
+      for (var i = 0; i < this.frames.length; i++) {
+
+        var frame = this.frames[i];
+
+        if (frame !== null) {
+
+          output[i] = frame.toJSON();
+        } else {
+
+          output[i] = null;
+        }
+      }
+
+      return output;
+    }
+  }]);
   return Frames;
 }();
 
@@ -58841,7 +59022,7 @@ var DeleteButtonCell = function () {
 
   createClass(DeleteButtonCell, [{
     key: 'disabled',
-    set: function (value) {
+    set: function set(value) {
 
       this.button.disabled = true;
     }
@@ -58872,155 +59053,163 @@ var Group$1 = function () {
     this._selected = false;
   }
 
-  Group.prototype.checkGroupIsValid = function checkGroupIsValid() {
+  createClass(Group, [{
+    key: 'checkGroupIsValid',
+    value: function checkGroupIsValid() {
 
-    return this.containedFrames.length > 1;
-  };
-
-  Group.prototype.initTableRow = function initTableRow() {
-    var _this = this;
-
-    this.row = document.createElement('tr');
-
-    new TextCell(this.row, this.num);
-    var framesCell = new TextCell(this.row, '<h4>Frames in Group</h4>');
-
-    this.addFrameButton = document.createElement('button');
-    this.addFrameButton.classList.add('add-selected-frame-button');
-    this.addFrameButton.innerHTML = 'Add Selected Frame';
-
-    framesCell.appendChild(this.addFrameButton);
-
-    var frameTable = document.createElement('table');
-    this.framesInGroup = document.createElement('tbody');
-    this.framesInGroup.classList.add('frames-in-group');
-
-    frameTable.appendChild(this.framesInGroup);
-    framesCell.appendChild(frameTable);
-
-    this.resetButton = new ResetButtonCell(this.row);
-    this.resetButton.onClick = function () {
-      return _this.reset();
-    };
-  };
-
-  Group.prototype.addFrame = function addFrame(frame) {
-    var _this2 = this;
-
-    var detail = {
-      frame: frame,
-      deleteButton: null
-    };
-
-    this.containedFrames.push(detail);
-    var framePos = this.containedFrames.length - 1;
-
-    var row = document.createElement('tr');
-
-    this.framesInGroup.appendChild(row);
-
-    new TextCell(row, 'Frame #' + frame.num);
-
-    row.appendChild(document.createElement('td'));
-
-    detail.deleteButton = new DeleteButtonCell(row);
-
-    detail.deleteButton.onClick = function () {
-
-      if (_this2.framesInGroup.contains(row)) _this2.framesInGroup.removeChild(row);
-
-      if (_this2.lastAddedFrameNum === frame.num) _this2.lastAddedFrameNum = null;
-
-      _this2.containedFrames.splice(framePos, 1);
-
-      _this2.createAnimation();
-    };
-
-    this.selected = true;
-  };
-
-  Group.prototype.initAddFrameButton = function initAddFrameButton() {
-    var _this3 = this;
-
-    this.lastAddedFrameNum = null;
-
-    this.addFrameButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      var frame = _this3.frames.frames[_this3.frames.selectedFrameNum];
-
-      if (frame === undefined || frame === null) return;
-
-      // don't add the same frame consecutively (use loop instead)
-      if (_this3.lastAddedFrame === frame) return;
-
-      _this3.lastAddedFrameNum = frame;
-
-      _this3.addFrame(frame);
-
-      _this3.createAnimation();
-      animationControl.play();
-    });
-  };
-
-  Group.prototype.createAnimation = function createAnimation() {
-
-    var frames = this.containedFrames.map(function (detail) {
-      return detail.frame;
-    });
-
-    animationControl.createAnimation(frames);
-  };
-
-  Group.prototype.reset = function reset() {
-
-    // console.log( this.containedFrames )
-    for (var i = this.containedFrames.length - 1; i >= 0; i--) {
-
-      this.containedFrames[i].deleteButton.click();
+      return this.containedFrames.length > 1;
     }
+  }, {
+    key: 'initTableRow',
+    value: function initTableRow() {
+      var _this = this;
 
-    this.containedFrames = [];
-    console.log(this.containedFrames.length);
+      this.row = document.createElement('tr');
 
-    animationControl.reset();
-    this.selected = false;
-  };
+      new TextCell(this.row, this.num);
+      var framesCell = new TextCell(this.row, '<h4>Frames in Group</h4>');
 
-  Group.prototype.fromJSON = function fromJSON(object) {
+      this.addFrameButton = document.createElement('button');
+      this.addFrameButton.classList.add('add-selected-frame-button');
+      this.addFrameButton.innerHTML = 'Add Selected Frame';
 
-    this.reset();
+      framesCell.appendChild(this.addFrameButton);
 
-    for (var key in object) {
+      var frameTable = document.createElement('table');
+      this.framesInGroup = document.createElement('tbody');
+      this.framesInGroup.classList.add('frames-in-group');
 
-      var detail = object[key];
+      frameTable.appendChild(this.framesInGroup);
+      framesCell.appendChild(frameTable);
 
-      this.addFrame(this.frames.frames[detail.frameNum]);
-    }
-  };
-
-  Group.prototype.toJSON = function toJSON() {
-
-    var output = {};
-
-    for (var i = 0; i < this.containedFrames.length; i++) {
-
-      var detail = this.containedFrames[i];
-
-      output[i] = {
-
-        frameNum: detail.frame.num
-
+      this.resetButton = new ResetButtonCell(this.row);
+      this.resetButton.onClick = function () {
+        return _this.reset();
       };
     }
+  }, {
+    key: 'addFrame',
+    value: function addFrame(frame) {
+      var _this2 = this;
 
-    return output;
-  };
+      var detail = {
+        frame: frame,
+        deleteButton: null
+      };
 
-  createClass(Group, [{
+      this.containedFrames.push(detail);
+      var framePos = this.containedFrames.length - 1;
+
+      var row = document.createElement('tr');
+
+      this.framesInGroup.appendChild(row);
+
+      new TextCell(row, 'Frame #' + frame.num);
+
+      row.appendChild(document.createElement('td'));
+
+      detail.deleteButton = new DeleteButtonCell(row);
+
+      detail.deleteButton.onClick = function () {
+
+        if (_this2.framesInGroup.contains(row)) _this2.framesInGroup.removeChild(row);
+
+        if (_this2.lastAddedFrameNum === frame.num) _this2.lastAddedFrameNum = null;
+
+        _this2.containedFrames.splice(framePos, 1);
+
+        _this2.createAnimation();
+      };
+
+      this.selected = true;
+    }
+  }, {
+    key: 'initAddFrameButton',
+    value: function initAddFrameButton() {
+      var _this3 = this;
+
+      this.lastAddedFrameNum = null;
+
+      this.addFrameButton.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        var frame = _this3.frames.frames[_this3.frames.selectedFrameNum];
+
+        if (frame === undefined || frame === null) return;
+
+        // don't add the same frame consecutively (use loop instead)
+        if (_this3.lastAddedFrame === frame) return;
+
+        _this3.lastAddedFrameNum = frame;
+
+        _this3.addFrame(frame);
+
+        _this3.createAnimation();
+        animationControl.play();
+      });
+    }
+  }, {
+    key: 'createAnimation',
+    value: function createAnimation() {
+
+      var frames = this.containedFrames.map(function (detail) {
+        return detail.frame;
+      });
+
+      animationControl.createAnimation(frames);
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+
+      // console.log( this.containedFrames )
+      for (var i = this.containedFrames.length - 1; i >= 0; i--) {
+
+        this.containedFrames[i].deleteButton.click();
+      }
+
+      this.containedFrames = [];
+      console.log(this.containedFrames.length);
+
+      animationControl.reset();
+      this.selected = false;
+    }
+  }, {
+    key: 'fromJSON',
+    value: function fromJSON(object) {
+
+      this.reset();
+
+      for (var key in object) {
+
+        var detail = object[key];
+
+        this.addFrame(this.frames.frames[detail.frameNum]);
+      }
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+
+      var output = {};
+
+      for (var i = 0; i < this.containedFrames.length; i++) {
+
+        var detail = this.containedFrames[i];
+
+        output[i] = {
+
+          frameNum: detail.frame.num
+
+        };
+      }
+
+      return output;
+    }
+  }, {
     key: 'selected',
-    set: function (bool) {
+    set: function set(bool) {
 
       if (this._selected === bool) return;
 
@@ -59057,137 +59246,146 @@ var Groups = function () {
     this.initNewGroupButton();
   }
 
-  Groups.prototype.removeGroup = function removeGroup(group) {
+  createClass(Groups, [{
+    key: 'removeGroup',
+    value: function removeGroup(group) {
 
-    this.groupsTable.removeChild(group.row);
+      this.groupsTable.removeChild(group.row);
 
-    this.groups[group.num] = null;
+      this.groups[group.num] = null;
 
-    group.reset();
+      group.reset();
 
-    if (this.selectedGroup === group) this.selectedGroup = null;
-  };
+      if (this.selectedGroup === group) this.selectedGroup = null;
+    }
+  }, {
+    key: 'createGroup',
+    value: function createGroup(num, details) {
+      var _this = this;
 
-  Groups.prototype.createGroup = function createGroup(num, details) {
-    var _this = this;
+      var group = new Group$1(num, this.frames);
 
-    var group = new Group$1(num, this.frames);
+      if (details !== undefined) group.fromJSON(details);
 
-    if (details !== undefined) group.fromJSON(details);
+      this.groups.push(group);
 
-    this.groups.push(group);
+      this.groupsTable.appendChild(group.row);
 
-    this.groupsTable.appendChild(group.row);
+      this.select(group);
 
-    this.select(group);
+      var select = function select(e) {
 
-    var select = function (e) {
+        e.preventDefault();
 
-      e.preventDefault();
+        _this.select(group);
+      };
 
-      _this.select(group);
-    };
+      group.row.addEventListener('click', select);
+    }
+  }, {
+    key: 'initNewGroupButton',
+    value: function initNewGroupButton() {
+      var _this2 = this;
 
-    group.row.addEventListener('click', select);
-  };
+      this.newGroupButton.addEventListener('click', function (e) {
 
-  Groups.prototype.initNewGroupButton = function initNewGroupButton() {
-    var _this2 = this;
+        e.preventDefault();
 
-    this.newGroupButton.addEventListener('click', function (e) {
+        _this2.createGroup(_this2.currentGroupNum++);
 
-      e.preventDefault();
+        if (_this2.currentGroupNum >= 29) {
 
-      _this2.createGroup(_this2.currentGroupNum++);
+          _this2.newGroupButton.innerHTML = 'Limit Reached!';
 
-      if (_this2.currentGroupNum >= 29) {
+          _this2.newGroupButton.disabled = true;
+        }
+      });
 
-        _this2.newGroupButton.innerHTML = 'Limit Reached!';
+      this.newGroupButton.click();
+    }
+  }, {
+    key: 'select',
+    value: function select(group) {
 
-        _this2.newGroupButton.disabled = true;
-      }
-    });
+      group.selected = true;
 
-    this.newGroupButton.click();
-  };
+      this.selectedGroup = group;
 
-  Groups.prototype.select = function select(group) {
+      this.groups.forEach(function (g) {
 
-    group.selected = true;
+        if (g !== null && g.num !== group.num) {
 
-    this.selectedGroup = group;
+          g.selected = false;
+        }
+      });
+    }
+  }, {
+    key: 'deselectAll',
+    value: function deselectAll() {
 
-    this.groups.forEach(function (g) {
-
-      if (g !== null && g.num !== group.num) {
+      this.groups.forEach(function (g) {
 
         g.selected = false;
-      }
-    });
-  };
-
-  Groups.prototype.deselectAll = function deselectAll() {
-
-    this.groups.forEach(function (g) {
-
-      g.selected = false;
-    });
-  };
-
-  Groups.prototype.reset = function reset() {
-    var _this3 = this;
-
-    this.groups.forEach(function (group) {
-
-      if (group !== null) _this3.removeGroup(group);
-    });
-
-    this.currentGroupNum = 0;
-    this.selectedGroup = null;
-    this.groups = [];
-  };
-
-  Groups.prototype.fromJSON = function fromJSON(object) {
-
-    this.reset();
-
-    for (var key in object) {
-
-      var detail = object[key];
-
-      if (detail === null) {
-
-        this.frames[key] = null;
-      } else {
-
-        this.createGroup(key, detail);
-        this.currentFrameNum = key;
-      }
+      });
     }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      var _this3 = this;
 
-    this.deselectAll();
-  };
+      this.groups.forEach(function (group) {
 
-  Groups.prototype.toJSON = function toJSON() {
+        if (group !== null) _this3.removeGroup(group);
+      });
 
-    var output = {};
-
-    for (var i = 0; i < this.groups.length; i++) {
-
-      var group = this.groups[i];
-
-      if (group !== null) {
-
-        output[i] = group.toJSON();
-      } else {
-
-        output[i] = null;
-      }
+      this.currentGroupNum = 0;
+      this.selectedGroup = null;
+      this.groups = [];
     }
+  }, {
+    key: 'fromJSON',
+    value: function fromJSON(object) {
 
-    return output;
-  };
+      this.reset();
 
+      for (var key in object) {
+
+        var detail = object[key];
+
+        if (detail === null) {
+
+          this.frames[key] = null;
+        } else {
+
+          this.createGroup(key, detail);
+          this.currentFrameNum = key;
+        }
+      }
+
+      this.deselectAll();
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+
+      var output = {};
+
+      for (var i = 0; i < this.groups.length; i++) {
+
+        var group = this.groups[i];
+
+        if (group !== null) {
+
+          output[i] = group.toJSON();
+        } else {
+
+          output[i] = null;
+        }
+      }
+
+      return output;
+    }
+  }]);
   return Groups;
 }();
 
@@ -59231,7 +59429,7 @@ var LoopInputCell = function LoopInputCell(row) {
   });
 };
 
-var flattenGroup = function (group, loopAmount) {
+var flattenGroup = function flattenGroup(group, loopAmount) {
 
   var frames = [];
 
@@ -59245,7 +59443,7 @@ var flattenGroup = function (group, loopAmount) {
   return frames;
 };
 // take the details array and flatten it to an array of frames
-var flattenDetails = function (details) {
+var flattenDetails = function flattenDetails(details) {
 
   var frames = [];
 
@@ -59286,267 +59484,280 @@ var Dance = function () {
     this.initFramerateInput();
   }
 
-  Dance.prototype.initAdvancedControlsToggle = function initAdvancedControlsToggle() {
+  createClass(Dance, [{
+    key: 'initAdvancedControlsToggle',
+    value: function initAdvancedControlsToggle() {
 
-    HTMLControl.controls.dance.advancedControlToggle.addEventListener('change', function (e) {
+      HTMLControl.controls.dance.advancedControlToggle.addEventListener('change', function (e) {
 
-      e.preventDefault();
+        e.preventDefault();
 
-      HTMLControl.controls.dance.advancedControlSection.classList.toggle('hide');
-    });
-  };
+        HTMLControl.controls.dance.advancedControlSection.classList.toggle('hide');
+      });
+    }
+  }, {
+    key: 'add',
+    value: function add(elem, loop) {
+      var _this = this;
 
-  Dance.prototype.add = function add(elem, loop) {
-    var _this = this;
+      var loopAmount = loop || 1;
 
-    var loopAmount = loop || 1;
-
-    var detail = {
-      elem: elem,
-      loopAmount: loopAmount,
-      deleteButton: null
-    };
-
-    this.containedElems.push(detail);
-
-    var pos = this.containedElems.length - 1;
-
-    var row = document.createElement('tr');
-    this.table.appendChild(row);
-
-    new TextCell(row, elem.num);
-    new TextCell(row, elem.type);
-
-    if (elem.type === 'group') {
-
-      var loopInput = new LoopInputCell(row);
-
-      loopInput.onInput = function (value) {
-
-        detail.loopAmount = value;
-        _this.checkDanceIsValid();
+      var detail = {
+        elem: elem,
+        loopAmount: loopAmount,
+        deleteButton: null
       };
-    } else {
 
-      row.appendChild(document.createElement('td'));
-    }
+      this.containedElems.push(detail);
 
-    detail.deleteButton = new DeleteButtonCell(row);
+      var pos = this.containedElems.length - 1;
 
-    detail.deleteButton.onClick = function () {
+      var row = document.createElement('tr');
+      this.table.appendChild(row);
 
-      if (_this.table.contains(row)) _this.table.removeChild(row);
+      new TextCell(row, elem.num);
+      new TextCell(row, elem.type);
 
-      _this.containedElems.splice(pos, 1);
+      if (elem.type === 'group') {
 
-      if (detail.elem.type === 'group' && detail.elem.num === _this.lastAddedGroupNum) _this.lastAddedGroupNum = -1;
-      if (detail.elem.type === 'frame' && detail.elem.num === _this.lastAddedFrameNum) _this.lastAddedFrameNum = -1;
+        var loopInput = new LoopInputCell(row);
 
-      _this.checkDanceIsValid();
-    };
+        loopInput.onInput = function (value) {
 
-    this.checkDanceIsValid();
-    HTMLControl.controls.dance.resetButton.disabled = false;
-  };
-
-  Dance.prototype.initAddSelectedFrameButton = function initAddSelectedFrameButton() {
-    var _this2 = this;
-
-    this.lastAddedFrameNum = null;
-
-    HTMLControl.controls.dance.addFrameButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      var frame = _this2.frames.frames[_this2.frames.selectedFrameNum];
-      _this2.groups.deselectAll();
-      animationControl.reset();
-
-      if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
-
-      _this2.add(frame);
-
-      _this2.lastAddedFrameNum = frame.num;
-      _this2.lastAddedType = 'frame';
-    });
-  };
-
-  Dance.prototype.initAddSelectedGroupButton = function initAddSelectedGroupButton() {
-    var _this3 = this;
-
-    this.lastAddedGroupNum = null;
-
-    HTMLControl.controls.dance.addGroupButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      var group = _this3.groups.selectedGroup;
-      _this3.groups.deselectAll();
-      animationControl.reset();
-
-      if (group === null || group.num === _this3.lastAddedGroupNum && _this3.lastAddedType === 'group') return;
-
-      _this3.add(group);
-
-      _this3.lastAddedGroupNum = group.num;
-      _this3.lastAddedType = 'group';
-    });
-  };
-
-  Dance.prototype.initFramerateInput = function initFramerateInput() {
-    var _this4 = this;
-
-    HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
-
-      _this4.groups.deselectAll();
-      _this4.framerate = e.target.value;
-    });
-  };
-
-  Dance.prototype.setFramerate = function setFramerate(rate) {
-
-    if (rate < 0.1 || rate > 10) {
-
-      console.warn('Attempting to set frame rate outside of allowed range [0.1, 10]!');
-      rate = 1;
-    }
-
-    HTMLControl.controls.dance.framerate.value = rate;
-    this.framerate = rate;
-  };
-
-  Dance.prototype.initDanceButton = function initDanceButton() {
-    var _this5 = this;
-
-    HTMLControl.controls.dance.playButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      _this5.groups.deselectAll();
-      animationControl.reset();
-      _this5.createAnimation();
-      animationControl.play();
-
-      if (HTMLControl.controls.music.play.innerHTML === 'Play') {
-
-        HTMLControl.controls.music.play.click();
-      }
-    });
-  };
-
-  Dance.prototype.initResetButton = function initResetButton() {
-    var _this6 = this;
-
-    HTMLControl.controls.dance.resetButton.addEventListener('click', function (e) {
-
-      e.preventDefault();
-
-      _this6.groups.deselectAll();
-      animationControl.reset();
-      _this6.reset();
-    });
-  };
-
-  Dance.prototype.createAnimation = function createAnimation() {
-
-    var frames = flattenDetails(this.containedElems);
-
-    this.actions = animationControl.createAnimation(frames);
-  };
-
-  Dance.prototype.checkDanceIsValid = function checkDanceIsValid() {
-
-    var containedFramesNum = 0;
-    var containsValidGroups = false;
-
-    this.containedElems.forEach(function (detail) {
-
-      if (detail.elem.type === 'frame') containedFramesNum++;else if (detail.elem.type === 'group') {
-
-        // this would require a 'change' event added to the group so that the dance can listen
-        // when frames are added or removed to check whether the group becomes valid
-        // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
-        if (detail.loopAmount > 0) containsValidGroups = true;
-      }
-    });
-
-    this.valid = containedFramesNum > 1 || containsValidGroups;
-
-    HTMLControl.controls.dance.playButton.disabled = !this.valid;
-  };
-
-  Dance.prototype.reset = function reset() {
-
-    for (var i = this.containedElems.length - 1; i >= 0; i--) {
-
-      this.containedElems[i].deleteButton.click();
-    }
-
-    this.containedElems = [];
-
-    this.valid = false;
-    HTMLControl.controls.dance.playButton.disabled = true;
-    HTMLControl.controls.dance.resetButton.disabled = true;
-  };
-
-  Dance.prototype.fromJSON = function fromJSON(object) {
-
-    this.reset();
-
-    this.setFramerate(object.framerate || 1);
-
-    for (var key in object) {
-
-      var value = object[key];
-
-      if (value.type === 'frame') {
-
-        this.add(this.frames.frames[value.num]);
-      } else if (value.type === 'group') {
-
-        this.add(this.groups.groups[value.num], value.loopAmount);
-      } else if (key === 'framerate') {
-
-        HTMLControl.controls.dance.framerate.value = value;
-      }
-    }
-
-    this.checkDanceIsValid();
-  };
-
-  Dance.prototype.toJSON = function toJSON() {
-
-    var output = {
-
-      framerate: this.framerate
-
-    };
-
-    for (var i = 0; i < this.containedElems.length; i++) {
-
-      var detail = this.containedElems[i];
-
-      if (detail !== null) {
-
-        output[i] = {
-
-          type: detail.elem.type,
-          num: detail.elem.num,
-          loopAmount: detail.loopAmount
-
+          detail.loopAmount = value;
+          _this.checkDanceIsValid();
         };
       } else {
 
-        output[i] = null;
+        row.appendChild(document.createElement('td'));
       }
+
+      detail.deleteButton = new DeleteButtonCell(row);
+
+      detail.deleteButton.onClick = function () {
+
+        if (_this.table.contains(row)) _this.table.removeChild(row);
+
+        _this.containedElems.splice(pos, 1);
+
+        if (detail.elem.type === 'group' && detail.elem.num === _this.lastAddedGroupNum) _this.lastAddedGroupNum = -1;
+        if (detail.elem.type === 'frame' && detail.elem.num === _this.lastAddedFrameNum) _this.lastAddedFrameNum = -1;
+
+        _this.checkDanceIsValid();
+      };
+
+      this.checkDanceIsValid();
+      HTMLControl.controls.dance.resetButton.disabled = false;
     }
+  }, {
+    key: 'initAddSelectedFrameButton',
+    value: function initAddSelectedFrameButton() {
+      var _this2 = this;
 
-    return output;
-  };
+      this.lastAddedFrameNum = null;
 
-  createClass(Dance, [{
+      HTMLControl.controls.dance.addFrameButton.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        var frame = _this2.frames.frames[_this2.frames.selectedFrameNum];
+        _this2.groups.deselectAll();
+        animationControl.reset();
+
+        if (frame === null || frame.num === _this2.lastAddedFrameNum && _this2.lastAddedType === 'frame') return;
+
+        _this2.add(frame);
+
+        _this2.lastAddedFrameNum = frame.num;
+        _this2.lastAddedType = 'frame';
+      });
+    }
+  }, {
+    key: 'initAddSelectedGroupButton',
+    value: function initAddSelectedGroupButton() {
+      var _this3 = this;
+
+      this.lastAddedGroupNum = null;
+
+      HTMLControl.controls.dance.addGroupButton.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        var group = _this3.groups.selectedGroup;
+        _this3.groups.deselectAll();
+        animationControl.reset();
+
+        if (group === null || group.num === _this3.lastAddedGroupNum && _this3.lastAddedType === 'group') return;
+
+        _this3.add(group);
+
+        _this3.lastAddedGroupNum = group.num;
+        _this3.lastAddedType = 'group';
+      });
+    }
+  }, {
+    key: 'initFramerateInput',
+    value: function initFramerateInput() {
+      var _this4 = this;
+
+      HTMLControl.controls.dance.framerate.addEventListener('input', function (e) {
+
+        _this4.groups.deselectAll();
+        _this4.framerate = e.target.value;
+      });
+    }
+  }, {
+    key: 'setFramerate',
+    value: function setFramerate(rate) {
+
+      if (rate < 0.1 || rate > 10) {
+
+        console.warn('Attempting to set frame rate outside of allowed range [0.1, 10]!');
+        rate = 1;
+      }
+
+      HTMLControl.controls.dance.framerate.value = rate;
+      this.framerate = rate;
+    }
+  }, {
+    key: 'initDanceButton',
+    value: function initDanceButton() {
+      var _this5 = this;
+
+      HTMLControl.controls.dance.playButton.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        _this5.groups.deselectAll();
+        animationControl.reset();
+        _this5.createAnimation();
+        animationControl.play();
+
+        if (HTMLControl.controls.music.play.innerHTML === 'Play') {
+
+          HTMLControl.controls.music.play.click();
+        }
+      });
+    }
+  }, {
+    key: 'initResetButton',
+    value: function initResetButton() {
+      var _this6 = this;
+
+      HTMLControl.controls.dance.resetButton.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        _this6.groups.deselectAll();
+        animationControl.reset();
+        _this6.reset();
+      });
+    }
+  }, {
+    key: 'createAnimation',
+    value: function createAnimation() {
+
+      var frames = flattenDetails(this.containedElems);
+
+      this.actions = animationControl.createAnimation(frames);
+    }
+  }, {
+    key: 'checkDanceIsValid',
+    value: function checkDanceIsValid() {
+
+      var containedFramesNum = 0;
+      var containsValidGroups = false;
+
+      this.containedElems.forEach(function (detail) {
+
+        if (detail.elem.type === 'frame') containedFramesNum++;else if (detail.elem.type === 'group') {
+
+          // this would require a 'change' event added to the group so that the dance can listen
+          // when frames are added or removed to check whether the group becomes valid
+          // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
+          if (detail.loopAmount > 0) containsValidGroups = true;
+        }
+      });
+
+      this.valid = containedFramesNum > 1 || containsValidGroups;
+
+      HTMLControl.controls.dance.playButton.disabled = !this.valid;
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+
+      for (var i = this.containedElems.length - 1; i >= 0; i--) {
+
+        this.containedElems[i].deleteButton.click();
+      }
+
+      this.containedElems = [];
+
+      this.valid = false;
+      HTMLControl.controls.dance.playButton.disabled = true;
+      HTMLControl.controls.dance.resetButton.disabled = true;
+    }
+  }, {
+    key: 'fromJSON',
+    value: function fromJSON(object) {
+
+      this.reset();
+
+      this.setFramerate(object.framerate || 1);
+
+      for (var key in object) {
+
+        var value = object[key];
+
+        if (value.type === 'frame') {
+
+          this.add(this.frames.frames[value.num]);
+        } else if (value.type === 'group') {
+
+          this.add(this.groups.groups[value.num], value.loopAmount);
+        } else if (key === 'framerate') {
+
+          HTMLControl.controls.dance.framerate.value = value;
+        }
+      }
+
+      this.checkDanceIsValid();
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+
+      var output = {
+
+        framerate: this.framerate
+
+      };
+
+      for (var i = 0; i < this.containedElems.length; i++) {
+
+        var detail = this.containedElems[i];
+
+        if (detail !== null) {
+
+          output[i] = {
+
+            type: detail.elem.type,
+            num: detail.elem.num,
+            loopAmount: detail.loopAmount
+
+          };
+        } else {
+
+          output[i] = null;
+        }
+      }
+
+      return output;
+    }
+  }, {
     key: 'framerate',
-    set: function (value) {
+    set: function set(value) {
 
       animationControl.framerate = value;
     }
@@ -59571,218 +59782,228 @@ var Main = function () {
     // HTMLControl.loading.overlay.classList.add( 'hide' );
   }
 
-  Main.prototype.init = function init() {
+  createClass(Main, [{
+    key: 'init',
+    value: function init() {
 
-    this.app = new App(HTMLControl.canvas);
-    this.app.renderer.setClearColor(0xf7f7f7, 1.0);
-    this.app.renderer.shadowMap.enabled = true;
-    this.app.renderer.shadowMap.renderReverseSided = false;
-    this.app.renderer.shadowMap.renderSingleSided = false;
-    this.app.renderer.shadowMap.type = PCFShadowMap; // THREE.BasicShadowMap // THREE.; // default THREE.PCFShadowMap
+      this.app = new App(HTMLControl.canvas);
+      this.app.renderer.setClearColor(0xf7f7f7, 1.0);
+      this.app.renderer.shadowMap.enabled = true;
+      this.app.renderer.shadowMap.renderReverseSided = false;
+      this.app.renderer.shadowMap.renderSingleSided = false;
+      this.app.renderer.shadowMap.type = PCFShadowMap; // THREE.BasicShadowMap // THREE.; // default THREE.PCFShadowMap
 
-    // Put any per frame calculations here
-    this.app.onUpdate = function () {
+      // Put any per frame calculations here
+      this.app.onUpdate = function () {
 
-      // use this.delta for timings here
-      var delta = this.delta / 1000;
+        // use this.delta for timings here
+        var delta = this.delta / 1000;
 
-      animationControl.onUpdate(delta);
-    };
+        animationControl.onUpdate(delta);
+      };
 
-    // put any per resize calculations here
-    this.app.onWindowResize = function () {};
-  };
+      // put any per resize calculations here
+      this.app.onWindowResize = function () {};
+    }
+  }, {
+    key: 'preLoad',
+    value: function preLoad() {
 
-  Main.prototype.preLoad = function preLoad() {
+      this.animations = {};
 
-    this.animations = {};
+      this.loadingPromises = [];
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      var _this = this;
 
-    this.loadingPromises = [];
-  };
+      console.time('Loading took: ');
+      var stagePromise = loaders.fbxLoader('/assets/models/robot_dance/stage_camera_lights.fbx').then(function (object) {
 
-  Main.prototype.load = function load() {
-    var _this = this;
+        _this.stage = object.getObjectByName('Stage');
 
-    console.time('Loading took: ');
-    var stagePromise = loaders.fbxLoader('/assets/models/robot_dance/stage_camera_lights.fbx').then(function (object) {
+        _this.camera = object.getObjectByName('Camera');
+        _this.spotLight = object.getObjectByName('Spot_stage_center_high');
 
-      _this.stage = object.getObjectByName('Stage');
+        _this.soundSourceLeft = object.getObjectByName('Stage_Left_Sound');
+        _this.soundSourceRight = object.getObjectByName('Stage_Right_Sound');
 
-      _this.camera = object.getObjectByName('Camera');
-      _this.spotLight = object.getObjectByName('Spot_stage_center_high');
+        _this.sceneCentre = new Box3().setFromObject(object).getCenter();
+      });
 
-      _this.soundSourceLeft = object.getObjectByName('Stage_Left_Sound');
-      _this.soundSourceRight = object.getObjectByName('Stage_Right_Sound');
+      var naoPromise = loaders.fbxLoader('/assets/models/robot_dance/nao.fbx').then(function (object) {
 
-      _this.sceneCentre = new Box3().setFromObject(object).getCenter();
-    });
+        invertMirroredFBX(object);
 
-    var naoPromise = loaders.fbxLoader('/assets/models/robot_dance/nao.fbx').then(function (object) {
+        _this.robot = new Robot(object);
 
-      invertMirroredFBX(object);
+        object.position.z += 10;
+      });
 
-      _this.robot = new Robot(object);
+      this.loadingPromises.push(naoPromise, stagePromise);
+    }
+  }, {
+    key: 'postLoad',
+    value: function postLoad() {
+      var _this2 = this;
 
-      object.position.z += 10;
-    });
+      Promise.all(this.loadingPromises).then(function () {
 
-    this.loadingPromises.push(naoPromise, stagePromise);
-  };
+        _this2.app.scene.add(_this2.stage);
+        _this2.app.scene.add(_this2.robot.model);
 
-  Main.prototype.postLoad = function postLoad() {
-    var _this2 = this;
+        _this2.initBackground();
+        _this2.initLighting();
+        _this2.initShadows();
+        _this2.initCamera();
+        _this2.initCameraControl();
 
-    Promise.all(this.loadingPromises).then(function () {
+        animationControl.initMixer(_this2.robot.model);
 
-      _this2.app.scene.add(_this2.stage);
-      _this2.app.scene.add(_this2.robot.model);
+        var frames = new Frames(_this2.robot);
+        var groups = new Groups(frames);
+        var dance = new Dance(groups);
 
-      _this2.initBackground();
-      _this2.initLighting();
-      _this2.initShadows();
-      _this2.initCamera();
-      _this2.initCameraControl();
+        animationControl.setDance(dance);
 
-      animationControl.initMixer(_this2.robot.model);
+        new Audio$1([_this2.soundSourceLeft, _this2.soundSourceRight], _this2.app.camera);
 
-      var frames = new Frames(_this2.robot);
-      var groups = new Groups(frames);
-      var dance = new Dance(groups);
+        new FileControl(frames, groups, dance);
 
-      animationControl.setDance(dance);
+        _this2.app.play();
 
-      new Audio$1([_this2.soundSourceLeft, _this2.soundSourceRight], _this2.app.camera);
+        console.timeEnd('Loading took: ');
+      });
+    }
+  }, {
+    key: 'initShadows',
+    value: function initShadows() {
 
-      new FileControl(frames, groups, dance);
+      // this.stage.getObjectByName( 'scene' ).receiveShadow = true;
+      // this.stage.getObjectByName( 'curtains_top' ).receiveShadow = true;
 
-      _this2.app.play();
+      this.stage.traverse(function (child) {
 
-      console.timeEnd('Loading took: ');
-    });
-  };
+        if (child.name === 'scene' || child.name === 'curtains_top'
+        // || child.name === 'curtains'
+        ) {
 
-  Main.prototype.initShadows = function initShadows() {
+            child.receiveShadow = true;
+          }
 
-    // this.stage.getObjectByName( 'scene' ).receiveShadow = true;
-    // this.stage.getObjectByName( 'curtains_top' ).receiveShadow = true;
+        if (child.name === 'side'
+        // || child.name === 'curtains'
 
-    this.stage.traverse(function (child) {
-
-      if (child.name === 'scene' || child.name === 'curtains_top'
-      // || child.name === 'curtains'
-      ) {
-
-          child.receiveShadow = true;
-        }
-
-      if (child.name === 'side'
-      // || child.name === 'curtains'
-
-      || child.name === 'speaker_cone' || child.name === 'speaker_cone_edge' || child.name === 'speaker_cone_outer' || child.name === 'Speaker_body' || child.name === 'tassle04' || child.name === 'tassle02') {
-        child.castShadow = true;
-      }
-    });
-
-    this.robot.model.traverse(function (child) {
-
-      if (child.name === 'R_shin' || child.name === 'R_thigh' || child.name === 'L_thigh' || child.name === 'L_shin' || child.name === 'fingers18' || child.name === 'fingers11' || child.name === 'fingers21' || child.name === 'fingers20' || child.name === 'fingers14' || child.name === 'fingers12' || child.name === 'fingers16' || child.name === 'fingers15' || child.name === 'fingers13' || child.name === 'fingers13' || child.name === 'fingers19' || child.name === 'L_forearm' || child.name === 'L_elbow' || child.name === 'L_shoulder' || child.name === 'L_arm_upper' || child.name === 'fingers05' || child.name === 'fingers06' || child.name === 'fingers08' || child.name === 'fingers10' || child.name === 'fingers00' || child.name === 'fingers02' || child.name === 'fingers04' || child.name === 'fingers03' || child.name === 'fingers07' || child.name === 'fingers09' || child.name === 'fingers01' || child.name === 'R_elbow' || child.name === 'R_shoulder' || child.name === 'R_arm_upper' || child.name === 'R_hand' || child.name === 'R_wrist' || child.name === 'body' || child.name === 'neck' || child.name === 'head' || child.name === 'L_hip' || child.name === 'R_hip' || child.name === 'L_hand'
-
-      // ||  child.name === 'R_foot'
-      // || child.name === 'R_knee'
-      // || child.name === 'L_foot'
-      // || child.name === 'chest_detail'
-      // || child.name === 'R_knee_rear'
-      // || child.name === 'R_hip_lower'
-      // || child.name === 'R_hip_cog'
-      // || child.name === 'L_hip_cog'
-      // || child.name === 'L_hip_lower'
-      // || child.name === 'L_knee'
-      // || child.name === 'L_ankle'
-      // || child.name === 'R_ankle'
-      // || child.name === 'L_knee_rear'
-      // || child.name === 'fingers17'
-      // || child.name === 'L_shoulder_joint'
-      // || child.name === 'R_shoulder_joint'
-
-      ) {
-
+        || child.name === 'speaker_cone' || child.name === 'speaker_cone_edge' || child.name === 'speaker_cone_outer' || child.name === 'Speaker_body' || child.name === 'tassle04' || child.name === 'tassle02') {
           child.castShadow = true;
         }
-    });
-  };
+      });
 
-  Main.prototype.initLighting = function initLighting() {
+      this.robot.model.traverse(function (child) {
 
-    var ambientLight = new AmbientLight(0xffffff, 0.3);
-    this.app.scene.add(ambientLight);
+        if (child.name === 'R_shin' || child.name === 'R_thigh' || child.name === 'L_thigh' || child.name === 'L_shin' || child.name === 'fingers18' || child.name === 'fingers11' || child.name === 'fingers21' || child.name === 'fingers20' || child.name === 'fingers14' || child.name === 'fingers12' || child.name === 'fingers16' || child.name === 'fingers15' || child.name === 'fingers13' || child.name === 'fingers13' || child.name === 'fingers19' || child.name === 'L_forearm' || child.name === 'L_elbow' || child.name === 'L_shoulder' || child.name === 'L_arm_upper' || child.name === 'fingers05' || child.name === 'fingers06' || child.name === 'fingers08' || child.name === 'fingers10' || child.name === 'fingers00' || child.name === 'fingers02' || child.name === 'fingers04' || child.name === 'fingers03' || child.name === 'fingers07' || child.name === 'fingers09' || child.name === 'fingers01' || child.name === 'R_elbow' || child.name === 'R_shoulder' || child.name === 'R_arm_upper' || child.name === 'R_hand' || child.name === 'R_wrist' || child.name === 'body' || child.name === 'neck' || child.name === 'head' || child.name === 'L_hip' || child.name === 'R_hip' || child.name === 'L_hand'
 
-    this.spotLight.castShadow = true;
-    this.spotLight.shadow.mapSize.width = 1024;
-    this.spotLight.shadow.mapSize.height = 1024;
-    this.spotLight.shadow.camera.near = 80;
-    this.spotLight.shadow.camera.far = 300;
+        // ||  child.name === 'R_foot'
+        // || child.name === 'R_knee'
+        // || child.name === 'L_foot'
+        // || child.name === 'chest_detail'
+        // || child.name === 'R_knee_rear'
+        // || child.name === 'R_hip_lower'
+        // || child.name === 'R_hip_cog'
+        // || child.name === 'L_hip_cog'
+        // || child.name === 'L_hip_lower'
+        // || child.name === 'L_knee'
+        // || child.name === 'L_ankle'
+        // || child.name === 'R_ankle'
+        // || child.name === 'L_knee_rear'
+        // || child.name === 'fingers17'
+        // || child.name === 'L_shoulder_joint'
+        // || child.name === 'R_shoulder_joint'
 
-    this.spotLight.penumbra = 0.45;
-    this.spotLight.angle = 0.45;
-    this.spotLight.distance = 300;
+        ) {
 
-    var left = this.spotLight.clone();
-    left.intensity = 0.9;
-    left.position.x -= 100;
-    left.position.y += 20;
-    left.shadow.radius = 1.5;
+            child.castShadow = true;
+          }
+      });
+    }
+  }, {
+    key: 'initLighting',
+    value: function initLighting() {
 
-    var center = this.spotLight.clone();
-    center.intensity = 1.2;
-    center.position.x += 25;
-    center.shadow.radius = 1.75;
+      var ambientLight = new AmbientLight(0xffffff, 0.3);
+      this.app.scene.add(ambientLight);
 
-    this.app.scene.add(left, center);
-  };
+      this.spotLight.castShadow = true;
+      this.spotLight.shadow.mapSize.width = 1024;
+      this.spotLight.shadow.mapSize.height = 1024;
+      this.spotLight.shadow.camera.near = 80;
+      this.spotLight.shadow.camera.far = 300;
 
-  Main.prototype.initCamera = function initCamera() {
+      this.spotLight.penumbra = 0.45;
+      this.spotLight.angle = 0.45;
+      this.spotLight.distance = 300;
 
-    this.app.camera.far = 800;
-    this.app.camera.fov = 35;
-    this.app.camera.position.set(0, 0, 200);
-    this.app.camera.updateProjectionMatrix();
-  };
+      var left = this.spotLight.clone();
+      left.intensity = 0.9;
+      left.position.x -= 100;
+      left.position.y += 20;
+      left.shadow.radius = 1.5;
 
-  Main.prototype.initCameraControl = function initCameraControl() {
+      var center = this.spotLight.clone();
+      center.intensity = 1.2;
+      center.position.x += 25;
+      center.shadow.radius = 1.75;
 
-    this.app.controls = new OrbitControls(this.app.camera, this.app.canvas);
+      this.app.scene.add(left, center);
+    }
+  }, {
+    key: 'initCamera',
+    value: function initCamera() {
 
-    // vertical rotation limits
-    this.app.controls.minPolarAngle = Math.PI * 0.1; // upper
-    this.app.controls.maxPolarAngle = Math.PI * 0.45; // lower
+      this.app.camera.far = 800;
+      this.app.camera.fov = 35;
+      this.app.camera.position.set(0, 0, 200);
+      this.app.camera.updateProjectionMatrix();
+    }
+  }, {
+    key: 'initCameraControl',
+    value: function initCameraControl() {
 
-    this.app.controls.minDistance = 60;
-    this.app.controls.maxDistance = 400;
+      this.app.controls = new OrbitControls(this.app.camera, this.app.canvas);
 
-    // horizontal rotation limits
-    this.app.controls.minAzimuthAngle = -Math.PI * 0.5;
-    this.app.controls.maxAzimuthAngle = Math.PI * 0.5;
+      // vertical rotation limits
+      this.app.controls.minPolarAngle = Math.PI * 0.1; // upper
+      this.app.controls.maxPolarAngle = Math.PI * 0.45; // lower
 
-    this.app.controls.enableDamping = true;
-    this.app.controls.dampingFactor = 0.2;
+      this.app.controls.minDistance = 60;
+      this.app.controls.maxDistance = 400;
 
-    this.app.controls.target.copy(this.sceneCentre);
-    this.app.controls.update();
-  };
+      // horizontal rotation limits
+      this.app.controls.minAzimuthAngle = -Math.PI * 0.5;
+      this.app.controls.maxAzimuthAngle = Math.PI * 0.5;
 
-  Main.prototype.initBackground = function initBackground() {
+      this.app.controls.enableDamping = true;
+      this.app.controls.dampingFactor = 0.2;
 
-    this.app.scene.fog = new Fog(0xf7f7f7, 400, 700);
+      this.app.controls.target.copy(this.sceneCentre);
+      this.app.controls.update();
+    }
+  }, {
+    key: 'initBackground',
+    value: function initBackground() {
 
-    var geometry = new PlaneBufferGeometry(20000, 20000);
-    var material = new MeshBasicMaterial({ color: 0xaaaaaa });
-    var ground = new Mesh(geometry, material);
-    ground.position.set(0, -5, 0);
-    ground.rotation.x = -Math.PI / 2;
+      this.app.scene.fog = new Fog(0xf7f7f7, 400, 700);
 
-    this.app.scene.add(ground);
-  };
+      var geometry = new PlaneBufferGeometry(20000, 20000);
+      var material = new MeshBasicMaterial({ color: 0xaaaaaa });
+      var ground = new Mesh(geometry, material);
+      ground.position.set(0, -5, 0);
+      ground.rotation.x = -Math.PI / 2;
 
+      this.app.scene.add(ground);
+    }
+  }]);
   return Main;
 }();
 

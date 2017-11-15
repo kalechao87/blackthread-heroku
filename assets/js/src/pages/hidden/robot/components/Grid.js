@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import loaders from './loaders.js';
+import loaders from '../loaders.js';
 import canvas from '../Canvas.js';
 
 const createTextMesh = ( font, text, color ) => {

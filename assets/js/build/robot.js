@@ -52228,18 +52228,18 @@ function Time() {
   Object.defineProperties(this, {
 
     now: {
-      get: function () {
+      get: function get() {
 
         return (performance || Date).now();
       }
     },
 
     timeScale: {
-      get: function () {
+      get: function get() {
 
         return _timeScale;
       },
-      set: function (value) {
+      set: function set(value) {
 
         _totalTimeAtLastScaleChange = this.totalTime;
         _timeAtLastScaleChange = this.now;
@@ -52248,14 +52248,14 @@ function Time() {
     },
 
     unscaledTotalTime: {
-      get: function () {
+      get: function get() {
 
         return this.running ? this.now - _startTime : 0;
       }
     },
 
     totalTime: {
-      get: function () {
+      get: function get() {
 
         var diff = (this.now - _timeAtLastScaleChange) * this.timeScale;
 
@@ -52265,7 +52265,7 @@ function Time() {
 
     // Unscaled time since delta was last checked
     unscaledDelta: {
-      get: function () {
+      get: function get() {
 
         var diff = this.now - _lastDelta;
         _lastDelta = this.now;
@@ -52276,7 +52276,7 @@ function Time() {
 
     // Scaled time since delta was last checked
     delta: {
-      get: function () {
+      get: function get() {
 
         return this.unscaledDelta * this.timeScale;
       }
@@ -52338,826 +52338,826 @@ function Time() {
 
 function OrbitControls(object, domElement) {
 
-	this.object = object;
+  this.object = object;
 
-	this.domElement = domElement !== undefined ? domElement : document;
+  this.domElement = domElement !== undefined ? domElement : document;
 
-	// Set to false to disable this control
-	this.enabled = true;
+  // Set to false to disable this control
+  this.enabled = true;
 
-	// "target" sets the location of focus, where the object orbits around
-	this.target = new Vector3();
+  // "target" sets the location of focus, where the object orbits around
+  this.target = new Vector3();
 
-	// How far you can dolly in and out ( PerspectiveCamera only )
-	this.minDistance = 0;
-	this.maxDistance = Infinity;
+  // How far you can dolly in and out ( PerspectiveCamera only )
+  this.minDistance = 0;
+  this.maxDistance = Infinity;
 
-	// How far you can zoom in and out ( OrthographicCamera only )
-	this.minZoom = 0;
-	this.maxZoom = Infinity;
+  // How far you can zoom in and out ( OrthographicCamera only )
+  this.minZoom = 0;
+  this.maxZoom = Infinity;
 
-	// How far you can orbit vertically, upper and lower limits.
-	// Range is 0 to Math.PI radians.
-	this.minPolarAngle = 0; // radians
-	this.maxPolarAngle = Math.PI; // radians
+  // How far you can orbit vertically, upper and lower limits.
+  // Range is 0 to Math.PI radians.
+  this.minPolarAngle = 0; // radians
+  this.maxPolarAngle = Math.PI; // radians
 
-	// How far you can orbit horizontally, upper and lower limits.
-	// If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
-	this.minAzimuthAngle = -Infinity; // radians
-	this.maxAzimuthAngle = Infinity; // radians
+  // How far you can orbit horizontally, upper and lower limits.
+  // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
+  this.minAzimuthAngle = -Infinity; // radians
+  this.maxAzimuthAngle = Infinity; // radians
 
-	// Set to true to enable damping (inertia)
-	// If damping is enabled, you must call controls.update() in your animation loop
-	this.enableDamping = false;
-	this.dampingFactor = 0.25;
+  // Set to true to enable damping (inertia)
+  // If damping is enabled, you must call controls.update() in your animation loop
+  this.enableDamping = false;
+  this.dampingFactor = 0.25;
 
-	// This option actually enables dollying in and out; left as "zoom" for backwards compatibility.
-	// Set to false to disable zooming
-	this.enableZoom = true;
-	this.zoomSpeed = 1.0;
+  // This option actually enables dollying in and out; left as "zoom" for backwards compatibility.
+  // Set to false to disable zooming
+  this.enableZoom = true;
+  this.zoomSpeed = 1.0;
 
-	// Set to false to disable rotating
-	this.enableRotate = true;
-	this.rotateSpeed = 1.0;
+  // Set to false to disable rotating
+  this.enableRotate = true;
+  this.rotateSpeed = 1.0;
 
-	// Set to false to disable panning
-	this.enablePan = true;
-	this.keyPanSpeed = 7.0; // pixels moved per arrow key push
+  // Set to false to disable panning
+  this.enablePan = true;
+  this.keyPanSpeed = 7.0; // pixels moved per arrow key push
 
-	// Set to true to automatically rotate around the target
-	// If auto-rotate is enabled, you must call controls.update() in your animation loop
-	this.autoRotate = false;
-	this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
+  // Set to true to automatically rotate around the target
+  // If auto-rotate is enabled, you must call controls.update() in your animation loop
+  this.autoRotate = false;
+  this.autoRotateSpeed = 2.0; // 30 seconds per round when fps is 60
 
-	// Set to false to disable use of the keys
-	this.enableKeys = true;
+  // Set to false to disable use of the keys
+  this.enableKeys = true;
 
-	// The four arrow keys
-	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
+  // The four arrow keys
+  this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
 
-	// Mouse buttons
-	this.mouseButtons = { ORBIT: MOUSE.LEFT, ZOOM: MOUSE.MIDDLE, PAN: MOUSE.RIGHT };
+  // Mouse buttons
+  this.mouseButtons = { ORBIT: MOUSE.LEFT, ZOOM: MOUSE.MIDDLE, PAN: MOUSE.RIGHT };
 
-	// for reset
-	this.target0 = this.target.clone();
-	this.position0 = this.object.position.clone();
-	this.zoom0 = this.object.zoom;
+  // for reset
+  this.target0 = this.target.clone();
+  this.position0 = this.object.position.clone();
+  this.zoom0 = this.object.zoom;
 
-	//
-	// public methods
-	//
+  //
+  // public methods
+  //
 
-	this.getPolarAngle = function () {
+  this.getPolarAngle = function () {
 
-		return spherical.phi;
-	};
+    return spherical.phi;
+  };
 
-	this.getAzimuthalAngle = function () {
+  this.getAzimuthalAngle = function () {
 
-		return spherical.theta;
-	};
+    return spherical.theta;
+  };
 
-	this.saveState = function () {
+  this.saveState = function () {
 
-		scope.target0.copy(scope.target);
-		scope.position0.copy(scope.object.position);
-		scope.zoom0 = scope.object.zoom;
-	};
+    scope.target0.copy(scope.target);
+    scope.position0.copy(scope.object.position);
+    scope.zoom0 = scope.object.zoom;
+  };
 
-	this.reset = function () {
+  this.reset = function () {
 
-		scope.target.copy(scope.target0);
-		scope.object.position.copy(scope.position0);
-		scope.object.zoom = scope.zoom0;
+    scope.target.copy(scope.target0);
+    scope.object.position.copy(scope.position0);
+    scope.object.zoom = scope.zoom0;
 
-		scope.object.updateProjectionMatrix();
-		scope.dispatchEvent(changeEvent);
+    scope.object.updateProjectionMatrix();
+    scope.dispatchEvent(changeEvent);
 
-		scope.update();
+    scope.update();
 
-		state = STATE.NONE;
-	};
+    state = STATE.NONE;
+  };
 
-	// this method is exposed, but perhaps it would be better if we can make it private...
-	this.update = function () {
+  // this method is exposed, but perhaps it would be better if we can make it private...
+  this.update = function () {
 
-		var offset = new Vector3();
+    var offset = new Vector3();
 
-		// so camera.up is the orbit axis
-		var quat = new Quaternion().setFromUnitVectors(object.up, new Vector3(0, 1, 0));
-		var quatInverse = quat.clone().inverse();
+    // so camera.up is the orbit axis
+    var quat = new Quaternion().setFromUnitVectors(object.up, new Vector3(0, 1, 0));
+    var quatInverse = quat.clone().inverse();
 
-		var lastPosition = new Vector3();
-		var lastQuaternion = new Quaternion();
+    var lastPosition = new Vector3();
+    var lastQuaternion = new Quaternion();
 
-		return function update() {
+    return function update() {
 
-			var position = scope.object.position;
+      var position = scope.object.position;
 
-			offset.copy(position).sub(scope.target);
+      offset.copy(position).sub(scope.target);
 
-			// rotate offset to "y-axis-is-up" space
-			offset.applyQuaternion(quat);
+      // rotate offset to "y-axis-is-up" space
+      offset.applyQuaternion(quat);
 
-			// angle from z-axis around y-axis
-			spherical.setFromVector3(offset);
+      // angle from z-axis around y-axis
+      spherical.setFromVector3(offset);
 
-			if (scope.autoRotate && state === STATE.NONE) {
+      if (scope.autoRotate && state === STATE.NONE) {
 
-				rotateLeft(getAutoRotationAngle());
-			}
+        rotateLeft(getAutoRotationAngle());
+      }
 
-			spherical.theta += sphericalDelta.theta;
-			spherical.phi += sphericalDelta.phi;
+      spherical.theta += sphericalDelta.theta;
+      spherical.phi += sphericalDelta.phi;
 
-			// restrict theta to be between desired limits
-			spherical.theta = Math.max(scope.minAzimuthAngle, Math.min(scope.maxAzimuthAngle, spherical.theta));
+      // restrict theta to be between desired limits
+      spherical.theta = Math.max(scope.minAzimuthAngle, Math.min(scope.maxAzimuthAngle, spherical.theta));
 
-			// restrict phi to be between desired limits
-			spherical.phi = Math.max(scope.minPolarAngle, Math.min(scope.maxPolarAngle, spherical.phi));
+      // restrict phi to be between desired limits
+      spherical.phi = Math.max(scope.minPolarAngle, Math.min(scope.maxPolarAngle, spherical.phi));
 
-			spherical.makeSafe();
+      spherical.makeSafe();
 
-			spherical.radius *= scale;
+      spherical.radius *= scale;
 
-			// restrict radius to be between desired limits
-			spherical.radius = Math.max(scope.minDistance, Math.min(scope.maxDistance, spherical.radius));
+      // restrict radius to be between desired limits
+      spherical.radius = Math.max(scope.minDistance, Math.min(scope.maxDistance, spherical.radius));
 
-			// move target to panned location
-			scope.target.add(panOffset);
+      // move target to panned location
+      scope.target.add(panOffset);
 
-			offset.setFromSpherical(spherical);
+      offset.setFromSpherical(spherical);
 
-			// rotate offset back to "camera-up-vector-is-up" space
-			offset.applyQuaternion(quatInverse);
+      // rotate offset back to "camera-up-vector-is-up" space
+      offset.applyQuaternion(quatInverse);
 
-			position.copy(scope.target).add(offset);
+      position.copy(scope.target).add(offset);
 
-			scope.object.lookAt(scope.target);
+      scope.object.lookAt(scope.target);
 
-			if (scope.enableDamping === true) {
+      if (scope.enableDamping === true) {
 
-				sphericalDelta.theta *= 1 - scope.dampingFactor;
-				sphericalDelta.phi *= 1 - scope.dampingFactor;
-			} else {
+        sphericalDelta.theta *= 1 - scope.dampingFactor;
+        sphericalDelta.phi *= 1 - scope.dampingFactor;
+      } else {
 
-				sphericalDelta.set(0, 0, 0);
-			}
+        sphericalDelta.set(0, 0, 0);
+      }
 
-			scale = 1;
+      scale = 1;
 
-			panOffset.set(0, 0, 0);
+      panOffset.set(0, 0, 0);
 
-			// update condition is:
-			// min(camera displacement, camera rotation in radians)^2 > EPS
-			// using small-angle approximation cos(x/2) = 1 - x^2 / 8
+      // update condition is:
+      // min(camera displacement, camera rotation in radians)^2 > EPS
+      // using small-angle approximation cos(x/2) = 1 - x^2 / 8
 
-			if (zoomChanged || lastPosition.distanceToSquared(scope.object.position) > EPS || 8 * (1 - lastQuaternion.dot(scope.object.quaternion)) > EPS) {
+      if (zoomChanged || lastPosition.distanceToSquared(scope.object.position) > EPS || 8 * (1 - lastQuaternion.dot(scope.object.quaternion)) > EPS) {
 
-				scope.dispatchEvent(changeEvent);
+        scope.dispatchEvent(changeEvent);
 
-				lastPosition.copy(scope.object.position);
-				lastQuaternion.copy(scope.object.quaternion);
-				zoomChanged = false;
+        lastPosition.copy(scope.object.position);
+        lastQuaternion.copy(scope.object.quaternion);
+        zoomChanged = false;
 
-				return true;
-			}
+        return true;
+      }
 
-			return false;
-		};
-	}();
+      return false;
+    };
+  }();
 
-	this.dispose = function () {
+  this.dispose = function () {
 
-		scope.domElement.removeEventListener('contextmenu', onContextMenu, false);
-		scope.domElement.removeEventListener('mousedown', onMouseDown, false);
-		scope.domElement.removeEventListener('wheel', onMouseWheel, false);
+    scope.domElement.removeEventListener('contextmenu', onContextMenu, false);
+    scope.domElement.removeEventListener('mousedown', onMouseDown, false);
+    scope.domElement.removeEventListener('wheel', onMouseWheel, false);
 
-		scope.domElement.removeEventListener('touchstart', onTouchStart, false);
-		scope.domElement.removeEventListener('touchend', onTouchEnd, false);
-		scope.domElement.removeEventListener('touchmove', onTouchMove, false);
+    scope.domElement.removeEventListener('touchstart', onTouchStart, false);
+    scope.domElement.removeEventListener('touchend', onTouchEnd, false);
+    scope.domElement.removeEventListener('touchmove', onTouchMove, false);
 
-		document.removeEventListener('mousemove', onMouseMove, false);
-		document.removeEventListener('mouseup', onMouseUp, false);
+    document.removeEventListener('mousemove', onMouseMove, false);
+    document.removeEventListener('mouseup', onMouseUp, false);
 
-		window.removeEventListener('keydown', onKeyDown, false);
+    window.removeEventListener('keydown', onKeyDown, false);
 
-		//scope.dispatchEvent( { type: 'dispose' } ); // should this be added here?
-	};
+    // scope.dispatchEvent( { type: 'dispose' } ); // should this be added here?
+  };
 
-	//
-	// internals
-	//
+  //
+  // internals
+  //
 
-	var scope = this;
+  var scope = this;
 
-	var changeEvent = { type: 'change' };
-	var startEvent = { type: 'start' };
-	var endEvent = { type: 'end' };
+  var changeEvent = { type: 'change' };
+  var startEvent = { type: 'start' };
+  var endEvent = { type: 'end' };
 
-	var STATE = { NONE: -1, ROTATE: 0, DOLLY: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_DOLLY: 4, TOUCH_PAN: 5 };
+  var STATE = { NONE: -1, ROTATE: 0, DOLLY: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_DOLLY: 4, TOUCH_PAN: 5 };
 
-	var state = STATE.NONE;
+  var state = STATE.NONE;
 
-	var EPS = 0.000001;
+  var EPS = 0.000001;
 
-	// current position in spherical coordinates
-	var spherical = new Spherical();
-	var sphericalDelta = new Spherical();
+  // current position in spherical coordinates
+  var spherical = new Spherical();
+  var sphericalDelta = new Spherical();
 
-	var scale = 1;
+  var scale = 1;
 
-	var panOffset = new Vector3();
-	var zoomChanged = false;
+  var panOffset = new Vector3();
+  var zoomChanged = false;
 
-	var rotateStart = new Vector2();
-	var rotateEnd = new Vector2();
-	var rotateDelta = new Vector2();
+  var rotateStart = new Vector2();
+  var rotateEnd = new Vector2();
+  var rotateDelta = new Vector2();
 
-	var panStart = new Vector2();
-	var panEnd = new Vector2();
-	var panDelta = new Vector2();
+  var panStart = new Vector2();
+  var panEnd = new Vector2();
+  var panDelta = new Vector2();
 
-	var dollyStart = new Vector2();
-	var dollyEnd = new Vector2();
-	var dollyDelta = new Vector2();
+  var dollyStart = new Vector2();
+  var dollyEnd = new Vector2();
+  var dollyDelta = new Vector2();
 
-	function getAutoRotationAngle() {
+  function getAutoRotationAngle() {
 
-		return 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
-	}
+    return 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
+  }
 
-	function getZoomScale() {
+  function getZoomScale() {
 
-		return Math.pow(0.95, scope.zoomSpeed);
-	}
+    return Math.pow(0.95, scope.zoomSpeed);
+  }
 
-	function rotateLeft(angle) {
+  function rotateLeft(angle) {
 
-		sphericalDelta.theta -= angle;
-	}
+    sphericalDelta.theta -= angle;
+  }
 
-	function rotateUp(angle) {
+  function rotateUp(angle) {
 
-		sphericalDelta.phi -= angle;
-	}
+    sphericalDelta.phi -= angle;
+  }
 
-	this.rotateUp = rotateUp;
+  this.rotateUp = rotateUp;
 
-	var panLeft = function () {
+  var panLeft = function () {
 
-		var v = new Vector3();
+    var v = new Vector3();
 
-		return function panLeft(distance, objectMatrix) {
+    return function panLeft(distance, objectMatrix) {
 
-			v.setFromMatrixColumn(objectMatrix, 0); // get X column of objectMatrix
-			v.multiplyScalar(-distance);
+      v.setFromMatrixColumn(objectMatrix, 0); // get X column of objectMatrix
+      v.multiplyScalar(-distance);
 
-			panOffset.add(v);
-		};
-	}();
+      panOffset.add(v);
+    };
+  }();
 
-	var panUp = function () {
+  var panUp = function () {
 
-		var v = new Vector3();
+    var v = new Vector3();
 
-		return function panUp(distance, objectMatrix) {
+    return function panUp(distance, objectMatrix) {
 
-			v.setFromMatrixColumn(objectMatrix, 1); // get Y column of objectMatrix
-			v.multiplyScalar(distance);
+      v.setFromMatrixColumn(objectMatrix, 1); // get Y column of objectMatrix
+      v.multiplyScalar(distance);
 
-			panOffset.add(v);
-		};
-	}();
+      panOffset.add(v);
+    };
+  }();
 
-	// deltaX and deltaY are in pixels; right and down are positive
-	var pan = function () {
+  // deltaX and deltaY are in pixels; right and down are positive
+  var pan = function () {
 
-		var offset = new Vector3();
+    var offset = new Vector3();
 
-		return function pan(deltaX, deltaY) {
+    return function pan(deltaX, deltaY) {
 
-			var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+      var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 
-			if (scope.object instanceof PerspectiveCamera) {
+      if (scope.object instanceof PerspectiveCamera) {
 
-				// perspective
-				var position = scope.object.position;
-				offset.copy(position).sub(scope.target);
-				var targetDistance = offset.length();
+        // perspective
+        var position = scope.object.position;
+        offset.copy(position).sub(scope.target);
+        var targetDistance = offset.length();
 
-				// half of the fov is center to top of screen
-				targetDistance *= Math.tan(scope.object.fov / 2 * Math.PI / 180.0);
+        // half of the fov is center to top of screen
+        targetDistance *= Math.tan(scope.object.fov / 2 * Math.PI / 180.0);
 
-				// we actually don't use screenWidth, since perspective camera is fixed to screen height
-				panLeft(2 * deltaX * targetDistance / element.clientHeight, scope.object.matrix);
-				panUp(2 * deltaY * targetDistance / element.clientHeight, scope.object.matrix);
-			} else if (scope.object instanceof OrthographicCamera) {
+        // we actually don't use screenWidth, since perspective camera is fixed to screen height
+        panLeft(2 * deltaX * targetDistance / element.clientHeight, scope.object.matrix);
+        panUp(2 * deltaY * targetDistance / element.clientHeight, scope.object.matrix);
+      } else if (scope.object instanceof OrthographicCamera) {
 
-				// orthographic
-				panLeft(deltaX * (scope.object.right - scope.object.left) / scope.object.zoom / element.clientWidth, scope.object.matrix);
-				panUp(deltaY * (scope.object.top - scope.object.bottom) / scope.object.zoom / element.clientHeight, scope.object.matrix);
-			} else {
+        // orthographic
+        panLeft(deltaX * (scope.object.right - scope.object.left) / scope.object.zoom / element.clientWidth, scope.object.matrix);
+        panUp(deltaY * (scope.object.top - scope.object.bottom) / scope.object.zoom / element.clientHeight, scope.object.matrix);
+      } else {
 
-				// camera neither orthographic nor perspective
-				console.warn('WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.');
-				scope.enablePan = false;
-			}
-		};
-	}();
+        // camera neither orthographic nor perspective
+        console.warn('WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.');
+        scope.enablePan = false;
+      }
+    };
+  }();
 
-	scope.pan = pan;
+  scope.pan = pan;
 
-	function dollyIn(dollyScale) {
+  function dollyIn(dollyScale) {
 
-		if (scope.object instanceof PerspectiveCamera) {
+    if (scope.object instanceof PerspectiveCamera) {
 
-			scale /= dollyScale;
-		} else if (scope.object instanceof OrthographicCamera) {
+      scale /= dollyScale;
+    } else if (scope.object instanceof OrthographicCamera) {
 
-			scope.object.zoom = Math.max(scope.minZoom, Math.min(scope.maxZoom, scope.object.zoom * dollyScale));
-			scope.object.updateProjectionMatrix();
-			zoomChanged = true;
-		} else {
+      scope.object.zoom = Math.max(scope.minZoom, Math.min(scope.maxZoom, scope.object.zoom * dollyScale));
+      scope.object.updateProjectionMatrix();
+      zoomChanged = true;
+    } else {
 
-			console.warn('WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.');
-			scope.enableZoom = false;
-		}
-	}
+      console.warn('WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.');
+      scope.enableZoom = false;
+    }
+  }
 
-	scope.dollyIn = dollyIn;
+  scope.dollyIn = dollyIn;
 
-	function dollyOut(dollyScale) {
+  function dollyOut(dollyScale) {
 
-		if (scope.object instanceof PerspectiveCamera) {
+    if (scope.object instanceof PerspectiveCamera) {
 
-			scale *= dollyScale;
-		} else if (scope.object instanceof OrthographicCamera) {
+      scale *= dollyScale;
+    } else if (scope.object instanceof OrthographicCamera) {
 
-			scope.object.zoom = Math.max(scope.minZoom, Math.min(scope.maxZoom, scope.object.zoom / dollyScale));
-			scope.object.updateProjectionMatrix();
-			zoomChanged = true;
-		} else {
+      scope.object.zoom = Math.max(scope.minZoom, Math.min(scope.maxZoom, scope.object.zoom / dollyScale));
+      scope.object.updateProjectionMatrix();
+      zoomChanged = true;
+    } else {
 
-			console.warn('WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.');
-			scope.enableZoom = false;
-		}
-	}
+      console.warn('WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.');
+      scope.enableZoom = false;
+    }
+  }
 
-	scope.dollyOut = dollyOut;
+  scope.dollyOut = dollyOut;
 
-	//
-	// event callbacks - update the object state
-	//
+  //
+  // event callbacks - update the object state
+  //
 
-	function handleMouseDownRotate(event) {
+  function handleMouseDownRotate(event) {
 
-		//console.log( 'handleMouseDownRotate' );
+    // console.log( 'handleMouseDownRotate' );
 
-		rotateStart.set(event.clientX, event.clientY);
-	}
+    rotateStart.set(event.clientX, event.clientY);
+  }
 
-	function handleMouseDownDolly(event) {
+  function handleMouseDownDolly(event) {
 
-		//console.log( 'handleMouseDownDolly' );
+    // console.log( 'handleMouseDownDolly' );
 
-		dollyStart.set(event.clientX, event.clientY);
-	}
+    dollyStart.set(event.clientX, event.clientY);
+  }
 
-	function handleMouseDownPan(event) {
+  function handleMouseDownPan(event) {
 
-		//console.log( 'handleMouseDownPan' );
+    // console.log( 'handleMouseDownPan' );
 
-		panStart.set(event.clientX, event.clientY);
-	}
+    panStart.set(event.clientX, event.clientY);
+  }
 
-	function handleMouseMoveRotate(event) {
+  function handleMouseMoveRotate(event) {
 
-		//console.log( 'handleMouseMoveRotate' );
+    // console.log( 'handleMouseMoveRotate' );
 
-		rotateEnd.set(event.clientX, event.clientY);
-		rotateDelta.subVectors(rotateEnd, rotateStart);
+    rotateEnd.set(event.clientX, event.clientY);
+    rotateDelta.subVectors(rotateEnd, rotateStart);
 
-		var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+    var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 
-		// rotating across whole screen goes 360 degrees around
-		rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
+    // rotating across whole screen goes 360 degrees around
+    rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
 
-		// rotating up and down along whole screen attempts to go 360, but limited to 180
-		rotateUp(2 * Math.PI * rotateDelta.y / element.clientHeight * scope.rotateSpeed);
+    // rotating up and down along whole screen attempts to go 360, but limited to 180
+    rotateUp(2 * Math.PI * rotateDelta.y / element.clientHeight * scope.rotateSpeed);
 
-		rotateStart.copy(rotateEnd);
+    rotateStart.copy(rotateEnd);
 
-		scope.update();
-	}
+    scope.update();
+  }
 
-	function handleMouseMoveDolly(event) {
+  function handleMouseMoveDolly(event) {
 
-		//console.log( 'handleMouseMoveDolly' );
+    // console.log( 'handleMouseMoveDolly' );
 
-		dollyEnd.set(event.clientX, event.clientY);
+    dollyEnd.set(event.clientX, event.clientY);
 
-		dollyDelta.subVectors(dollyEnd, dollyStart);
+    dollyDelta.subVectors(dollyEnd, dollyStart);
 
-		if (dollyDelta.y > 0) {
+    if (dollyDelta.y > 0) {
 
-			dollyIn(getZoomScale());
-		} else if (dollyDelta.y < 0) {
+      dollyIn(getZoomScale());
+    } else if (dollyDelta.y < 0) {
 
-			dollyOut(getZoomScale());
-		}
+      dollyOut(getZoomScale());
+    }
 
-		dollyStart.copy(dollyEnd);
+    dollyStart.copy(dollyEnd);
 
-		scope.update();
-	}
+    scope.update();
+  }
 
-	function handleMouseMovePan(event) {
+  function handleMouseMovePan(event) {
 
-		//console.log( 'handleMouseMovePan' );
+    // console.log( 'handleMouseMovePan' );
 
-		panEnd.set(event.clientX, event.clientY);
+    panEnd.set(event.clientX, event.clientY);
 
-		panDelta.subVectors(panEnd, panStart);
+    panDelta.subVectors(panEnd, panStart);
 
-		pan(panDelta.x, panDelta.y);
+    pan(panDelta.x, panDelta.y);
 
-		panStart.copy(panEnd);
+    panStart.copy(panEnd);
 
-		scope.update();
-	}
+    scope.update();
+  }
 
-	function handleMouseUp(event) {
+  function handleMouseUp(event) {
 
-		// console.log( 'handleMouseUp' );
+    // console.log( 'handleMouseUp' );
 
-	}
+  }
 
-	function handleMouseWheel(event) {
+  function handleMouseWheel(event) {
 
-		// console.log( 'handleMouseWheel' );
+    // console.log( 'handleMouseWheel' );
 
-		if (event.deltaY < 0) {
+    if (event.deltaY < 0) {
 
-			dollyOut(getZoomScale());
-		} else if (event.deltaY > 0) {
+      dollyOut(getZoomScale());
+    } else if (event.deltaY > 0) {
 
-			dollyIn(getZoomScale());
-		}
+      dollyIn(getZoomScale());
+    }
 
-		scope.update();
-	}
+    scope.update();
+  }
 
-	function handleKeyDown(event) {
+  function handleKeyDown(event) {
 
-		//console.log( 'handleKeyDown' );
+    // console.log( 'handleKeyDown' );
 
-		switch (event.keyCode) {
+    switch (event.keyCode) {
 
-			case scope.keys.UP:
-				pan(0, scope.keyPanSpeed);
-				scope.update();
-				break;
+      case scope.keys.UP:
+        pan(0, scope.keyPanSpeed);
+        scope.update();
+        break;
 
-			case scope.keys.BOTTOM:
-				pan(0, -scope.keyPanSpeed);
-				scope.update();
-				break;
+      case scope.keys.BOTTOM:
+        pan(0, -scope.keyPanSpeed);
+        scope.update();
+        break;
 
-			case scope.keys.LEFT:
-				pan(scope.keyPanSpeed, 0);
-				scope.update();
-				break;
+      case scope.keys.LEFT:
+        pan(scope.keyPanSpeed, 0);
+        scope.update();
+        break;
 
-			case scope.keys.RIGHT:
-				pan(-scope.keyPanSpeed, 0);
-				scope.update();
-				break;
+      case scope.keys.RIGHT:
+        pan(-scope.keyPanSpeed, 0);
+        scope.update();
+        break;
 
-		}
-	}
+    }
+  }
 
-	function handleTouchStartRotate(event) {
+  function handleTouchStartRotate(event) {
 
-		//console.log( 'handleTouchStartRotate' );
+    // console.log( 'handleTouchStartRotate' );
 
-		rotateStart.set(event.touches[0].pageX, event.touches[0].pageY);
-	}
+    rotateStart.set(event.touches[0].pageX, event.touches[0].pageY);
+  }
 
-	function handleTouchStartDolly(event) {
+  function handleTouchStartDolly(event) {
 
-		//console.log( 'handleTouchStartDolly' );
+    // console.log( 'handleTouchStartDolly' );
 
-		var dx = event.touches[0].pageX - event.touches[1].pageX;
-		var dy = event.touches[0].pageY - event.touches[1].pageY;
+    var dx = event.touches[0].pageX - event.touches[1].pageX;
+    var dy = event.touches[0].pageY - event.touches[1].pageY;
 
-		var distance = Math.sqrt(dx * dx + dy * dy);
+    var distance = Math.sqrt(dx * dx + dy * dy);
 
-		dollyStart.set(0, distance);
-	}
+    dollyStart.set(0, distance);
+  }
 
-	function handleTouchStartPan(event) {
+  function handleTouchStartPan(event) {
 
-		//console.log( 'handleTouchStartPan' );
+    // console.log( 'handleTouchStartPan' );
 
-		panStart.set(event.touches[0].pageX, event.touches[0].pageY);
-	}
+    panStart.set(event.touches[0].pageX, event.touches[0].pageY);
+  }
 
-	function handleTouchMoveRotate(event) {
+  function handleTouchMoveRotate(event) {
 
-		//console.log( 'handleTouchMoveRotate' );
+    // console.log( 'handleTouchMoveRotate' );
 
-		rotateEnd.set(event.touches[0].pageX, event.touches[0].pageY);
-		rotateDelta.subVectors(rotateEnd, rotateStart);
+    rotateEnd.set(event.touches[0].pageX, event.touches[0].pageY);
+    rotateDelta.subVectors(rotateEnd, rotateStart);
 
-		var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+    var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 
-		// rotating across whole screen goes 360 degrees around
-		rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
+    // rotating across whole screen goes 360 degrees around
+    rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
 
-		// rotating up and down along whole screen attempts to go 360, but limited to 180
-		rotateUp(2 * Math.PI * rotateDelta.y / element.clientHeight * scope.rotateSpeed);
+    // rotating up and down along whole screen attempts to go 360, but limited to 180
+    rotateUp(2 * Math.PI * rotateDelta.y / element.clientHeight * scope.rotateSpeed);
 
-		rotateStart.copy(rotateEnd);
+    rotateStart.copy(rotateEnd);
 
-		scope.update();
-	}
+    scope.update();
+  }
 
-	function handleTouchMoveDolly(event) {
+  function handleTouchMoveDolly(event) {
 
-		//console.log( 'handleTouchMoveDolly' );
+    // console.log( 'handleTouchMoveDolly' );
 
-		var dx = event.touches[0].pageX - event.touches[1].pageX;
-		var dy = event.touches[0].pageY - event.touches[1].pageY;
+    var dx = event.touches[0].pageX - event.touches[1].pageX;
+    var dy = event.touches[0].pageY - event.touches[1].pageY;
 
-		var distance = Math.sqrt(dx * dx + dy * dy);
+    var distance = Math.sqrt(dx * dx + dy * dy);
 
-		dollyEnd.set(0, distance);
+    dollyEnd.set(0, distance);
 
-		dollyDelta.subVectors(dollyEnd, dollyStart);
+    dollyDelta.subVectors(dollyEnd, dollyStart);
 
-		if (dollyDelta.y > 0) {
+    if (dollyDelta.y > 0) {
 
-			dollyOut(getZoomScale());
-		} else if (dollyDelta.y < 0) {
+      dollyOut(getZoomScale());
+    } else if (dollyDelta.y < 0) {
 
-			dollyIn(getZoomScale());
-		}
+      dollyIn(getZoomScale());
+    }
 
-		dollyStart.copy(dollyEnd);
+    dollyStart.copy(dollyEnd);
 
-		scope.update();
-	}
+    scope.update();
+  }
 
-	function handleTouchMovePan(event) {
+  function handleTouchMovePan(event) {
 
-		//console.log( 'handleTouchMovePan' );
+    // console.log( 'handleTouchMovePan' );
 
-		panEnd.set(event.touches[0].pageX, event.touches[0].pageY);
+    panEnd.set(event.touches[0].pageX, event.touches[0].pageY);
 
-		panDelta.subVectors(panEnd, panStart);
+    panDelta.subVectors(panEnd, panStart);
 
-		pan(panDelta.x, panDelta.y);
+    pan(panDelta.x, panDelta.y);
 
-		panStart.copy(panEnd);
+    panStart.copy(panEnd);
 
-		scope.update();
-	}
+    scope.update();
+  }
 
-	function handleTouchEnd(event) {}
+  function handleTouchEnd(event) {}
 
-	//console.log( 'handleTouchEnd' );
+  // console.log( 'handleTouchEnd' );
 
-	//
-	// event handlers - FSM: listen for events and reset state
-	//
+  //
+  // event handlers - FSM: listen for events and reset state
+  //
 
-	function onMouseDown(event) {
+  function onMouseDown(event) {
 
-		if (scope.enabled === false) return;
+    if (scope.enabled === false) return;
 
-		event.preventDefault();
+    event.preventDefault();
 
-		if (event.button === scope.mouseButtons.ORBIT) {
+    if (event.button === scope.mouseButtons.ORBIT) {
 
-			if (scope.enableRotate === false) return;
+      if (scope.enableRotate === false) return;
 
-			handleMouseDownRotate(event);
+      handleMouseDownRotate(event);
 
-			state = STATE.ROTATE;
-		} else if (event.button === scope.mouseButtons.ZOOM) {
+      state = STATE.ROTATE;
+    } else if (event.button === scope.mouseButtons.ZOOM) {
 
-			if (scope.enableZoom === false) return;
+      if (scope.enableZoom === false) return;
 
-			handleMouseDownDolly(event);
+      handleMouseDownDolly(event);
 
-			state = STATE.DOLLY;
-		} else if (event.button === scope.mouseButtons.PAN) {
+      state = STATE.DOLLY;
+    } else if (event.button === scope.mouseButtons.PAN) {
 
-			if (scope.enablePan === false) return;
+      if (scope.enablePan === false) return;
 
-			handleMouseDownPan(event);
+      handleMouseDownPan(event);
 
-			state = STATE.PAN;
-		}
+      state = STATE.PAN;
+    }
 
-		if (state !== STATE.NONE) {
+    if (state !== STATE.NONE) {
 
-			document.addEventListener('mousemove', onMouseMove, false);
-			document.addEventListener('mouseup', onMouseUp, false);
+      document.addEventListener('mousemove', onMouseMove, false);
+      document.addEventListener('mouseup', onMouseUp, false);
 
-			scope.dispatchEvent(startEvent);
-		}
-	}
+      scope.dispatchEvent(startEvent);
+    }
+  }
 
-	function onMouseMove(event) {
+  function onMouseMove(event) {
 
-		if (scope.enabled === false) return;
+    if (scope.enabled === false) return;
 
-		event.preventDefault();
+    event.preventDefault();
 
-		if (state === STATE.ROTATE) {
+    if (state === STATE.ROTATE) {
 
-			if (scope.enableRotate === false) return;
+      if (scope.enableRotate === false) return;
 
-			handleMouseMoveRotate(event);
-		} else if (state === STATE.DOLLY) {
+      handleMouseMoveRotate(event);
+    } else if (state === STATE.DOLLY) {
 
-			if (scope.enableZoom === false) return;
+      if (scope.enableZoom === false) return;
 
-			handleMouseMoveDolly(event);
-		} else if (state === STATE.PAN) {
+      handleMouseMoveDolly(event);
+    } else if (state === STATE.PAN) {
 
-			if (scope.enablePan === false) return;
+      if (scope.enablePan === false) return;
 
-			handleMouseMovePan(event);
-		}
-	}
+      handleMouseMovePan(event);
+    }
+  }
 
-	function onMouseUp(event) {
+  function onMouseUp(event) {
 
-		if (scope.enabled === false) return;
+    if (scope.enabled === false) return;
 
-		handleMouseUp(event);
+    handleMouseUp(event);
 
-		document.removeEventListener('mousemove', onMouseMove, false);
-		document.removeEventListener('mouseup', onMouseUp, false);
+    document.removeEventListener('mousemove', onMouseMove, false);
+    document.removeEventListener('mouseup', onMouseUp, false);
 
-		scope.dispatchEvent(endEvent);
+    scope.dispatchEvent(endEvent);
 
-		state = STATE.NONE;
-	}
+    state = STATE.NONE;
+  }
 
-	function onMouseWheel(event) {
+  function onMouseWheel(event) {
 
-		if (scope.enabled === false || scope.enableZoom === false || state !== STATE.NONE && state !== STATE.ROTATE) return;
+    if (scope.enabled === false || scope.enableZoom === false || state !== STATE.NONE && state !== STATE.ROTATE) return;
 
-		event.preventDefault();
-		event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
 
-		handleMouseWheel(event);
+    handleMouseWheel(event);
 
-		scope.dispatchEvent(startEvent); // not sure why these are here...
-		scope.dispatchEvent(endEvent);
-	}
+    scope.dispatchEvent(startEvent); // not sure why these are here...
+    scope.dispatchEvent(endEvent);
+  }
 
-	function onKeyDown(event) {
+  function onKeyDown(event) {
 
-		if (scope.enabled === false || scope.enableKeys === false || scope.enablePan === false) return;
+    if (scope.enabled === false || scope.enableKeys === false || scope.enablePan === false) return;
 
-		handleKeyDown(event);
-	}
+    handleKeyDown(event);
+  }
 
-	function onTouchStart(event) {
+  function onTouchStart(event) {
 
-		if (scope.enabled === false) return;
+    if (scope.enabled === false) return;
 
-		switch (event.touches.length) {
+    switch (event.touches.length) {
 
-			case 1:
-				// one-fingered touch: rotate
+      case 1:
+        // one-fingered touch: rotate
 
-				if (scope.enableRotate === false) return;
+        if (scope.enableRotate === false) return;
 
-				handleTouchStartRotate(event);
+        handleTouchStartRotate(event);
 
-				state = STATE.TOUCH_ROTATE;
+        state = STATE.TOUCH_ROTATE;
 
-				break;
+        break;
 
-			case 2:
-				// two-fingered touch: dolly
+      case 2:
+        // two-fingered touch: dolly
 
-				if (scope.enableZoom === false) return;
+        if (scope.enableZoom === false) return;
 
-				handleTouchStartDolly(event);
+        handleTouchStartDolly(event);
 
-				state = STATE.TOUCH_DOLLY;
+        state = STATE.TOUCH_DOLLY;
 
-				break;
+        break;
 
-			case 3:
-				// three-fingered touch: pan
+      case 3:
+        // three-fingered touch: pan
 
-				if (scope.enablePan === false) return;
+        if (scope.enablePan === false) return;
 
-				handleTouchStartPan(event);
+        handleTouchStartPan(event);
 
-				state = STATE.TOUCH_PAN;
+        state = STATE.TOUCH_PAN;
 
-				break;
+        break;
 
-			default:
+      default:
 
-				state = STATE.NONE;
+        state = STATE.NONE;
 
-		}
+    }
 
-		if (state !== STATE.NONE) {
+    if (state !== STATE.NONE) {
 
-			scope.dispatchEvent(startEvent);
-		}
-	}
+      scope.dispatchEvent(startEvent);
+    }
+  }
 
-	function onTouchMove(event) {
+  function onTouchMove(event) {
 
-		if (scope.enabled === false) return;
+    if (scope.enabled === false) return;
 
-		event.preventDefault();
-		event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
 
-		switch (event.touches.length) {
+    switch (event.touches.length) {
 
-			case 1:
-				// one-fingered touch: rotate
+      case 1:
+        // one-fingered touch: rotate
 
-				if (scope.enableRotate === false) return;
-				if (state !== STATE.TOUCH_ROTATE) return; // is this needed?...
+        if (scope.enableRotate === false) return;
+        if (state !== STATE.TOUCH_ROTATE) return; // is this needed?...
 
-				handleTouchMoveRotate(event);
+        handleTouchMoveRotate(event);
 
-				break;
+        break;
 
-			case 2:
-				// two-fingered touch: dolly
+      case 2:
+        // two-fingered touch: dolly
 
-				if (scope.enableZoom === false) return;
-				if (state !== STATE.TOUCH_DOLLY) return; // is this needed?...
+        if (scope.enableZoom === false) return;
+        if (state !== STATE.TOUCH_DOLLY) return; // is this needed?...
 
-				handleTouchMoveDolly(event);
+        handleTouchMoveDolly(event);
 
-				break;
+        break;
 
-			case 3:
-				// three-fingered touch: pan
+      case 3:
+        // three-fingered touch: pan
 
-				if (scope.enablePan === false) return;
-				if (state !== STATE.TOUCH_PAN) return; // is this needed?...
+        if (scope.enablePan === false) return;
+        if (state !== STATE.TOUCH_PAN) return; // is this needed?...
 
-				handleTouchMovePan(event);
+        handleTouchMovePan(event);
 
-				break;
+        break;
 
-			default:
+      default:
 
-				state = STATE.NONE;
+        state = STATE.NONE;
 
-		}
-	}
+    }
+  }
 
-	function onTouchEnd(event) {
+  function onTouchEnd(event) {
 
-		if (scope.enabled === false) return;
+    if (scope.enabled === false) return;
 
-		handleTouchEnd(event);
+    handleTouchEnd(event);
 
-		scope.dispatchEvent(endEvent);
+    scope.dispatchEvent(endEvent);
 
-		state = STATE.NONE;
-	}
+    state = STATE.NONE;
+  }
 
-	function onContextMenu(event) {
+  function onContextMenu(event) {
 
-		event.preventDefault();
-	}
+    event.preventDefault();
+  }
 
-	//
+  //
 
-	scope.domElement.addEventListener('contextmenu', onContextMenu, false);
+  scope.domElement.addEventListener('contextmenu', onContextMenu, false);
 
-	scope.domElement.addEventListener('mousedown', onMouseDown, false);
-	scope.domElement.addEventListener('wheel', onMouseWheel, false);
+  scope.domElement.addEventListener('mousedown', onMouseDown, false);
+  scope.domElement.addEventListener('wheel', onMouseWheel, false);
 
-	scope.domElement.addEventListener('touchstart', onTouchStart, false);
-	scope.domElement.addEventListener('touchend', onTouchEnd, false);
-	scope.domElement.addEventListener('touchmove', onTouchMove, false);
+  scope.domElement.addEventListener('touchstart', onTouchStart, false);
+  scope.domElement.addEventListener('touchend', onTouchEnd, false);
+  scope.domElement.addEventListener('touchmove', onTouchMove, false);
 
-	window.addEventListener('keydown', onKeyDown, false);
+  window.addEventListener('keydown', onKeyDown, false);
 
-	// force an update at start
+  // force an update at start
 
-	this.update();
-};
+  this.update();
+}
 
 OrbitControls.prototype = Object.create(EventDispatcher.prototype);
 OrbitControls.prototype.constructor = OrbitControls;
@@ -53193,20 +53193,23 @@ function App(canvas) {
 
   this.time = new Time();
 
-  var setRendererSize = function () {
+  var setRendererSize = function setRendererSize() {
     _renderer.setSize(_canvas.clientWidth, _canvas.clientHeight, false);
   };
 
-  var setCameraAspect = function () {
+  var setCameraAspect = function setCameraAspect() {
     _camera.aspect = _canvas.clientWidth / _canvas.clientHeight;
     _camera.updateProjectionMatrix();
   };
 
   this.onWindowResize = function () {};
 
-  var onWindowResize = function () {
+  var onWindowResize = function onWindowResize() {
 
     if (!self.autoResize) return;
+
+    // don't do anything if the camera doesn't exist yet
+    if (!_camera) return;
 
     if (_camera.type !== 'PerspectiveCamera') {
 
@@ -53226,7 +53229,7 @@ function App(canvas) {
   Object.defineProperties(this, {
 
     canvas: {
-      get: function () {
+      get: function get() {
 
         if (_canvas === undefined) {
 
@@ -53237,14 +53240,14 @@ function App(canvas) {
 
         return _canvas;
       },
-      set: function (newCanvas) {
+      set: function set(newCanvas) {
 
         _canvas = newCanvas;
       }
     },
 
     camera: {
-      get: function () {
+      get: function get() {
 
         if (_camera === undefined) {
 
@@ -53253,7 +53256,7 @@ function App(canvas) {
 
         return _camera;
       },
-      set: function (camera) {
+      set: function set(camera) {
 
         _camera = camera;
         setCameraAspect();
@@ -53261,7 +53264,7 @@ function App(canvas) {
     },
 
     scene: {
-      get: function () {
+      get: function get() {
 
         if (_scene === undefined) {
 
@@ -53270,14 +53273,14 @@ function App(canvas) {
 
         return _scene;
       },
-      set: function (scene) {
+      set: function set(scene) {
 
         _scene = scene;
       }
     },
 
     renderer: {
-      get: function () {
+      get: function get() {
 
         if (_renderer === undefined) {
 
@@ -53288,7 +53291,7 @@ function App(canvas) {
 
         return _renderer;
       },
-      set: function (renderer) {
+      set: function set(renderer) {
 
         _renderer = renderer;
         setRendererSize();
@@ -53296,7 +53299,7 @@ function App(canvas) {
     },
 
     averageFrameTime: {
-      get: function () {
+      get: function get() {
 
         return this.frameCount !== 0 ? this.time.unscaledTotalTime / this.frameCount : 0;
       }
@@ -53446,6 +53449,12 @@ function App(canvas) {
   };
 }
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
 var asyncGenerator = function () {
   function AwaitValue(value) {
     this.value = value;
@@ -53583,9 +53592,19 @@ var createClass = function () {
   };
 }();
 
-var LightingSetup = function () {
-    function LightingSetup(app) {
-        classCallCheck(this, LightingSetup);
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
+
+var Lighting = function () {
+    function Lighting(app) {
+        classCallCheck(this, Lighting);
 
 
         this.app = app;
@@ -53593,36 +53612,38 @@ var LightingSetup = function () {
         this.initLights();
     }
 
-    LightingSetup.prototype.initLights = function initLights() {
+    createClass(Lighting, [{
+        key: 'initLights',
+        value: function initLights() {
 
-        var ambientLight = new AmbientLight(0xffffff, 0.3);
-        this.app.scene.add(ambientLight);
+            var ambientLight = new AmbientLight(0xffffff, 0.3);
+            this.app.scene.add(ambientLight);
 
-        // ****  METHOD 1:   3 POINT LIGHTING ***************************
-        // Traditional 3 point light setup - slightly more expensive due to
-        // two extra lights
+            // ****  METHOD 1:   3 POINT LIGHTING ***************************
+            // Traditional 3 point light setup - slightly more expensive due to
+            // two extra lights
 
-        var backLight = new DirectionalLight(0xffffff, 0.325);
-        backLight.position.set(130, 100, 150);
+            var backLight = new DirectionalLight(0xffffff, 0.325);
+            backLight.position.set(130, 100, 150);
 
-        var keyLight = new DirectionalLight(0xffffff, 0.375);
-        keyLight.position.set(100, 50, 0);
+            var keyLight = new DirectionalLight(0xffffff, 0.375);
+            keyLight.position.set(100, 50, 0);
 
-        var fillLight = new DirectionalLight(0xffffff, 0.3);
-        fillLight.position.set(75, 75, 50);
+            var fillLight = new DirectionalLight(0xffffff, 0.3);
+            fillLight.position.set(75, 75, 50);
 
-        this.app.scene.add(backLight, keyLight, fillLight);
+            this.app.scene.add(backLight, keyLight, fillLight);
 
-        // ****  METHOD 2:   CAMERA LIGHT ***********************************
-        // Visually similar to 3 point lighting, but cheaper as only two lights
-        // are needed
+            // ****  METHOD 2:   CAMERA LIGHT ***********************************
+            // Visually similar to 3 point lighting, but cheaper as only two lights
+            // are needed
 
-        // this.pointLight = new THREE.PointLight( 0xffffff, 0.7, 0, 0 );
-        // this.app.camera.add( this.pointLight );
-        // this.app.scene.add( this.app.camera );
-    };
-
-    return LightingSetup;
+            // this.pointLight = new THREE.PointLight( 0xffffff, 0.7, 0, 0 );
+            // this.app.camera.add( this.pointLight );
+            // this.app.scene.add( this.app.camera );
+        }
+    }]);
+    return Lighting;
 }();
 
 var canvas$1 = document.querySelector('#viewer-canvas');
@@ -53650,35 +53671,40 @@ var HTMLControl = function () {
     classCallCheck(this, HTMLControl);
   }
 
-  HTMLControl.setInitialState = function setInitialState() {
+  createClass(HTMLControl, null, [{
+    key: 'setInitialState',
+    value: function setInitialState() {
 
-    controls.slope.value = 0;
+      controls.slope.value = 0;
 
-    controls.simulate.disabled = false;
-    controls.slope.disabled = false;
-    controls.randomize.disabled = false;
-    controls.reset.disabled = true;
-    controls.showGrid.disabled = false;
-  };
+      controls.simulate.disabled = false;
+      controls.slope.disabled = false;
+      controls.randomize.disabled = false;
+      controls.reset.disabled = true;
+      controls.showGrid.disabled = false;
+    }
+  }, {
+    key: 'setOnLoadStartState',
+    value: function setOnLoadStartState() {
 
-  HTMLControl.setOnLoadStartState = function setOnLoadStartState() {
+      loading.bar.classList.remove('hide');
+      loading.progress.style.width = '0%';
+    }
+  }, {
+    key: 'setOnLoadEndState',
+    value: function setOnLoadEndState() {
 
-    loading.bar.classList.remove('hide');
-    loading.progress.style.width = '0%';
-  };
+      loading.overlay.classList.add('hide');
+    }
+  }, {
+    key: 'setOnSimulateState',
+    value: function setOnSimulateState() {
 
-  HTMLControl.setOnLoadEndState = function setOnLoadEndState() {
-
-    loading.overlay.classList.add('hide');
-  };
-
-  HTMLControl.setOnSimulateState = function setOnSimulateState() {
-
-    controls.simulate.disabled = true;
-    controls.slope.disabled = true;
-    controls.reset.disabled = false;
-  };
-
+      controls.simulate.disabled = true;
+      controls.slope.disabled = true;
+      controls.reset.disabled = false;
+    }
+  }]);
   return HTMLControl;
 }();
 
@@ -53707,7 +53733,7 @@ var Canvas = function () {
     this.app.scene.background = 0xf7f7f7;
     this.app.scene.fog = new Fog(0xf7f7f7, 400, 1500);
 
-    this.lighting = new LightingSetup(this.app);
+    this.lighting = new Lighting(this.app);
 
     this.loadedObjects = new Group();
     this.app.scene.add(this.loadedObjects);
@@ -53721,57 +53747,63 @@ var Canvas = function () {
     this.addGround();
   }
 
-  Canvas.prototype.initShadows = function initShadows() {
+  createClass(Canvas, [{
+    key: 'initShadows',
+    value: function initShadows() {
 
-    this.app.renderer.shadowMap.enabled = true;
-    this.app.renderer.shadowMap.type = PCFShadowMap;
-    // PCFSoftShadowMap, PCFShadowMap
-  };
-
-  Canvas.prototype.initCamera = function initCamera() {
-
-    this.app.camera.far = 1500;
-    this.app.camera.fov = 30;
-    this.app.camera.position.set(250, 120, 200);
-    this.app.camera.updateProjectionMatrix();
-  };
-
-  Canvas.prototype.initControls = function initControls() {
-
-    this.app.controls.minPolarAngle = 0;
-    this.app.controls.maxPolarAngle = Math.PI * 0.45;
-
-    this.app.controls.minDistance = 10;
-    this.app.controls.maxDistance = 500;
-
-    // How far you can orbit horizontally, upper and lower limits.
-    // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
-    this.app.controls.minAzimuthAngle = -Math.PI * 0.65; // radians
-    this.app.controls.maxAzimuthAngle = Math.PI * 0.75; // radians
-  };
-
-  Canvas.prototype.addGround = function addGround() {
-    var geometry = new PlaneBufferGeometry(20000, 20000);
-    var material = new MeshPhongMaterial({ shininess: 0.1 });
-    var ground = new Mesh(geometry, material);
-    ground.position.set(0, -2, 0);
-    ground.rotation.x = -Math.PI / 2;
-    this.app.scene.add(ground);
-  };
-
-  Canvas.prototype.addObjectToScene = function addObjectToScene(object) {
-
-    if (object === undefined) {
-
-      console.error('Oops! An unspecified error occurred :(');
-      return;
+      this.app.renderer.shadowMap.enabled = true;
+      this.app.renderer.shadowMap.type = PCFShadowMap;
+      // PCFSoftShadowMap, PCFShadowMap
     }
-    this.loadedObjects.add(object);
+  }, {
+    key: 'initCamera',
+    value: function initCamera() {
 
-    // fit camera to all loaded objects
-    this.app.fitCameraToObject(this.loadedObjects);
-  };
+      this.app.camera.far = 1500;
+      this.app.camera.fov = 30;
+      this.app.camera.position.set(250, 120, 200);
+      this.app.camera.updateProjectionMatrix();
+    }
+  }, {
+    key: 'initControls',
+    value: function initControls() {
 
+      this.app.controls.minPolarAngle = 0;
+      this.app.controls.maxPolarAngle = Math.PI * 0.45;
+
+      this.app.controls.minDistance = 10;
+      this.app.controls.maxDistance = 500;
+
+      // How far you can orbit horizontally, upper and lower limits.
+      // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
+      this.app.controls.minAzimuthAngle = -Math.PI * 0.65; // radians
+      this.app.controls.maxAzimuthAngle = Math.PI * 0.75; // radians
+    }
+  }, {
+    key: 'addGround',
+    value: function addGround() {
+      var geometry = new PlaneBufferGeometry(20000, 20000);
+      var material = new MeshPhongMaterial({ shininess: 0.1 });
+      var ground = new Mesh(geometry, material);
+      ground.position.set(0, -2, 0);
+      ground.rotation.x = -Math.PI / 2;
+      this.app.scene.add(ground);
+    }
+  }, {
+    key: 'addObjectToScene',
+    value: function addObjectToScene(object) {
+
+      if (object === undefined) {
+
+        console.error('Oops! An unspecified error occurred :(');
+        return;
+      }
+      this.loadedObjects.add(object);
+
+      // fit camera to all loaded objects
+      this.app.fitCameraToObject(this.loadedObjects);
+    }
+  }]);
   return Canvas;
 }();
 
@@ -54036,7 +54068,7 @@ var NURBSUtils = {
  
  returns the span
  */
-	findSpan: function (p, u, U) {
+	findSpan: function findSpan(p, u, U) {
 
 		var n = U.length - p - 1;
 
@@ -54080,7 +54112,7 @@ var NURBSUtils = {
  
  returns array[p+1] with basis functions values.
  */
-	calcBasisFunctions: function (span, u, p, U) {
+	calcBasisFunctions: function calcBasisFunctions(span, u, p, U) {
 
 		var N = [];
 		var left = [];
@@ -54118,7 +54150,7 @@ var NURBSUtils = {
  u : parametric point
  	returns point for given u
  */
-	calcBSplinePoint: function (p, U, P, u) {
+	calcBSplinePoint: function calcBSplinePoint(p, U, P, u) {
 
 		var span = this.findSpan(p, u, U);
 		var N = this.calcBasisFunctions(span, u, p, U);
@@ -54147,7 +54179,7 @@ var NURBSUtils = {
  U    : knot vector
  	returns array[n+1][p+1] with basis functions derivatives
  */
-	calcBasisFunctionDerivatives: function (span, u, p, n, U) {
+	calcBasisFunctionDerivatives: function calcBasisFunctionDerivatives(span, u, p, n, U) {
 
 		var zeroArr = [];
 		for (var i = 0; i <= p; ++i) {
@@ -54259,7 +54291,7 @@ var NURBSUtils = {
  	nd : number of derivatives
  		returns array[d+1] with derivatives
  	*/
-	calcBSplineDerivatives: function (p, U, P, u, nd) {
+	calcBSplineDerivatives: function calcBSplineDerivatives(p, U, P, u, nd) {
 
 		var du = nd < p ? nd : p;
 		var CK = [];
@@ -54302,7 +54334,7 @@ var NURBSUtils = {
  Calculate "K over I"
  	returns k!/(i!(k-i)!)
  */
-	calcKoverI: function (k, i) {
+	calcKoverI: function calcKoverI(k, i) {
 
 		var nom = 1;
 
@@ -54331,7 +54363,7 @@ var NURBSUtils = {
  	Pders : result of function calcBSplineDerivatives
  	returns array with derivatives for rational curve.
  */
-	calcRationalCurveDerivatives: function (Pders) {
+	calcRationalCurveDerivatives: function calcRationalCurveDerivatives(Pders) {
 
 		var nd = Pders.length;
 		var Aders = [];
@@ -54370,7 +54402,7 @@ var NURBSUtils = {
  nd : number of derivatives
  	returns array with derivatives.
  */
-	calcNURBSDerivatives: function (p, U, P, u, nd) {
+	calcNURBSDerivatives: function calcNURBSDerivatives(p, U, P, u, nd) {
 
 		var Pders = this.calcBSplineDerivatives(p, U, P, u, nd);
 		return this.calcRationalCurveDerivatives(Pders);
@@ -54385,7 +54417,7 @@ var NURBSUtils = {
  u, v   : parametric values
  	returns point for given (u, v)
  */
-	calcSurfacePoint: function (p, q, U, V, P, u, v) {
+	calcSurfacePoint: function calcSurfacePoint(p, q, U, V, P, u, v) {
 
 		var uspan = this.findSpan(p, u, U);
 		var vspan = this.findSpan(q, v, V);
@@ -54481,49 +54513,43 @@ NURBSCurve.prototype.getTangent = function (t) {
 };
 
 /**
-* @author Kyle-Larson https://github.com/Kyle-Larson
-* @author Takahiro https://github.com/takahirox
-*
-* Loader loads FBX file and generates Group representing FBX scene.
-* Requires FBX file to be >= 7.0 and in ASCII or to be any version in Binary format.
-*
-* Supports:
-* 	Mesh Generation (Positional Data)
-* 	Normal Data (Per Vertex Drawing Instance)
-*  UV Data (Per Vertex Drawing Instance)
-*  Skinning
-*  Animation
+ * @author Kyle-Larson https://github.com/Kyle-Larson
+ * @author Takahiro https://github.com/takahirox
+ *
+ * Loader loads FBX file and generates Group representing FBX scene.
+ * Requires FBX file to be >= 7.0 and in ASCII or to be any version in Binary format.
+ *
+ * Supports:
+ * 	Mesh Generation (Positional Data)
+ * 	Normal Data (Per Vertex Drawing Instance)
+ *	UV Data (Per Vertex Drawing Instance)
+*	Skinning
+*	Animation
 * 	- Separated Animations based on stacks.
 * 	- Skeletal & Non-Skeletal Animations
-*  NURBS (Open, Closed and Periodic forms)
+*	NURBS (Open, Closed and Periodic forms)
 *
 * Needs Support:
 * 	Indexed Buffers
 * 	PreRotation support.
+*	Euler rotation order
+*
+* FBX format references:
+* 	https://wiki.blender.org/index.php/User:Mont29/Foundation/FBX_File_Structure
+*
+* 	Binary format specification:
+*		https://code.blender.org/2013/08/fbx-binary-file-format-specification/
+*		https://wiki.rogiken.org/specifications/file-format/fbx/ (more detail but Japanese)
 */
 
-/**
-  * Generates a loader for loading FBX files from URL and parsing into
-  * a THREE.Group.
-  * @param {THREE.LoadingManager} manager - Loading Manager for loader to use.
-  */
 function FBXLoader(manager) {
 
   this.manager = manager !== undefined ? manager : DefaultLoadingManager;
-}
+};
 
 Object.assign(FBXLoader.prototype, {
 
-  /**
-    * Loads an ASCII/Binary FBX file from URL and parses into a THREE.Group.
-    * THREE.Group will have an animations property of AnimationClips
-    * of the different animations exported with the FBX.
-    * @param {string} url - URL of the FBX file.
-    * @param {function(THREE.Group):void} onLoad - Callback for when FBX file is loaded and parsed.
-    * @param {function(ProgressEvent):void} onProgress - Callback fired periodically when file is being retrieved from server.
-    * @param {function(Event):void} onError - Callback fired when error occurs (Currently only with retrieving file, not with parsing errors).
-    */
-  load: function (url, onLoad, onProgress, onError) {
+  load: function load(url, onLoad, onProgress, onError) {
 
     var self = this;
 
@@ -54536,7 +54562,6 @@ Object.assign(FBXLoader.prototype, {
       try {
 
         var scene = self.parse(buffer, resourceDirectory);
-
         onLoad(scene);
       } catch (error) {
 
@@ -54550,18 +54575,9 @@ Object.assign(FBXLoader.prototype, {
     }, onProgress, onError);
   },
 
+  parse: function parse(FBXBuffer, resourceDirectory) {
 
-  /**
-    * Parses an ASCII/Binary FBX file and returns a THREE.Group.
-    * THREE.Group will have an animations property of AnimationClips
-    * of the different animations within the FBX file.
-    * @param {ArrayBuffer} FBXBuffer - Contents of FBX file to parse.
-    * @param {string} resourceDirectory - Directory to load external assets (e.g. textures ) from.
-    * @returns {THREE.Group}
-    */
-  parse: function (FBXBuffer, resourceDirectory) {
-
-    var FBXTree = void 0;
+    var FBXTree;
 
     if (isFbxFormatBinary(FBXBuffer)) {
 
@@ -54595,25 +54611,17 @@ Object.assign(FBXLoader.prototype, {
 
     return sceneGraph;
   }
+
 });
 
-/**
-  * Parses map of relationships between objects.
-  * @param {{Connections: { properties: { connections: [number, number, string][]}}}} FBXTree
-  * @returns {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
-  */
+// Parses FBXTree.Connections which holds parent-child connections between objects (e.g. material -> texture, model->geometry )
+// and details the connection type
 function parseConnections(FBXTree) {
 
-  /**
-    * @type {Map<number, { parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>}
-    */
   var connectionMap = new Map();
 
   if ('Connections' in FBXTree) {
 
-    /**
-      * @type {[number, number, string][]}
-      */
     var connectionArray = FBXTree.Connections.properties.connections;
     for (var connectionArrayIndex = 0, connectionArrayLength = connectionArray.length; connectionArrayIndex < connectionArrayLength; ++connectionArrayIndex) {
 
@@ -54646,16 +54654,13 @@ function parseConnections(FBXTree) {
   return connectionMap;
 }
 
-/**
-  * Parses map of images referenced in FBXTree.
-  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
-  * @returns {Map<number, string(image blob/data URL)>}
-  */
+// Parses map of images referenced in FBXTree.Objects.subNodes.Video
+// Images can either be referenced externally or embedded in the file
+// These images are connected to textures in FBXTree.Objects.subNodes.Textures
+// via FBXTree.Connections. Note that images can be duplicated here, in which case only one
+// will will have a .Content field
 function parseImages(FBXTree) {
 
-  /**
-    * @type {Map<number, string(image blob/data URL)>}
-    */
   var imageMap = new Map();
 
   if ('Video' in FBXTree.Objects.subNodes) {
@@ -54678,17 +54683,14 @@ function parseImages(FBXTree) {
   return imageMap;
 }
 
-/**
-  * @param {videoNode} videoNode - Node to get texture image information from.
-  * @returns {string} - image blob/data URL
-  */
+// Parse embedded image data in FBXTree.Video.properties.Content
 function parseImage(videoNode) {
 
   var content = videoNode.properties.Content;
   var fileName = videoNode.properties.RelativeFilename || videoNode.properties.Filename;
   var extension = fileName.slice(fileName.lastIndexOf('.') + 1).toLowerCase();
 
-  var type = void 0;
+  var type;
 
   switch (extension) {
 
@@ -54698,6 +54700,7 @@ function parseImage(videoNode) {
       break;
 
     case 'jpg':
+    case 'jpeg':
 
       type = 'image/jpeg';
       break;
@@ -54714,7 +54717,7 @@ function parseImage(videoNode) {
 
     default:
 
-      console.warn('FBXLoader: No support image type ' + extension);
+      console.warn('FBXLoader: Image type "' + extension + '" is not supported.');
       return;
 
   }
@@ -54722,25 +54725,18 @@ function parseImage(videoNode) {
   if (typeof content === 'string') {
 
     return 'data:' + type + ';base64,' + content;
-  }
+  } else {
 
-  var array = new Uint8Array(content);
-  return window.URL.createObjectURL(new Blob([array], { type: type }));
+    var array = new Uint8Array(content);
+    return window.URL.createObjectURL(new Blob([array], { type: type }));
+  }
 }
 
-/**
-  * Parses map of textures referenced in FBXTree.
-  * @param {{Objects: {subNodes: {Texture: Object.<string, FBXTextureNode>}}}} FBXTree
-  * @param {THREE.TextureLoader} loader
-  * @param {Map<number, string(image blob/data URL)>} imageMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {Map<number, THREE.Texture>}
-  */
+// Parse nodes in FBXTree.Objects.subNodes.Texture
+// These contain details such as UV scaling, cropping, rotation etc and are connected
+// to images in FBXTree.Objects.subNodes.Video
 function parseTextures(FBXTree, loader, imageMap, connections) {
 
-  /**
-    * @type {Map<number, THREE.Texture>}
-    */
   var textureMap = new Map();
 
   if ('Texture' in FBXTree.Objects.subNodes) {
@@ -54756,20 +54752,14 @@ function parseTextures(FBXTree, loader, imageMap, connections) {
   return textureMap;
 }
 
-/**
-  * @param {textureNode} textureNode - Node to get texture information from.
-  * @param {THREE.TextureLoader} loader
-  * @param {Map<number, string(image blob/data URL)>} imageMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {THREE.Texture}
-  */
+// Parse individual node in FBXTree.Objects.subNodes.Texture
 function parseTexture(textureNode, loader, imageMap, connections) {
 
   var FBX_ID = textureNode.id;
 
-  var name = textureNode.name;
+  var name = textureNode.attrName;
 
-  var fileName = void 0;
+  var fileName;
 
   var filePath = textureNode.properties.FileName;
   var relativeFilePath = textureNode.properties.RelativeFilename;
@@ -54805,9 +54795,6 @@ function parseTexture(textureNode, loader, imageMap, connections) {
     loader.setPath(undefined);
   }
 
-  /**
-    * @type {THREE.Texture}
-    */
   var texture = loader.load(fileName);
   texture.name = name;
   texture.FBX_ID = FBX_ID;
@@ -54824,18 +54811,20 @@ function parseTexture(textureNode, loader, imageMap, connections) {
   texture.wrapS = valueU === 0 ? RepeatWrapping : ClampToEdgeWrapping;
   texture.wrapT = valueV === 0 ? RepeatWrapping : ClampToEdgeWrapping;
 
+  if ('Scaling' in textureNode.properties) {
+
+    var values = textureNode.properties.Scaling.value;
+
+    texture.repeat.x = values[0];
+    texture.repeat.y = values[1];
+  }
+
   loader.setPath(currentPath);
 
   return texture;
 }
 
-/**
-  * Parses map of Material information.
-  * @param {{Objects: {subNodes: {Material: Object.<number, FBXMaterialNode>}}}} FBXTree
-  * @param {Map<number, THREE.Texture>} textureMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {Map<number, THREE.Material>}
-  */
+// Parse nodes in FBXTree.Objects.subNodes.Material
 function parseMaterials(FBXTree, textureMap, connections) {
 
   var materialMap = new Map();
@@ -54853,34 +54842,29 @@ function parseMaterials(FBXTree, textureMap, connections) {
   return materialMap;
 }
 
-/**
-  * Takes information from Material node and returns a generated THREE.Material
-  * @param {FBXMaterialNode} materialNode
-  * @param {Map<number, THREE.Texture>} textureMap
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {THREE.Material}
-  */
+// Parse single node in FBXTree.Objects.subNodes.Material
+// Materials are connected to texture maps in FBXTree.Objects.subNodes.Textures
+// FBX format currently only supports Lambert and Phong shading models
 function parseMaterial(materialNode, textureMap, connections) {
 
   var FBX_ID = materialNode.id;
   var name = materialNode.attrName;
   var type = materialNode.properties.ShadingModel;
 
-  // Case where FBXs wrap shading model in property object.
-  if (typeof type === 'object') {
+  //Case where FBX wraps shading model in property object.
+  if ((typeof type === 'undefined' ? 'undefined' : _typeof(type)) === 'object') {
 
     type = type.value;
   }
 
-  // Seems like FBX can include unused materials which don't have any connections.
-  // Ignores them so far.
+  // Ignore unused materials which don't have any connections.
   if (!connections.has(FBX_ID)) return null;
 
   var children = connections.get(FBX_ID).children;
 
   var parameters = parseParameters(materialNode.properties, textureMap, children);
 
-  var material = void 0;
+  var material;
 
   switch (type.toLowerCase()) {
 
@@ -54891,8 +54875,8 @@ function parseMaterial(materialNode, textureMap, connections) {
       material = new MeshLambertMaterial();
       break;
     default:
-      console.warn('THREE.FBXLoader: No implementation given for material type %s in FBXLoader.js. Defaulting to standard material.', type);
-      material = new MeshStandardMaterial({ color: 0x3300ff });
+      console.warn('THREE.FBXLoader: unknown material type "%s". Defaulting to MeshPhongMaterial.', type);
+      material = new MeshPhongMaterial({ color: 0x3300ff });
       break;
 
   }
@@ -54903,29 +54887,27 @@ function parseMaterial(materialNode, textureMap, connections) {
   return material;
 }
 
-/**
-  * @typedef {{Diffuse: FBXVector3, Specular: FBXVector3, Shininess: FBXValue, Emissive: FBXVector3, EmissiveFactor: FBXValue, Opacity: FBXValue}} FBXMaterialProperties
-  */
-/**
-  * @typedef {{color: THREE.Color=, specular: THREE.Color=, shininess: number=, emissive: THREE.Color=, emissiveIntensity: number=, opacity: number=, transparent: boolean=, map: THREE.Texture=}} THREEMaterialParameterPack
-  */
-/**
-  * @param {FBXMaterialProperties} properties
-  * @param {Map<number, THREE.Texture>} textureMap
-  * @param {{ID: number, relationship: string}[]} childrenRelationships
-  * @returns {THREEMaterialParameterPack}
-  */
+// Parse FBX material and return parameters suitable for a three.js material
+// Also parse the texture map and return any textures associated with the material
 function parseParameters(properties, textureMap, childrenRelationships) {
 
   var parameters = {};
 
   if (properties.BumpFactor) {
 
-    parameters.bumpScale = parseFloat(properties.BumpFactor.value);
+    parameters.bumpScale = properties.BumpFactor.value;
   }
   if (properties.Diffuse) {
 
     parameters.color = parseColor(properties.Diffuse);
+  }
+  if (properties.DisplacementFactor) {
+
+    parameters.displacementScale = properties.DisplacementFactor.value;
+  }
+  if (properties.ReflectionFactor) {
+
+    parameters.reflectivity = properties.ReflectionFactor.value;
   }
   if (properties.Specular) {
 
@@ -54945,7 +54927,7 @@ function parseParameters(properties, textureMap, childrenRelationships) {
   }
   if (properties.Opacity) {
 
-    parameters.opacity = properties.Opacity.value;
+    parameters.opacity = parseFloat(properties.Opacity.value);
   }
   if (parameters.opacity < 1.0) {
 
@@ -54960,27 +54942,46 @@ function parseParameters(properties, textureMap, childrenRelationships) {
 
     switch (type) {
 
-      case 'DiffuseColor':
-      case ' "DiffuseColor':
-        parameters.map = textureMap.get(relationship.ID);
-        break;
-
       case 'Bump':
-      case ' "Bump':
         parameters.bumpMap = textureMap.get(relationship.ID);
         break;
 
+      case 'DiffuseColor':
+        parameters.map = textureMap.get(relationship.ID);
+        break;
+
+      case 'DisplacementColor':
+        parameters.displacementMap = textureMap.get(relationship.ID);
+        break;
+
+      case 'EmissiveColor':
+        parameters.emissiveMap = textureMap.get(relationship.ID);
+        break;
+
       case 'NormalMap':
-      case ' "NormalMap':
         parameters.normalMap = textureMap.get(relationship.ID);
         break;
 
+      case 'ReflectionColor':
+        parameters.envMap = textureMap.get(relationship.ID);
+        parameters.envMap.mapping = EquirectangularReflectionMapping;
+        break;
+
+      case 'SpecularColor':
+        parameters.specularMap = textureMap.get(relationship.ID);
+        break;
+
+      case 'TransparentColor':
+        parameters.alphaMap = textureMap.get(relationship.ID);
+        parameters.transparent = true;
+        break;
+
       case 'AmbientColor':
-      case 'EmissiveColor':
-      case ' "AmbientColor':
-      case ' "EmissiveColor':
+      case 'ShininessExponent': // AKA glossiness map
+      case 'SpecularFactor': // AKA specularLevel
+      case 'VectorDisplacementColor': // NOTE: Seems to be a copy of DisplacementColor
       default:
-        console.warn('THREE.FBXLoader: Unknown texture application of type %s, skipping texture.', type);
+        console.warn('THREE.FBXLoader: %s map is not supported in three.js, skipping texture.', type);
         break;
 
     }
@@ -54989,12 +54990,9 @@ function parseParameters(properties, textureMap, childrenRelationships) {
   return parameters;
 }
 
-/**
-  * Generates map of Skeleton-like objects for use later when generating and binding skeletons.
-  * @param {{Objects: {subNodes: {Deformer: Object.<number, FBXSubDeformerNode>}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @returns {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>}
-  */
+// Parse nodes in FBXTree.Objects.subNodes.Deformer
+// Deformer node can contain skinning or Vertex Cache animation data, however only skinning is supported here
+// Generates map of Skeleton-like objects for use later when generating and binding skeletons.
 function parseDeformers(FBXTree, connections) {
 
   var deformers = {};
@@ -55021,12 +55019,9 @@ function parseDeformers(FBXTree, connections) {
   return deformers;
 }
 
-/**
-  * Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections and an object containing SubDeformer nodes.
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} connections
-  * @param {Object.<number, FBXSubDeformerNode>} DeformerNodes
-  * @returns {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}}
-  */
+// Parse single nodes in FBXTree.Objects.subNodes.Deformer
+// Generates a "Skeleton Representation" of FBX nodes based on an FBX Skin Deformer's connections
+// and an object containing SubDeformer nodes.
 function parseSkeleton(connections, DeformerNodes) {
 
   var subDeformers = {};
@@ -55043,15 +55038,15 @@ function parseSkeleton(connections, DeformerNodes) {
       index: i,
       indices: [],
       weights: [],
-      transform: parseMatrixArray(subDeformerNode.subNodes.Transform.properties.a),
-      transformLink: parseMatrixArray(subDeformerNode.subNodes.TransformLink.properties.a),
+      transform: new Matrix4().fromArray(subDeformerNode.subNodes.Transform.properties.a),
+      transformLink: new Matrix4().fromArray(subDeformerNode.subNodes.TransformLink.properties.a),
       linkMode: subDeformerNode.properties.Mode
     };
 
     if ('Indexes' in subDeformerNode.subNodes) {
 
-      subDeformer.indices = parseIntArray(subDeformerNode.subNodes.Indexes.properties.a);
-      subDeformer.weights = parseFloatArray(subDeformerNode.subNodes.Weights.properties.a);
+      subDeformer.indices = subDeformerNode.subNodes.Indexes.properties.a;
+      subDeformer.weights = subDeformerNode.subNodes.Weights.properties.a;
     }
 
     subDeformers[child.ID] = subDeformer;
@@ -55063,13 +55058,7 @@ function parseSkeleton(connections, DeformerNodes) {
   };
 }
 
-/**
-  * Generates Buffer geometries from geometry information in FBXTree, and generates map of THREE.BufferGeometries
-  * @param {{Objects: {subNodes: {Geometry: Object.<number, FBXGeometryNode}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
-  * @returns {Map<number, THREE.BufferGeometry>}
-  */
+// Parse nodes in FBXTree.Objects.subNodes.Geometry
 function parseGeometries(FBXTree, connections, deformers) {
 
   var geometryMap = new Map();
@@ -55089,13 +55078,7 @@ function parseGeometries(FBXTree, connections, deformers) {
   return geometryMap;
 }
 
-/**
-  * Generates BufferGeometry from FBXGeometryNode.
-  * @param {FBXGeometryNode} geometryNode
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers
-  * @returns {THREE.BufferGeometry}
-  */
+// Parse single node in FBXTree.Objects.subNodes.Geometry
 function parseGeometry(geometryNode, relationships, deformers) {
 
   switch (geometryNode.attrType) {
@@ -55111,13 +55094,7 @@ function parseGeometry(geometryNode, relationships, deformers) {
   }
 }
 
-/**
-  * Specialty function for parsing Mesh based Geometry Nodes.
-  * @param {FBXGeometryNode} geometryNode
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships - Object representing relationships between specific geometry node and other nodes.
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}>} deformers - Map object of deformers and subDeformers by ID.
-  * @returns {THREE.BufferGeometry}
-  */
+// Parse single node mesh geometry in FBXTree.Objects.subNodes.Geometry
 function parseMeshGeometry(geometryNode, relationships, deformers) {
 
   for (var i = 0; i < relationships.children.length; ++i) {
@@ -55129,20 +55106,32 @@ function parseMeshGeometry(geometryNode, relationships, deformers) {
   return genGeometry(geometryNode, deformer);
 }
 
-/**
-  * @param {{map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[]}} deformer - Skeleton representation for geometry instance.
-  * @returns {THREE.BufferGeometry}
-  */
+// Generate a THREE.BufferGeometry from a node in FBXTree.Objects.subNodes.Geometry
 function genGeometry(geometryNode, deformer) {
-
-  var geometry = new Geometry$1();
 
   var subNodes = geometryNode.subNodes;
 
-  // First, each index is going to be its own vertex.
+  var vertexPositions = subNodes.Vertices.properties.a;
+  var vertexIndices = subNodes.PolygonVertexIndex.properties.a;
 
-  var vertexBuffer = parseFloatArray(subNodes.Vertices.properties.a);
-  var indexBuffer = parseIntArray(subNodes.PolygonVertexIndex.properties.a);
+  // create arrays to hold the final data used to build the buffergeometry
+  var vertexBuffer = [];
+  var normalBuffer = [];
+  var colorsBuffer = [];
+  var uvsBuffer = [];
+  var materialIndexBuffer = [];
+  var vertexWeightsBuffer = [];
+  var weightsIndicesBuffer = [];
+
+  if (subNodes.LayerElementColor) {
+
+    var colorInfo = getColors(subNodes.LayerElementColor[0]);
+  }
+
+  if (subNodes.LayerElementMaterial) {
+
+    var materialInfo = getMaterials(subNodes.LayerElementMaterial[0]);
+  }
 
   if (subNodes.LayerElementNormal) {
 
@@ -55158,16 +55147,6 @@ function genGeometry(geometryNode, deformer) {
       uvInfo.push(getUVs(subNodes.LayerElementUV[i]));
       i++;
     }
-  }
-
-  if (subNodes.LayerElementColor) {
-
-    var colorInfo = getColors(subNodes.LayerElementColor[0]);
-  }
-
-  if (subNodes.LayerElementMaterial) {
-
-    var materialInfo = getMaterials(subNodes.LayerElementMaterial[0]);
   }
 
   var weightTable = {};
@@ -55196,28 +55175,49 @@ function genGeometry(geometryNode, deformer) {
     }
   }
 
-  var faceVertexBuffer = [];
   var polygonIndex = 0;
+  var faceLength = 0;
   var displayedWeightsWarning = false;
 
-  for (var polygonVertexIndex = 0; polygonVertexIndex < indexBuffer.length; polygonVertexIndex++) {
+  // these will hold data for a single face
+  var vertexPositionIndexes = [];
+  var faceNormals = [];
+  var faceColors = [];
+  var faceUVs = [];
+  var faceWeights = [];
+  var faceWeightIndices = [];
 
-    var vertexIndex = indexBuffer[polygonVertexIndex];
+  for (var polygonVertexIndex = 0; polygonVertexIndex < vertexIndices.length; polygonVertexIndex++) {
+
+    var vertexIndex = vertexIndices[polygonVertexIndex];
 
     var endOfFace = false;
 
+    // Face index and vertex index arrays are combined in a single array
+    // A cube with quad faces looks like this:
+    // PolygonVertexIndex: *24 {
+    //  a: 0, 1, 3, -3, 2, 3, 5, -5, 4, 5, 7, -7, 6, 7, 1, -1, 1, 7, 5, -4, 6, 0, 2, -5
+    //  }
+    // Negative numbers mark the end of a face - first face here is 0, 1, 3, -3
+    // to find index of last vertex multiply by -1 and subtract 1: -3 * - 1 - 1 = 2
     if (vertexIndex < 0) {
 
-      vertexIndex ^= -1;
-      indexBuffer[polygonVertexIndex] = vertexIndex;
+      vertexIndex = vertexIndex ^ -1; // equivalent to ( x * -1 ) - 1
+      vertexIndices[polygonVertexIndex] = vertexIndex;
       endOfFace = true;
     }
 
-    var vertex = new Vertex$1();
     var weightIndices = [];
     var weights = [];
 
-    vertex.position.fromArray(vertexBuffer, vertexIndex * 3);
+    vertexPositionIndexes.push(vertexIndex * 3, vertexIndex * 3 + 1, vertexIndex * 3 + 2);
+
+    if (colorInfo) {
+
+      var data = getData(polygonVertexIndex, polygonIndex, vertexIndex, colorInfo);
+
+      faceColors.push(data[0], data[1], data[2]);
+    }
 
     if (deformer) {
 
@@ -55266,78 +55266,209 @@ function genGeometry(geometryNode, deformer) {
         weights = Weight;
       }
 
+      // if the weight array is shorter than 4 pad with 0s
       for (var i = weights.length; i < 4; ++i) {
 
         weights[i] = 0;
         weightIndices[i] = 0;
       }
 
-      vertex.skinWeights.fromArray(weights);
-      vertex.skinIndices.fromArray(weightIndices);
+      for (var i = 0; i < 4; ++i) {
+
+        faceWeights.push(weights[i]);
+        faceWeightIndices.push(weightIndices[i]);
+      }
     }
 
     if (normalInfo) {
 
-      vertex.normal.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, normalInfo));
+      var data = getData(polygonVertexIndex, polygonIndex, vertexIndex, normalInfo);
+
+      faceNormals.push(data[0], data[1], data[2]);
     }
 
     if (uvInfo) {
 
-      var uvTemp = new Vector2();
-
       for (var i = 0; i < uvInfo.length; i++) {
 
-        vertex.uv.push(uvTemp.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, uvInfo[i])));
+        var data = getData(polygonVertexIndex, polygonIndex, vertexIndex, uvInfo[i]);
+
+        if (faceUVs[i] === undefined) {
+
+          faceUVs[i] = [];
+        }
+
+        faceUVs[i].push(data[0], data[1]);
       }
     }
 
-    if (colorInfo) {
+    faceLength++;
 
-      vertex.color.fromArray(getData(polygonVertexIndex, polygonIndex, vertexIndex, colorInfo));
-    }
-
-    faceVertexBuffer.push(vertex);
-
+    // we have reached the end of a face - it may have 4 sides though
+    // in which case the data is split into to represent 3 sides faces
     if (endOfFace) {
 
-      var face = new Face();
-      face.genTrianglesFromVertices(faceVertexBuffer);
+      for (var i = 2; i < faceLength; i++) {
 
-      if (materialInfo !== undefined) {
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[0]]);
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[1]]);
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[2]]);
 
-        var materials = getData(polygonVertexIndex, polygonIndex, vertexIndex, materialInfo);
-        face.materialIndex = materials[0];
-      } else {
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[(i - 1) * 3]]);
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[(i - 1) * 3 + 1]]);
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[(i - 1) * 3 + 2]]);
 
-        // Seems like some models don't have materialInfo(subNodes.LayerElementMaterial).
-        // Set 0 in such a case.
-        face.materialIndex = 0;
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[i * 3]]);
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[i * 3 + 1]]);
+        vertexBuffer.push(vertexPositions[vertexPositionIndexes[i * 3 + 2]]);
       }
 
-      geometry.faces.push(face);
-      faceVertexBuffer = [];
+      if (deformer) {
+
+        for (var i = 2; i < faceLength; i++) {
+
+          vertexWeightsBuffer.push(faceWeights[0]);
+          vertexWeightsBuffer.push(faceWeights[1]);
+          vertexWeightsBuffer.push(faceWeights[2]);
+          vertexWeightsBuffer.push(faceWeights[3]);
+
+          vertexWeightsBuffer.push(faceWeights[(i - 1) * 4]);
+          vertexWeightsBuffer.push(faceWeights[(i - 1) * 4 + 1]);
+          vertexWeightsBuffer.push(faceWeights[(i - 1) * 4 + 2]);
+          vertexWeightsBuffer.push(faceWeights[(i - 1) * 4 + 3]);
+
+          vertexWeightsBuffer.push(faceWeights[i * 4]);
+          vertexWeightsBuffer.push(faceWeights[i * 4 + 1]);
+          vertexWeightsBuffer.push(faceWeights[i * 4 + 2]);
+          vertexWeightsBuffer.push(faceWeights[i * 4 + 3]);
+
+          weightsIndicesBuffer.push(faceWeightIndices[0]);
+          weightsIndicesBuffer.push(faceWeightIndices[1]);
+          weightsIndicesBuffer.push(faceWeightIndices[2]);
+          weightsIndicesBuffer.push(faceWeightIndices[3]);
+
+          weightsIndicesBuffer.push(faceWeightIndices[(i - 1) * 4]);
+          weightsIndicesBuffer.push(faceWeightIndices[(i - 1) * 4 + 1]);
+          weightsIndicesBuffer.push(faceWeightIndices[(i - 1) * 4 + 2]);
+          weightsIndicesBuffer.push(faceWeightIndices[(i - 1) * 4 + 3]);
+
+          weightsIndicesBuffer.push(faceWeightIndices[i * 4]);
+          weightsIndicesBuffer.push(faceWeightIndices[i * 4 + 1]);
+          weightsIndicesBuffer.push(faceWeightIndices[i * 4 + 2]);
+          weightsIndicesBuffer.push(faceWeightIndices[i * 4 + 3]);
+        }
+      }
+
+      if (normalInfo) {
+
+        for (var i = 2; i < faceLength; i++) {
+
+          normalBuffer.push(faceNormals[0]);
+          normalBuffer.push(faceNormals[1]);
+          normalBuffer.push(faceNormals[2]);
+
+          normalBuffer.push(faceNormals[(i - 1) * 3]);
+          normalBuffer.push(faceNormals[(i - 1) * 3 + 1]);
+          normalBuffer.push(faceNormals[(i - 1) * 3 + 2]);
+
+          normalBuffer.push(faceNormals[i * 3]);
+          normalBuffer.push(faceNormals[i * 3 + 1]);
+          normalBuffer.push(faceNormals[i * 3 + 2]);
+        }
+      }
+
+      if (uvInfo) {
+
+        for (var j = 0; j < uvInfo.length; j++) {
+
+          if (uvsBuffer[j] === undefined) uvsBuffer[j] = [];
+
+          for (var i = 2; i < faceLength; i++) {
+
+            uvsBuffer[j].push(faceUVs[j][0]);
+            uvsBuffer[j].push(faceUVs[j][1]);
+
+            uvsBuffer[j].push(faceUVs[j][(i - 1) * 2]);
+            uvsBuffer[j].push(faceUVs[j][(i - 1) * 2 + 1]);
+
+            uvsBuffer[j].push(faceUVs[j][i * 2]);
+            uvsBuffer[j].push(faceUVs[j][i * 2 + 1]);
+          }
+        }
+      }
+
+      if (colorInfo) {
+
+        for (var i = 2; i < faceLength; i++) {
+
+          colorsBuffer.push(faceColors[0]);
+          colorsBuffer.push(faceColors[1]);
+          colorsBuffer.push(faceColors[2]);
+
+          colorsBuffer.push(faceColors[(i - 1) * 3]);
+          colorsBuffer.push(faceColors[(i - 1) * 3 + 1]);
+          colorsBuffer.push(faceColors[(i - 1) * 3 + 2]);
+
+          colorsBuffer.push(faceColors[i * 3]);
+          colorsBuffer.push(faceColors[i * 3 + 1]);
+          colorsBuffer.push(faceColors[i * 3 + 2]);
+        }
+      }
+
+      if (materialInfo && materialInfo.mappingType !== 'AllSame') {
+
+        var materialIndex = getData(polygonVertexIndex, polygonIndex, vertexIndex, materialInfo)[0];
+
+        for (var i = 2; i < faceLength; i++) {
+
+          materialIndexBuffer.push(materialIndex);
+          materialIndexBuffer.push(materialIndex);
+          materialIndexBuffer.push(materialIndex);
+        }
+      }
+
       polygonIndex++;
 
       endOfFace = false;
+      faceLength = 0;
+
+      // reset arrays for the next face
+      vertexPositionIndexes = [];
+      faceNormals = [];
+      faceColors = [];
+      faceUVs = [];
+      faceWeights = [];
+      faceWeightIndices = [];
     }
   }
 
-  /**
-    * @type {{vertexBuffer: number[], normalBuffer: number[], uvBuffer: number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-    */
-  var bufferInfo = geometry.flattenToBuffers();
-
   var geo = new BufferGeometry();
   geo.name = geometryNode.name;
-  geo.addAttribute('position', new Float32BufferAttribute(bufferInfo.vertexBuffer, 3));
 
-  if (bufferInfo.normalBuffer.length > 0) {
+  geo.addAttribute('position', new Float32BufferAttribute(vertexBuffer, 3));
 
-    geo.addAttribute('normal', new Float32BufferAttribute(bufferInfo.normalBuffer, 3));
+  if (colorsBuffer.length > 0) {
+
+    geo.addAttribute('color', new Float32BufferAttribute(colorsBuffer, 3));
   }
-  if (bufferInfo.uvBuffers.length > 0) {
 
-    for (var i = 0; i < bufferInfo.uvBuffers.length; i++) {
+  if (deformer) {
+
+    geo.addAttribute('skinIndex', new Float32BufferAttribute(weightsIndicesBuffer, 4));
+
+    geo.addAttribute('skinWeight', new Float32BufferAttribute(vertexWeightsBuffer, 4));
+
+    // used later to bind the skeleton to the model
+    geo.FBX_Deformer = deformer;
+  }
+
+  if (normalBuffer.length > 0) {
+
+    geo.addAttribute('normal', new Float32BufferAttribute(normalBuffer, 3));
+  }
+  if (uvsBuffer.length > 0) {
+
+    for (var i = 0; i < uvsBuffer.length; i++) {
 
       var name = 'uv' + (i + 1).toString();
       if (i == 0) {
@@ -55345,63 +55476,65 @@ function genGeometry(geometryNode, deformer) {
         name = 'uv';
       }
 
-      geo.addAttribute(name, new Float32BufferAttribute(bufferInfo.uvBuffers[i], 2));
+      geo.addAttribute(name, new Float32BufferAttribute(uvsBuffer[i], 2));
     }
   }
 
-  if (subNodes.LayerElementColor) {
+  if (materialInfo && materialInfo.mappingType !== 'AllSame') {
 
-    geo.addAttribute('color', new Float32BufferAttribute(bufferInfo.colorBuffer, 3));
-  }
+    // Convert the material indices of each vertex into rendering groups on the geometry.
+    var prevMaterialIndex = materialIndexBuffer[0];
+    var startIndex = 0;
 
-  if (deformer) {
+    for (var i = 0; i < materialIndexBuffer.length; ++i) {
 
-    geo.addAttribute('skinIndex', new Float32BufferAttribute(bufferInfo.skinIndexBuffer, 4));
+      if (materialIndexBuffer[i] !== prevMaterialIndex) {
 
-    geo.addAttribute('skinWeight', new Float32BufferAttribute(bufferInfo.skinWeightBuffer, 4));
+        geo.addGroup(startIndex, i - startIndex, prevMaterialIndex);
 
-    geo.FBX_Deformer = deformer;
-  }
+        prevMaterialIndex = materialIndexBuffer[i];
+        startIndex = i;
+      }
+    }
 
-  // Convert the material indices of each vertex into rendering groups on the geometry.
+    // the loop above doesn't add the last group, do that here.
+    if (geo.groups.length > 0) {
 
-  var materialIndexBuffer = bufferInfo.materialIndexBuffer;
-  var prevMaterialIndex = materialIndexBuffer[0];
-  var startIndex = 0;
+      var lastGroup = geo.groups[geo.groups.length - 1];
+      var lastIndex = lastGroup.start + lastGroup.count;
 
-  for (var i = 0; i < materialIndexBuffer.length; ++i) {
+      if (lastIndex !== materialIndexBuffer.length) {
 
-    if (materialIndexBuffer[i] !== prevMaterialIndex) {
+        geo.addGroup(lastIndex, materialIndexBuffer.length - lastIndex, prevMaterialIndex);
+      }
+    }
 
-      geo.addGroup(startIndex, i - startIndex, prevMaterialIndex);
+    // case where there are multiple materials but the whole geometry is only
+    // using one of them
+    if (geo.groups.length === 0) {
 
-      prevMaterialIndex = materialIndexBuffer[i];
-      startIndex = i;
+      geo.addGroup(0, materialIndexBuffer.length, materialIndexBuffer[0]);
     }
   }
 
   return geo;
 }
 
-/**
-  * Parses normal information for geometry.
-  * @param {FBXGeometryNode} geometryNode
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+// Parse normal from FBXTree.Objects.subNodes.Geometry.subNodes.LayerElementNormal if it exists
 function getNormals(NormalNode) {
 
   var mappingType = NormalNode.properties.MappingInformationType;
   var referenceType = NormalNode.properties.ReferenceInformationType;
-  var buffer = parseFloatArray(NormalNode.subNodes.Normals.properties.a);
+  var buffer = NormalNode.subNodes.Normals.properties.a;
   var indexBuffer = [];
   if (referenceType === 'IndexToDirect') {
 
     if ('NormalIndex' in NormalNode.subNodes) {
 
-      indexBuffer = parseIntArray(NormalNode.subNodes.NormalIndex.properties.a);
+      indexBuffer = NormalNode.subNodes.NormalIndex.properties.a;
     } else if ('NormalsIndex' in NormalNode.subNodes) {
 
-      indexBuffer = parseIntArray(NormalNode.subNodes.NormalsIndex.properties.a);
+      indexBuffer = NormalNode.subNodes.NormalsIndex.properties.a;
     }
   }
 
@@ -55414,20 +55547,16 @@ function getNormals(NormalNode) {
   };
 }
 
-/**
-  * Parses UV information for geometry.
-  * @param {FBXGeometryNode} geometryNode
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+// Parse UVs from FBXTree.Objects.subNodes.Geometry.subNodes.LayerElementUV if it exists
 function getUVs(UVNode) {
 
   var mappingType = UVNode.properties.MappingInformationType;
   var referenceType = UVNode.properties.ReferenceInformationType;
-  var buffer = parseFloatArray(UVNode.subNodes.UV.properties.a);
+  var buffer = UVNode.subNodes.UV.properties.a;
   var indexBuffer = [];
   if (referenceType === 'IndexToDirect') {
 
-    indexBuffer = parseIntArray(UVNode.subNodes.UVIndex.properties.a);
+    indexBuffer = UVNode.subNodes.UVIndex.properties.a;
   }
 
   return {
@@ -55439,20 +55568,16 @@ function getUVs(UVNode) {
   };
 }
 
-/**
-  * Parses Vertex Color information for geometry.
-  * @param {FBXGeometryNode} geometryNode
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+// Parse Vertex Colors from FBXTree.Objects.subNodes.Geometry.subNodes.LayerElementColor if it exists
 function getColors(ColorNode) {
 
   var mappingType = ColorNode.properties.MappingInformationType;
   var referenceType = ColorNode.properties.ReferenceInformationType;
-  var buffer = parseFloatArray(ColorNode.subNodes.Colors.properties.a);
+  var buffer = ColorNode.subNodes.Colors.properties.a;
   var indexBuffer = [];
   if (referenceType === 'IndexToDirect') {
 
-    indexBuffer = parseFloatArray(ColorNode.subNodes.ColorIndex.properties.a);
+    indexBuffer = ColorNode.subNodes.ColorIndex.properties.a;
   }
 
   return {
@@ -55464,11 +55589,7 @@ function getColors(ColorNode) {
   };
 }
 
-/**
-  * Parses material application information for geometry.
-  * @param {FBXGeometryNode}
-  * @returns {{dataSize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}}
-  */
+// Parse mapping and material data in FBXTree.Objects.subNodes.Geometry.subNodes.LayerElementMaterial if it exists
 function getMaterials(MaterialNode) {
 
   var mappingType = MaterialNode.properties.MappingInformationType;
@@ -55485,10 +55606,10 @@ function getMaterials(MaterialNode) {
     };
   }
 
-  var materialIndexBuffer = parseIntArray(MaterialNode.subNodes.Materials.properties.a);
+  var materialIndexBuffer = MaterialNode.subNodes.Materials.properties.a;
 
   // Since materials are stored as indices, there's a bit of a mismatch between FBX and what
-  // we expect.  So we create an intermediate buffer that points to the index in the buffer,
+  // we expect.So we create an intermediate buffer that points to the index in the buffer,
   // for conforming with the other functions we've written for other data.
   var materialIndices = [];
 
@@ -55506,30 +55627,18 @@ function getMaterials(MaterialNode) {
   };
 }
 
-/**
-  * Function uses the infoObject and given indices to return value array of object.
-  * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-  * @param {number} polygonIndex - Index of polygon in geometry.
-  * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-  * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-  * @returns {number[]}
-  */
-
+// Functions use the infoObject and given indices to return value array of geometry.
+// infoObject can be materialInfo, normalInfo, UVInfo or colorInfo
+// polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
+// polygonIndex - Index of polygon in geometry.
+// vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
 var dataArray = [];
 
 var GetData = {
 
   ByPolygonVertex: {
 
-    /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
-    Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    Direct: function Direct(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonVertexIndex * infoObject.dataSize;
       var to = polygonVertexIndex * infoObject.dataSize + infoObject.dataSize;
@@ -55538,16 +55647,7 @@ var GetData = {
       return slice(dataArray, infoObject.buffer, from, to);
     },
 
-
-    /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
-    IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    IndexToDirect: function IndexToDirect(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonVertexIndex];
       var from = index * infoObject.dataSize;
@@ -55556,19 +55656,12 @@ var GetData = {
       // return infoObject.buffer.slice( from, to );
       return slice(dataArray, infoObject.buffer, from, to);
     }
+
   },
 
   ByPolygon: {
 
-    /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
-    Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    Direct: function Direct(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = polygonIndex * infoObject.dataSize;
       var to = polygonIndex * infoObject.dataSize + infoObject.dataSize;
@@ -55577,16 +55670,7 @@ var GetData = {
       return slice(dataArray, infoObject.buffer, from, to);
     },
 
-
-    /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
-    IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    IndexToDirect: function IndexToDirect(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var index = infoObject.indices[polygonIndex];
       var from = index * infoObject.dataSize;
@@ -55595,10 +55679,12 @@ var GetData = {
       // return infoObject.buffer.slice( from, to );
       return slice(dataArray, infoObject.buffer, from, to);
     }
+
   },
 
   ByVertice: {
-    Direct: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+
+    Direct: function Direct(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = vertexIndex * infoObject.dataSize;
       var to = vertexIndex * infoObject.dataSize + infoObject.dataSize;
@@ -55606,19 +55692,12 @@ var GetData = {
       // return infoObject.buffer.slice( from, to );
       return slice(dataArray, infoObject.buffer, from, to);
     }
+
   },
 
   AllSame: {
 
-    /**
-      * Function uses the infoObject and given indices to return value array of object.
-      * @param {number} polygonVertexIndex - Index of vertex in draw order (which index of the index buffer refers to this vertex).
-      * @param {number} polygonIndex - Index of polygon in geometry.
-      * @param {number} vertexIndex - Index of vertex inside vertex buffer (used because some data refers to old index buffer that we don't use anymore).
-      * @param {{datasize: number, buffer: number[], indices: number[], mappingType: string, referenceType: string}} infoObject - Object containing data and how to access data.
-      * @returns {number[]}
-      */
-    IndexToDirect: function (polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
+    IndexToDirect: function IndexToDirect(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
 
       var from = infoObject.indices[0] * infoObject.dataSize;
       var to = infoObject.indices[0] * infoObject.dataSize + infoObject.dataSize;
@@ -55626,6 +55705,7 @@ var GetData = {
       // return infoObject.buffer.slice( from, to );
       return slice(dataArray, infoObject.buffer, from, to);
     }
+
   }
 
 };
@@ -55635,12 +55715,7 @@ function getData(polygonVertexIndex, polygonIndex, vertexIndex, infoObject) {
   return GetData[infoObject.mappingType][infoObject.referenceType](polygonVertexIndex, polygonIndex, vertexIndex, infoObject);
 }
 
-/**
-  * Specialty function for parsing NurbsCurve based Geometry Nodes.
-  * @param {FBXGeometryNode} geometryNode
-  * @param {{parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}} relationships
-  * @returns {THREE.BufferGeometry}
-  */
+// Generate a NurbGeometry from a node in FBXTree.Objects.subNodes.Geometry
 function parseNurbsGeometry(geometryNode) {
 
   if (NURBSCurve === undefined) {
@@ -55659,17 +55734,16 @@ function parseNurbsGeometry(geometryNode) {
 
   var degree = order - 1;
 
-  var knots = parseFloatArray(geometryNode.subNodes.KnotVector.properties.a);
+  var knots = geometryNode.subNodes.KnotVector.properties.a;
   var controlPoints = [];
-  var pointsValues = parseFloatArray(geometryNode.subNodes.Points.properties.a);
+  var pointsValues = geometryNode.subNodes.Points.properties.a;
 
   for (var i = 0, l = pointsValues.length; i < l; i += 4) {
 
     controlPoints.push(new Vector4().fromArray(pointsValues, i));
   }
 
-  var startKnot = void 0,
-      endKnot = void 0;
+  var startKnot, endKnot;
 
   if (geometryNode.properties.Form === 'Closed') {
 
@@ -55701,29 +55775,15 @@ function parseNurbsGeometry(geometryNode) {
   return geometry;
 }
 
-/**
-  * Finally generates Scene graph and Scene graph Objects.
-  * @param {{Objects: {subNodes: {Model: Object.<number, FBXModelNode>}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @param {Map<number, {map: Map<number, {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}>, array: {FBX_ID: number, indices: number[], weights: number[], transform: number[], transformLink: number[], linkMode: string}[], skeleton: THREE.Skeleton|null}>} deformers
-  * @param {Map<number, THREE.BufferGeometry>} geometryMap
-  * @param {Map<number, THREE.Material>} materialMap
-  * @returns {THREE.Group}
-  */
+// parse nodes in FBXTree.Objects.subNodes.Model and generate a THREE.Group
 function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
   var sceneGraph = new Group();
 
   var ModelNode = FBXTree.Objects.subNodes.Model;
 
-  /**
-    * @type {Array.<THREE.Object3D>}
-    */
   var modelArray = [];
 
-  /**
-    * @type {Map.<number, THREE.Object3D>}
-    */
   var modelMap = new Map();
 
   for (var nodeID in ModelNode) {
@@ -55758,12 +55818,9 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
       switch (node.attrType) {
 
+        // create a THREE.PerspectiveCamera or THREE.OrthographicCamera
         case 'Camera':
-          /* ***********
-          * Supported camera types:
-          * PerspectiveCamera
-          * OrthographicCamera
-          ************** */
+
           var cameraAttribute;
 
           for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
@@ -55784,7 +55841,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
           } else {
 
             var type = 0;
-            if (cameraAttribute.CameraProjectionType !== undefined && (cameraAttribute.CameraProjectionType.value === '1' || cameraAttribute.CameraProjectionType.value === 1)) {
+            if (cameraAttribute.CameraProjectionType !== undefined && cameraAttribute.CameraProjectionType.value === 1) {
 
               type = 1;
             }
@@ -55806,8 +55863,8 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
             if (cameraAttribute.AspectWidth !== undefined && cameraAttribute.AspectHeight !== undefined) {
 
-              width = parseFloat(cameraAttribute.AspectWidth.value);
-              height = parseFloat(cameraAttribute.AspectHeight.value);
+              width = cameraAttribute.AspectWidth.value;
+              height = cameraAttribute.AspectHeight.value;
             }
 
             var aspect = width / height;
@@ -55815,18 +55872,18 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
             var fov = 45;
             if (cameraAttribute.FieldOfView !== undefined) {
 
-              fov = parseFloat(cameraAttribute.FieldOfView.value);
+              fov = cameraAttribute.FieldOfView.value;
             }
 
             switch (type) {
 
-              case '0': // Perspective
               case 0:
+                // Perspective
                 model = new PerspectiveCamera(fov, aspect, nearClippingPlane, farClippingPlane);
                 break;
 
-              case '1': // Orthographic
               case 1:
+                // Orthographic
                 model = new OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, nearClippingPlane, farClippingPlane);
                 break;
 
@@ -55840,13 +55897,8 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
           break;
 
+        // Create a THREE.DirectionalLight, THREE.PointLight or THREE.SpotLight
         case 'Light':
-          /* ***********
-          * Supported light types:
-          * DirectionalLight
-          * PointLight
-          * SpotLight
-          ************** */
 
           var lightAttribute;
 
@@ -55882,19 +55934,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
             if (lightAttribute.Color !== undefined) {
 
-              var temp = lightAttribute.Color.value.split(',');
-
-              var r = parseFloat(temp[0]);
-              var g = parseFloat(temp[1]);
-              var b = parseFloat(temp[1]);
-
-              color = new Color(r, g, b);
+              color = parseColor(lightAttribute.Color.value);
             }
 
             var intensity = lightAttribute.Intensity === undefined ? 1 : lightAttribute.Intensity.value / 100;
 
             // light disabled
-            if (lightAttribute.CastLightOnObject !== undefined && (lightAttribute.CastLightOnObject.value === '0' || lightAttribute.CastLightOnObject.value === 0)) {
+            if (lightAttribute.CastLightOnObject !== undefined && lightAttribute.CastLightOnObject.value === 0) {
 
               intensity = 0;
             }
@@ -55902,7 +55948,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
             var distance = 0;
             if (lightAttribute.FarAttenuationEnd !== undefined) {
 
-              if (lightAttribute.EnableFarAttenuation !== undefined && (lightAttribute.EnableFarAttenuation.value === '0' || lightAttribute.EnableFarAttenuation.value === 0)) {
+              if (lightAttribute.EnableFarAttenuation !== undefined && lightAttribute.EnableFarAttenuation.value === 0) {
 
                 distance = 0;
               } else {
@@ -55911,24 +55957,23 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
               }
             }
 
-            // TODO
-            // could be calculated linearly from FarAttenuationStart to FarAttenuationEnd?
+            // TODO: could this be calculated linearly from FarAttenuationStart to FarAttenuationEnd?
             var decay = 1;
 
             switch (type) {
 
-              case '0': // Point
               case 0:
+                // Point
                 model = new PointLight(color, intensity, distance, decay);
                 break;
 
-              case '1': // Directional
               case 1:
+                // Directional
                 model = new DirectionalLight(color, intensity);
                 break;
 
-              case '2': // Spot
               case 2:
+                // Spot
                 var angle = Math.PI / 3;
 
                 if (lightAttribute.InnerAngle !== undefined) {
@@ -55956,7 +56001,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
             }
 
-            if (lightAttribute.CastShadows !== undefined && (lightAttribute.CastShadows.value === '1' || lightAttribute.CastShadows.value === 1)) {
+            if (lightAttribute.CastShadows !== undefined && lightAttribute.CastShadows.value === 1) {
 
               model.castShadow = true;
             }
@@ -55965,19 +56010,9 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
           break;
 
         case 'Mesh':
-          /**
-            * @type {?THREE.BufferGeometry}
-            */
+
           var geometry = null;
-
-          /**
-            * @type {THREE.MultiMaterial|THREE.Material}
-            */
           var material = null;
-
-          /**
-            * @type {Array.<THREE.Material>}
-            */
           var materials = [];
 
           for (var childrenIndex = 0, childrenLength = conns.children.length; childrenIndex < childrenLength; ++childrenIndex) {
@@ -56002,7 +56037,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
             material = materials[0];
           } else {
 
-            material = new MeshStandardMaterial({ color: 0x3300ff });
+            material = new MeshPhongMaterial({ color: 0xcccccc });
             materials.push(material);
           }
           if ('color' in geometry.attributes) {
@@ -56044,13 +56079,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
           break;
 
         default:
-          model = new Object3D();
+          model = new Group();
           break;
 
       }
     }
 
-    model.name = node.attrName.replace(/:/, '').replace(/_/, '').replace(/-/, '');
+    model.name = PropertyBinding.sanitizeNodeName(node.attrName);
     model.FBX_ID = id;
 
     modelArray.push(model);
@@ -56065,24 +56100,24 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
     if ('Lcl_Translation' in node.properties) {
 
-      model.position.fromArray(parseFloatArray(node.properties.Lcl_Translation.value));
+      model.position.fromArray(node.properties.Lcl_Translation.value);
     }
 
     if ('Lcl_Rotation' in node.properties) {
 
-      var rotation = parseFloatArray(node.properties.Lcl_Rotation.value).map(degreeToRadian);
+      var rotation = node.properties.Lcl_Rotation.value.map(_Math.degToRad);
       rotation.push('ZYX');
       model.rotation.fromArray(rotation);
     }
 
     if ('Lcl_Scaling' in node.properties) {
 
-      model.scale.fromArray(parseFloatArray(node.properties.Lcl_Scaling.value));
+      model.scale.fromArray(node.properties.Lcl_Scaling.value);
     }
 
     if ('PreRotation' in node.properties) {
 
-      var preRotations = new Euler().setFromVector3(parseVector3(node.properties.PreRotation).multiplyScalar(DEG2RAD), 'ZYX');
+      var preRotations = new Euler().fromArray(node.properties.PreRotation.value.map(_Math.degToRad), 'ZYX');
       preRotations = new Quaternion().setFromEuler(preRotations);
       var currentRotation = new Quaternion().setFromEuler(model.rotation);
       preRotations.multiply(currentRotation);
@@ -56111,16 +56146,13 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
 
         var child = conns.children[childrenIndex];
 
-        if (child.relationship === 'LookAtProperty' || child.relationship === ' "LookAtProperty') {
+        if (child.relationship === 'LookAtProperty') {
 
           var lookAtTarget = FBXTree.Objects.subNodes.Model[child.ID];
 
           if ('Lcl_Translation' in lookAtTarget.properties) {
 
-            var pos = lookAtTarget.properties.Lcl_Translation.value.split(',').map(function (val) {
-
-              return parseFloat(val);
-            });
+            var pos = lookAtTarget.properties.Lcl_Translation.value;
 
             // DirectionalLight, SpotLight
             if (model.target !== undefined) {
@@ -56159,26 +56191,28 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   // Now with the bones created, we can update the skeletons and bind them to the skinned meshes.
   sceneGraph.updateMatrixWorld(true);
 
+  var worldMatrices = new Map();
+
   // Put skeleton into bind pose.
-  var BindPoseNode = FBXTree.Objects.subNodes.Pose;
-  for (var nodeID in BindPoseNode) {
+  if ('Pose' in FBXTree.Objects.subNodes) {
 
-    if (BindPoseNode[nodeID].attrType === 'BindPose') {
+    var BindPoseNode = FBXTree.Objects.subNodes.Pose;
+    for (var nodeID in BindPoseNode) {
 
-      BindPoseNode = BindPoseNode[nodeID];
-      break;
+      if (BindPoseNode[nodeID].attrType === 'BindPose') {
+
+        BindPoseNode = BindPoseNode[nodeID];
+        break;
+      }
     }
-  }
-  if (BindPoseNode) {
 
     var PoseNode = BindPoseNode.subNodes.PoseNode;
-    var worldMatrices = new Map();
 
     for (var PoseNodeIndex = 0, PoseNodeLength = PoseNode.length; PoseNodeIndex < PoseNodeLength; ++PoseNodeIndex) {
 
       var node = PoseNode[PoseNodeIndex];
 
-      var rawMatWrd = parseMatrixArray(node.subNodes.Matrix.properties.a);
+      var rawMatWrd = new Matrix4().fromArray(node.subNodes.Matrix.properties.a);
 
       worldMatrices.set(parseInt(node.id), rawMatWrd);
     }
@@ -56194,9 +56228,6 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
       var subDeformer = subDeformers[key];
       var subDeformerIndex = subDeformer.index;
 
-      /**
-        * @type {THREE.Bone}
-        */
       var bone = deformer.bones[subDeformerIndex];
       if (!worldMatrices.has(bone.FBX_ID)) {
 
@@ -56226,7 +56257,7 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
           if (modelMap.has(geoConns.parents[i].ID)) {
 
             var model = modelMap.get(geoConns.parents[i].ID);
-            // ASSERT model typeof SkinnedMesh
+
             model.bind(deformer.skeleton, model.matrixWorld);
             break;
           }
@@ -56235,12 +56266,11 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
     }
   }
 
-  // Skeleton is now bound, return objects to starting
-  // world positions.
+  //Skeleton is now bound, return objects to starting world positions.
   sceneGraph.updateMatrixWorld(true);
 
-  // Silly hack with the animation parsing.  We're gonna pretend the scene graph has a skeleton
-  // to attach animations to, since FBXs treat animations as animations for the entire scene,
+  // Silly hack with the animation parsing. We're gonna pretend the scene graph has a skeleton
+  // to attach animations to, since FBX treats animations as animations for the entire scene,
   // not just for individual objects.
   sceneGraph.skeleton = {
     bones: modelArray
@@ -56268,11 +56298,11 @@ function parseScene(FBXTree, connections, deformers, geometryMap, materialMap) {
   return sceneGraph;
 }
 
-/**
-  * Parses animation information from FBXTree and generates an AnimationInfoObject.
-  * @param {{Objects: {subNodes: {AnimationCurveNode: any, AnimationCurve: any, AnimationLayer: any, AnimationStack: any}}}} FBXTree
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  */
+// Parses animation information from nodes in
+// FBXTree.Objects.subNodes.AnimationCurve ( connected to AnimationCurveNode )
+// FBXTree.Objects.subNodes.AnimationCurveNode ( connected to AnimationLayer and an animated property in some other node )
+// FBXTree.Objects.subNodes.AnimationLayer ( connected to AnimationStack )
+// FBXTree.Objects.subNodes.AnimationStack
 function parseAnimations(FBXTree, connections, sceneGraph) {
 
   var rawNodes = FBXTree.Objects.subNodes.AnimationCurveNode;
@@ -56280,10 +56310,53 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   var rawLayers = FBXTree.Objects.subNodes.AnimationLayer;
   var rawStacks = FBXTree.Objects.subNodes.AnimationStack;
 
+  var fps = 30; // default framerate
+
+  if ('GlobalSettings' in FBXTree && 'TimeMode' in FBXTree.GlobalSettings.properties) {
+
+    /* Autodesk time mode documentation can be found here:
+    *	http://docs.autodesk.com/FBX/2014/ENU/FBX-SDK-Documentation/index.html?url=cpp_ref/class_fbx_time.html,topicNumber=cpp_ref_class_fbx_time_html
+    */
+    var timeModeEnum = [30, // 0: eDefaultMode
+    120, // 1: eFrames120
+    100, // 2: eFrames100
+    60, // 3: eFrames60
+    50, // 4: eFrames50
+    48, // 5: eFrames48
+    30, // 6: eFrames30 (black and white NTSC )
+    30, // 7: eFrames30Drop
+    29.97, // 8: eNTSCDropFrame
+    29.97, // 90: eNTSCFullFrame
+    25, // 10: ePal ( PAL/SECAM )
+    24, // 11: eFrames24 (Film/Cinema)
+    1, // 12: eFrames1000 (use for date time))
+    23.976, // 13: eFilmFullFrame
+    30, // 14: eCustom: use GlobalSettings.properties.CustomFrameRate.value
+    96, // 15: eFrames96
+    72, // 16: eFrames72
+    59.94];
+
+    var eMode = FBXTree.GlobalSettings.properties.TimeMode.value;
+
+    if (eMode === 14) {
+
+      if ('CustomFrameRate' in FBXTree.GlobalSettings.properties) {
+
+        fps = FBXTree.GlobalSettings.properties.CustomFrameRate.value;
+
+        fps = fps === -1 ? 30 : fps;
+      }
+    } else if (eMode <= 17) {
+      // for future proofing - if more eModes get added, they will default to 30fps
+
+      fps = timeModeEnum[eMode];
+    }
+  }
+
   /**
-    * @type {{
-        curves: Map<number, {
-        T: {
+   * @type {{
+       curves: Map<number, {
+       T: {
         id: number;
         attr: string;
         internalID: number;
@@ -56653,22 +56726,10 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
     layers: {},
     stacks: {},
     length: 0,
-    fps: 30,
+    fps: fps,
     frames: 0
   };
 
-  /**
-    * @type {Array.<{
-      id: number;
-      attr: string;
-      internalID: number;
-      attrX: boolean;
-      attrY: boolean;
-      attrZ: boolean;
-      containerBoneID: number;
-      containerID: number;
-    }>}
-    */
   var animationCurveNodes = [];
   for (var nodeID in rawNodes) {
 
@@ -56679,47 +56740,6 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
     }
   }
 
-  /**
-    * @type {Map.<number, {
-      id: number,
-      attr: string,
-      internalID: number,
-      attrX: boolean,
-      attrY: boolean,
-      attrZ: boolean,
-      containerBoneID: number,
-      containerID: number,
-      curves: {
-        x: {
-          version: any,
-          id: number,
-          internalID: number,
-          times: number[],
-          values: number[],
-          attrFlag: number[],
-          attrData: number[],
-        },
-        y: {
-          version: any,
-          id: number,
-          internalID: number,
-          times: number[],
-          values: number[],
-          attrFlag: number[],
-          attrData: number[],
-        },
-        z: {
-          version: any,
-          id: number,
-          internalID: number,
-          times: number[],
-          values: number[],
-          attrFlag: number[],
-          attrData: number[],
-        }
-      }
-    }>}
-    */
   var tmpMap = new Map();
   for (var animationCurveNodeIndex = 0; animationCurveNodeIndex < animationCurveNodes.length; ++animationCurveNodeIndex) {
 
@@ -56730,17 +56750,6 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
     tmpMap.set(animationCurveNodes[animationCurveNodeIndex].id, animationCurveNodes[animationCurveNodeIndex]);
   }
 
-  /**
-    * @type {{
-      version: any,
-      id: number,
-      internalID: number,
-      times: number[],
-      values: number[],
-      attrFlag: number[],
-      attrData: number[],
-    }[]}
-    */
   var animationCurves = [];
   for (nodeID in rawCurves) {
 
@@ -56784,12 +56793,13 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
       returnObject.curves.set(id, { T: null, R: null, S: null });
     }
     returnObject.curves.get(id)[curveNode.attr] = curveNode;
+
     if (curveNode.attr === 'R') {
 
       var curves = curveNode.curves;
 
-      // Seems like some FBX files have AnimationCurveNode
-      // which doesn't have any connected AnimationCurve.
+      // Some FBX files have an AnimationCurveNode
+      // which isn't any connected to any AnimationCurve.
       // Setting animation parameter for them here.
 
       if (curves.x === null) {
@@ -56819,9 +56829,9 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
         };
       }
 
-      curves.x.values = curves.x.values.map(degreeToRadian);
-      curves.y.values = curves.y.values.map(degreeToRadian);
-      curves.z.values = curves.z.values.map(degreeToRadian);
+      curves.x.values = curves.x.values.map(_Math.degToRad);
+      curves.y.values = curves.y.values.map(_Math.degToRad);
+      curves.z.values = curves.z.values.map(_Math.degToRad);
 
       if (curveNode.preRotations !== null) {
 
@@ -56844,127 +56854,6 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
 
   for (var nodeID in rawLayers) {
 
-    /**
-      * @type {{
-      T: {
-        id: number;
-        attr: string;
-        internalID: number;
-        attrX: boolean;
-        attrY: boolean;
-        attrZ: boolean;
-        containerBoneID: number;
-        containerID: number;
-        curves: {
-          x: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          y: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          z: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-        },
-      },
-      R: {
-        id: number;
-        attr: string;
-        internalID: number;
-        attrX: boolean;
-        attrY: boolean;
-        attrZ: boolean;
-        containerBoneID: number;
-        containerID: number;
-        curves: {
-          x: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          y: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          z: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-        },
-      },
-      S: {
-        id: number;
-        attr: string;
-        internalID: number;
-        attrX: boolean;
-        attrY: boolean;
-        attrZ: boolean;
-        containerBoneID: number;
-        containerID: number;
-        curves: {
-          x: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          y: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          z: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-        },
-      }
-      }[]}
-      */
     var layer = [];
     var children = connections.get(parseInt(nodeID)).children;
 
@@ -57024,7 +56913,7 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
         name: rawStacks[nodeID].attrName,
         layers: layers,
         length: timestamps.max - timestamps.min,
-        frames: (timestamps.max - timestamps.min) * 30
+        frames: (timestamps.max - timestamps.min) * returnObject.fps
       };
     }
   }
@@ -57032,67 +56921,27 @@ function parseAnimations(FBXTree, connections, sceneGraph) {
   return returnObject;
 }
 
-/**
-  * @param {Object} FBXTree
-  * @param {{id: number, attrName: string, properties: Object<string, any>}} animationCurveNode
-  * @param {Map<number, {parents: {ID: number, relationship: string}[], children: {ID: number, relationship: string}[]}>} connections
-  * @param {{skeleton: {bones: {FBX_ID: number}[]}}} sceneGraph
-  */
 function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph) {
 
   var rawModels = FBXTree.Objects.subNodes.Model;
 
   var returnObject = {
-    /**
-      * @type {number}
-      */
+
     id: animationCurveNode.id,
-
-    /**
-      * @type {string}
-      */
     attr: animationCurveNode.attrName,
-
-    /**
-      * @type {number}
-      */
     internalID: animationCurveNode.id,
-
-    /**
-      * @type {boolean}
-      */
     attrX: false,
-
-    /**
-      * @type {boolean}
-      */
     attrY: false,
-
-    /**
-      * @type {boolean}
-      */
     attrZ: false,
-
-    /**
-      * @type {number}
-      */
     containerBoneID: -1,
-
-    /**
-      * @type {number}
-      */
     containerID: -1,
-
     curves: {
       x: null,
       y: null,
       z: null
     },
-
-    /**
-      * @type {number[]}
-      */
     preRotations: null
+
   };
 
   if (returnObject.attr.match(/S|R|T/)) {
@@ -57142,146 +56991,22 @@ function parseAnimationNode(FBXTree, animationCurveNode, connections, sceneGraph
   return returnObject;
 }
 
-/**
-  * @param {{id: number, subNodes: {KeyTime: {properties: {a: string}}, KeyValueFloat: {properties: {a: string}}, KeyAttrFlags: {properties: {a: string}}, KeyAttrDataFloat: {properties: {a: string}}}}} animationCurve
-  */
 function parseAnimationCurve(animationCurve) {
 
   return {
     version: null,
     id: animationCurve.id,
     internalID: animationCurve.id,
-    times: parseFloatArray(animationCurve.subNodes.KeyTime.properties.a).map(convertFBXTimeToSeconds),
-    values: parseFloatArray(animationCurve.subNodes.KeyValueFloat.properties.a),
+    times: animationCurve.subNodes.KeyTime.properties.a.map(convertFBXTimeToSeconds),
+    values: animationCurve.subNodes.KeyValueFloat.properties.a,
 
-    attrFlag: parseIntArray(animationCurve.subNodes.KeyAttrFlags.properties.a),
-    attrData: parseFloatArray(animationCurve.subNodes.KeyAttrDataFloat.properties.a)
+    attrFlag: animationCurve.subNodes.KeyAttrFlags.properties.a,
+    attrData: animationCurve.subNodes.KeyAttrDataFloat.properties.a
   };
 }
 
-/**
-  * Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
-  * than the max or min respectively.
-  * @param {{
-      T: {
-          id: number,
-          attr: string,
-          internalID: number,
-          attrX: boolean,
-          attrY: boolean,
-          attrZ: boolean,
-          containerBoneID: number,
-          containerID: number,
-          curves: {
-              x: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-              y: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-              z: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-          },
-      },
-      R: {
-          id: number,
-          attr: string,
-          internalID: number,
-          attrX: boolean,
-          attrY: boolean,
-          attrZ: boolean,
-          containerBoneID: number,
-          containerID: number,
-          curves: {
-              x: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-              y: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-              z: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-          },
-      },
-      S: {
-          id: number,
-          attr: string,
-          internalID: number,
-          attrX: boolean,
-          attrY: boolean,
-          attrZ: boolean,
-          containerBoneID: number,
-          containerID: number,
-          curves: {
-              x: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-              y: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-              z: {
-                  version: any,
-                  id: number,
-                  internalID: number,
-                  times: number[],
-                  values: number[],
-                  attrFlag: number[],
-                  attrData: number[],
-              },
-          },
-      },
-  }} layer
-  */
+// Sets the maxTimeStamp and minTimeStamp variables if it has timeStamps that are either larger or smaller
+// than the max or min respectively.
 function getCurveNodeMaxMinTimeStamps(layer, timestamps) {
 
   if (layer.R) {
@@ -57298,39 +57023,8 @@ function getCurveNodeMaxMinTimeStamps(layer, timestamps) {
   }
 }
 
-/**
-  * Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
-  * exceeds the maximum or minimum.
-  * @param {{
-      x: {
-          version: any,
-          id: number,
-          internalID: number,
-          times: number[],
-          values: number[],
-          attrFlag: number[],
-          attrData: number[],
-      },
-      y: {
-          version: any,
-          id: number,
-          internalID: number,
-          times: number[],
-          values: number[],
-          attrFlag: number[],
-          attrData: number[],
-      },
-      z: {
-          version: any,
-          id: number,
-          internalID: number,
-          times: number[],
-          values: number[],
-          attrFlag: number[],
-          attrData: number[],
-      }
-  }} curve
-  */
+// Sets the maxTimeStamp and minTimeStamp if one of the curve's time stamps
+// exceeds the maximum or minimum.
 function getCurveMaxMinTimeStamp(curve, timestamps) {
 
   if (curve.x) {
@@ -57347,386 +57041,13 @@ function getCurveMaxMinTimeStamp(curve, timestamps) {
   }
 }
 
-/**
-  * Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
-  * @param {{times: number[]}} axis
-  */
+// Sets the maxTimeStamp and minTimeStamp if one of its timestamps exceeds the maximum or minimum.
 function getCurveAxisMaxMinTimeStamps(axis, timestamps) {
 
   timestamps.max = axis.times[axis.times.length - 1] > timestamps.max ? axis.times[axis.times.length - 1] : timestamps.max;
   timestamps.min = axis.times[0] < timestamps.min ? axis.times[0] : timestamps.min;
 }
 
-/**
-  * @param {{
-  curves: Map<number, {
-    T: {
-      id: number;
-      attr: string;
-      internalID: number;
-      attrX: boolean;
-      attrY: boolean;
-      attrZ: boolean;
-      containerBoneID: number;
-      containerID: number;
-      curves: {
-        x: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        y: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        z: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-      };
-    };
-    R: {
-      id: number;
-      attr: string;
-      internalID: number;
-      attrX: boolean;
-      attrY: boolean;
-      attrZ: boolean;
-      containerBoneID: number;
-      containerID: number;
-      curves: {
-        x: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        y: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        z: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-      };
-    };
-    S: {
-      id: number;
-      attr: string;
-      internalID: number;
-      attrX: boolean;
-      attrY: boolean;
-      attrZ: boolean;
-      containerBoneID: number;
-      containerID: number;
-      curves: {
-        x: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        y: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        z: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-      };
-    };
-  }>;
-  layers: Map<number, {
-    T: {
-      id: number;
-      attr: string;
-      internalID: number;
-      attrX: boolean;
-      attrY: boolean;
-      attrZ: boolean;
-      containerBoneID: number;
-      containerID: number;
-      curves: {
-        x: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        y: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        z: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-      };
-    };
-    R: {
-      id: number;
-      attr: string;
-      internalID: number;
-      attrX: boolean;
-      attrY: boolean;
-      attrZ: boolean;
-      containerBoneID: number;
-      containerID: number;
-      curves: {
-        x: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        y: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        z: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-      };
-    };
-    S: {
-      id: number;
-      attr: string;
-      internalID: number;
-      attrX: boolean;
-      attrY: boolean;
-      attrZ: boolean;
-      containerBoneID: number;
-      containerID: number;
-      curves: {
-        x: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        y: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-        z: {
-          version: any;
-          id: number;
-          internalID: number;
-          times: number[];
-          values: number[];
-          attrFlag: number[];
-          attrData: number[];
-        };
-      };
-    };
-  }[]>;
-  stacks: Map<number, {
-    name: string;
-    layers: {
-      T: {
-        id: number;
-        attr: string;
-        internalID: number;
-        attrX: boolean;
-        attrY: boolean;
-        attrZ: boolean;
-        containerBoneID: number;
-        containerID: number;
-        curves: {
-          x: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          y: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          z: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-        };
-      };
-      R: {
-        id: number;
-        attr: string;
-        internalID: number;
-        attrX: boolean;
-        attrY: boolean;
-        attrZ: boolean;
-        containerBoneID: number;
-        containerID: number;
-        curves: {
-          x: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          y: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          z: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-        };
-      };
-      S: {
-        id: number;
-        attr: string;
-        internalID: number;
-        attrX: boolean;
-        attrY: boolean;
-        attrZ: boolean;
-        containerBoneID: number;
-        containerID: number;
-        curves: {
-          x: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          y: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-          z: {
-            version: any;
-            id: number;
-            internalID: number;
-            times: number[];
-            values: number[];
-            attrFlag: number[];
-            attrData: number[];
-          };
-        };
-      };
-    }[][];
-    length: number;
-    frames: number;
-  }>;
-  length: number;
-  fps: number;
-  frames: number;
-}} animations,
-  * @param {{skeleton: { bones: THREE.Bone[]}}} group
-  */
 function addAnimations(group, animations) {
 
   if (group.animations === undefined) {
@@ -57740,26 +57061,9 @@ function addAnimations(group, animations) {
 
     var stack = stacks[key];
 
-    /**
-      * @type {{
-      * name: string,
-      * fps: number,
-      * length: number,
-      * hierarchy: Array.<{
-      * 	parent: number,
-      * 	name: string,
-      * 	keys: Array.<{
-      * 		time: number,
-      * 		pos: Array.<number>,
-      * 		rot: Array.<number>,
-      * 		scl: Array.<number>
-      * 	}>
-      * }>
-      * }}
-      */
     var animationData = {
       name: stack.name,
-      fps: 30,
+      fps: animations.fps,
       length: stack.length,
       hierarchy: []
     };
@@ -57806,9 +57110,6 @@ function addAnimations(group, animations) {
 var euler = new Euler();
 var quaternion = new Quaternion();
 
-/**
-  * @param {THREE.Bone} bone
-  */
 function generateKey(animations, animationNode, bone, frame) {
 
   var key = {
@@ -57820,26 +57121,66 @@ function generateKey(animations, animationNode, bone, frame) {
 
   if (animationNode === undefined) return key;
 
+  euler.setFromQuaternion(bone.quaternion, 'ZYX', false);
+
   try {
 
     if (hasCurve(animationNode, 'T') && hasKeyOnFrame(animationNode.T, frame)) {
 
-      key.pos = [animationNode.T.curves.x.values[frame], animationNode.T.curves.y.values[frame], animationNode.T.curves.z.values[frame]];
+      if (animationNode.T.curves.x.values[frame]) {
+
+        key.pos[0] = animationNode.T.curves.x.values[frame];
+      }
+
+      if (animationNode.T.curves.y.values[frame]) {
+
+        key.pos[1] = animationNode.T.curves.y.values[frame];
+      }
+
+      if (animationNode.T.curves.z.values[frame]) {
+
+        key.pos[2] = animationNode.T.curves.z.values[frame];
+      }
     }
 
     if (hasCurve(animationNode, 'R') && hasKeyOnFrame(animationNode.R, frame)) {
 
-      var rotationX = animationNode.R.curves.x.values[frame];
-      var rotationY = animationNode.R.curves.y.values[frame];
-      var rotationZ = animationNode.R.curves.z.values[frame];
+      // Only update the euler's values if rotation is defined for the axis on this frame
+      if (animationNode.R.curves.x.values[frame]) {
 
-      quaternion.setFromEuler(euler.set(rotationX, rotationY, rotationZ, 'ZYX'));
+        euler.x = animationNode.R.curves.x.values[frame];
+      }
+
+      if (animationNode.R.curves.y.values[frame]) {
+
+        euler.y = animationNode.R.curves.y.values[frame];
+      }
+
+      if (animationNode.R.curves.z.values[frame]) {
+
+        euler.z = animationNode.R.curves.z.values[frame];
+      }
+
+      quaternion.setFromEuler(euler);
       key.rot = quaternion.toArray();
     }
 
     if (hasCurve(animationNode, 'S') && hasKeyOnFrame(animationNode.S, frame)) {
 
-      key.scl = [animationNode.S.curves.x.values[frame], animationNode.S.curves.y.values[frame], animationNode.S.curves.z.values[frame]];
+      if (animationNode.T.curves.x.values[frame]) {
+
+        key.scl[0] = animationNode.S.curves.x.values[frame];
+      }
+
+      if (animationNode.T.curves.y.values[frame]) {
+
+        key.scl[1] = animationNode.S.curves.y.values[frame];
+      }
+
+      if (animationNode.T.curves.z.values[frame]) {
+
+        key.scl[2] = animationNode.S.curves.z.values[frame];
+      }
     }
   } catch (error) {
 
@@ -57886,248 +57227,45 @@ function isKeyExistOnFrame(curve, frame) {
   return curve.values[frame] !== undefined;
 }
 
-/**
-  * An instance of a Vertex with data for drawing vertices to the screen.
-  * @constructor
-  */
-function Vertex$1() {
-
-  /**
-    * Position of the vertex.
-    * @type {THREE.Vector3}
-    */
-  this.position = new Vector3();
-
-  /**
-    * Normal of the vertex
-    * @type {THREE.Vector3}
-    */
-  this.normal = new Vector3();
-
-  /**
-    * Array of UV coordinates of the vertex.
-    * @type {Array of THREE.Vector2}
-    */
-  this.uv = [];
-
-  /**
-    * Color of the vertex
-    * @type {THREE.Vector3}
-    */
-  this.color = new Vector3();
-
-  /**
-    * Indices of the bones vertex is influenced by.
-    * @type {THREE.Vector4}
-    */
-  this.skinIndices = new Vector4(0, 0, 0, 0);
-
-  /**
-    * Weights that each bone influences the vertex.
-    * @type {THREE.Vector4}
-    */
-  this.skinWeights = new Vector4(0, 0, 0, 0);
-}
-
-Object.assign(Vertex$1.prototype, {
-  copy: function (target) {
-
-    var returnVar = target || new Vertex$1();
-
-    returnVar.position.copy(this.position);
-    returnVar.normal.copy(this.normal);
-    returnVar.uv.copy(this.uv);
-    returnVar.skinIndices.copy(this.skinIndices);
-    returnVar.skinWeights.copy(this.skinWeights);
-
-    return returnVar;
-  },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
-
-    this.position.toArray(vertexBuffer, vertexBuffer.length);
-    this.normal.toArray(normalBuffer, normalBuffer.length);
-    for (var i = 0; i < this.uv.length; i++) {
-
-      this.uv[i].toArray(uvBuffers[i], uvBuffers[i].length);
-    }
-    this.color.toArray(colorBuffer, colorBuffer.length);
-    this.skinIndices.toArray(skinIndexBuffer, skinIndexBuffer.length);
-    this.skinWeights.toArray(skinWeightBuffer, skinWeightBuffer.length);
-  }
-});
-
-/**
-  * @constructor
-  */
-function Triangle$1() {
-
-  /**
-    * @type {{position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}
-    */
-  this.vertices = [];
-}
-
-Object.assign(Triangle$1.prototype, {
-  copy: function (target) {
-
-    var returnVar = target || new Triangle$1();
-
-    for (var i = 0; i < this.vertices.length; ++i) {
-
-      this.vertices[i].copy(returnVar.vertices[i]);
-    }
-
-    return returnVar;
-  },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer) {
-
-    var vertices = this.vertices;
-
-    for (var i = 0, l = vertices.length; i < l; ++i) {
-
-      vertices[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer);
-    }
-  }
-});
-
-/**
-  * @constructor
-  */
-function Face() {
-
-  /**
-    * @type {{vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[]}
-    */
-  this.triangles = [];
-  this.materialIndex = 0;
-}
-
-Object.assign(Face.prototype, {
-  copy: function (target) {
-
-    var returnVar = target || new Face();
-
-    for (var i = 0; i < this.triangles.length; ++i) {
-
-      this.triangles[i].copy(returnVar.triangles[i]);
-    }
-
-    returnVar.materialIndex = this.materialIndex;
-
-    return returnVar;
-  },
-  genTrianglesFromVertices: function (vertexArray) {
-
-    for (var i = 2; i < vertexArray.length; ++i) {
-
-      var triangle = new Triangle$1();
-      triangle.vertices[0] = vertexArray[0];
-      triangle.vertices[1] = vertexArray[i - 1];
-      triangle.vertices[2] = vertexArray[i];
-      this.triangles.push(triangle);
-    }
-  },
-  flattenToBuffers: function (vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer) {
-
-    var triangles = this.triangles;
-    var materialIndex = this.materialIndex;
-
-    for (var i = 0, l = triangles.length; i < l; ++i) {
-
-      triangles[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer);
-      append(materialIndexBuffer, [materialIndex, materialIndex, materialIndex]);
-    }
-  }
-});
-
-/**
-  * @constructor
-  */
-function Geometry$1() {
-
-  /**
-    * @type {{triangles: {vertices: {position: THREE.Vector3, normal: THREE.Vector3, uv: Array of THREE.Vector2, skinIndices: THREE.Vector4, skinWeights: THREE.Vector4}[]}[], materialIndex: number}[]}
-    */
-  this.faces = [];
-
-  /**
-    * @type {{}|THREE.Skeleton}
-    */
-  this.skeleton = null;
-}
-
-Object.assign(Geometry$1.prototype, {
-
-  /**
-    * @returns	{{vertexBuffer: number[], normalBuffer: number[], uvBuffers: Array of number[], skinIndexBuffer: number[], skinWeightBuffer: number[], materialIndexBuffer: number[]}}
-    */
-  flattenToBuffers: function () {
-
-    var vertexBuffer = [];
-    var normalBuffer = [];
-    var uvBuffers = [];
-    var colorBuffer = [];
-    var skinIndexBuffer = [];
-    var skinWeightBuffer = [];
-    var materialIndexBuffer = [];
-
-    var faces = this.faces;
-
-    for (var i = 0; i < faces[0].triangles[0].vertices[0].uv.length; i++) {
-
-      uvBuffers.push([]);
-    }
-
-    for (var i = 0, l = faces.length; i < l; ++i) {
-      faces[i].flattenToBuffers(vertexBuffer, normalBuffer, uvBuffers, colorBuffer, skinIndexBuffer, skinWeightBuffer, materialIndexBuffer);
-    }
-
-    return {
-      vertexBuffer: vertexBuffer,
-      normalBuffer: normalBuffer,
-      uvBuffers: uvBuffers,
-      colorBuffer: colorBuffer,
-      skinIndexBuffer: skinIndexBuffer,
-      skinWeightBuffer: skinWeightBuffer,
-      materialIndexBuffer: materialIndexBuffer
-    };
-  }
-});
-
+// parse an FBX file in ASCII format
 function TextParser() {}
 
 Object.assign(TextParser.prototype, {
-  getPrevNode: function () {
+
+  getPrevNode: function getPrevNode() {
 
     return this.nodeStack[this.currentIndent - 2];
   },
-  getCurrentNode: function () {
+
+  getCurrentNode: function getCurrentNode() {
 
     return this.nodeStack[this.currentIndent - 1];
   },
-  getCurrentProp: function () {
+
+  getCurrentProp: function getCurrentProp() {
 
     return this.currentProp;
   },
-  pushStack: function (node) {
+
+  pushStack: function pushStack(node) {
 
     this.nodeStack.push(node);
     this.currentIndent += 1;
   },
-  popStack: function () {
+
+  popStack: function popStack() {
 
     this.nodeStack.pop();
     this.currentIndent -= 1;
   },
-  setCurrentProp: function (val, name) {
+
+  setCurrentProp: function setCurrentProp(val, name) {
 
     this.currentProp = val;
     this.currentPropName = name;
   },
 
-
-  // ----------parse ---------------------------------------------------
-  parse: function (text) {
+  parse: function parse(text) {
 
     this.currentIndent = 0;
     this.allNodes = new FBXTree();
@@ -58185,7 +57323,7 @@ Object.assign(TextParser.prototype, {
         //	 "iVB..."
         if (propName === 'Content' && propValue === ',') {
 
-          propValue = split[++lineNum].replace(/"/g, '').trim();
+          propValue = split[++lineNum].replace(/"/g, '').replace(/,$/, '').trim();
         }
 
         this.parseNodeProperty(l, propName, propValue);
@@ -58201,15 +57339,8 @@ Object.assign(TextParser.prototype, {
         continue;
       }
 
-      // for special case,
-      //
-      //	  Vertices: *8670 {
-      //		  a: 0.0356229953467846,13.9599733352661,-0.399196773.....(snip)
-      // -0.0612030513584614,13.960485458374,-0.409748703241348,-0.10.....
-      // 0.12490539252758,13.7450733184814,-0.454119384288788,0.09272.....
-      // 0.0836158767342567,13.5432004928589,-0.435397416353226,0.028.....
-      //
-      // these case the lines must contiue with previous line
+      // large arrays are split over multiple lines terminated with a ',' character
+      // if this is encountered the line needs to be joined to the previous line
       if (l.match(/^[^\s\t}]/)) {
 
         this.parseNodePropertyContinued(l);
@@ -58218,10 +57349,10 @@ Object.assign(TextParser.prototype, {
 
     return this.allNodes;
   },
-  parseNodeBegin: function (line, nodeName, nodeAttrs) {
 
-    // var nodeName = match[1];
-    var node = { name: nodeName, properties: {}, subNodes: {} };
+  parseNodeBegin: function parseNodeBegin(line, nodeName, nodeAttrs) {
+
+    var node = { 'name': nodeName, properties: {}, 'subNodes': {} };
     var attrs = this.parseNodeAttr(nodeAttrs);
     var currentNode = this.getCurrentNode();
 
@@ -58230,15 +57361,13 @@ Object.assign(TextParser.prototype, {
 
       this.allNodes.add(nodeName, node);
     } else {
-
       // a subnode
 
-      // already exists subnode, then append it
+      // if the subnode already exists, append it
       if (nodeName in currentNode.subNodes) {
 
         var tmp = currentNode.subNodes[nodeName];
 
-        // console.log( "duped entry found\nkey: " + nodeName + "\nvalue: " + propValue );
         if (this.isFlattenNode(currentNode.subNodes[nodeName])) {
 
           if (attrs.id === '') {
@@ -58269,7 +57398,7 @@ Object.assign(TextParser.prototype, {
       }
     }
 
-    // for this		  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // for this	↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // NodeAttribute: 1001463072, "NodeAttribute::", "LimbNode" {
     if (nodeAttrs) {
 
@@ -58280,7 +57409,8 @@ Object.assign(TextParser.prototype, {
 
     this.pushStack(node);
   },
-  parseNodeAttr: function (attrs) {
+
+  parseNodeAttr: function parseNodeAttr(attrs) {
 
     var id = attrs[0];
 
@@ -58290,7 +57420,6 @@ Object.assign(TextParser.prototype, {
 
       if (isNaN(id)) {
 
-        // PolygonVertexIndex: *16380 {
         id = attrs[0];
       }
     }
@@ -58306,13 +57435,14 @@ Object.assign(TextParser.prototype, {
 
     return { id: id, name: name, type: type };
   },
-  parseNodeProperty: function (line, propName, propValue) {
+
+  parseNodeProperty: function parseNodeProperty(line, propName, propValue) {
 
     var currentNode = this.getCurrentNode();
     var parentName = currentNode.name;
 
-    // special case parent node's is like "Properties70"
-    // these children nodes must treat with careful
+    // special case where the parent node is something like "Properties70"
+    // these children nodes must treated carefully
     if (parentName !== undefined) {
 
       var propMatch = parentName.match(/Properties(\d)+/);
@@ -58323,7 +57453,7 @@ Object.assign(TextParser.prototype, {
       }
     }
 
-    // special case Connections
+    // Connections
     if (propName === 'C') {
 
       var connProps = propValue.split(',').slice(1);
@@ -58331,6 +57461,11 @@ Object.assign(TextParser.prototype, {
       var to = parseInt(connProps[1]);
 
       var rest = propValue.split(',').slice(3);
+
+      rest = rest.map(function (elem) {
+
+        return elem.trim().replace(/^"/, '');
+      });
 
       propName = 'connections';
       propValue = [from, to];
@@ -58342,7 +57477,7 @@ Object.assign(TextParser.prototype, {
       }
     }
 
-    // special case Connections
+    // Node
     if (propName === 'Node') {
 
       var id = parseInt(propValue);
@@ -58353,7 +57488,6 @@ Object.assign(TextParser.prototype, {
     // already exists in properties, then append this
     if (propName in currentNode.properties) {
 
-      // console.log( "duped entry found\nkey: " + propName + "\nvalue: " + propValue );
       if (Array.isArray(currentNode.properties[propName])) {
 
         currentNode.properties[propName].push(propValue);
@@ -58363,7 +57497,6 @@ Object.assign(TextParser.prototype, {
       }
     } else {
 
-      // console.log( propName + ":  " + propValue );
       if (Array.isArray(currentNode.properties[propName])) {
 
         currentNode.properties[propName].push(propValue);
@@ -58374,15 +57507,28 @@ Object.assign(TextParser.prototype, {
     }
 
     this.setCurrentProp(currentNode.properties, propName);
+
+    // convert string to array, unless it ends in ',' in which case more will be added to it
+    if (propName === 'a' && propValue.slice(-1) !== ',') {
+
+      currentNode.properties.a = parseNumberArray(propValue);
+    }
   },
 
-
-  // TODO:
-  parseNodePropertyContinued: function (line) {
+  parseNodePropertyContinued: function parseNodePropertyContinued(line) {
 
     this.currentProp[this.currentPropName] += line;
+
+    // if the line doesn't end in ',' we have reached the end of the property value
+    // so convert the string to an array
+    if (line.slice(-1) !== ',') {
+
+      var currentNode = this.getCurrentNode();
+      currentNode.properties.a = parseNumberArray(currentNode.properties.a);
+    }
   },
-  parseNodeSpecialProperty: function (line, propName, propValue) {
+
+  parseNodeSpecialProperty: function parseNodeSpecialProperty(line, propName, propValue) {
 
     // split this
     // P: "Lcl Scaling", "Lcl Scaling", "", "A",1,1,1
@@ -58407,20 +57553,28 @@ Object.assign(TextParser.prototype, {
     }
     */
 
-    // cast value in its type
+    // cast value to its type
     switch (innerPropType1) {
 
       case 'int':
+      case 'enum':
+      case 'bool':
+      case 'ULongLong':
         innerPropValue = parseInt(innerPropValue);
         break;
 
       case 'double':
+      case 'Number':
+      case 'FieldOfView':
         innerPropValue = parseFloat(innerPropValue);
         break;
 
       case 'ColorRGB':
       case 'Vector3D':
-        innerPropValue = parseFloatArray(innerPropValue);
+      case 'Lcl_Translation':
+      case 'Lcl_Rotation':
+      case 'Lcl_Scaling':
+        innerPropValue = parseNumberArray(innerPropValue);
         break;
 
     }
@@ -58428,42 +57582,34 @@ Object.assign(TextParser.prototype, {
     // CAUTION: these props must append to parent's parent
     this.getPrevNode().properties[innerPropName] = {
 
-      type: innerPropType1,
-      type2: innerPropType2,
-      flag: innerPropFlag,
-      value: innerPropValue
+      'type': innerPropType1,
+      'type2': innerPropType2,
+      'flag': innerPropFlag,
+      'value': innerPropValue
 
     };
 
     this.setCurrentProp(this.getPrevNode().properties, innerPropName);
   },
-  nodeEnd: function () {
+
+  nodeEnd: function nodeEnd() {
 
     this.popStack();
   },
 
+  isFlattenNode: function isFlattenNode(node) {
 
-  /* ---------------------------------------------------------------- */
-  /*		util													  */
-  isFlattenNode: function (node) {
-
-    return !!('subNodes' in node && 'properties' in node);
+    return 'subNodes' in node && 'properties' in node ? true : false;
   }
+
 });
 
-// Binary format specification:
-//   https://code.blender.org/2013/08/fbx-binary-file-format-specification/
-//   https://wiki.rogiken.org/specifications/file-format/fbx/ (more detail but Japanese)
+// Parse an FBX file in Binary format
 function BinaryParser() {}
 
 Object.assign(BinaryParser.prototype, {
 
-  /**
-    * Parses binary data and builds FBXTree as much compatible as possible with the one built by TextParser.
-    * @param {ArrayBuffer} buffer
-    * @returns {THREE.FBXTree}
-    */
-  parse: function (buffer) {
+  parse: function parse(buffer) {
 
     var reader = new BinaryReader(buffer);
     reader.skip(23); // skip magic 23 bytes
@@ -58483,18 +57629,13 @@ Object.assign(BinaryParser.prototype, {
     return allNodes;
   },
 
-
-  /**
-    * Checks if reader has reached the end of content.
-    * @param {BinaryReader} reader
-    * @returns {boolean}
-    */
-  endOfContent: function (reader) {
+  // Check if reader has reached the end of content.
+  endOfContent: function endOfContent(reader) {
 
     // footer size: 160bytes + 16-byte alignment padding
     // - 16bytes: magic
     // - padding til 16-byte alignment (at least 1byte?)
-    //   (seems like some exporters embed fixed 15 or 16bytes?)
+    //	(seems like some exporters embed fixed 15 or 16bytes?)
     // - 4bytes: magic
     // - 4bytes: version
     // - 120bytes: zero
@@ -58502,25 +57643,21 @@ Object.assign(BinaryParser.prototype, {
     if (reader.size() % 16 === 0) {
 
       return (reader.getOffset() + 160 + 16 & ~0xf) >= reader.size();
-    }
+    } else {
 
-    return reader.getOffset() + 160 + 16 >= reader.size();
+      return reader.getOffset() + 160 + 16 >= reader.size();
+    }
   },
 
-
-  /**
-    * Parses Node as much compatible as possible with the one parsed by TextParser
-    * TODO: could be optimized more?
-    * @param {BinaryReader} reader
-    * @param {number} version
-    * @returns {Object} - Returns an Object as node, or null if NULL-record.
-    */
-  parseNode: function (reader, version) {
+  parseNode: function parseNode(reader, version) {
 
     // The first three data sizes depends on version.
     var endOffset = version >= 7500 ? reader.getUint64() : reader.getUint32();
     var numProperties = version >= 7500 ? reader.getUint64() : reader.getUint32();
+
+    // note: do not remove this even if you get a linter warning as it moves the buffer forward
     var propertyListLen = version >= 7500 ? reader.getUint64() : reader.getUint32();
+
     var nameLen = reader.getUint8();
     var name = reader.getString(nameLen);
 
@@ -58544,7 +57681,7 @@ Object.assign(BinaryParser.prototype, {
 
     var isSingleProperty = false;
 
-    // if this node represents just a single property
+    // check if this node represents just a single property
     // like (name, 0) set or (name2, [0, 1, 2]) set of {name: 0, name2: [0, 1, 2]}
     if (numProperties === 1 && reader.getOffset() === endOffset) {
 
@@ -58564,23 +57701,11 @@ Object.assign(BinaryParser.prototype, {
 
         if (Array.isArray(value)) {
 
-          // node represents
-          //	Vertices: *3 {
-          //		a: 0.01, 0.02, 0.03
-          //	}
-          // of text format here.
-
           node.properties[node.name] = node.propertyList[0];
           subNodes[node.name] = node;
 
-          // Later phase expects single property array is in node.properties.a as String.
-          // TODO: optimize
-          node.properties.a = value.toString();
+          node.properties.a = value;
         } else {
-
-          // node represents
-          // 	Version: 100
-          // of text format here.
 
           properties[node.name] = value;
         }
@@ -58588,13 +57713,11 @@ Object.assign(BinaryParser.prototype, {
         continue;
       }
 
-      // special case: connections
+      // parse connections
       if (name === 'Connections' && node.name === 'C') {
 
         var array = [];
 
-        // node.propertyList would be like
-        // ["OO", 111264976, 144038752, "d|x"] (?, from, to, additional values)
         for (var i = 1, il = node.propertyList.length; i < il; i++) {
 
           array[i - 1] = node.propertyList[i];
@@ -58611,9 +57734,8 @@ Object.assign(BinaryParser.prototype, {
       }
 
       // special case: child node is Properties\d+
+      // move child node's properties to this node.
       if (node.name.match(/^Properties\d+$/)) {
-
-        // move child node's properties to this node.
 
         var keys = Object.keys(node.properties);
 
@@ -58626,7 +57748,7 @@ Object.assign(BinaryParser.prototype, {
         continue;
       }
 
-      // special case: properties
+      // parse 'properties70'
       if (name.match(/^Properties\d+$/) && node.name === 'P') {
 
         var innerPropName = node.propertyList[0];
@@ -58646,26 +57768,19 @@ Object.assign(BinaryParser.prototype, {
           innerPropValue = node.propertyList[4];
         }
 
-        if (innerPropType1.indexOf('Lcl_') === 0) {
-
-          innerPropValue = innerPropValue.toString();
-        }
-
-        // this will be copied to parent. see above.
+        // this will be copied to parent, see above
         properties[innerPropName] = {
 
-          type: innerPropType1,
-          type2: innerPropType2,
-          flag: innerPropFlag,
-          value: innerPropValue
+          'type': innerPropType1,
+          'type2': innerPropType2,
+          'flag': innerPropFlag,
+          'value': innerPropValue
 
         };
 
         continue;
       }
 
-      // standard case
-      // follows TextParser's manner.
       if (subNodes[node.name] === undefined) {
 
         if (typeof node.id === 'number') {
@@ -58676,27 +57791,32 @@ Object.assign(BinaryParser.prototype, {
 
           subNodes[node.name] = node;
         }
-      } else if (node.id === '') {
-
-        if (!Array.isArray(subNodes[node.name])) {
-
-          subNodes[node.name] = [subNodes[node.name]];
-        }
-
-        subNodes[node.name].push(node);
-      } else if (subNodes[node.name][node.id] === undefined) {
-
-        subNodes[node.name][node.id] = node;
       } else {
 
-        // conflict id. irregular?
+        if (node.id === '') {
 
-        if (!Array.isArray(subNodes[node.name][node.id])) {
+          if (!Array.isArray(subNodes[node.name])) {
 
-          subNodes[node.name][node.id] = [subNodes[node.name][node.id]];
+            subNodes[node.name] = [subNodes[node.name]];
+          }
+
+          subNodes[node.name].push(node);
+        } else {
+
+          if (subNodes[node.name][node.id] === undefined) {
+
+            subNodes[node.name][node.id] = node;
+          } else {
+
+            // conflict id. irregular?
+            if (!Array.isArray(subNodes[node.name][node.id])) {
+
+              subNodes[node.name][node.id] = [subNodes[node.name][node.id]];
+            }
+
+            subNodes[node.name][node.id].push(node);
+          }
         }
-
-        subNodes[node.name][node.id].push(node);
       }
     }
 
@@ -58708,40 +57828,50 @@ Object.assign(BinaryParser.prototype, {
       attrType: attrType,
       name: name,
       properties: properties,
-      propertyList: propertyList, // raw property list, would be used by parent
+      propertyList: propertyList, // raw property list used by parent
       subNodes: subNodes
 
     };
   },
-  parseProperty: function (reader) {
+
+  parseProperty: function parseProperty(reader) {
 
     var type = reader.getChar();
 
     switch (type) {
 
-      case 'F':
-        return reader.getFloat32();
+      case 'C':
+        return reader.getBoolean();
 
       case 'D':
         return reader.getFloat64();
 
-      case 'L':
-        return reader.getInt64();
+      case 'F':
+        return reader.getFloat32();
 
       case 'I':
         return reader.getInt32();
 
+      case 'L':
+        return reader.getInt64();
+
+      case 'R':
+        var length = reader.getUint32();
+        return reader.getArrayBuffer(length);
+
+      case 'S':
+        var length = reader.getUint32();
+        return reader.getString(length);
+
       case 'Y':
         return reader.getInt16();
 
-      case 'C':
-        return reader.getBoolean();
-
-      case 'f':
-      case 'd':
-      case 'l':
-      case 'i':
       case 'b':
+      case 'c':
+      case 'd':
+      case 'f':
+      case 'i':
+      case 'l':
 
         var arrayLength = reader.getUint32();
         var encoding = reader.getUint32(); // 0: non-compressed, 1: compressed
@@ -58751,20 +57881,21 @@ Object.assign(BinaryParser.prototype, {
 
           switch (type) {
 
-            case 'f':
-              return reader.getFloat32Array(arrayLength);
+            case 'b':
+            case 'c':
+              return reader.getBooleanArray(arrayLength);
 
             case 'd':
               return reader.getFloat64Array(arrayLength);
 
-            case 'l':
-              return reader.getInt64Array(arrayLength);
+            case 'f':
+              return reader.getFloat32Array(arrayLength);
 
             case 'i':
               return reader.getInt32Array(arrayLength);
 
-            case 'b':
-              return reader.getBooleanArray(arrayLength);
+            case 'l':
+              return reader.getInt64Array(arrayLength);
 
           }
         }
@@ -58779,36 +57910,30 @@ Object.assign(BinaryParser.prototype, {
 
         switch (type) {
 
-          case 'f':
-            return reader2.getFloat32Array(arrayLength);
+          case 'b':
+          case 'c':
+            return reader2.getBooleanArray(arrayLength);
 
           case 'd':
             return reader2.getFloat64Array(arrayLength);
 
-          case 'l':
-            return reader2.getInt64Array(arrayLength);
+          case 'f':
+            return reader2.getFloat32Array(arrayLength);
 
           case 'i':
             return reader2.getInt32Array(arrayLength);
 
-          case 'b':
-            return reader2.getBooleanArray(arrayLength);
+          case 'l':
+            return reader2.getInt64Array(arrayLength);
 
         }
-
-      case 'S':
-        var length = reader.getUint32();
-        return reader.getString(length);
-
-      case 'R':
-        var length = reader.getUint32();
-        return reader.getArrayBuffer(length);
 
       default:
         throw new Error('THREE.FBXLoader: Unknown property type ' + type);
 
     }
   }
+
 });
 
 function BinaryReader(buffer, littleEndian) {
@@ -58819,28 +57944,31 @@ function BinaryReader(buffer, littleEndian) {
 }
 
 Object.assign(BinaryReader.prototype, {
-  getOffset: function () {
+
+  getOffset: function getOffset() {
 
     return this.offset;
   },
-  size: function () {
+
+  size: function size() {
 
     return this.dv.buffer.byteLength;
   },
-  skip: function (length) {
+
+  skip: function skip(length) {
 
     this.offset += length;
   },
 
-
   // seems like true/false representation depends on exporter.
-  //   true: 1 or 'Y'(=0x59), false: 0 or 'T'(=0x54)
+  // true: 1 or 'Y'(=0x59), false: 0 or 'T'(=0x54)
   // then sees LSB.
-  getBoolean: function () {
+  getBoolean: function getBoolean() {
 
     return (this.getUint8() & 1) === 1;
   },
-  getBooleanArray: function (size) {
+
+  getBooleanArray: function getBooleanArray(size) {
 
     var a = [];
 
@@ -58851,13 +57979,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getInt8: function () {
+
+  getInt8: function getInt8() {
 
     var value = this.dv.getInt8(this.offset);
     this.offset += 1;
     return value;
   },
-  getInt8Array: function (size) {
+
+  getInt8Array: function getInt8Array(size) {
 
     var a = [];
 
@@ -58868,13 +57998,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getUint8: function () {
+
+  getUint8: function getUint8() {
 
     var value = this.dv.getUint8(this.offset);
     this.offset += 1;
     return value;
   },
-  getUint8Array: function (size) {
+
+  getUint8Array: function getUint8Array(size) {
 
     var a = [];
 
@@ -58885,13 +58017,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getInt16: function () {
+
+  getInt16: function getInt16() {
 
     var value = this.dv.getInt16(this.offset, this.littleEndian);
     this.offset += 2;
     return value;
   },
-  getInt16Array: function (size) {
+
+  getInt16Array: function getInt16Array(size) {
 
     var a = [];
 
@@ -58902,13 +58036,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getUint16: function () {
+
+  getUint16: function getUint16() {
 
     var value = this.dv.getUint16(this.offset, this.littleEndian);
     this.offset += 2;
     return value;
   },
-  getUint16Array: function (size) {
+
+  getUint16Array: function getUint16Array(size) {
 
     var a = [];
 
@@ -58919,13 +58055,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getInt32: function () {
+
+  getInt32: function getInt32() {
 
     var value = this.dv.getInt32(this.offset, this.littleEndian);
     this.offset += 4;
     return value;
   },
-  getInt32Array: function (size) {
+
+  getInt32Array: function getInt32Array(size) {
 
     var a = [];
 
@@ -58936,13 +58074,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getUint32: function () {
+
+  getUint32: function getUint32() {
 
     var value = this.dv.getUint32(this.offset, this.littleEndian);
     this.offset += 4;
     return value;
   },
-  getUint32Array: function (size) {
+
+  getUint32Array: function getUint32Array(size) {
 
     var a = [];
 
@@ -58954,16 +58094,14 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-
-  // JavaScript doesn't support 64-bit integer so attempting to calculate by ourselves.
+  // JavaScript doesn't support 64-bit integer so calculate this here
   // 1 << 32 will return 1 so using multiply operation instead here.
-  // There'd be a possibility that this method returns wrong value if the value
+  // There's a possibility that this method returns wrong value if the value
   // is out of the range between Number.MAX_SAFE_INTEGER and Number.MIN_SAFE_INTEGER.
   // TODO: safely handle 64-bit integer
-  getInt64: function () {
+  getInt64: function getInt64() {
 
-    var low = void 0,
-        high = void 0;
+    var low, high;
 
     if (this.littleEndian) {
 
@@ -58990,7 +58128,8 @@ Object.assign(BinaryReader.prototype, {
 
     return high * 0x100000000 + low;
   },
-  getInt64Array: function (size) {
+
+  getInt64Array: function getInt64Array(size) {
 
     var a = [];
 
@@ -59002,12 +58141,10 @@ Object.assign(BinaryReader.prototype, {
     return a;
   },
 
-
   // Note: see getInt64() comment
-  getUint64: function () {
+  getUint64: function getUint64() {
 
-    var low = void 0,
-        high = void 0;
+    var low, high;
 
     if (this.littleEndian) {
 
@@ -59021,7 +58158,8 @@ Object.assign(BinaryReader.prototype, {
 
     return high * 0x100000000 + low;
   },
-  getUint64Array: function (size) {
+
+  getUint64Array: function getUint64Array(size) {
 
     var a = [];
 
@@ -59032,13 +58170,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getFloat32: function () {
+
+  getFloat32: function getFloat32() {
 
     var value = this.dv.getFloat32(this.offset, this.littleEndian);
     this.offset += 4;
     return value;
   },
-  getFloat32Array: function (size) {
+
+  getFloat32Array: function getFloat32Array(size) {
 
     var a = [];
 
@@ -59049,13 +58189,15 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getFloat64: function () {
+
+  getFloat64: function getFloat64() {
 
     var value = this.dv.getFloat64(this.offset, this.littleEndian);
     this.offset += 8;
     return value;
   },
-  getFloat64Array: function (size) {
+
+  getFloat64Array: function getFloat64Array(size) {
 
     var a = [];
 
@@ -59066,17 +58208,20 @@ Object.assign(BinaryReader.prototype, {
 
     return a;
   },
-  getArrayBuffer: function (size) {
+
+  getArrayBuffer: function getArrayBuffer(size) {
 
     var value = this.dv.buffer.slice(this.offset, this.offset + size);
     this.offset += size;
     return value;
   },
-  getChar: function () {
+
+  getChar: function getChar() {
 
     return String.fromCharCode(this.getUint8());
   },
-  getString: function (size) {
+
+  getString: function getString(size) {
 
     var s = '';
 
@@ -59097,123 +58242,22 @@ Object.assign(BinaryReader.prototype, {
 
     return s;
   }
+
 });
 
+// FBXTree holds a representation of the FBX data, returned by the TextParser ( FBX ASCII format)
+// and BinaryParser( FBX Binary format)
 function FBXTree() {}
 
 Object.assign(FBXTree.prototype, {
-  add: function (key, val) {
+
+  add: function add(key, val) {
 
     this[key] = val;
-  },
-  searchConnectionParent: function (id) {
-
-    if (this.__cache_search_connection_parent === undefined) {
-
-      this.__cache_search_connection_parent = [];
-    }
-
-    if (this.__cache_search_connection_parent[id] !== undefined) {
-
-      return this.__cache_search_connection_parent[id];
-    }
-
-    this.__cache_search_connection_parent[id] = [];
-
-    var conns = this.Connections.properties.connections;
-
-    var results = [];
-    for (var i = 0; i < conns.length; ++i) {
-
-      if (conns[i][0] == id) {
-
-        // 0 means scene root
-        var res = conns[i][1] === 0 ? -1 : conns[i][1];
-        results.push(res);
-      }
-    }
-
-    if (results.length > 0) {
-
-      append(this.__cache_search_connection_parent[id], results);
-      return results;
-    }
-
-    this.__cache_search_connection_parent[id] = [-1];
-    return [-1];
-  },
-  searchConnectionChildren: function (id) {
-
-    if (this.__cache_search_connection_children === undefined) {
-
-      this.__cache_search_connection_children = [];
-    }
-
-    if (this.__cache_search_connection_children[id] !== undefined) {
-
-      return this.__cache_search_connection_children[id];
-    }
-
-    this.__cache_search_connection_children[id] = [];
-
-    var conns = this.Connections.properties.connections;
-
-    var res = [];
-    for (var i = 0; i < conns.length; ++i) {
-
-      if (conns[i][1] == id) {
-
-        // 0 means scene root
-        res.push(conns[i][0] === 0 ? -1 : conns[i][0]);
-        // there may more than one kid, then search to the end
-      }
-    }
-
-    if (res.length > 0) {
-
-      append(this.__cache_search_connection_children[id], res);
-      return res;
-    }
-
-    this.__cache_search_connection_children[id] = [];
-    return [];
-  },
-  searchConnectionType: function (id, to) {
-
-    var key = id + ',' + to; // TODO: to hash
-    if (this.__cache_search_connection_type === undefined) {
-
-      this.__cache_search_connection_type = {};
-    }
-
-    if (this.__cache_search_connection_type[key] !== undefined) {
-
-      return this.__cache_search_connection_type[key];
-    }
-
-    this.__cache_search_connection_type[key] = '';
-
-    var conns = this.Connections.properties.connections;
-
-    for (var i = 0; i < conns.length; ++i) {
-
-      if (conns[i][0] == id && conns[i][1] == to) {
-
-        // 0 means scene root
-        this.__cache_search_connection_type[key] = conns[i][2];
-        return conns[i][2];
-      }
-    }
-
-    this.__cache_search_connection_type[id] = null;
-    return null;
   }
+
 });
 
-/**
-  * @param {ArrayBuffer} buffer
-  * @returns {boolean}
-  */
 function isFbxFormatBinary(buffer) {
 
   var CORRECT = 'Kaydara FBX Binary  \0';
@@ -59221,9 +58265,6 @@ function isFbxFormatBinary(buffer) {
   return buffer.byteLength >= CORRECT.length && CORRECT === convertArrayBufferToString(buffer, 0, CORRECT.length);
 }
 
-/**
-  * @returns {boolean}
-  */
 function isFbxFormatASCII(text) {
 
   var CORRECT = ['K', 'a', 'y', 'd', 'a', 'r', 'a', '\\', 'F', 'B', 'X', '\\', 'B', 'i', 'n', 'a', 'r', 'y', '\\', '\\'];
@@ -59250,9 +58291,6 @@ function isFbxFormatASCII(text) {
   return true;
 }
 
-/**
-  * @returns {number}
-  */
 function getFbxVersion(text) {
 
   var versionRegExp = /FBXVersion: (\d+)/;
@@ -59265,27 +58303,17 @@ function getFbxVersion(text) {
   throw new Error('THREE.FBXLoader: Cannot find the version number for the file given.');
 }
 
-/**
-  * Converts FBX ticks into real time seconds.
-  * @param {number} time - FBX tick timestamp to convert.
-  * @returns {number} - FBX tick in real world time.
-  */
+// Converts FBX ticks into real time seconds.
 function convertFBXTimeToSeconds(time) {
 
-  // Constant is FBX ticks per second.
   return time / 46186158000;
 }
 
-/**
-  * Parses comma separated list of float numbers and returns them in an array.
-  * @example
-  * // Returns [ 5.6, 9.4, 2.5, 1.4 ]
-  * parseFloatArray( "5.6,9.4,2.5,1.4" )
-  * @returns {number[]}
-  */
-function parseFloatArray(string) {
+// Parses comma separated list of numbers and returns them an array.
+// Used internally by the TextParser
+function parseNumberArray(value) {
 
-  var array = string.split(',');
+  var array = value.split(',');
 
   for (var i = 0, l = array.length; i < l; i++) {
 
@@ -59295,57 +58323,17 @@ function parseFloatArray(string) {
   return array;
 }
 
-/**
-  * Parses comma separated list of int numbers and returns them in an array.
-  * @example
-  * // Returns [ 5, 8, 2, 3 ]
-  * parseFloatArray( "5,8,2,3" )
-  * @returns {number[]}
-  */
-function parseIntArray(string) {
-
-  var array = string.split(',');
-
-  for (var i = 0, l = array.length; i < l; i++) {
-
-    array[i] = parseInt(array[i]);
-  }
-
-  return array;
-}
-
-/**
-  * Parses Vector3 property from FBXTree.  Property is given as .value.x, .value.y, etc.
-  * @param {FBXVector3} property - Property to parse as Vector3.
-  * @returns {THREE.Vector3}
-  */
 function parseVector3(property) {
 
   return new Vector3().fromArray(property.value);
 }
 
-/**
-  * Parses Color property from FBXTree.  Property is given as .value.x, .value.y, etc.
-  * @param {FBXVector3} property - Property to parse as Color.
-  * @returns {THREE.Color}
-  */
 function parseColor(property) {
 
   return new Color().fromArray(property.value);
 }
 
-function parseMatrixArray(floatString) {
-
-  return new Matrix4().fromArray(parseFloatArray(floatString));
-}
-
-/**
-  * Converts ArrayBuffer to String.
-  * @param {ArrayBuffer} buffer
-  * @param {number} from
-  * @param {number} to
-  * @returns {String}
-  */
+// Converts ArrayBuffer to String.
 function convertArrayBufferToString(buffer, from, to) {
 
   if (from === undefined) from = 0;
@@ -59367,20 +58355,6 @@ function convertArrayBufferToString(buffer, from, to) {
 
   return s;
 }
-
-/**
-  * Converts number from degrees into radians.
-  * @param {number} value
-  * @returns {number}
-  */
-function degreeToRadian(value) {
-
-  return value * DEG2RAD;
-}
-
-var DEG2RAD = Math.PI / 180;
-
-//
 
 function findIndex(array, func) {
 
@@ -59464,11 +58438,11 @@ var fontLoader = null;
 
 var fbxLoader = null;
 
-var defaultReject = function (err) {
+var defaultReject = function defaultReject(err) {
   console.log(err);
 };
 
-var promisifyLoader = function (loader) {
+var promisifyLoader = function promisifyLoader(loader) {
   return function (url) {
     return new Promise(function (resolve) {
       var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultReject;
@@ -59562,66 +58536,73 @@ var AnimationControls = function () {
     this.actions = [];
   }
 
-  AnimationControls.prototype.reset = function reset() {
+  createClass(AnimationControls, [{
+    key: 'reset',
+    value: function reset() {
 
-    this.actions.forEach(function (action) {
+      this.actions.forEach(function (action) {
 
-      action.stop();
-    });
+        action.stop();
+      });
 
-    Object.values(this.mixers).forEach(function (mixer) {
+      Object.values(this.mixers).forEach(function (mixer) {
 
-      mixer.time = 0;
-      mixer.stopAllAction();
-    });
+        mixer.time = 0;
+        mixer.stopAllAction();
+      });
 
-    this.mixers = {};
-    this.actions = [];
-    this.isPaused = true;
-  };
+      this.mixers = {};
+      this.actions = [];
+      this.isPaused = true;
+    }
+  }, {
+    key: 'update',
+    value: function update(delta) {
 
-  AnimationControls.prototype.update = function update(delta) {
+      if (this.isPaused) return;
 
-    if (this.isPaused) return;
+      Object.values(this.mixers).forEach(function (mixer) {
 
-    Object.values(this.mixers).forEach(function (mixer) {
+        // divide by 1000 to convert seconds to milliseconds
+        // then divide by 2 to match FBX framerate
+        mixer.update(delta / 1000 / 2);
+      });
+    }
+  }, {
+    key: 'initAnimation',
+    value: function initAnimation(object, animationClip, mixer, startAt) {
 
-      // divide by 1000 to convert seconds to milliseconds
-      mixer.update(delta / 1000);
-    });
-  };
+      var action = mixer.clipAction(animationClip);
+      // action.clampWhenFinished = true;
+      action.loop = LoopOnce;
 
-  AnimationControls.prototype.initAnimation = function initAnimation(object, animationClip, mixer, startAt) {
+      if (startAt !== undefined) action.startAt(startAt);
 
-    var action = mixer.clipAction(animationClip);
-    action.clampWhenFinished = true;
-    action.loop = LoopOnce;
+      action.play();
 
-    if (startAt !== undefined) action.startAt(startAt);
+      if (!this.mixers[mixer.name]) this.mixers[mixer.name] = mixer;
 
-    action.play();
+      this.actions.push(action);
+    }
+  }, {
+    key: 'play',
+    value: function play() {
 
-    if (!this.mixers[mixer.name]) this.mixers[mixer.name] = mixer;
+      this.isPaused = false;
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
 
-    this.actions.push(action);
-  };
-
-  AnimationControls.prototype.play = function play() {
-
-    this.isPaused = false;
-  };
-
-  AnimationControls.prototype.pause = function pause() {
-
-    this.isPaused = true;
-  };
-
+      this.isPaused = true;
+    }
+  }]);
   return AnimationControls;
 }();
 
 var animationControls = new AnimationControls();
 
-var createTextMesh = function (font, text, color) {
+var createTextMesh = function createTextMesh(font, text, color) {
 
     color = color === undefined ? 0xeeeeee : color;
 
@@ -59663,183 +58644,191 @@ var Grid = function () {
         this.initCoords();
     }
 
-    Grid.prototype.init = function init(position) {
+    createClass(Grid, [{
+        key: 'init',
+        value: function init(position) {
 
-        this.initArrow(position);
-        this.initText(position);
-    };
-
-    Grid.prototype.initGrid = function initGrid() {
-
-        var step = this.length / this.widthDivisions;
-        var halfWidth = this.width / 2;
-
-        var lengthDivisions = this.width / step;
-        var halfLength = this.length / 2;
-
-        var widthCenter = this.widthDivisions / 2;
-        var lengthCenter = lengthDivisions / 2;
-
-        var vertices = [];
-        var colors = [];
-
-        // vertical lines
-        for (var i = 0, j = 0, k = -halfLength; i <= this.widthDivisions; i++, k += step) {
-
-            // create a vertex at either end of the  line
-            vertices.push(-halfWidth, this.height, k, halfWidth, this.height, k);
-
-            var color = i === widthCenter ? this.colorCenterLine : this.colorGrid;
-
-            // push the color details twice (once for each vertex)
-            colors.push.apply(colors, color.concat(color));
+            this.initArrow(position);
+            this.initText(position);
         }
+    }, {
+        key: 'initGrid',
+        value: function initGrid() {
 
-        // horizontal lines
-        for (var _i = 0, _k = -halfWidth; _i <= lengthDivisions; _i++, _k += step) {
+            var step = this.length / this.widthDivisions;
+            var halfWidth = this.width / 2;
 
-            vertices.push(_k, this.height, -halfLength, _k, this.height, halfLength);
+            var lengthDivisions = this.width / step;
+            var halfLength = this.length / 2;
 
-            var _color = _i === lengthCenter ? this.colorCenterLine : this.colorGrid;
+            var widthCenter = this.widthDivisions / 2;
+            var lengthCenter = lengthDivisions / 2;
 
-            colors.push.apply(colors, _color.concat(_color));
+            var vertices = [];
+            var colors = [];
+
+            // vertical lines
+            for (var i = 0, j = 0, k = -halfLength; i <= this.widthDivisions; i++, k += step) {
+
+                // create a vertex at either end of the  line
+                vertices.push(-halfWidth, this.height, k, halfWidth, this.height, k);
+
+                var color = i === widthCenter ? this.colorCenterLine : this.colorGrid;
+
+                // push the color details twice (once for each vertex)
+                colors.push.apply(colors, toConsumableArray(color).concat(toConsumableArray(color)));
+            }
+
+            // horizontal lines
+            for (var _i = 0, _k = -halfWidth; _i <= lengthDivisions; _i++, _k += step) {
+
+                vertices.push(_k, this.height, -halfLength, _k, this.height, halfLength);
+
+                var _color = _i === lengthCenter ? this.colorCenterLine : this.colorGrid;
+
+                colors.push.apply(colors, toConsumableArray(_color).concat(toConsumableArray(_color)));
+            }
+
+            var geometry = new BufferGeometry();
+            geometry.addAttribute('position', new Float32BufferAttribute(vertices, 3));
+            geometry.addAttribute('color', new Float32BufferAttribute(colors, 3));
+
+            var material = new LineBasicMaterial({ vertexColors: VertexColors });
+
+            this.group.add(new LineSegments(geometry, material));
         }
+    }, {
+        key: 'initCenterCircle',
+        value: function initCenterCircle() {
 
-        var geometry = new BufferGeometry();
-        geometry.addAttribute('position', new Float32BufferAttribute(vertices, 3));
-        geometry.addAttribute('color', new Float32BufferAttribute(colors, 3));
+            var geometry = new CircleBufferGeometry(13.5, 64);
+            geometry.rotateX(-Math.PI / 2);
+            geometry.translate(0, this.height, 0);
+            var material = new LineBasicMaterial({ color: this.colorGrid });
+            var edges = new EdgesGeometry(geometry);
 
-        var material = new LineBasicMaterial({ vertexColors: VertexColors });
+            var line = new LineSegments(edges, material);
 
-        this.group.add(new LineSegments(geometry, material));
-    };
+            this.group.add(line);
+        }
+    }, {
+        key: 'initCoords',
+        value: function initCoords() {
 
-    Grid.prototype.initCenterCircle = function initCenterCircle() {
+            var position = 40;
+            var height = this.height + 0.1;
 
-        var geometry = new CircleBufferGeometry(13.5, 64);
-        geometry.rotateX(-Math.PI / 2);
-        geometry.translate(0, this.height, 0);
-        var material = new LineBasicMaterial({ color: this.colorGrid });
-        var edges = new EdgesGeometry(geometry);
+            var geometry = new CircleBufferGeometry(2, 32);
+            geometry.rotateX(-Math.PI / 2);
+            geometry.translate(0, height, 0);
 
-        var line = new LineSegments(edges, material);
+            var material = new MeshBasicMaterial({ color: this.colorCenterLine });
 
-        this.group.add(line);
-    };
+            var center = new Mesh(geometry, material);
+            center.position.set(0, 0, 0);
 
-    Grid.prototype.initCoords = function initCoords() {
+            var upperLeft = new Mesh(geometry, material);
+            upperLeft.position.set(-position, 0, -position);
 
-        var position = 40;
-        var height = this.height + 0.1;
+            var upperRight = new Mesh(geometry, material);
+            upperRight.position.set(position, 0, -position);
 
-        var geometry = new CircleBufferGeometry(2, 32);
-        geometry.rotateX(-Math.PI / 2);
-        geometry.translate(0, height, 0);
+            var lowerLeft = new Mesh(geometry, material);
+            lowerLeft.position.set(-position, 0, position);
 
-        var material = new MeshBasicMaterial({ color: this.colorCenterLine });
+            var lowerRight = new Mesh(geometry, material);
+            lowerRight.position.set(position, 0, position);
 
-        var center = new Mesh(geometry, material);
-        center.position.set(0, 0, 0);
+            this.group.add(center, upperLeft, upperRight, lowerLeft, lowerRight);
+        }
+    }, {
+        key: 'initText',
+        value: function initText(position) {
+            var _this = this;
 
-        var upperLeft = new Mesh(geometry, material);
-        upperLeft.position.set(-position, 0, -position);
+            var createBallText = function createBallText() {
 
-        var upperRight = new Mesh(geometry, material);
-        upperRight.position.set(position, 0, -position);
+                _this.ballText = createTextMesh(_this.font, '(' + position.x + ',' + position.z + ')', 0x000000);
+                _this.ballText.position.set(position.x - 29.5, 2, position.z + 7);
 
-        var lowerLeft = new Mesh(geometry, material);
-        lowerLeft.position.set(-position, 0, position);
+                _this.group.add(_this.ballText);
+            };
 
-        var lowerRight = new Mesh(geometry, material);
-        lowerRight.position.set(position, 0, position);
-
-        this.group.add(center, upperLeft, upperRight, lowerLeft, lowerRight);
-    };
-
-    Grid.prototype.initText = function initText(position) {
-        var _this = this;
-
-        var createBallText = function () {
-
-            _this.ballText = createTextMesh(_this.font, '(' + position.x + ',' + position.z + ')', 0x000000);
-            _this.ballText.position.set(position.x - 29.5, 2, position.z + 7);
-
-            _this.group.add(_this.ballText);
-        };
-
-        // if the font is already loaded then this is not the first time
-        // the function has been called and only ball text needs updating
-        if (this.font) {
-
-            createBallText();
-        } else {
-
-            loaders.fontLoader('/assets/fonts/json/droid_sans_mono_regular.typeface.json').then(function (font) {
-
-                _this.font = font;
-
-                var centerText = createTextMesh(_this.font, '(0,0)', _this.colorCenterLine);
-                centerText.position.set(3, 0, -2);
-
-                var upperLeftText = createTextMesh(_this.font, '(-40,40)', _this.colorCenterLine);
-                upperLeftText.position.set(-38, 0, -42);
-
-                var upperRightText = createTextMesh(_this.font, '(40,40)', _this.colorCenterLine);
-                upperRightText.position.set(43, 0, -42);
-
-                var lowerLeftText = createTextMesh(_this.font, '(-40,-40)', _this.colorCenterLine);
-                lowerLeftText.position.set(-38, 0, 38);
-
-                var lowerRightText = createTextMesh(_this.font, '(40,-40)', _this.colorCenterLine);
-                lowerRightText.position.set(43, 0, 38);
-
-                _this.group.add(centerText, upperLeftText, upperRightText, lowerLeftText, lowerRightText);
+            // if the font is already loaded then this is not the first time
+            // the function has been called and only ball text needs updating
+            if (this.font) {
 
                 createBallText();
-            });
+            } else {
+
+                loaders.fontLoader('/assets/fonts/json/droid_sans_mono_regular.typeface.json').then(function (font) {
+
+                    _this.font = font;
+
+                    var centerText = createTextMesh(_this.font, '(0,0)', _this.colorCenterLine);
+                    centerText.position.set(3, 0, -2);
+
+                    var upperLeftText = createTextMesh(_this.font, '(-40,40)', _this.colorCenterLine);
+                    upperLeftText.position.set(-38, 0, -42);
+
+                    var upperRightText = createTextMesh(_this.font, '(40,40)', _this.colorCenterLine);
+                    upperRightText.position.set(43, 0, -42);
+
+                    var lowerLeftText = createTextMesh(_this.font, '(-40,-40)', _this.colorCenterLine);
+                    lowerLeftText.position.set(-38, 0, 38);
+
+                    var lowerRightText = createTextMesh(_this.font, '(40,-40)', _this.colorCenterLine);
+                    lowerRightText.position.set(43, 0, 38);
+
+                    _this.group.add(centerText, upperLeftText, upperRightText, lowerLeftText, lowerRightText);
+
+                    createBallText();
+                });
+            }
         }
-    };
+    }, {
+        key: 'initArrow',
+        value: function initArrow(position) {
 
-    Grid.prototype.initArrow = function initArrow(position) {
+            var height = this.height + 3;
 
-        var height = this.height + 3;
+            // arrow
+            var dir = new Vector3(1, 0, 0);
+            var origin = new Vector3(position.x, height, position.z);
+            this.arrowHelper = new ArrowHelper(dir, origin, 30, 0x000000);
 
-        // arrow
-        var dir = new Vector3(1, 0, 0);
-        var origin = new Vector3(position.x, height, position.z);
-        this.arrowHelper = new ArrowHelper(dir, origin, 30, 0x000000);
+            this.group.add(this.arrowHelper);
 
-        this.group.add(this.arrowHelper);
+            this.arrowHelper.cone.scale.set(3, 15, 3);
+            this.arrowHelper.cone.updateMatrix();
 
-        this.arrowHelper.cone.scale.set(3, 15, 3);
-        this.arrowHelper.cone.updateMatrix();
+            // circle around ball
+            var geometry = new CircleBufferGeometry(8, 64);
+            geometry.rotateX(-Math.PI / 2);
+            geometry.translate(0, height, 0);
+            var material = new LineBasicMaterial({ color: 0x000000 });
+            var edges = new EdgesGeometry(geometry);
 
-        // circle around ball
-        var geometry = new CircleBufferGeometry(8, 64);
-        geometry.rotateX(-Math.PI / 2);
-        geometry.translate(0, height, 0);
-        var material = new LineBasicMaterial({ color: 0x000000 });
-        var edges = new EdgesGeometry(geometry);
+            this.ballCircle = new LineSegments(edges, material);
+            this.ballCircle.position.set(position.x, 0, position.z);
 
-        this.ballCircle = new LineSegments(edges, material);
-        this.ballCircle.position.set(position.x, 0, position.z);
+            this.group.add(this.ballCircle);
+        }
+    }, {
+        key: 'update',
+        value: function update(directionVector) {
 
-        this.group.add(this.ballCircle);
-    };
+            this.arrowHelper.setDirection(directionVector);
+        }
+    }, {
+        key: 'reset',
+        value: function reset() {
 
-    Grid.prototype.update = function update(directionVector) {
-
-        this.arrowHelper.setDirection(directionVector);
-    };
-
-    Grid.prototype.reset = function reset() {
-
-        this.group.remove(this.arrowHelper, this.ballCircle, this.ballText);
-    };
-
-    createClass(Grid, [{
+            this.group.remove(this.arrowHelper, this.ballCircle, this.ballText);
+        }
+    }, {
         key: 'enabled',
-        set: function (bool) {
+        set: function set(bool) {
 
             this.group.visible = bool;
         }
@@ -59862,153 +58851,168 @@ var HUD = function () {
         this.initObjects();
     }
 
-    HUD.prototype.init = function init(position) {
+    createClass(HUD, [{
+        key: 'init',
+        value: function init(position) {
 
-        this.position = position;
+            this.position = position;
 
-        this.initBallHelper(position);
-        this.initArrowHelper();
-    };
+            this.initBallHelper(position);
+            this.initArrowHelper();
+        }
+    }, {
+        key: 'initFrame',
+        value: function initFrame() {
 
-    HUD.prototype.initFrame = function initFrame() {
+            var width = 250;
+            var height = 190;
+            var x = 10;
+            var y = HTMLControl.canvas.height - height - 10;
 
-        var width = 250;
-        var height = 190;
-        var x = 10;
-        var y = HTMLControl.canvas.height - height - 10;
+            this.frame = {
+                x: x,
+                y: y,
+                height: height,
+                width: width,
+                center: new Vector3(
 
-        this.frame = {
-            x: x,
-            y: y,
-            height: height,
-            width: width,
-            center: new Vector3(
+                // to place at left
+                // -HTMLControl.canvas.width / 2 + this.frame.width / 2 + this.frame.x,
 
-            // to place at left
-            // -HTMLControl.canvas.width / 2 + this.frame.width / 2 + this.frame.x,
+                // to place at right
+                HTMLControl.canvas.width / 2 - width / 2 - x,
 
-            // to place at right
-            HTMLControl.canvas.width / 2 - width / 2 - x,
+                // top place at top
+                -HTMLControl.canvas.height / 2 + height / 2 + y,
 
-            // top place at top
-            -HTMLControl.canvas.height / 2 + height / 2 + y,
+                // to place at bottom
+                // HTMLControl.canvas.height / 2 - this.frame.height / 2 - this.frame.y,
 
-            // to place at bottom
-            // HTMLControl.canvas.height / 2 - this.frame.height / 2 - this.frame.y,
+                0)
+            };
+        }
 
-            0)
-        };
-    };
+        // create a camera the full size of the canvas
 
-    // create a camera the full size of the canvas
+    }, {
+        key: 'initCamera',
+        value: function initCamera() {
 
+            this.camera = new OrthographicCamera(-HTMLControl.canvas.width / 2, HTMLControl.canvas.width / 2, HTMLControl.canvas.height / 2, -HTMLControl.canvas.height / 2, 0.1, 1000);
 
-    HUD.prototype.initCamera = function initCamera() {
+            this.camera.position.set(0, 0, 2);
+        }
+    }, {
+        key: 'initObjects',
+        value: function initObjects() {
 
-        this.camera = new OrthographicCamera(-HTMLControl.canvas.width / 2, HTMLControl.canvas.width / 2, HTMLControl.canvas.height / 2, -HTMLControl.canvas.height / 2, 0.1, 1000);
+            this.initBackGround();
+            this.initBorder();
+            this.initField();
+            this.initGoals();
+        }
+    }, {
+        key: 'initBackGround',
+        value: function initBackGround() {
 
-        this.camera.position.set(0, 0, 2);
-    };
+            var plane = new PlaneBufferGeometry(this.frame.width, this.frame.height);
+            var mesh = new Mesh(plane, new MeshBasicMaterial({ color: 0x909090, transparent: true, opacity: 0.1 }));
 
-    HUD.prototype.initObjects = function initObjects() {
+            mesh.position.copy(this.frame.center);
 
-        this.initBackGround();
-        this.initBorder();
-        this.initField();
-        this.initGoals();
-    };
+            this.scene.add(mesh);
+        }
+    }, {
+        key: 'initBorder',
+        value: function initBorder() {
 
-    HUD.prototype.initBackGround = function initBackGround() {
+            var plane = new PlaneBufferGeometry(this.frame.width, this.frame.height);
 
-        var plane = new PlaneBufferGeometry(this.frame.width, this.frame.height);
-        var mesh = new Mesh(plane, new MeshBasicMaterial({ color: 0x909090, transparent: true, opacity: 0.1 }));
+            var edges = new EdgesGeometry(plane);
+            var line = new LineSegments(edges, new LineBasicMaterial({ color: 0x202020, transparent: true, opacity: 0.75 }));
 
-        mesh.position.copy(this.frame.center);
+            line.position.copy(this.frame.center);
 
-        this.scene.add(mesh);
-    };
+            this.scene.add(line);
+        }
+    }, {
+        key: 'initField',
+        value: function initField() {
 
-    HUD.prototype.initBorder = function initBorder() {
+            var plane = new PlaneBufferGeometry(this.frame.width - 50, this.frame.height - 50);
+            var mesh = new Mesh(plane, new MeshBasicMaterial({ color: 0x75B82B }));
 
-        var plane = new PlaneBufferGeometry(this.frame.width, this.frame.height);
+            mesh.position.copy(this.frame.center);
 
-        var edges = new EdgesGeometry(plane);
-        var line = new LineSegments(edges, new LineBasicMaterial({ color: 0x202020, transparent: true, opacity: 0.75 }));
+            this.scene.add(mesh);
+        }
+    }, {
+        key: 'initGoals',
+        value: function initGoals() {
 
-        line.position.copy(this.frame.center);
+            var plane = new PlaneBufferGeometry(5, 50);
+            var mesh = new Mesh(plane, new MeshBasicMaterial({ color: 0x000080 }));
 
-        this.scene.add(line);
-    };
+            mesh.position.set(this.frame.center.x + 73, this.frame.center.y, this.frame.center.z + 1);
 
-    HUD.prototype.initField = function initField() {
+            this.scene.add(mesh);
+        }
+    }, {
+        key: 'initBallHelper',
+        value: function initBallHelper(position) {
 
-        var plane = new PlaneBufferGeometry(this.frame.width - 50, this.frame.height - 50);
-        var mesh = new Mesh(plane, new MeshBasicMaterial({ color: 0x75B82B }));
+            if (position === undefined) position = this.position;
 
-        mesh.position.copy(this.frame.center);
+            var geo = new CircleBufferGeometry(5, 12);
+            this.ballHelper = new Mesh(geo, new MeshBasicMaterial({ color: 0xC60000 }));
+            this.ballHelper.position.set(this.frame.center.x + position.x, this.frame.center.y - position.z, this.frame.center.z);
 
-        this.scene.add(mesh);
-    };
+            this.scene.add(this.ballHelper);
+        }
+    }, {
+        key: 'initArrowHelper',
+        value: function initArrowHelper() {
 
-    HUD.prototype.initGoals = function initGoals() {
+            var dir = new Vector3(1, 0, 0);
+            var origin = this.ballHelper.position.clone();
+            this.arrowHelper = new ArrowHelper(dir, origin, 40, 0x000000, 20, 10);
 
-        var plane = new PlaneBufferGeometry(5, 50);
-        var mesh = new Mesh(plane, new MeshBasicMaterial({ color: 0x000080 }));
+            this.scene.add(this.arrowHelper);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
 
-        mesh.position.set(this.frame.center.x + 73, this.frame.center.y, this.frame.center.z + 1);
+            // required to draw the renderer's background in the main scene
+            canvas.app.renderer.clear();
 
-        this.scene.add(mesh);
-    };
+            if (!this.enabled) return;
 
-    HUD.prototype.initBallHelper = function initBallHelper(position) {
+            canvas.app.renderer.render(this.scene, this.camera, null, true);
+        }
+    }, {
+        key: 'resize',
+        value: function resize() {
 
-        if (position === undefined) position = this.position;
+            this.initFrame();
+            this.initCamera();
+            this.scene = new Scene();
+            this.initObjects();
+        }
+    }, {
+        key: 'reset',
+        value: function reset() {
 
-        var geo = new CircleBufferGeometry(5, 12);
-        this.ballHelper = new Mesh(geo, new MeshBasicMaterial({ color: 0xC60000 }));
-        this.ballHelper.position.set(this.frame.center.x + position.x, this.frame.center.y - position.z, this.frame.center.z);
+            this.scene.remove(this.arrowHelper);
+            this.scene.remove(this.ballHelper);
+        }
+    }, {
+        key: 'update',
+        value: function update(directionVector) {
 
-        this.scene.add(this.ballHelper);
-    };
-
-    HUD.prototype.initArrowHelper = function initArrowHelper() {
-
-        var dir = new Vector3(1, 0, 0);
-        var origin = this.ballHelper.position.clone();
-        this.arrowHelper = new ArrowHelper(dir, origin, 40, 0x000000, 20, 10);
-
-        this.scene.add(this.arrowHelper);
-    };
-
-    HUD.prototype.render = function render() {
-
-        // required to draw the renderer's background in the main scene
-        canvas.app.renderer.clear();
-
-        if (!this.enabled) return;
-
-        canvas.app.renderer.render(this.scene, this.camera, null, true);
-    };
-
-    HUD.prototype.resize = function resize() {
-
-        this.initFrame();
-        this.initCamera();
-        this.scene = new Scene();
-        this.initObjects();
-    };
-
-    HUD.prototype.reset = function reset() {
-
-        this.scene.remove(this.arrowHelper);
-        this.scene.remove(this.ballHelper);
-    };
-
-    HUD.prototype.update = function update(directionVector) {
-
-        this.arrowHelper.setDirection(directionVector);
-    };
-
+            this.arrowHelper.setDirection(directionVector);
+        }
+    }]);
     return HUD;
 }();
 
@@ -60025,63 +59029,69 @@ var Overlay = function () {
     this.initListeners();
   }
 
-  Overlay.prototype.init = function init(position) {
-
-    this.grid.init(position);
-    this.hud.init(position);
-  };
-
-  Overlay.prototype.render = function render() {
-
-    this.hud.render();
-  };
-
-  Overlay.prototype.update = function update(slope) {
-
-    var angle = Math.atan(slope);
-    var x = Math.cos(angle);
-    var y = Math.sin(angle);
-
-    // direction of arrow is in 2D x, y plane (vertical to screen)
-    this.hud.update(new Vector3(x, y, 0).normalize());
-
-    // direction of arrow is in 3D x, -z plane (into screen)
-    this.grid.update(new Vector3(x, 0, -y).normalize());
-  };
-
-  Overlay.prototype.reset = function reset() {
-
-    this.hud.reset();
-    this.grid.reset();
-  };
-
-  Overlay.prototype.resize = function resize() {
-    var _this = this;
-
-    throttle(function () {
-      _this.hud.resize();
-    }, 250);
-  };
-
-  Overlay.prototype.initListeners = function initListeners() {
-    var _this2 = this;
-
-    HTMLControl.controls.slope.addEventListener('input', function (e) {
-
-      e.preventDefault();
-
-      _this2.update(e.target.value);
-    }, false);
-
-    HTMLControl.controls.showGrid.addEventListener('click', function (e) {
-
-      _this2.enabled = e.target.checked;
-    }, false);
-  };
-
   createClass(Overlay, [{
+    key: 'init',
+    value: function init(position) {
+
+      this.grid.init(position);
+      this.hud.init(position);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      this.hud.render();
+    }
+  }, {
+    key: 'update',
+    value: function update(slope) {
+
+      var angle = Math.atan(slope);
+      var x = Math.cos(angle);
+      var y = Math.sin(angle);
+
+      // direction of arrow is in 2D x, y plane (vertical to screen)
+      this.hud.update(new Vector3(x, y, 0).normalize());
+
+      // direction of arrow is in 3D x, -z plane (into screen)
+      this.grid.update(new Vector3(x, 0, -y).normalize());
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+
+      this.hud.reset();
+      this.grid.reset();
+    }
+  }, {
+    key: 'resize',
+    value: function resize() {
+      var _this = this;
+
+      throttle(function () {
+        _this.hud.resize();
+      }, 250);
+    }
+  }, {
+    key: 'initListeners',
+    value: function initListeners() {
+      var _this2 = this;
+
+      HTMLControl.controls.slope.addEventListener('input', function (e) {
+
+        e.preventDefault();
+
+        _this2.update(e.target.value);
+      }, false);
+
+      HTMLControl.controls.showGrid.addEventListener('click', function (e) {
+
+        _this2.enabled = e.target.checked;
+      }, false);
+    }
+  }, {
     key: 'enabled',
-    set: function (bool) {
+    set: function set(bool) {
 
       this.grid.enabled = bool;
       this.hud.enabled = bool;
@@ -60096,9 +59106,9 @@ var timing = {
 
 };
 
-var Simulation = function () {
-    function Simulation() {
-        classCallCheck(this, Simulation);
+var Main = function () {
+    function Main() {
+        classCallCheck(this, Main);
 
 
         this.preLoad();
@@ -60111,299 +59121,322 @@ var Simulation = function () {
     // everything done before loading is called here
 
 
-    Simulation.prototype.preLoad = function preLoad() {
+    createClass(Main, [{
+        key: 'preLoad',
+        value: function preLoad() {
 
-        var self = this;
+            var self = this;
 
-        this.loadingPromises = [];
+            this.loadingPromises = [];
 
-        this.overlay = new Overlay();
+            this.overlay = new Overlay();
 
-        // Put any per frame calculation here
-        canvas.app.onUpdate = function () {
-            // NB: use self inside this function, 'this' will refer to canvas.app
+            // Put any per frame calculation here
+            canvas.app.onUpdate = function () {
+                // NB: use self inside this function, 'this' will refer to canvas.app
 
-            animationControls.update(this.delta);
-            self.overlay.render();
-        };
+                animationControls.update(this.delta);
+                self.overlay.render();
+            };
 
-        // put any per resize calculations here (throttled to once per 250ms)
-        canvas.app.onWindowResize = function () {
-            // NB: use self inside this function, 'this' will refer to canvas.app
+            // put any per resize calculations here (throttled to once per 250ms)
+            canvas.app.onWindowResize = function () {
+                // NB: use self inside this function, 'this' will refer to canvas.app
 
-            self.overlay.resize();
-        };
+                self.overlay.resize();
+            };
 
-        this.initReset();
-        this.initRandomize();
-    };
+            this.initReset();
+            this.initRandomize();
+        }
 
-    // load the models
+        // load the models
 
+    }, {
+        key: 'loadModels',
+        value: function loadModels() {
+            var _this = this;
 
-    Simulation.prototype.loadModels = function loadModels() {
-        var _this = this;
+            var fieldPromise = loaders.fbxLoader('/assets/models/robot/field.fbx').then(function (object) {
 
-        var fieldPromise = loaders.fbxLoader('/assets/models/robot/field.fbx').then(function (object) {
+                // field width width ~140cm, length ~200cm
+                canvas.app.scene.add(object);
+            });
 
-            // field width width ~140cm, length ~200cm
-            canvas.app.scene.add(object);
-        });
+            var naoPromise = loaders.fbxLoader('/assets/models/robot/nao.fbx').then(function (object) {
 
-        var naoPromise = loaders.fbxLoader('/assets/models/robot/nao.fbx').then(function (object) {
+                // NOTE: Will no longer be needed if https://github.com/mrdoob/three.js/issues/11911 is merged
+                invertMirroredFBX(object);
 
-            // NOTE: Will no longer be needed if https://github.com/mrdoob/three.js/issues/11911 is merged
-            invertMirroredFBX(object);
+                _this.nao = object;
+            });
 
-            _this.nao = object;
-        });
+            var ballPromise = loaders.fbxLoader('/assets/models/robot/ball.fbx').then(function (object) {
 
-        var ballPromise = loaders.fbxLoader('/assets/models/robot/ball.fbx').then(function (object) {
+                _this.ball = new Group();
 
-            _this.ball = new Group();
+                _this.ballMesh = object;
+                _this.ball.add(_this.ballMesh);
+            });
 
-            _this.ballMesh = object;
-            _this.ball.add(_this.ballMesh);
-        });
+            this.loadingPromises = [fieldPromise, naoPromise, ballPromise];
+        }
 
-        this.loadingPromises = [fieldPromise, naoPromise, ballPromise];
-    };
+        // everything done after loading is called here
 
-    // everything done after loading is called here
+    }, {
+        key: 'postLoad',
+        value: function postLoad() {
+            var _this2 = this;
 
+            Promise.all(this.loadingPromises).then(function () {
 
-    Simulation.prototype.postLoad = function postLoad() {
-        var _this2 = this;
+                _this2.init();
 
-        Promise.all(this.loadingPromises).then(function () {
+                _this2.addObjects();
+                _this2.initSimulation();
+                HTMLControl.setOnLoadEndState();
 
-            _this2.init();
-
-            _this2.addObjects();
-            _this2.initSimulation();
-            HTMLControl.setOnLoadEndState();
-
-            canvas.app.play();
-        });
-    };
-
-    Simulation.prototype.init = function init() {
-
-        animationControls.reset();
-        canvas.app.controls.reset();
-
-        this.initPositions();
-        this.updateEquation();
-        HTMLControl.setInitialState();
-        this.setInitialTransforms();
-
-        this.overlay.init(this.ball.position);
-    };
-
-    // set up positions for the animations
-
-
-    Simulation.prototype.initPositions = function initPositions() {
-        this.ballInitialPos = [_Math.randInt(-15, 30), 4.75, _Math.randInt(-15, 30)];
-
-        this.naoInitialPos = [this.ballInitialPos[0] - 44, 0, this.ballInitialPos[2] - 37];
-    };
-
-    Simulation.prototype.updateEquation = function updateEquation() {
-
-        HTMLControl.ballPosition.innerHTML = this.ballInitialPos[0] + ', ' + this.ballInitialPos[2];
-
-        var signA = this.ballInitialPos[0] > 0 ? ' - ' : ' + ';
-        var signB = this.ballInitialPos[2] > 0 ? ' ) + ' : ' ) ';
-
-        HTMLControl.equation.innerHTML = '( ' + 'x ' + signA + Math.abs(this.ballInitialPos[0]) + signB + this.ballInitialPos[2];
-    };
-
-    Simulation.prototype.initReset = function initReset() {
-        var _this3 = this;
-
-        HTMLControl.controls.reset.addEventListener('click', throttle(function () {
-
-            cancelAnimationFrame(_this3.ballAnimationFrameId);
-            _this3.ballAnimationFrameId = undefined;
-
-            clearTimeout(_this3.ballTimer);
-            _this3.ballTimer = undefined;
+                canvas.app.play();
+            });
+        }
+    }, {
+        key: 'init',
+        value: function init() {
 
             animationControls.reset();
             canvas.app.controls.reset();
 
+            this.initPositions();
+            this.updateEquation();
             HTMLControl.setInitialState();
-            _this3.setInitialTransforms();
+            this.setInitialTransforms();
 
-            _this3.overlay.update(0);
-        }, 250));
-    };
-
-    Simulation.prototype.initRandomize = function initRandomize() {
-        var _this4 = this;
-
-        HTMLControl.controls.randomize.addEventListener('click', throttle(function () {
-
-            cancelAnimationFrame(_this4.ballAnimationFrameId);
-            _this4.ballAnimationFrameId = undefined;
-
-            clearTimeout(_this4.ballTimer);
-            _this4.ballTimer = undefined;
-
-            _this4.overlay.reset();
-
-            _this4.init();
-        }, 250));
-    };
-
-    Simulation.prototype.addObjects = function addObjects() {
-
-        canvas.app.scene.add(this.nao, this.ball);
-    };
-
-    Simulation.prototype.setInitialTransforms = function setInitialTransforms() {
-
-        this.ball.position.set(this.ballInitialPos[0], this.ballInitialPos[1], this.ballInitialPos[2]);
-
-        this.nao.position.set(this.naoInitialPos[0], this.naoInitialPos[1], this.naoInitialPos[2]);
-
-        this.nao.rotation.set(0, 0, 0);
-        this.ball.rotation.set(0, 0, 0);
-        this.ballMesh.rotation.set(0, 0, 0);
-    };
-
-    // this is set up after the user has entered the slope
-
-
-    Simulation.prototype.initNaoAnimation = function initNaoAnimation() {
-
-        this.naoMixer = new AnimationMixer(this.nao);
-        this.naoMixer.name = 'nao mixer';
-
-        animationControls.initAnimation(this.nao, this.nao.animations[0], this.naoMixer);
-    };
-
-    // this is set up after the user has entered the slope
-
-
-    Simulation.prototype.initBallAnimation = function initBallAnimation(slope) {
-
-        var self = this;
-
-        // ball initial velocity ( not physically calculated, just start at 1 )
-        var initialVelocity = 1;
-
-        // split this into x and z components based on slope
-        var angle = Math.atan(slope);
-        var xVel = Math.cos(angle) * initialVelocity;
-        var zVel = Math.sin(angle) * initialVelocity;
-
-        // this.ball.rotateY( -angle );
-
-        // set up rotation axis
-        var axis = new Vector3(0, 0, 1);
-
-        axis.set(xVel, 0, zVel).normalize();
-        axis.cross(Object3D.DefaultUp);
-
-        function moveBall() {
-
-            // checks to reverse x direction
-            var postXPositionCheck = self.ball.position.x >= 73;
-            var nearPostZPositionCheck = postXPositionCheck && self.ball.position.z >= 20 && self.ball.position.z <= 30;
-            var farPostZPositionCheck = postXPositionCheck && self.ball.position.z <= -20 && self.ball.position.z >= -30;
-            var postCheck = nearPostZPositionCheck || farPostZPositionCheck;
-
-            var nearFrontAdBoardCheck = self.ball.position.x >= 87 && self.ball.position.z <= -20;
-            var farFrontAdBoardCheck = self.ball.position.x >= 87 && self.ball.position.z >= 20;
-            var frontAdBoardCheck = farFrontAdBoardCheck || nearFrontAdBoardCheck;
-
-            var backOfGoalCheck = self.ball.position.x >= 92;
-
-            // checks to reverse z direction
-            var topAndBottomWallCheck = self.ball.position.z >= 55 || self.ball.position.z <= -55;
-
-            if (postCheck || frontAdBoardCheck) {
-
-                // don't reverse the direction more than once as this can cause 'juddering'
-                // as the direction is rapidly changed
-                xVel *= -1 * Math.sign(xVel);
-
-                axis.set(xVel, 0, zVel).normalize();
-                axis.cross(Object3D.DefaultUp);
-            }
-
-            if (backOfGoalCheck) {
-
-                xVel *= -0.5 * Math.sign(xVel);
-                zVel *= 0.5;
-
-                axis.set(xVel, 0, zVel).normalize();
-                axis.cross(Object3D.DefaultUp);
-            }
-
-            if (topAndBottomWallCheck) {
-
-                zVel *= -1;
-
-                axis.set(xVel, 0, zVel).normalize();
-                axis.cross(Object3D.DefaultUp);
-
-                // self.ball.rotateY( Math.PI - ( 2 * angle ) );
-                // self.ballMesh.rotateY( -( Math.PI - ( 2 * angle ) ) );
-            }
-
-            self.ball.translateX(xVel);
-            self.ball.translateZ(zVel);
-
-            // self.ball.translateX( totalVelocity );
-            // totalVelocity *= 0.99166;
-
-            xVel *= 0.99166; // value calculated to allow ball to roll approx 2 seconds
-            zVel *= 0.99166;
-
-            var totalVelocity = Math.sqrt(xVel * xVel + zVel * zVel);
-
-            var amount = -totalVelocity / (Math.PI * 10) * Math.PI;
-            self.ballMesh.rotateOnAxis(axis, amount);
-
-            if (totalVelocity < 0.05) return;
-
-            self.ballAnimationFrameId = requestAnimationFrame(function () {
-                moveBall();
-            });
+            this.overlay.init(this.ball.position);
         }
 
-        this.ballTimer = setTimeout(function () {
+        // set up positions for the animations
 
-            moveBall();
-        }, timing.ballMoveStart * 1000);
+    }, {
+        key: 'initPositions',
+        value: function initPositions() {
+            this.ballInitialPos = [_Math.randInt(-15, 30), 4.75, _Math.randInt(-15, 30)];
 
-        // moveBall(); // roll ball immediately for testing
-    };
+            this.naoInitialPos = [this.ballInitialPos[0] - 44, 0, this.ballInitialPos[2] - 37];
+        }
+    }, {
+        key: 'updateEquation',
+        value: function updateEquation() {
 
-    Simulation.prototype.initSimulation = function initSimulation() {
-        var _this5 = this;
+            HTMLControl.ballPosition.innerHTML = this.ballInitialPos[0] + ', ' + this.ballInitialPos[2];
 
-        HTMLControl.controls.simulate.addEventListener('click', function (e) {
+            var signA = this.ballInitialPos[0] > 0 ? ' - ' : ' + ';
+            var signB = this.ballInitialPos[2] > 0 ? ' ) + ' : ' ) ';
 
-            e.preventDefault();
+            HTMLControl.equation.innerHTML = '( ' + 'x ' + signA + Math.abs(this.ballInitialPos[0]) + signB + this.ballInitialPos[2];
+        }
+    }, {
+        key: 'initReset',
+        value: function initReset() {
+            var _this3 = this;
 
-            var slope = -HTMLControl.controls.slope.value;
+            HTMLControl.controls.reset.addEventListener('click', throttle(function () {
 
-            _this5.initNaoAnimation();
-            _this5.initBallAnimation(slope);
+                cancelAnimationFrame(_this3.ballAnimationFrameId);
+                _this3.ballAnimationFrameId = undefined;
 
-            animationControls.play();
+                clearTimeout(_this3.ballTimer);
+                _this3.ballTimer = undefined;
 
-            HTMLControl.setOnSimulateState();
-        }, false);
-    };
+                animationControls.reset();
+                canvas.app.controls.reset();
 
-    return Simulation;
+                HTMLControl.setInitialState();
+                _this3.setInitialTransforms();
+
+                _this3.overlay.update(0);
+            }, 250));
+        }
+    }, {
+        key: 'initRandomize',
+        value: function initRandomize() {
+            var _this4 = this;
+
+            HTMLControl.controls.randomize.addEventListener('click', throttle(function () {
+
+                cancelAnimationFrame(_this4.ballAnimationFrameId);
+                _this4.ballAnimationFrameId = undefined;
+
+                clearTimeout(_this4.ballTimer);
+                _this4.ballTimer = undefined;
+
+                _this4.overlay.reset();
+
+                _this4.init();
+            }, 250));
+        }
+    }, {
+        key: 'addObjects',
+        value: function addObjects() {
+
+            canvas.app.scene.add(this.nao, this.ball);
+        }
+    }, {
+        key: 'setInitialTransforms',
+        value: function setInitialTransforms() {
+
+            this.ball.position.set(this.ballInitialPos[0], this.ballInitialPos[1], this.ballInitialPos[2]);
+
+            this.nao.position.set(this.naoInitialPos[0], this.naoInitialPos[1], this.naoInitialPos[2]);
+
+            this.nao.rotation.set(0, 0, 0);
+            this.ball.rotation.set(0, 0, 0);
+            this.ballMesh.rotation.set(0, 0, 0);
+        }
+
+        // this is set up after the user has entered the slope
+
+    }, {
+        key: 'initNaoAnimation',
+        value: function initNaoAnimation() {
+
+            this.naoMixer = new AnimationMixer(this.nao);
+            this.naoMixer.name = 'nao mixer';
+
+            console.log(this.nao.animations[0]);
+
+            this.naoMixer.addEventListener('loop', function (e) {
+                console.log('loop: ', e);
+            });
+            this.naoMixer.addEventListener('finished', function (e) {
+                console.log('finished: ', e);
+            });
+
+            animationControls.initAnimation(this.nao, this.nao.animations[0], this.naoMixer);
+        }
+
+        // this is set up after the user has entered the slope
+
+    }, {
+        key: 'initBallAnimation',
+        value: function initBallAnimation(slope) {
+
+            var self = this;
+
+            // ball initial velocity ( not physically calculated, just start at 1 )
+            var initialVelocity = 1;
+
+            // split this into x and z components based on slope
+            var angle = Math.atan(slope);
+            var xVel = Math.cos(angle) * initialVelocity;
+            var zVel = Math.sin(angle) * initialVelocity;
+
+            // this.ball.rotateY( -angle );
+
+            // set up rotation axis
+            var axis = new Vector3(0, 0, 1);
+
+            axis.set(xVel, 0, zVel).normalize();
+            axis.cross(Object3D.DefaultUp);
+
+            function moveBall() {
+
+                // checks to reverse x direction
+                var postXPositionCheck = self.ball.position.x >= 73;
+                var nearPostZPositionCheck = postXPositionCheck && self.ball.position.z >= 20 && self.ball.position.z <= 30;
+                var farPostZPositionCheck = postXPositionCheck && self.ball.position.z <= -20 && self.ball.position.z >= -30;
+                var postCheck = nearPostZPositionCheck || farPostZPositionCheck;
+
+                var nearFrontAdBoardCheck = self.ball.position.x >= 87 && self.ball.position.z <= -20;
+                var farFrontAdBoardCheck = self.ball.position.x >= 87 && self.ball.position.z >= 20;
+                var frontAdBoardCheck = farFrontAdBoardCheck || nearFrontAdBoardCheck;
+
+                var backOfGoalCheck = self.ball.position.x >= 92;
+
+                // checks to reverse z direction
+                var topAndBottomWallCheck = self.ball.position.z >= 55 || self.ball.position.z <= -55;
+
+                if (postCheck || frontAdBoardCheck) {
+
+                    // don't reverse the direction more than once as this can cause 'juddering'
+                    // as the direction is rapidly changed
+                    xVel *= -1 * Math.sign(xVel);
+
+                    axis.set(xVel, 0, zVel).normalize();
+                    axis.cross(Object3D.DefaultUp);
+                }
+
+                if (backOfGoalCheck) {
+
+                    xVel *= -0.5 * Math.sign(xVel);
+                    zVel *= 0.5;
+
+                    axis.set(xVel, 0, zVel).normalize();
+                    axis.cross(Object3D.DefaultUp);
+                }
+
+                if (topAndBottomWallCheck) {
+
+                    zVel *= -1;
+
+                    axis.set(xVel, 0, zVel).normalize();
+                    axis.cross(Object3D.DefaultUp);
+
+                    // self.ball.rotateY( Math.PI - ( 2 * angle ) );
+                    // self.ballMesh.rotateY( -( Math.PI - ( 2 * angle ) ) );
+                }
+
+                self.ball.translateX(xVel);
+                self.ball.translateZ(zVel);
+
+                // self.ball.translateX( totalVelocity );
+                // totalVelocity *= 0.99166;
+
+                xVel *= 0.99166; // value calculated to allow ball to roll approx 2 seconds
+                zVel *= 0.99166;
+
+                var totalVelocity = Math.sqrt(xVel * xVel + zVel * zVel);
+
+                var amount = -totalVelocity / (Math.PI * 10) * Math.PI;
+                self.ballMesh.rotateOnAxis(axis, amount);
+
+                if (totalVelocity < 0.05) return;
+
+                self.ballAnimationFrameId = requestAnimationFrame(function () {
+                    moveBall();
+                });
+            }
+
+            this.ballTimer = setTimeout(function () {
+
+                moveBall();
+            }, timing.ballMoveStart * 1000);
+
+            // moveBall(); // roll ball immediately for testing
+        }
+    }, {
+        key: 'initSimulation',
+        value: function initSimulation() {
+            var _this5 = this;
+
+            HTMLControl.controls.simulate.addEventListener('click', function (e) {
+
+                e.preventDefault();
+
+                var slope = -HTMLControl.controls.slope.value;
+
+                _this5.initNaoAnimation();
+                _this5.initBallAnimation(slope);
+
+                animationControls.play();
+
+                HTMLControl.setOnSimulateState();
+            }, false);
+        }
+    }]);
+    return Main;
 }();
 
-var simulation = new Simulation();
+var main = new Main();
 
 }());

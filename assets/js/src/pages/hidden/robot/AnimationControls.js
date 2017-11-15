@@ -41,7 +41,8 @@ class AnimationControls {
     Object.values( this.mixers ).forEach( ( mixer ) => {
 
       // divide by 1000 to convert seconds to milliseconds
-      mixer.update( delta / 1000 );
+      // then divide by 2 to match FBX framerate
+      mixer.update( delta / 1000 / 2 );
 
     } );
 
@@ -50,7 +51,7 @@ class AnimationControls {
   initAnimation( object, animationClip, mixer, startAt ) {
 
     const action = mixer.clipAction( animationClip );
-    action.clampWhenFinished = true;
+    // action.clampWhenFinished = true;
     action.loop = THREE.LoopOnce;
 
     if ( startAt !== undefined ) action.startAt( startAt );

@@ -4,7 +4,7 @@ import * as THREE from 'three';
 
 import Grid from './Grid.js';
 import HUD from './HUD.js';
-import HTMLControl from './HTMLControl.js';
+import HTMLControl from '../HTMLControl.js';
 
 
 export default class Overlay {

@@ -2,11 +2,11 @@ import * as THREE from 'three';
 import throttle from 'lodash.throttle';
 
 import canvas from './Canvas.js';
-import loaders from './utilities/loaders.js';
-import HTMLControl from './utilities/HTMLControl.js';
+import loaders from './loaders.js';
+import HTMLControl from './HTMLControl.js';
 import invertMirroredFBX from './utilities/invertMirroredFBX.js';
-import animationControls from './utilities/AnimationControls.js';
-import Overlay from './utilities/Overlay.js';
+import animationControls from './AnimationControls.js';
+import Overlay from './components/Overlay.js';
 
 const timing = {
 
@@ -14,7 +14,7 @@ const timing = {
 
 };
 
-export default class Simulation {
+export default class Main {
 
   constructor() {
 
@@ -213,6 +213,11 @@ export default class Simulation {
 
     this.naoMixer = new THREE.AnimationMixer( this.nao );
     this.naoMixer.name = 'nao mixer';
+
+    console.log( this.nao.animations[ 0 ] );
+
+    this.naoMixer.addEventListener( 'loop', ( e ) => { console.log( 'loop: ', e ) } );
+    this.naoMixer.addEventListener( 'finished', ( e ) => { console.log( 'finished: ', e ) } );
 
     animationControls.initAnimation( this.nao, this.nao.animations[ 0 ], this.naoMixer );
 

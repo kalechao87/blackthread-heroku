@@ -1,4 +1,4 @@
 import 'babel-polyfill';
-import Simulation from 'pages/hidden/robot/Simulation.js';
+import Main from 'pages/hidden/robot/Main.js';
 
-const simulation = new Simulation();
+const main = new Main();

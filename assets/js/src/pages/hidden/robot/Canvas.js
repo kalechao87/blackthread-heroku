@@ -2,9 +2,9 @@ import * as THREE from 'three';
 
 import App from 'App/App.js';
 
-import LightingSetup from './utilities/LightingSetup.js';
+import LightingSetup from './components/Lighting.js';
 
-import HTMLControl from './utilities/HTMLControl.js';
+import HTMLControl from './HTMLControl.js';
 
 /* ******************************************************** */
 

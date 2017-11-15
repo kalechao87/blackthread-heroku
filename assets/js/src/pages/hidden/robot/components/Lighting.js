@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export default class LightingSetup {
+export default class Lighting {
 
   constructor( app ) {
 

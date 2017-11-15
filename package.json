@@ -11,7 +11,8 @@
     "compress": "npm run compress:js && npm run compress:css",
     "compress:js": "git status",
     "compress:css": "git status",
-    "uncss": "npm run node_scripts/uncss.js"
+    "uncss": "npm run node_scripts/uncss.js",
+    "flow": "flow"
   },
   "repository": {
     "type": "git",
@@ -35,14 +36,18 @@
   },
   "devDependencies": {
     "autoprefixer": "^7.1.3",
-    "babel-cli": "^6.24.0",
+    "babel-cli": "^7.0.0-beta.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-es2015-loose-rollup": "^7.0.0",
+    "babel-preset-flow": "^6.23.0",
     "certbot": "^1.0.0",
     "eslint": "^3.16.1",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
+    "flow-bin": "^0.58.0",
     "glob": "^7.1.2",
     "glslify": "^6.0.1",
     "greenlock-cli": "^2.2.10",

@@ -21,17 +21,17 @@ const glsl = () => {
         res
         .replace( /[ \t]*\/\/.*\n/g, '' )
         .replace( /[ \t]*\/\*[\s\S]*?\*\//g, '' )
-        .replace( /\n{2,}/g, '\n' )
+        .replace( /\n{2,}/g, '\n' ),
       ) + ';';
     },
   };
 };
 
 const includePathOptions = {
-    include: {},
-    paths: [ 'assets/js/src' ],
-    external: [],
-    extensions: [ '.js', '.json' ],
+  include: {},
+  paths: [ 'assets/js/src' ],
+  external: [],
+  extensions: [ '.js', '.json' ],
 };
 
 const defaultPlugins = [
@@ -53,9 +53,21 @@ const defaultPlugins = [
   babel( {
     compact: false,
     exclude: ['node_modules/**', 'src/shaders/**'],
-    // babelrc: false,
-    presets: ['es2015-loose-rollup'],
-
+    babelrc: false,
+    plugins: [
+      'external-helpers',
+    ],
+    presets: [
+      // 'es2015-loose-rollup',
+      // 'flow',
+      ['env',
+        {
+          modules: false,
+          targets: {
+            browsers: [ 'last 2 versions', '> 5%' ],
+          },
+        } ],
+    ],
   } ),
 ];
 
@@ -68,8 +80,8 @@ const config = ( entry, dest, moduleName, plugins ) => {
     // sourceMap: true,
     moduleName,
     plugins,
-  }
-}
+  };
+};
 
 // stderr to stderr to keep `rollup main.js > bundle.js` from breaking
 const stderr = console.error.bind( console );
