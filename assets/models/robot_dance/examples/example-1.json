@@ -6,22 +6,6 @@
 	},
 	"frames": {
 		"0": {
-			"type": "frame",
-			"number": 0,
-			"headPitch": "17",
-			"headYaw": "15",
-			"leftShoulderPitch": "21",
-			"leftShoulderYaw": "16",
-			"rightShoulderPitch": "27",
-			"rightShoulderYaw": "14",
-			"leftElbowPitch": "18",
-			"leftElbowYaw": "16",
-			"rightElbowPitch": "12",
-			"rightElbowYaw": "12"
-		},
-		"1": {
-			"type": "frame",
-			"number": 1,
 			"headPitch": "",
 			"headYaw": "",
 			"leftShoulderPitch": "",
@@ -32,21 +16,42 @@
 			"leftElbowYaw": "",
 			"rightElbowPitch": "",
 			"rightElbowYaw": ""
+		},
+		"1": {
+			"headPitch": "9",
+			"headYaw": "21",
+			"leftShoulderPitch": "26",
+			"leftShoulderYaw": "16",
+			"rightShoulderPitch": "22",
+			"rightShoulderYaw": "19",
+			"leftElbowPitch": "31",
+			"leftElbowYaw": "16",
+			"rightElbowPitch": "28",
+			"rightElbowYaw": "28"
+		},
+		"2": {
+			"headPitch": "18",
+			"headYaw": "",
+			"leftShoulderPitch": "",
+			"leftShoulderYaw": "25",
+			"rightShoulderPitch": "",
+			"rightShoulderYaw": "23",
+			"leftElbowPitch": "",
+			"leftElbowYaw": "",
+			"rightElbowPitch": "",
+			"rightElbowYaw": ""
 		}
 	},
 	"groups": {
 		"0": {
 			"0": {
-				"frameNum": 1,
-				"loopAmount": 1
+				"frameNum": 0
 			},
 			"1": {
-				"frameNum": 0,
-				"loopAmount": 1
+				"frameNum": 1
 			},
 			"2": {
-				"frameNum": 1,
-				"loopAmount": 1
+				"frameNum": 0
 			}
 		}
 	},
@@ -54,13 +59,17 @@
 		"0": {
 			"type": "group",
 			"num": 0,
-			"loopAmount": "Group"
+			"loopAmount": 2
 		},
 		"1": {
 			"type": "frame",
-			"num": 1,
-			"loopAmount": "Frame"
+			"num": 2,
+			"loopAmount": 1
 		},
-		"framerate": 1
+		"2": {
+			"type": "frame",
+			"num": 0,
+			"loopAmount": 1
+		}
 	}
 }

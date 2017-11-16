@@ -21,7 +21,6 @@ import animationControl from './animation/animationControl.js';
 // Set up THREE caching
 THREE.Cache.enabled = true;
 
-
 class Main {
 
   constructor() {

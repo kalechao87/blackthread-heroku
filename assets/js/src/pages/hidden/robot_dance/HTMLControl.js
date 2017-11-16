@@ -18,6 +18,7 @@ const controls = {
   groups: {
     table: document.querySelector( '#groups' ),
     createButton: document.querySelector( '#create-group-button' ),
+    selectFrameMessage: document.querySelector( '#selected-frame-message' ),
   },
   dance: {
     framerate: document.querySelector( '#framerate' ),

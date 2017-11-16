@@ -98,7 +98,7 @@ export default class Groups {
 
     this.groups.forEach( ( g ) => {
 
-      g.selected = false;
+      if ( g !== null ) g.selected = false;
 
     } );
 

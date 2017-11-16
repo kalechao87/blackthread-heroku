@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true
+  },
+  "exclude": [
+    "assets/js/build",
+    "assets/js/build-min",
+    "_site"
+    "node_modules"
+  ],
+  "typeAcquisition": {
+    "enable": true
+  }
+}

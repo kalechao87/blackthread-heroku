@@ -13,8 +13,6 @@ export default class Group {
     this.frames = frames;
     this.robot = frames.robot;
 
-    this.containedFrames = [];
-
     this.valid = false;
 
     this.num = num;
@@ -34,7 +32,7 @@ export default class Group {
     if ( bool === true ) {
 
       this.row.style.backgroundColor = 'aliceBlue';
-      this.createAnimation( this.containedFrames );
+
       animationControl.play();
       this._selected = true;
 
@@ -46,13 +44,6 @@ export default class Group {
     }
 
   }
-
-  checkGroupIsValid() {
-
-    return this.containedFrames.length > 1;
-
-  }
-
 
   initTableRow() {
 
@@ -81,15 +72,13 @@ export default class Group {
 
   addFrame( frame ) {
 
-    const detail = {
-      frame,
-      deleteButton: null,
-    };
-
-    this.containedFrames.push( detail );
-    const framePos = this.containedFrames.length - 1;
+    // const detail = {
+    //   frame,
+    //   deleteButton: null,
+    // };
 
     const row = document.createElement( 'tr' );
+    row.dataset.frameNumber = frame.num;
 
     this.framesInGroup.appendChild( row );
 
@@ -97,22 +86,27 @@ export default class Group {
 
     row.appendChild( document.createElement( 'td' ) );
 
-    detail.deleteButton = new DeleteButtonCell( row );
+    const deleteButton = new DeleteButtonCell( row );
 
-    detail.deleteButton.onClick = () => {
+    deleteButton.onClick = () => {
 
-      if ( this.framesInGroup.contains( row ) ) this.framesInGroup.removeChild( row );
+      if ( this.framesInGroup.contains( row ) ) {
 
-      if ( this.lastAddedFrameNum === frame.num ) this.lastAddedFrameNum = null;
+        this.framesInGroup.removeChild( row );
 
-      this.containedFrames.splice( framePos, 1 );
+      }
+
+      if ( this.lastAddedFrameNum === frame.num ) {
+
+        this.lastAddedFrameNum = null;
+
+      }
 
       this.createAnimation();
 
     };
 
     this.selected = true;
-
 
   }
 
@@ -128,9 +122,6 @@ export default class Group {
 
       if ( frame === undefined || frame === null ) return;
 
-      // don't add the same frame consecutively (use loop instead)
-      if ( this.lastAddedFrame === frame ) return;
-
       this.lastAddedFrameNum = frame;
 
       this.addFrame( frame );
@@ -142,25 +133,33 @@ export default class Group {
 
   }
 
+  getFrames() {
+
+    const frames = [];
+
+    this.framesInGroup.childNodes.forEach( ( node ) => {
+
+      frames.push( this.frames.frames[ node.dataset.frameNumber ] );
+
+    } );
+
+    return frames;
+
+  }
+
   createAnimation() {
 
-    const frames = this.containedFrames.map( detail => detail.frame );
-
-    animationControl.createAnimation( frames );
+    animationControl.createAnimation( this.getFrames() );
 
   }
 
   reset() {
 
-    // console.log( this.containedFrames )
-    for ( let i = this.containedFrames.length - 1; i >= 0; i-- ) {
+    while ( this.framesInGroup.firstChild ) {
 
-      this.containedFrames[i].deleteButton.click();
+      this.framesInGroup.removeChild( this.framesInGroup.firstChild );
 
     }
-
-    this.containedFrames = [];
-    console.log( this.containedFrames.length )
 
     animationControl.reset();
     this.selected = false;

@@ -10,13 +10,14 @@ const flattenGroup = ( group, loopAmount ) => {
 
   for ( let i = 0; i < loopAmount; i++ ) {
 
-    frames = frames.concat( group.containedFrames.map( ( detail => detail.frame ) ) );
+    frames = frames.concat( group.getFrames() );
 
   }
 
   return frames;
 
 };
+
 // take the details array and flatten it to an array of frames
 const flattenDetails = ( details ) => {
 
@@ -268,6 +269,8 @@ export default class Dance {
         // this would require a 'change' event added to the group so that the dance can listen
         // when frames are added or removed to check whether the group becomes valid
         // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
+
+        // instead use simpler but not totally accurate method
         if ( detail.loopAmount > 0 ) containsValidGroups = true;
 
       }
@@ -321,8 +324,6 @@ export default class Dance {
       }
 
     }
-
-    this.checkDanceIsValid();
 
   }
 

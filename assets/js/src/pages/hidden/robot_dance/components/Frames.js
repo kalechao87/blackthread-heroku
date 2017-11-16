@@ -83,8 +83,6 @@ export default class Frames {
 
     // if ( this.selectedFrameNum === num ) return;
 
-    console.log( 'frames.select', num );
-
     animationControl.reset();
 
     const frame = this.frames[ num ];
@@ -102,6 +100,8 @@ export default class Frames {
       if ( i !== num ) this.frames[ i ].selected = false;
 
     }
+
+    HTMLControl.controls.groups.selectFrameMessage.innerHTML = num;
 
   }
 

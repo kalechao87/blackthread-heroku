@@ -61,8 +61,6 @@ class AnimationControl {
 
   createAnimation( frames ) {
 
-    console.log( frames )
-
     this.reset();
 
     if ( frames.length < 2 ) return [];
@@ -155,8 +153,6 @@ class AnimationControl {
 
   play() {
 
-    console.log( 'animationControl.play' )
-
     this.actions.forEach( ( action ) => {
 
       action.play();
@@ -166,8 +162,6 @@ class AnimationControl {
   }
 
   reset() {
-
-    console.log( 'animationControl.reset' );
 
     this.actions.forEach( ( action ) => {
 

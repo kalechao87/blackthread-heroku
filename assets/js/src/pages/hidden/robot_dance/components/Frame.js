@@ -4,8 +4,6 @@ import TextCell from './HTML/TextCell.js';
 import CellInputElem from './HTML/CellInputElem.js';
 import ResetButtonCell from './HTML/ResetButtonCell.js';
 
-// import animationControl from '../animation/animationControl.js';
-
 export default class Frame {
 
   constructor( robot, num, isBaseFrame = false ) {
@@ -42,7 +40,6 @@ export default class Frame {
       if ( this.row ) this.row.style.backgroundColor = 'aliceBlue';
       this.setRotations();
       this.addEventListeners();
-      // animationControl.reset();
 
       this._selected = true;
 
@@ -295,6 +292,8 @@ export default class Frame {
   }
 
   fromJSON( object ) {
+
+    this.reset();
 
     this.headPitchInput.value = object.headPitch;
     this.headYawInput.value = object.headYaw;
