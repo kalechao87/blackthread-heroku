@@ -24,7 +24,7 @@ http {
   server {
 
     #listen 80;
-    listen <?=getenv('PORT')?:'8080'?>;;
+    listen <?=getenv('PORT')?:'8080'?>;
 
     server_name www.blackthreaddesign.com;
 
