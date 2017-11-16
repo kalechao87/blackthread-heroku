@@ -4,43 +4,6 @@ import DeleteButtonCell from './HTML/DeleteButtonCell.js';
 import LoopInputCell from './HTML/LoopInputCell.js';
 import animationControl from '../animation/animationControl.js';
 
-const flattenGroup = ( group, loopAmount ) => {
-
-  let frames = [];
-
-  for ( let i = 0; i < loopAmount; i++ ) {
-
-    frames = frames.concat( group.getFrames() );
-
-  }
-
-  return frames;
-
-};
-
-// take the details array and flatten it to an array of frames
-const flattenDetails = ( details ) => {
-
-  let frames = [];
-
-  details.forEach( ( detail ) => {
-
-    const elem = detail.elem;
-
-    if ( elem.type === 'frame' ) frames.push( elem );
-
-    else if ( elem.type === 'group' ) {
-
-      frames = frames.concat( flattenGroup( elem, detail.loopAmount ) );
-
-    }
-
-  } );
-
-  return frames;
-
-};
-
 export default class Dance {
 
   constructor( groups ) {
@@ -53,8 +16,6 @@ export default class Dance {
 
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
-
-    this.containedElems = [];
 
     this.initAdvancedControlsToggle();
     this.initAddSelectedFrameButton();
@@ -87,17 +48,11 @@ export default class Dance {
 
     const loopAmount = loop || 1;
 
-    const detail = {
-      elem,
-      loopAmount,
-      deleteButton: null,
-    };
-
-    this.containedElems.push( detail );
-
-    const pos = this.containedElems.length - 1;
-
     const row = document.createElement( 'tr' );
+    row.dataset.type = elem.type;
+    row.dataset.loops = loopAmount;
+    row.dataset.number = elem.num;
+
     this.table.appendChild( row );
 
     new TextCell( row, elem.num );
@@ -109,7 +64,7 @@ export default class Dance {
 
       loopInput.onInput = ( value ) => {
 
-        detail.loopAmount = value;
+        row.dataset.loops = value;
         this.checkDanceIsValid();
 
       };
@@ -120,16 +75,14 @@ export default class Dance {
 
     }
 
-    detail.deleteButton = new DeleteButtonCell( row );
+    const deleteButton = new DeleteButtonCell( row );
 
-    detail.deleteButton.onClick = () => {
+    deleteButton.onClick = () => {
 
       if ( this.table.contains( row ) ) this.table.removeChild( row );
 
-      this.containedElems.splice( pos, 1 );
-
-      if ( detail.elem.type === 'group' && detail.elem.num === this.lastAddedGroupNum ) this.lastAddedGroupNum = -1;
-      if ( detail.elem.type === 'frame' && detail.elem.num === this.lastAddedFrameNum ) this.lastAddedFrameNum = -1;
+      if ( elem.type === 'group' && elem.num === this.lastAddedGroupNum ) this.lastAddedGroupNum = -1;
+      if ( elem.type === 'frame' && elem.num === this.lastAddedFrameNum ) this.lastAddedFrameNum = -1;
 
       this.checkDanceIsValid();
 
@@ -249,7 +202,31 @@ export default class Dance {
 
   createAnimation() {
 
-    const frames = flattenDetails( this.containedElems );
+    let frames = [];
+
+    this.table.childNodes.forEach( ( node ) => {
+
+      if ( node.nodeName === 'TR' ) {
+
+        const num = node.dataset.number;
+
+        if ( node.dataset.type === 'group' ) {
+
+          for ( let i = 0; i < node.dataset.loops; i++ ) {
+
+            frames = frames.concat( this.groups.groups[ num ].getFrames() );
+
+          }
+
+        } else {
+
+          frames.push( this.frames.frames[ num ] );
+
+        }
+
+      }
+
+    } );
 
     this.actions = animationControl.createAnimation( frames );
 
@@ -258,26 +235,31 @@ export default class Dance {
   checkDanceIsValid() {
 
     let containedFramesNum = 0;
-    let containsValidGroups = false;
+    let containsGroups = false;
 
-    this.containedElems.forEach( ( detail ) => {
+    this.table.childNodes.forEach( ( node ) => {
 
-      if ( detail.elem.type === 'frame' ) containedFramesNum++;
+      if ( node.nodeName === 'TR' ) {
 
-      else if ( detail.elem.type === 'group' ) {
+        if ( node.dataset.type === 'frame' ) {
 
-        // this would require a 'change' event added to the group so that the dance can listen
-        // when frames are added or removed to check whether the group becomes valid
-        // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
+          containedFramesNum++;
 
-        // instead use simpler but not totally accurate method
-        if ( detail.loopAmount > 0 ) containsValidGroups = true;
+        } else if ( node.dataset.loops > 0 ) {
+
+          // note: this doesn't actually check if the group is valid as that
+          // requires setting up a change listener on the group. This simpler
+          // method just checks that there is a group and assume it is valid
+          containsGroups = true;
+
+        }
 
       }
 
     } );
 
-    this.valid = ( containedFramesNum > 1 || containsValidGroups );
+
+    this.valid = ( containedFramesNum > 1 || containsGroups );
 
     HTMLControl.controls.dance.playButton.disabled = !this.valid;
 
@@ -285,13 +267,11 @@ export default class Dance {
 
   reset() {
 
-    for ( let i = this.containedElems.length - 1; i >= 0; i-- ) {
+    while ( this.table.firstChild ) {
 
-      this.containedElems[i].deleteButton.click();
+      this.table.removeChild( this.table.firstChild );
 
     }
-
-    this.containedElems = [];
 
     this.valid = false;
     HTMLControl.controls.dance.playButton.disabled = true;
@@ -335,27 +315,25 @@ export default class Dance {
 
     };
 
-    for ( let i = 0; i < this.containedElems.length; i++ ) {
+    let i = 0;
 
-      const detail = this.containedElems[ i ];
+    this.table.childNodes.forEach( ( node ) => {
 
-      if ( detail !== null ) {
+      if ( node.nodeName === 'TR' ) {
 
         output[ i ] = {
 
-          type: detail.elem.type,
-          num: detail.elem.num,
-          loopAmount: detail.loopAmount,
+          type: node.dataset.type,
+          num: node.dataset.number,
+          loopAmount: node.dataset.loops,
 
         };
 
-      } else {
-
-        output[ i ] = null;
+        i++;
 
       }
 
-    }
+    } );
 
     return output;
 

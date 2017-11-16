@@ -147,6 +147,10 @@ export default class FileControl {
     this.dance.reset();
     HTMLControl.controls.music.stop.click();
 
+    // add the initial frame and group back
+    this.frames.newFrameButton.click();
+    this.groups.newGroupButton.click();
+
   }
 
   initExamples() {

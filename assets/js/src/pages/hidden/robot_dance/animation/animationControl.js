@@ -63,87 +63,136 @@ class AnimationControl {
 
     this.reset();
 
-    if ( frames.length < 2 ) return [];
+    if ( frames.length < 2 ) return;
 
-    const headTracks = [];
-    const leftShoulderTracks = [];
-    const rightShoulderTracks = [];
-    const leftElbowTracks = [];
-    const rightElbowTracks = [];
+    const headValues = [
+
+      frames[ 0 ].headQuaternion.x,
+      frames[ 0 ].headQuaternion.y,
+      frames[ 0 ].headQuaternion.z,
+      frames[ 0 ].headQuaternion.w,
+
+    ];
+
+    const leftShoulderValues = [
+
+      frames[ 0 ].leftShoulderQuaternion.x,
+      frames[ 0 ].leftShoulderQuaternion.y,
+      frames[ 0 ].leftShoulderQuaternion.z,
+      frames[ 0 ].leftShoulderQuaternion.w,
+
+    ];
+
+    const rightShoulderValues = [
+
+      frames[ 0 ].rightShoulderQuaternion.x,
+      frames[ 0 ].rightShoulderQuaternion.y,
+      frames[ 0 ].rightShoulderQuaternion.z,
+      frames[ 0 ].rightShoulderQuaternion.w,
+
+    ];
+
+    const leftElbowValues = [
+
+      frames[ 0 ].leftElbowQuaternion.x,
+      frames[ 0 ].leftElbowQuaternion.y,
+      frames[ 0 ].leftElbowQuaternion.z,
+      frames[ 0 ].leftElbowQuaternion.w,
+
+    ];
+
+    const rightElbowValues = [
+
+      frames[ 0 ].rightElbowQuaternion.x,
+      frames[ 0 ].rightElbowQuaternion.y,
+      frames[ 0 ].rightElbowQuaternion.z,
+      frames[ 0 ].rightElbowQuaternion.w,
+
+    ];
+
+    const times = [ 0 ];
 
     for ( let i = 1; i < frames.length; i++ ) {
 
-      const initialFrame = frames[ i - 1 ];
-      const finalFrame = frames[ i ];
+      times.push( i );
 
-      const frameStartTime = i - 1;
+      headValues.push(
 
-      headTracks.push(
-        this.createKeyFrameTrack( 'head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime ),
+        frames[ i ].headQuaternion.x,
+        frames[ i ].headQuaternion.y,
+        frames[ i ].headQuaternion.z,
+        frames[ i ].headQuaternion.w,
+
       );
 
-      leftShoulderTracks.push(
-        this.createKeyFrameTrack( 'leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime ),
+      leftShoulderValues.push(
+
+        frames[ i ].leftShoulderQuaternion.x,
+        frames[ i ].leftShoulderQuaternion.y,
+        frames[ i ].leftShoulderQuaternion.z,
+        frames[ i ].leftShoulderQuaternion.w,
+
       );
 
-      rightShoulderTracks.push(
-        this.createKeyFrameTrack( 'rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime ),
+
+      rightShoulderValues.push(
+
+        frames[ i ].rightShoulderQuaternion.x,
+        frames[ i ].rightShoulderQuaternion.y,
+        frames[ i ].rightShoulderQuaternion.z,
+        frames[ i ].rightShoulderQuaternion.w,
+
       );
 
-      leftElbowTracks.push(
-        this.createKeyFrameTrack( 'leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime ),
+      leftElbowValues.push(
+
+        frames[ i ].leftElbowQuaternion.x,
+        frames[ i ].leftElbowQuaternion.y,
+        frames[ i ].leftElbowQuaternion.z,
+        frames[ i ].leftElbowQuaternion.w,
+
       );
 
-      rightElbowTracks.push(
-        this.createKeyFrameTrack( 'rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime ),
+      rightElbowValues.push(
+
+        frames[ i ].rightElbowQuaternion.x,
+        frames[ i ].rightElbowQuaternion.y,
+        frames[ i ].rightElbowQuaternion.z,
+        frames[ i ].rightElbowQuaternion.w,
+
       );
 
     }
 
+    const headTrack = [ new THREE.QuaternionKeyframeTrack( 'head.quaternion', times, headValues ) ];
+    const leftShoulderTrack = [ new THREE.QuaternionKeyframeTrack( 'leftShoulder.quaternion', times, leftShoulderValues ) ];
+    const rightShoulderTrack = [ new THREE.QuaternionKeyframeTrack( 'rightShoulder.quaternion', times, rightShoulderValues ) ];
+    const leftElbowTrack = [ new THREE.QuaternionKeyframeTrack( 'leftElbow.quaternion', times, leftElbowValues ) ];
+    const rightElbowTrack = [ new THREE.QuaternionKeyframeTrack( 'rightElbow.quaternion', times, rightElbowValues ) ];
+
     this.actions = [
-      this.createAction( 'headControl.quaternion', headTracks ),
-      this.createAction( 'shoulderControlLeft.quaternion', leftShoulderTracks ),
-      this.createAction( 'shoulderControlRight.quaternion', rightShoulderTracks ),
-      this.createAction( 'elbowControlLeft.quaternion', leftElbowTracks ),
-      this.createAction( 'elbowControlRight.quaternion', rightElbowTracks ),
+
+      this.createAction( 'headControl.quaternion', headTrack ),
+      this.createAction( 'shoulderControlLeft.quaternion', leftShoulderTrack ),
+      this.createAction( 'shoulderControlRight.quaternion', rightShoulderTrack ),
+      this.createAction( 'elbowControlLeft.quaternion', leftElbowTrack ),
+      this.createAction( 'elbowControlRight.quaternion', rightElbowTrack ),
+
     ];
 
   }
 
-  // create a keyframe track consisting of two keyframes, representing the time span of one frame
-  createKeyFrameTrack( part, initialPos, finalPos, startTime ) {
-
-    return new THREE.QuaternionKeyframeTrack( part,
-      [
-        startTime,
-        startTime + 1, // framerate is fixed a 1 fps, we'll use the action.timescale to convert to other framerates
-      ],
-      [
-        initialPos.x,
-        initialPos.y,
-        initialPos.z,
-        initialPos.w,
-        finalPos.x,
-        finalPos.y,
-        finalPos.z,
-        finalPos.w,
-      ],
-    );
-
-  }
-
-  // A Clip consists of several keyframe tracks
+  // A Clip consists of one or more keyframe tracks
   // - for example the movement of an arm over the duration of a group.
   // An Action controls playback of the clip
   createAction( name, tracks ) {
 
-    const clip = new THREE.AnimationClip( name, tracks.length, tracks );
+    const clip = new THREE.AnimationClip( name, -1, tracks );
 
     const action = this.mixer.clipAction( clip );
 
     action.zeroSlopeAtStart = false;
     action.zeroSlopeAtEnd = false;
-
 
     action.name = clip.name;
 

@@ -58589,6 +58589,10 @@ var FileControl = function () {
       this.groups.reset();
       this.dance.reset();
       HTMLControl.controls.music.stop.click();
+
+      // add the initial frame and group back
+      this.frames.newFrameButton.click();
+      this.groups.newGroupButton.click();
     }
   }, {
     key: 'initExamples',
@@ -59374,45 +59378,45 @@ var AnimationControl = function () {
 
       this.reset();
 
-      if (frames.length < 2) return [];
+      if (frames.length < 2) return;
 
-      var headTracks = [];
-      var leftShoulderTracks = [];
-      var rightShoulderTracks = [];
-      var leftElbowTracks = [];
-      var rightElbowTracks = [];
+      var headValues = [frames[0].headQuaternion.x, frames[0].headQuaternion.y, frames[0].headQuaternion.z, frames[0].headQuaternion.w];
+
+      var leftShoulderValues = [frames[0].leftShoulderQuaternion.x, frames[0].leftShoulderQuaternion.y, frames[0].leftShoulderQuaternion.z, frames[0].leftShoulderQuaternion.w];
+
+      var rightShoulderValues = [frames[0].rightShoulderQuaternion.x, frames[0].rightShoulderQuaternion.y, frames[0].rightShoulderQuaternion.z, frames[0].rightShoulderQuaternion.w];
+
+      var leftElbowValues = [frames[0].leftElbowQuaternion.x, frames[0].leftElbowQuaternion.y, frames[0].leftElbowQuaternion.z, frames[0].leftElbowQuaternion.w];
+
+      var rightElbowValues = [frames[0].rightElbowQuaternion.x, frames[0].rightElbowQuaternion.y, frames[0].rightElbowQuaternion.z, frames[0].rightElbowQuaternion.w];
+
+      var times = [0];
 
       for (var i = 1; i < frames.length; i++) {
 
-        var initialFrame = frames[i - 1];
-        var finalFrame = frames[i];
+        times.push(i);
 
-        var frameStartTime = i - 1;
+        headValues.push(frames[i].headQuaternion.x, frames[i].headQuaternion.y, frames[i].headQuaternion.z, frames[i].headQuaternion.w);
 
-        headTracks.push(this.createKeyFrameTrack('head.quaternion', initialFrame.headQuaternion, finalFrame.headQuaternion, frameStartTime));
+        leftShoulderValues.push(frames[i].leftShoulderQuaternion.x, frames[i].leftShoulderQuaternion.y, frames[i].leftShoulderQuaternion.z, frames[i].leftShoulderQuaternion.w);
 
-        leftShoulderTracks.push(this.createKeyFrameTrack('leftShoulder.quaternion', initialFrame.leftShoulderQuaternion, finalFrame.leftShoulderQuaternion, frameStartTime));
+        rightShoulderValues.push(frames[i].rightShoulderQuaternion.x, frames[i].rightShoulderQuaternion.y, frames[i].rightShoulderQuaternion.z, frames[i].rightShoulderQuaternion.w);
 
-        rightShoulderTracks.push(this.createKeyFrameTrack('rightShoulder.quaternion', initialFrame.rightShoulderQuaternion, finalFrame.rightShoulderQuaternion, frameStartTime));
+        leftElbowValues.push(frames[i].leftElbowQuaternion.x, frames[i].leftElbowQuaternion.y, frames[i].leftElbowQuaternion.z, frames[i].leftElbowQuaternion.w);
 
-        leftElbowTracks.push(this.createKeyFrameTrack('leftElbow.quaternion', initialFrame.leftElbowQuaternion, finalFrame.leftElbowQuaternion, frameStartTime));
-
-        rightElbowTracks.push(this.createKeyFrameTrack('rightElbow.quaternion', initialFrame.rightElbowQuaternion, finalFrame.rightElbowQuaternion, frameStartTime));
+        rightElbowValues.push(frames[i].rightElbowQuaternion.x, frames[i].rightElbowQuaternion.y, frames[i].rightElbowQuaternion.z, frames[i].rightElbowQuaternion.w);
       }
 
-      this.actions = [this.createAction('headControl.quaternion', headTracks), this.createAction('shoulderControlLeft.quaternion', leftShoulderTracks), this.createAction('shoulderControlRight.quaternion', rightShoulderTracks), this.createAction('elbowControlLeft.quaternion', leftElbowTracks), this.createAction('elbowControlRight.quaternion', rightElbowTracks)];
+      var headTrack = [new QuaternionKeyframeTrack('head.quaternion', times, headValues)];
+      var leftShoulderTrack = [new QuaternionKeyframeTrack('leftShoulder.quaternion', times, leftShoulderValues)];
+      var rightShoulderTrack = [new QuaternionKeyframeTrack('rightShoulder.quaternion', times, rightShoulderValues)];
+      var leftElbowTrack = [new QuaternionKeyframeTrack('leftElbow.quaternion', times, leftElbowValues)];
+      var rightElbowTrack = [new QuaternionKeyframeTrack('rightElbow.quaternion', times, rightElbowValues)];
+
+      this.actions = [this.createAction('headControl.quaternion', headTrack), this.createAction('shoulderControlLeft.quaternion', leftShoulderTrack), this.createAction('shoulderControlRight.quaternion', rightShoulderTrack), this.createAction('elbowControlLeft.quaternion', leftElbowTrack), this.createAction('elbowControlRight.quaternion', rightElbowTrack)];
     }
 
-    // create a keyframe track consisting of two keyframes, representing the time span of one frame
-
-  }, {
-    key: 'createKeyFrameTrack',
-    value: function createKeyFrameTrack(part, initialPos, finalPos, startTime) {
-
-      return new QuaternionKeyframeTrack(part, [startTime, startTime + 1], [initialPos.x, initialPos.y, initialPos.z, initialPos.w, finalPos.x, finalPos.y, finalPos.z, finalPos.w]);
-    }
-
-    // A Clip consists of several keyframe tracks
+    // A Clip consists of one or more keyframe tracks
     // - for example the movement of an arm over the duration of a group.
     // An Action controls playback of the clip
 
@@ -59420,7 +59424,7 @@ var AnimationControl = function () {
     key: 'createAction',
     value: function createAction(name, tracks) {
 
-      var clip = new AnimationClip(name, tracks.length, tracks);
+      var clip = new AnimationClip(name, -1, tracks);
 
       var action = this.mixer.clipAction(clip);
 
@@ -59489,6 +59493,8 @@ var Frames = function () {
     value: function removeFrame(frame) {
 
       HTMLControl.controls.frames.table.removeChild(frame.row);
+
+      frame.reset();
 
       frame.removeEventListeners();
     }
@@ -59714,11 +59720,6 @@ var Group$1 = function () {
     value: function addFrame(frame) {
       var _this2 = this;
 
-      // const detail = {
-      //   frame,
-      //   deleteButton: null,
-      // };
-
       var row = document.createElement('tr');
       row.dataset.frameNumber = frame.num;
 
@@ -59779,7 +59780,10 @@ var Group$1 = function () {
 
       this.framesInGroup.childNodes.forEach(function (node) {
 
-        frames.push(_this4.frames.frames[node.dataset.frameNumber]);
+        if (node.nodeName === 'TR') {
+
+          frames.push(_this4.frames.frames[node.dataset.frameNumber]);
+        }
       });
 
       return frames;
@@ -59814,6 +59818,8 @@ var Group$1 = function () {
 
         this.addFrame(this.frames.frames[detail.frameNum]);
       }
+
+      this.createAnimation();
     }
   }, {
     key: 'toJSON',
@@ -59821,16 +59827,21 @@ var Group$1 = function () {
 
       var output = {};
 
-      for (var i = 0; i < this.containedFrames.length; i++) {
+      var i = 0;
 
-        var detail = this.containedFrames[i];
+      this.framesInGroup.childNodes.forEach(function (node) {
 
-        output[i] = {
+        if (node.nodeName === 'TR') {
 
-          frameNum: detail.frame.num
+          output[i] = {
 
-        };
-      }
+            frameNum: node.dataset.frameNumber
+
+          };
+
+          i++;
+        }
+      });
 
       return output;
     }
@@ -60056,36 +60067,6 @@ var LoopInputCell = function LoopInputCell(row) {
   });
 };
 
-var flattenGroup = function flattenGroup(group, loopAmount) {
-
-  var frames = [];
-
-  for (var i = 0; i < loopAmount; i++) {
-
-    frames = frames.concat(group.getFrames());
-  }
-
-  return frames;
-};
-
-// take the details array and flatten it to an array of frames
-var flattenDetails = function flattenDetails(details) {
-
-  var frames = [];
-
-  details.forEach(function (detail) {
-
-    var elem = detail.elem;
-
-    if (elem.type === 'frame') frames.push(elem);else if (elem.type === 'group') {
-
-      frames = frames.concat(flattenGroup(elem, detail.loopAmount));
-    }
-  });
-
-  return frames;
-};
-
 var Dance = function () {
   function Dance(groups) {
     classCallCheck(this, Dance);
@@ -60099,8 +60080,6 @@ var Dance = function () {
 
     this.lastAddedType = null;
     this.table = HTMLControl.controls.dance.table;
-
-    this.containedElems = [];
 
     this.initAdvancedControlsToggle();
     this.initAddSelectedFrameButton();
@@ -60128,17 +60107,11 @@ var Dance = function () {
 
       var loopAmount = loop || 1;
 
-      var detail = {
-        elem: elem,
-        loopAmount: loopAmount,
-        deleteButton: null
-      };
-
-      this.containedElems.push(detail);
-
-      var pos = this.containedElems.length - 1;
-
       var row = document.createElement('tr');
+      row.dataset.type = elem.type;
+      row.dataset.loops = loopAmount;
+      row.dataset.number = elem.num;
+
       this.table.appendChild(row);
 
       new TextCell(row, elem.num);
@@ -60150,7 +60123,7 @@ var Dance = function () {
 
         loopInput.onInput = function (value) {
 
-          detail.loopAmount = value;
+          row.dataset.loops = value;
           _this.checkDanceIsValid();
         };
       } else {
@@ -60158,16 +60131,14 @@ var Dance = function () {
         row.appendChild(document.createElement('td'));
       }
 
-      detail.deleteButton = new DeleteButtonCell(row);
+      var deleteButton = new DeleteButtonCell(row);
 
-      detail.deleteButton.onClick = function () {
+      deleteButton.onClick = function () {
 
         if (_this.table.contains(row)) _this.table.removeChild(row);
 
-        _this.containedElems.splice(pos, 1);
-
-        if (detail.elem.type === 'group' && detail.elem.num === _this.lastAddedGroupNum) _this.lastAddedGroupNum = -1;
-        if (detail.elem.type === 'frame' && detail.elem.num === _this.lastAddedFrameNum) _this.lastAddedFrameNum = -1;
+        if (elem.type === 'group' && elem.num === _this.lastAddedGroupNum) _this.lastAddedGroupNum = -1;
+        if (elem.type === 'frame' && elem.num === _this.lastAddedFrameNum) _this.lastAddedFrameNum = -1;
 
         _this.checkDanceIsValid();
       };
@@ -60282,8 +60253,28 @@ var Dance = function () {
   }, {
     key: 'createAnimation',
     value: function createAnimation() {
+      var _this7 = this;
 
-      var frames = flattenDetails(this.containedElems);
+      var frames = [];
+
+      this.table.childNodes.forEach(function (node) {
+
+        if (node.nodeName === 'TR') {
+
+          var num = node.dataset.number;
+
+          if (node.dataset.type === 'group') {
+
+            for (var i = 0; i < node.dataset.loops; i++) {
+
+              frames = frames.concat(_this7.groups.groups[num].getFrames());
+            }
+          } else {
+
+            frames.push(_this7.frames.frames[num]);
+          }
+        }
+      });
 
       this.actions = animationControl.createAnimation(frames);
     }
@@ -60292,22 +60283,26 @@ var Dance = function () {
     value: function checkDanceIsValid() {
 
       var containedFramesNum = 0;
-      var containsValidGroups = false;
+      var containsGroups = false;
 
-      this.containedElems.forEach(function (detail) {
+      this.table.childNodes.forEach(function (node) {
 
-        if (detail.elem.type === 'frame') containedFramesNum++;else if (detail.elem.type === 'group') {
+        if (node.nodeName === 'TR') {
 
-          // this would require a 'change' event added to the group so that the dance can listen
-          // when frames are added or removed to check whether the group becomes valid
-          // if ( detail.elem.checkGroupIsValid() && detail.loopAmount > 0 ) containsValidGroups = true;
+          if (node.dataset.type === 'frame') {
 
-          // instead use simpler but not totally accurate method
-          if (detail.loopAmount > 0) containsValidGroups = true;
+            containedFramesNum++;
+          } else if (node.dataset.loops > 0) {
+
+            // note: this doesn't actually check if the group is valid as that
+            // requires setting up a change listener on the group. This simpler
+            // method just checks that there is a group and assume it is valid
+            containsGroups = true;
+          }
         }
       });
 
-      this.valid = containedFramesNum > 1 || containsValidGroups;
+      this.valid = containedFramesNum > 1 || containsGroups;
 
       HTMLControl.controls.dance.playButton.disabled = !this.valid;
     }
@@ -60315,12 +60310,10 @@ var Dance = function () {
     key: 'reset',
     value: function reset() {
 
-      for (var i = this.containedElems.length - 1; i >= 0; i--) {
+      while (this.table.firstChild) {
 
-        this.containedElems[i].deleteButton.click();
+        this.table.removeChild(this.table.firstChild);
       }
-
-      this.containedElems = [];
 
       this.valid = false;
       HTMLControl.controls.dance.playButton.disabled = true;
@@ -60360,24 +60353,23 @@ var Dance = function () {
 
       };
 
-      for (var i = 0; i < this.containedElems.length; i++) {
+      var i = 0;
 
-        var detail = this.containedElems[i];
+      this.table.childNodes.forEach(function (node) {
 
-        if (detail !== null) {
+        if (node.nodeName === 'TR') {
 
           output[i] = {
 
-            type: detail.elem.type,
-            num: detail.elem.num,
-            loopAmount: detail.loopAmount
+            type: node.dataset.type,
+            num: node.dataset.number,
+            loopAmount: node.dataset.loops
 
           };
-        } else {
 
-          output[i] = null;
+          i++;
         }
-      }
+      });
 
       return output;
     }

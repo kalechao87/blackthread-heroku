@@ -26,6 +26,8 @@ export default class Frames {
 
     HTMLControl.controls.frames.table.removeChild( frame.row );
 
+    frame.reset();
+
     frame.removeEventListeners();
 
   }

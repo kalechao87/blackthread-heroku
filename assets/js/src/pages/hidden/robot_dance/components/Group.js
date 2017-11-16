@@ -72,11 +72,6 @@ export default class Group {
 
   addFrame( frame ) {
 
-    // const detail = {
-    //   frame,
-    //   deleteButton: null,
-    // };
-
     const row = document.createElement( 'tr' );
     row.dataset.frameNumber = frame.num;
 
@@ -139,7 +134,11 @@ export default class Group {
 
     this.framesInGroup.childNodes.forEach( ( node ) => {
 
-      frames.push( this.frames.frames[ node.dataset.frameNumber ] );
+      if ( node.nodeName === 'TR' ) {
+
+        frames.push( this.frames.frames[ node.dataset.frameNumber ] );
+
+      }
 
     } );
 
@@ -178,23 +177,31 @@ export default class Group {
 
     }
 
+    this.createAnimation();
+
   }
 
   toJSON() {
 
     const output = {};
 
-    for ( let i = 0; i < this.containedFrames.length; i++ ) {
+    let i = 0;
 
-      const detail = this.containedFrames[ i ];
+    this.framesInGroup.childNodes.forEach( ( node ) => {
 
-      output[ i ] = {
+      if ( node.nodeName === 'TR' ) {
 
-        frameNum: detail.frame.num,
+        output[ i ] = {
 
-      };
+          frameNum: node.dataset.frameNumber,
 
-    }
+        };
+
+        i++;
+
+      }
+
+    } );
 
     return output;
 
