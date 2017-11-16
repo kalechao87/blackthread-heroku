@@ -37,9 +37,9 @@ http {
     keepalive_timeout 5;
     add_header Strict-Transport-Security max-age=31536000;
 
-    if ($request_uri = /index.html) {
+    <!-- if ($request_uri = /index.html) {
       return 301 https://www.blackthreaddesign.com/;
-    }
+    } -->
 
     location / {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
