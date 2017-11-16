@@ -32,7 +32,9 @@ http {
 
   server {
 
-    listen <%= ENV["PORT"] %>;
+    listen 80;
+    #listen <%= ENV["PORT"] %>;
+
     server_name www.blackthreaddesign.com;
     keepalive_timeout 5;
     add_header Strict-Transport-Security max-age=31536000;
