@@ -1,12 +1,12 @@
 #daemon off;
 #Heroku dynos have at least 4 cores.
-#worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
+worker_processes 4;
 
-#events {
-#  use epoll;
-#  accept_mutex on;
-#  worker_connections 1024;
-#}
+events {
+  use epoll;
+  accept_mutex on;
+  worker_connections 1024;
+}
 
 http {
   gzip on;
@@ -39,9 +39,9 @@ http {
     keepalive_timeout 5;
     add_header Strict-Transport-Security max-age=31536000;
 
-    <!-- if ($request_uri = /index.html) {
+    if ($request_uri = /index.html) {
       return 301 https://www.blackthreaddesign.com/;
-    } -->
+    }
 
     location / {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
