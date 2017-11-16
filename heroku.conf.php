@@ -26,6 +26,8 @@ http {
 
     #server_name www.blackthreaddesign.com;
 
+    root /app/_site/
+
     add_header Strict-Transport-Security max-age=31536000;
 
     location / {
