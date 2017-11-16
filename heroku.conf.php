@@ -42,15 +42,16 @@ http {
         return 301 https://www.blackthreaddesign.com/;
       }
 
-      auth_basic              "Restricted";
-      auth_basic_user_file    basic.htpasswd;
-      proxy_pass http://app_server;
+      #auth_basic              "Restricted";
+      #auth_basic_user_file    basic.htpasswd;
+      #proxy_pass http://app_server;
     }
-    location /unauthenticated {
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header Host $http_host;
-      proxy_redirect off;
-      proxy_pass http://app_server;
-    }
+
+    #location /unauthenticated {
+    #  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #  proxy_set_header Host $http_host;
+    #  proxy_redirect off;
+    #  proxy_pass http://app_server;
+    #}
   }
 }
