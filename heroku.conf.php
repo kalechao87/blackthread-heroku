@@ -1,14 +1,12 @@
-
-events {
-  use epoll;
-  accept_mutex on;
-}
+#events {
+#  use epoll;
+#  accept_mutex on;
+#}
 
 http {
   gzip on;
   gzip_comp_level 2;
   gzip_min_length 512;
-
 
   log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
   access_log logs/nginx/access.log l2met;
