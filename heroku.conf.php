@@ -1,74 +1,63 @@
+daemon off;
+#Heroku dynos have at least 4 cores.
+worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
+
+events {
+  use epoll;
+  accept_mutex on;
+  worker_connections 1024;
+}
+
 http {
-    include       mime.types;
-    default_type  application/octet-stream;
+  gzip on;
+  gzip_comp_level 2;
+  gzip_min_length 512;
 
-    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-    #                  '$status $body_bytes_sent "$http_referer" '
-    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+  server_tokens off;
 
-    #access_log  logs/access.log  main;
+  log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
+  access_log logs/nginx/access.log l2met;
+  error_log logs/nginx/error.log;
 
-    sendfile        on;
-    #tcp_nopush     on;
+  include mime.types;
+  default_type application/octet-stream;
+  sendfile on;
 
-    #keepalive_timeout  0;
-    keepalive_timeout  65;
+  #Must read the body in 5 seconds.
+  client_body_timeout 5;
 
-    gzip  on;
+  upstream app_server {
+    server unix:/tmp/nginx.socket fail_timeout=0;
+  }
 
-    client_max_body_size	100m;
+  server {
 
-    server_tokens off;
+    listen <%= ENV["PORT"] %>;
+    server_name www.blackthreaddesign.com;
+    keepalive_timeout 5;
+    add_header Strict-Transport-Security max-age=31536000;
 
-    fastcgi_buffers 256 4k;
-
-    # define an easy to reference name that can be used in fastgi_pass
-    upstream heroku-fcgi {
-        #server 127.0.0.1:4999 max_fails=3 fail_timeout=3s;
-        server unix:/tmp/heroku.fcgi.<?=getenv('PORT')?:'8080'?>.sock max_fails=3 fail_timeout=3s;
-        keepalive 16;
+    if ($request_uri = /index.html) {
+      return 301 https://www.blackthreaddesign.com/;
     }
 
-    server {
-        # define an easy to reference name that can be used in try_files
-        location @heroku-fcgi {
-            include fastcgi_params;
+    location / {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      if ($http_x_forwarded_proto != 'https') {
+        rewrite ^ https://$host$request_uri? permanent;
+      }
 
-            fastcgi_split_path_info ^(.+\.php)(/.*)$;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            # try_files resets $fastcgi_path_info, see http://trac.nginx.org/nginx/ticket/321, so we use the if instead
-            fastcgi_param PATH_INFO $fastcgi_path_info if_not_empty;
-
-            if (!-f $document_root$fastcgi_script_name) {
-                # check if the script exists
-                # otherwise, /foo.jpg/bar.php would get passed to FPM, which wouldn't run it as it's not in the list of allowed extensions, but this check is a good idea anyway, just in case
-                return 404;
-            }
-
-            fastcgi_pass heroku-fcgi;
-        }
-
-        # TODO: use X-Forwarded-Host? http://comments.gmane.org/gmane.comp.web.nginx.english/2170
-        server_name localhost;
-        listen <?=getenv('PORT')?:'8080'?>;
-        # FIXME: breaks redirects with foreman
-        port_in_redirect off;
-
-        root "<?=getenv('DOCUMENT_ROOT')?:getenv('HEROKU_APP_DIR')?:getcwd()?>";
-
-        error_log stderr;
-        access_log /tmp/heroku.nginx_access.<?=getenv('PORT')?:'8080'?>.log;
-
-        include "<?=getenv('HEROKU_PHP_NGINX_CONFIG_INCLUDE')?>";
-
-        # restrict access to hidden files, just in case
-        location ~ /\. {
-            deny all;
-        }
-
-        # default handling of .php
-        location ~ \.php {
-            try_files @heroku-fcgi @heroku-fcgi;
-        }
+      auth_basic              "Restricted";
+      auth_basic_user_file    basic.htpasswd;
+      proxy_pass http://app_server;
     }
+    location /unauthenticated {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_pass http://app_server;
+    }
+  }
 }
