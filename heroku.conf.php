@@ -8,27 +8,25 @@ http {
   gzip_comp_level 2;
   gzip_min_length 512;
 
-  log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
-  access_log logs/nginx/access.log l2met;
-  error_log logs/nginx/error.log;
+  #log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
+  #access_log logs/nginx/access.log l2met;
+  #error_log logs/nginx/error.log;
 
   #Must read the body in 5 seconds.
-  client_body_timeout 5;
+  #client_body_timeout 5;
 
-  upstream app_server {
-    server unix:/tmp/nginx.socket fail_timeout=0;
-  }
+  #upstream app_server {
+  #  server unix:/tmp/nginx.socket fail_timeout=0;
+  #}
 
   server {
 
     #listen 80;
     listen <?=getenv('PORT')?:'8080'?>;
 
-    server_name www.blackthreaddesign.com;
+    #server_name www.blackthreaddesign.com;
 
     add_header Strict-Transport-Security max-age=31536000;
-
-
 
     location / {
 
