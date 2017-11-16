@@ -60,7 +60,7 @@ export default class Dance {
 
     if ( elem.type === 'group' ) {
 
-      const loopInput = new LoopInputCell( row );
+      const loopInput = new LoopInputCell( row, loop );
 
       loopInput.onInput = ( value ) => {
 

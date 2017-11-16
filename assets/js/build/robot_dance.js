@@ -60027,11 +60027,13 @@ var Groups = function () {
   return Groups;
 }();
 
-var LoopInputCell = function LoopInputCell(row) {
+var LoopInputCell = function LoopInputCell(row, value) {
   var _this = this;
 
   classCallCheck(this, LoopInputCell);
 
+
+  value = value || 1;
 
   var cell = document.createElement('td');
   cell.innerHTML = 'Loop ';
@@ -60041,7 +60043,7 @@ var LoopInputCell = function LoopInputCell(row) {
   cell.appendChild(input);
   input.type = 'number';
   input.min = '0';
-  input.value = '1';
+  input.value = value;
   input.step = '1';
 
   var text = document.createElement('span');
@@ -60119,7 +60121,7 @@ var Dance = function () {
 
       if (elem.type === 'group') {
 
-        var loopInput = new LoopInputCell(row);
+        var loopInput = new LoopInputCell(row, loop);
 
         loopInput.onInput = function (value) {
 

@@ -1,6 +1,8 @@
 export default class LoopInputCell {
 
-  constructor( row ) {
+  constructor( row, value ) {
+
+    value = value || 1;
 
     const cell = document.createElement( 'td' );
     cell.innerHTML = 'Loop ';
@@ -10,7 +12,7 @@ export default class LoopInputCell {
     cell.appendChild( input );
     input.type = 'number';
     input.min = '0';
-    input.value = '1';
+    input.value = value;
     input.step = '1';
 
     const text = document.createElement( 'span' );
