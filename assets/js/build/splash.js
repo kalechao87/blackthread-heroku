@@ -55248,46 +55248,6 @@ var ImageUtils = {
 
 //
 
-var fadeLoader = function fadeLoader() {
-  var loadingOverlay = document.querySelector('#loadingOverlay');
-
-  if (!loadingOverlay) return;
-
-  loadingOverlay.classList.add('fadeOut');
-  window.setTimeout(function () {
-    loadingOverlay.classList.add('hidden');
-  }, 1500);
-};
-
-var initLoader = function initLoader() {
-  // show for at least a few seconds
-  // window.setTimeout( () => {
-  // // If THREE is not being used, fade out straightaway
-  // if ( typeof THREE !== 'object' ) {
-  //   fadeLoader();
-  //   return;
-  // }
-
-  // if we are using the loadingManager, wait for it to finish before
-  // fading out the loader
-  //   if ( useLoadingManager ) {
-  //     THREE.DefaultLoadingManager.onLoad = () => {
-  //       fadeLoader();
-  //     };
-  //   }
-  //   // otherwise fade it out straightaway
-  //   else {
-  //     fadeLoader();
-  //   }
-  // }, 3000 );
-
-};
-
-var loadingOverlay = {
-  init: initLoader,
-  fadeOut: fadeLoader
-};
-
 /* ****************************************
 Keep track of mouse / pointer position
 use something like
@@ -55332,21 +55292,244 @@ var pointerPosToCanvasCentre = function pointerPosToCanvasCentre(camera, canvas)
   return pos;
 };
 
-var loader = void 0;
+var fadeLoader = function fadeLoader() {
+  var loadingOverlay = document.querySelector('#loadingOverlay');
 
-// promisified version of THREE.FontLoader
-var fontLoader = function fontLoader(url) {
-  var promiseLoader = function promiseLoader(url) {
-    return new Promise(function (resolve, reject) {
-      if (!loader) loader = new FontLoader();
-      loader.load(url, resolve);
-    });
+  if (!loadingOverlay) return;
+
+  loadingOverlay.classList.add('fadeOut');
+  window.setTimeout(function () {
+    loadingOverlay.classList.add('hidden');
+  }, 1500);
+};
+
+var initLoader = function initLoader() {
+  // show for at least a few seconds
+  // window.setTimeout( () => {
+  // // If THREE is not being used, fade out straightaway
+  // if ( typeof THREE !== 'object' ) {
+  //   fadeLoader();
+  //   return;
+  // }
+
+  // if we are using the loadingManager, wait for it to finish before
+  // fading out the loader
+  //   if ( useLoadingManager ) {
+  //     THREE.DefaultLoadingManager.onLoad = () => {
+  //       fadeLoader();
+  //     };
+  //   }
+  //   // otherwise fade it out straightaway
+  //   else {
+  //     fadeLoader();
+  //   }
+  // }, 3000 );
+
+};
+
+var loadingOverlay = {
+  init: initLoader,
+  fadeOut: fadeLoader
+};
+
+var loadingManager = new LoadingManager();
+
+// hide the upload form when loading starts so that the progress bar can be shown
+loadingManager.onStart = function () {};
+
+loadingManager.onLoad = function () {
+
+  loadingOverlay.fadeOut();
+};
+
+loadingManager.onProgress = function () {};
+
+loadingManager.onError = function (msg) {
+
+  if (msg instanceof String && msg === '') return;
+
+  console.error('THREE.LoadingManager error: ' + msg);
+};
+
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
   };
 
-  return promiseLoader(url).then(function (object) {
-    return object;
-  });
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
 };
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+var fontLoader = null;
+var textureLoader = null;
+
+var defaultReject = function defaultReject(err) {
+  console.log(err);
+};
+
+var promisifyLoader = function promisifyLoader(loader) {
+  return function (url) {
+    return new Promise(function (resolve) {
+      var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultReject;
+
+
+      loader.load(url, resolve, loadingManager.onProgress, reject);
+    });
+  };
+};
+
+var Loaders = function Loaders() {
+  classCallCheck(this, Loaders);
+
+
+  return {
+
+    get textureLoader() {
+      if (textureLoader === null) {
+        textureLoader = promisifyLoader(new TextureLoader(loadingManager));
+      }
+      return textureLoader;
+    },
+
+    get fontLoader() {
+      if (fontLoader === null) {
+        fontLoader = promisifyLoader(new FontLoader(loadingManager));
+      }
+      return fontLoader;
+    }
+
+  };
+};
+
+var loaders = new Loaders();
 
 /**
  * @author Lewy Blue / https://github.com/looeee
@@ -56582,9 +56765,16 @@ var backgroundVert = "#define GLSLIFY 1\nattribute vec3 position;\nvarying vec2 
 
 var backgroundFrag = "precision mediump float;\n#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 uv;\nvoid main() {\n\tfloat dst = length(uv - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, uv).rgb, 0.08);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( uv, uv ) ), 1.0);\n\tgl_FragColor = col;\n}";
 
-var textVert = "#define GLSLIFY 1\nuniform float uTime;\nuniform vec2 pointer;\nattribute vec2 aAnimation;\nattribute vec3 aEndPosition;\nvarying vec2 screenUV;\nfloat ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\nvoid main() {\n  float d = length( position.xy - pointer );\n  float dist = 1.0 / d;\n  float moveAmount = clamp( dist * 200.0, 0.0, 10.0 ) * 0.002;\n  float tDelay = aAnimation.x;\n  float tDuration = aAnimation.y;\n  float tTime = clamp(uTime - tDelay, 0.0, tDuration);\n  float tProgress = ease(tTime, 0.0, 1.0, tDuration);\n  vec3 transformed = mix(position, aEndPosition, tProgress - moveAmount );\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n  screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;\n}\n";
+var textVert = "#define GLSLIFY 1\nuniform float uTime;\nuniform vec2 pointer;\nattribute vec2 aAnimation;\nattribute vec3 aEndPosition;\nvarying vec2 screenUV;\nfloat ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\nvoid main() {\n  float exploder = 0.001;\n  if( uTime <= 0.01 ) {\n    float d = length( position.xy - pointer );\n    float dist = 200.0 / d;\n    exploder = clamp( dist, 0.0, 20.0 ) * 0.002;\n  }\n  float tDelay = aAnimation.x;\n  float tDuration = aAnimation.y;\n  float tTime = clamp(uTime - tDelay, 0.0, tDuration);\n  float tProgress = ease(tTime, 0.0, 1.0, tDuration);\n  vec3 transformed = mix(position, aEndPosition, tProgress - exploder );\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n  screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;\n}\n";
 
-var textFrag = "#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 screenUV;\nvoid main() {\n\tfloat dst = length(screenUV - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, screenUV).rgb, 0.08);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( screenUV, screenUV ) ), 1.0);\n\tgl_FragColor = col;\n}";
+var textFrag = "#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 screenUV;\nvoid main() {\n\tfloat dst = length(screenUV - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, screenUV).rgb, 0.2);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( screenUV, screenUV ) ), 1.0);\n\tgl_FragColor = col;\n}";
+
+// computed using least squares fit from a few tests
+function cameraZPos(aspect) {
+
+  if (aspect <= 0.9) return -960 * aspect + 1350;else if (aspect <= 1.2) return -430 * aspect + 900;else if (aspect <= 3) return -110 * aspect + 500;else if (aspect <= 4.5) return -40 * aspect + 300;
+  return 100;
+}
 
 var createBufferAttribute = function createBufferAttribute(bufferGeometry, name, itemSize, count) {
   var buffer = new Float32Array(count * itemSize);
@@ -56597,7 +56787,8 @@ var createBufferAttribute = function createBufferAttribute(bufferGeometry, name,
 
 var v = new Vector3();
 
-var randomPointInSphere = function randomPointInSphere(radius) {
+function randomPointInSphere(radius) {
+
   var x = _Math.randFloat(-1, 1);
   var y = _Math.randFloat(-1, 1);
   var z = _Math.randFloat(-1, 1);
@@ -56608,20 +56799,9 @@ var randomPointInSphere = function randomPointInSphere(radius) {
   v.z = z * normalizationFactor * radius;
 
   return v;
-};
+}
 
-// computed using least squares fit from a few tests
-var cameraZPos = function cameraZPos(aspect) {
-  if (aspect <= 0.9) return -960 * aspect + 1350;else if (aspect <= 1.2) return -430 * aspect + 900;else if (aspect <= 3) return -110 * aspect + 500;else if (aspect <= 4.5) return -40 * aspect + 300;
-  return 100;
-};
-
-// saving function taken from three.js editor
-var link = document.createElement('a');
-link.style.display = 'none';
-document.body.appendChild(link); // Firefox workaround, see #6594
-
-function initBufferAnimation(bufferGeometry) {
+function createBufferAnimation(bufferGeometry) {
 
   var vertexCount = bufferGeometry.attributes.position.count;
   var faceCount = vertexCount / 3;
@@ -56668,7 +56848,7 @@ function initBufferAnimation(bufferGeometry) {
   }
 }
 
-var createTextGeometry = function createTextGeometry(font) {
+function createTextGeometry(font) {
   var text = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Black Thread Design';
 
 
@@ -56686,245 +56866,150 @@ var createTextGeometry = function createTextGeometry(font) {
 
   bufferGeometry.translate(-316, 0, 0);
 
-  initBufferAnimation(bufferGeometry);
+  createBufferAnimation(bufferGeometry);
 
-  // exportAsJSON( bufferGeometry );
   return bufferGeometry;
-};
+}
 
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
+function createShapeGeometries() {
+
+  var bufferGeometry = new TetrahedronBufferGeometry(50, 1);
+  bufferGeometry.translate(-20, 10, 0);
+
+  createBufferAnimation(bufferGeometry);
+
+  return bufferGeometry;
+}
+
+var Main = function () {
+  function Main() {
+    classCallCheck(this, Main);
+
+
+    this.preLoad();
+
+    this.load();
+
+    this.postLoad();
   }
 
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-var SplashCanvas = function () {
-  function SplashCanvas() {
-    classCallCheck(this, SplashCanvas);
-
-
-    var self = this;
-
-    this.app = new App(document.querySelector('#splash-canvas'));
-
-    this.app.camera.fov = 75;
-    this.app.camera.position.set(0, 0, cameraZPos(this.app.camera.aspect));
-    this.app.camera.updateProjectionMatrix();
-
-    this.initMaterials();
-
-    this.addBackground();
-
-    this.addText();
-
-    // this.initControls();
-
-    // this.pauseWhenOffscreen();
-
-    var updateMaterials = function updateMaterials() {
-      // Pan events on mobile sometimes register as (0,0); ignore these
-      if (pointerPos.x !== 0 && pointerPos.y !== 0) {
-        var offsetX = pointerPos.x / self.app.canvas.clientWidth;
-        var offsetY = 1 - pointerPos.y / self.app.canvas.clientHeight;
-
-        // make the line well defined when moving the pointer off the top of the canvas
-        offsetY = offsetY > 0.99 ? 0.999 : offsetY;
-
-        self.offset.set(offsetX, offsetY);
-        self.smooth.set(1.0, offsetY);
-
-        var pointer = pointerPosToCanvasCentre(self.app.camera, self.app.canvas);
-        self.pointer.set(pointer.x, pointer.y);
-      }
-    };
-
-    var uTime = 1.0;
-    var minTime = 0.0;
-    var animSpeed = 8000;
-
-    var updateAnimation = function updateAnimation() {
-
-      // set on repeat (for testing)
-      // if ( uTime <= minTime ) uTime = 1.0;
-
-      // Ignore large values of delta (caused by window not be being focused for a while)
-      if (uTime >= minTime && self.app.delta < 100) {
-
-        uTime -= self.app.delta / animSpeed;
-      }
-
-      self.textMat.uniforms.uTime.value = uTime;
-
-      // speed up the animation as it progresses
-      animSpeed -= 5;
-    };
-
-    this.app.onUpdate = function () {
-
-      updateMaterials();
-
-      updateAnimation();
-
-      //   if ( self.controls && self.controls.enableDamping === true ) self.controls.update();
-    };
-
-    this.app.onWindowResize = function () {
-
-      self.app.camera.position.set(0, 0, cameraZPos(self.app.camera.aspect));
-    };
-
-    DefaultLoadingManager.onLoad = function () {
-
-      loadingOverlay.fadeOut();
-      self.app.play();
-    };
-  }
-
-  createClass(SplashCanvas, [{
-    key: 'addText',
-    value: function addText() {
+  createClass(Main, [{
+    key: 'preLoad',
+    value: function preLoad() {
 
       var self = this;
 
-      fontLoader('/assets/fonts/json/droid_sans_mono_regular.typeface.json').then(function (font) {
+      this.app = new App(document.querySelector('#splash-canvas'));
 
-        var bufferGeometry = createTextGeometry(font);
+      this.app.camera.fov = 75;
+      this.app.camera.position.set(0, 0, cameraZPos(this.app.camera.aspect));
+      this.app.camera.updateProjectionMatrix();
 
-        var textMesh = new Mesh(bufferGeometry, self.textMat);
+      this.initMaterials();
 
-        self.app.scene.add(textMesh);
+      this.addBackground();
+
+      // this.initControls();
+
+      this.app.onWindowResize = function () {
+
+        self.app.camera.position.set(0, 0, cameraZPos(self.app.camera.aspect));
+      };
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      var _this = this;
+
+      this.loadingPromises = [];
+
+      var fontPromise = loaders.fontLoader('/assets/fonts/json/droid_sans_mono_regular.typeface.json').then(function (font) {
+        _this.font = font;
       });
+
+      this.loadingPromises.push(fontPromise);
+
+      // const noisePromise = loaders.textureLoader
+    }
+  }, {
+    key: 'postLoad',
+    value: function postLoad() {
+      var _this2 = this;
+
+      Promise.all(this.loadingPromises).then(function () {
+
+        var textGeo = createTextGeometry(_this2.font);
+        var textMesh = new Mesh(textGeo, _this2.textMat);
+        _this2.app.scene.add(textMesh);
+
+        var shapeGeo = createShapeGeometries();
+        _this2.shapeMesh = new Mesh(shapeGeo, _this2.textMat);
+        _this2.shapeMesh.position.set(-150, 150, 0);
+
+        _this2.app.scene.add(_this2.shapeMesh);
+
+        _this2.initAnimation();
+
+        _this2.app.play();
+      });
+    }
+  }, {
+    key: 'initAnimation',
+    value: function initAnimation() {
+
+      var self = this;
+
+      var uTime = 1.0;
+      var minTime = 0.0;
+      var animSpeed = 8000;
+
+      var updateMaterials = function updateMaterials() {
+
+        // Pan events on mobile sometimes register as ( 0, 0 ); ignore these
+        if (pointerPos.x !== 0 && pointerPos.y !== 0) {
+
+          var offsetX = pointerPos.x / self.app.canvas.clientWidth;
+          var offsetY = 1 - pointerPos.y / self.app.canvas.clientHeight;
+
+          // make the line well defined when moving the pointer off the top of the canvas
+          offsetY = offsetY > 0.99 ? 0.999 : offsetY;
+
+          self.offset.set(offsetX, offsetY);
+          self.smooth.set(1.0, offsetY);
+
+          var pointer = pointerPosToCanvasCentre(self.app.camera, self.app.canvas);
+          self.pointer.set(pointer.x, pointer.y);
+        }
+      };
+
+      var updateAnimation = function updateAnimation() {
+
+        // set on repeat (for testing)
+        // if ( uTime <= minTime ) uTime = 1.0;
+
+        // Ignore large values of delta (caused by window not be being focused for a while)
+        if (uTime >= minTime) {
+
+          uTime -= self.app.delta / animSpeed;
+        }
+
+        self.textMat.uniforms.uTime.value = uTime;
+
+        // speed up the animation as it progresses
+        animSpeed -= 5;
+      };
+
+      this.app.onUpdate = function () {
+
+        updateMaterials();
+
+        updateAnimation();
+
+        self.shapeMesh.rotation.x += 0.005;
+        self.shapeMesh.rotation.y += 0.005;
+
+        //   if ( self.controls && self.controls.enableDamping === true ) self.controls.update();
+      };
     }
   }, {
     key: 'addBackground',
@@ -57010,11 +57095,11 @@ var SplashCanvas = function () {
       this.controls = controls;
     }
   }]);
-  return SplashCanvas;
+  return Main;
 }();
 
-initNav();
+new Main();
 
-var splashHero = new SplashCanvas(false);
+initNav();
 
 }());

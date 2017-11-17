@@ -4,9 +4,6 @@ import 'babel-polyfill';
 import 'utilities/init/initHammer.js';
 import initNav from 'utilities/init/initNav.js';
 
-import SplashHero from 'pages/splash/SplashCanvas.js';
+import 'pages/splash/main.js';
 
 initNav();
-
-const splashHero = new SplashHero( false );
-

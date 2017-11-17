@@ -11,12 +11,19 @@ float ease(float t, float b, float c, float d) {
 }
 
 void main() {
-  // Inverse of distance from pointer to end vertex
-  float d = length( position.xy - pointer );
-  float dist = 1.0 / d;
 
-  // offset based on pointer position
-  float moveAmount = clamp( dist * 200.0, 0.0, 10.0 ) * 0.002;
+  float exploder = 0.001;
+
+  // calculate the offset based on pointer position once the initial animation is finished
+  if( uTime <= 0.01 ) {
+
+    float d = length( position.xy - pointer );
+    float dist = 200.0 / d;
+
+    // offset based on pointer position
+    exploder = clamp( dist, 0.0, 20.0 ) * 0.002;
+
+  }
 
   // Set up animation
   float tDelay = aAnimation.x;
@@ -26,10 +33,8 @@ void main() {
 
   float tProgress = ease(tTime, 0.0, 1.0, tDuration);
 
-
-  // Mix between initial and final position
-  vec3 transformed = mix(position, aEndPosition, tProgress - moveAmount );
-
+  // Mix between initial and final position plus mouse position offset
+  vec3 transformed = mix(position, aEndPosition, tProgress - exploder );
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
 

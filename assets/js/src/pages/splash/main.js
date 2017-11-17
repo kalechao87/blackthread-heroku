@@ -1,10 +1,8 @@
 import * as THREE from 'three';
 
-import loadingOverlay from 'utilities/init/initLoadingOverlay.js';
-
 import pointerPosToCanvasCentre from 'utilities/three/pointerPosToCanvasCentre.js';
 
-import fontLoader from 'utilities/three/loaders/fontLoader.js';
+import loaders from './loaders.js';
 
 import pointerPos from 'utilities/pointerPos.js';
 
@@ -16,13 +14,26 @@ import backgroundFrag from './shaders/background.frag';
 import textVert from './shaders/text.vert';
 import textFrag from './shaders/text.frag';
 
-import { cameraZPos, createTextGeometry } from './splashCanvasHelpers.js';
+import cameraZPos from './utilities/cameraZPos.js';
+
+import createTextGeometry from './utilities/createTextGeometry.js';
+import createShapeGeometries from './utilities/createShapeGeometries.js';
 
 THREE.Cache.enabled = true;
 
-export default class SplashCanvas {
+class Main {
 
   constructor() {
+
+    this.preLoad();
+
+    this.load();
+
+    this.postLoad();
+
+  }
+
+  preLoad() {
 
     const self = this;
 
@@ -36,15 +47,64 @@ export default class SplashCanvas {
 
     this.addBackground();
 
-    this.addText();
-
     // this.initControls();
 
-    // this.pauseWhenOffscreen();
+    this.app.onWindowResize = function () {
+
+      self.app.camera.position.set( 0, 0, cameraZPos( self.app.camera.aspect ) );
+
+    };
+
+  }
+
+  load() {
+
+    this.loadingPromises = [];
+
+    const fontPromise = loaders.fontLoader( '/assets/fonts/json/droid_sans_mono_regular.typeface.json' )
+      .then( ( font ) => { this.font = font; } );
+
+    this.loadingPromises.push( fontPromise );
+
+    // const noisePromise = loaders.textureLoader
+  }
+
+  postLoad() {
+
+    Promise.all( this.loadingPromises ).then(
+      () => {
+
+        const textGeo = createTextGeometry( this.font );
+        const textMesh = new THREE.Mesh( textGeo, this.textMat );
+        this.app.scene.add( textMesh );
+
+        const shapeGeo = createShapeGeometries();
+        this.shapeMesh = new THREE.Mesh( shapeGeo, this.textMat );
+        this.shapeMesh.position.set( -150, 150, 0 );
+
+        this.app.scene.add( this.shapeMesh );
+
+        this.initAnimation();
+
+        this.app.play();
+
+      } );
+
+  }
+
+  initAnimation() {
+
+    const self = this;
+
+    let uTime = 1.0;
+    const minTime = 0.0;
+    let animSpeed = 8000;
 
     const updateMaterials = function () {
-        // Pan events on mobile sometimes register as (0,0); ignore these
+
+      // Pan events on mobile sometimes register as ( 0, 0 ); ignore these
       if ( pointerPos.x !== 0 && pointerPos.y !== 0 ) {
+
         const offsetX = pointerPos.x / self.app.canvas.clientWidth;
         let offsetY = 1 - pointerPos.y / self.app.canvas.clientHeight;
 
@@ -56,20 +116,18 @@ export default class SplashCanvas {
 
         const pointer = pointerPosToCanvasCentre( self.app.camera, self.app.canvas );
         self.pointer.set( pointer.x, pointer.y );
-      }
-    };
 
-    let uTime = 1.0;
-    const minTime = 0.0;
-    let animSpeed = 8000;
+      }
+
+    };
 
     const updateAnimation = function () {
 
-      // set on repeat (for testing)
-      // if ( uTime <= minTime ) uTime = 1.0;
+    // set on repeat (for testing)
+    // if ( uTime <= minTime ) uTime = 1.0;
 
-      // Ignore large values of delta (caused by window not be being focused for a while)
-      if ( uTime >= minTime && self.app.delta < 100 ) {
+    // Ignore large values of delta (caused by window not be being focused for a while)
+      if ( uTime >= minTime ) {
 
         uTime -= self.app.delta / animSpeed;
 
@@ -77,7 +135,7 @@ export default class SplashCanvas {
 
       self.textMat.uniforms.uTime.value = uTime;
 
-      // speed up the animation as it progresses
+    // speed up the animation as it progresses
       animSpeed -= 5;
 
     };
@@ -88,40 +146,11 @@ export default class SplashCanvas {
 
       updateAnimation();
 
-    //   if ( self.controls && self.controls.enableDamping === true ) self.controls.update();
+      self.shapeMesh.rotation.x += 0.005;
+      self.shapeMesh.rotation.y += 0.005;
+
+      //   if ( self.controls && self.controls.enableDamping === true ) self.controls.update();
     };
-
-    this.app.onWindowResize = function () {
-
-      self.app.camera.position.set( 0, 0, cameraZPos( self.app.camera.aspect ) );
-
-    };
-
-
-    THREE.DefaultLoadingManager.onLoad = () => {
-
-      loadingOverlay.fadeOut();
-      self.app.play();
-
-    };
-
-  }
-
-
-  addText() {
-
-    const self = this;
-
-    fontLoader( '/assets/fonts/json/droid_sans_mono_regular.typeface.json' )
-    .then( ( font ) => {
-
-      const bufferGeometry = createTextGeometry( font );
-
-      const textMesh = new THREE.Mesh( bufferGeometry, self.textMat );
-
-      self.app.scene.add( textMesh );
-
-    } );
 
   }
 
@@ -211,3 +240,5 @@ export default class SplashCanvas {
   }
 
 }
+
+export default new Main();

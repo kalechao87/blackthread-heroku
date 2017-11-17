@@ -14,7 +14,7 @@ void main() {
 
 	vec3 color = mix(color1, color2, dst);
 
-	vec3 noise = mix(color, texture2D(noiseTexture, screenUV).rgb, 0.08);
+	vec3 noise = mix(color, texture2D(noiseTexture, screenUV).rgb, 0.2);
 
 	vec4 col = vec4( mix( noise, vec3( -2.6 ), dot( screenUV, screenUV ) ), 1.0);
 
