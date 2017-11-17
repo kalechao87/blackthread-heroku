@@ -11658,7 +11658,6 @@ if (typeof define === 'function' && define.amd) {
 
 var hammer$1 = interopDefault(hammer);
 
-// Set up Hammer as global
 window.Hammer = hammer$1;
 
 var Greedy = function Greedy(options) {
@@ -16403,7 +16402,7 @@ Object.assign( WebGLRenderTarget.prototype, EventDispatcher.prototype, {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com/
+ * @author alteredq / http://alteredqualia.com
  */
 
 function DataTexture( data, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding ) {
@@ -24778,6 +24777,8 @@ Object.assign( BufferAttribute.prototype, {
 
 } );
 
+//
+
 function Uint16BufferAttribute( array, itemSize, normalized ) {
 
 	BufferAttribute.call( this, new Uint16Array( array ), itemSize, normalized );
@@ -24807,10 +24808,6 @@ function Float32BufferAttribute( array, itemSize, normalized ) {
 Float32BufferAttribute.prototype = Object.create( BufferAttribute.prototype );
 Float32BufferAttribute.prototype.constructor = Float32BufferAttribute;
 
-
-/**
- * @author mrdoob / http://mrdoob.com/
- */
 
 function DirectGeometry() {
 
@@ -36752,7 +36749,7 @@ Group.prototype = Object.assign( Object.create( Object3D.prototype ), {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com/
  */
 
 function CompressedTexture( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding ) {
@@ -36780,8 +36777,8 @@ CompressedTexture.prototype.constructor = CompressedTexture;
 CompressedTexture.prototype.isCompressedTexture = true;
 
 /**
- * @author mrdoob / http://mrdoob.com/
- * @author Mugen87 / https://github.com/Mugen87
+ * @author Matt DesLauriers / @mattdesl
+ * @author atix / arthursilber.de
  */
 
 function WireframeGeometry( geometry ) {
@@ -48706,7 +48703,10 @@ Object.assign( StereoCamera.prototype, {
 } );
 
 /**
- * @author mrdoob / http://mrdoob.com/
+ * Camera for rendering cube maps
+ *	- renders scene into axis-aligned cube
+ *
+ * @author alteredq / http://alteredqualia.com/
  */
 
 function AudioListener() {
@@ -52690,8 +52690,7 @@ Object.assign( Cylindrical.prototype, {
 } );
 
 /**
- * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
+ * @author alteredq / http://alteredqualia.com/
  */
 
 function VertexNormalsHelper( object, size, hex, linewidth ) {
@@ -53047,7 +53046,6 @@ SkeletonHelper.prototype.updateMatrixWorld = function () {
 /**
  * @author alteredq / http://alteredqualia.com/
  * @author mrdoob / http://mrdoob.com/
- * @author Mugen87 / https://github.com/Mugen87
  */
 
 function HemisphereLightHelper( light, size, color ) {
@@ -53131,7 +53129,6 @@ HemisphereLightHelper.prototype.update = function () {
 
 /**
  * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
  */
 
 function FaceNormalsHelper( object, size, hex, linewidth ) {
@@ -53625,18 +53622,6 @@ BoxHelper.prototype.setFromObject = function ( object ) {
 
 /**
  * @author WestLangley / http://github.com/WestLangley
- * @author zz85 / http://github.com/zz85
- * @author bhouston / http://clara.io
- *
- * Creates an arrow for visualizing directions
- *
- * Parameters:
- *  dir - Vector3
- *  origin - Vector3
- *  length - Number
- *  color - color in hex value
- *  headLength - Number
- *  headWidth - Number
  */
 
 var lineGeometry;
@@ -53734,26 +53719,9 @@ ArrowHelper.prototype.setColor = function ( color ) {
 };
 
 /**
- * @author zz85 https://github.com/zz85
- *
- * Centripetal CatmullRom Curve - which is useful for avoiding
- * cusps and self-intersections in non-uniform catmull rom curves.
- * http://www.cemyuksel.com/research/catmullrom_param/catmullrom.pdf
- *
- * curve.type accepts centripetal(default), chordal and catmullrom
- * curve.tension is used for catmullrom which defaults to 0.5
+ * @author sroucheray / http://sroucheray.org/
+ * @author mrdoob / http://mrdoob.com/
  */
-
-
-/*
-Based on an optimized c++ solution in
- - http://stackoverflow.com/questions/9489736/catmull-rom-curve-with-no-cusps-and-no-self-intersections/
- - http://ideone.com/NoEbVM
-
-This CubicPoly class could be used for reusing some variables and calculations,
-but for three.js curve use, it could be possible inlined and flatten into a single function call
-which can be placed in CurveUtils.
-*/
 
 function CubicPoly() {
 
@@ -53943,10 +53911,6 @@ CatmullRomCurve3.prototype.copy = function ( source ) {
 
 };
 
-/**
- * @author alteredq / http://alteredqualia.com/
- */
-
 var SceneUtils = {
 
 	createMultiMaterialObject: function ( geometry, materials ) {
@@ -53982,7 +53946,9 @@ var SceneUtils = {
 
 };
 
-//
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
 
 Curve.create = function ( construct, getPoint ) {
 
@@ -54087,13 +54053,13 @@ Object.assign( Spline.prototype, {
 
 } );
 
+//
+
 SkeletonHelper.prototype.update = function () {
 
 	console.error( 'THREE.SkeletonHelper: update() no longer needs to be called.' );
 
 };
-
-//
 
 Object.assign( Box2.prototype, {
 
@@ -55230,6 +55196,8 @@ AudioAnalyser.prototype.getData = function () {
 
 };
 
+//
+
 var ImageUtils = {
 
 	crossOrigin: undefined,
@@ -55278,7 +55246,7 @@ var ImageUtils = {
 
 };
 
-// const useLoadingManager = true;
+//
 
 var fadeLoader = function fadeLoader() {
   var loadingOverlay = document.querySelector('#loadingOverlay');
@@ -55347,72 +55315,21 @@ var moveHandler = function moveHandler(e) {
 window.addEventListener('mousemove', moveHandler);
 new Hammer(document.querySelector('body')).on('pan', moveHandler);
 
-var pointerPosToCanvasCentre = function pointerPosToCanvasCentre(canvas) {
-  var offsetY = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var offsetX = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+var vector = new Vector3();
 
-  var halfWidth = canvas.clientWidth / 2 + offsetX;
-  var halfHeight = canvas.clientHeight / 2 + offsetY;
-  return {
-    x: pointerPos.x <= halfWidth ? -halfWidth + pointerPos.x : pointerPos.x - halfWidth,
-    y: halfHeight - pointerPos.y
-  };
-};
+var pointerPosToCanvasCentre = function pointerPosToCanvasCentre(camera, canvas) {
 
-// compute the centroid of a triangular face
+  vector.set(pointerPos.x / canvas.clientWidth * 2 - 1, -(pointerPos.y / canvas.clientHeight) * 2 + 1, 0.5);
 
-var v = new Vector3();
+  vector.unproject(camera);
 
-var computeCentroid = function computeCentroid(geometry, face) {
-  var a = geometry.vertices[face.a];
-  var b = geometry.vertices[face.b];
-  var c = geometry.vertices[face.c];
+  var dir = vector.sub(camera.position).normalize();
 
-  v.x = (a.x + b.x + c.x) / 3;
-  v.y = (a.y + b.y + c.y) / 3;
-  v.z = (a.z + b.z + c.z) / 3;
+  var distance = -camera.position.z / dir.z;
 
-  return v;
-};
+  var pos = camera.position.clone().add(dir.multiplyScalar(distance));
 
-// Add an attribute to a bufferGeometry and return a reference to the attribute
-
-var createBufferAttribute = function createBufferAttribute(bufferGeometry, name, itemSize, count) {
-  var buffer = new Float32Array(count * itemSize);
-  var attribute = new BufferAttribute(buffer, itemSize);
-
-  bufferGeometry.addAttribute(name, attribute);
-
-  return attribute;
-};
-
-// set the .index property of a bufferGeometry from faces
-var setBufferGeometryIndicesFromFaces = function setBufferGeometryIndicesFromFaces(bufferGeometry, faceCount, faces) {
-  var indexBuffer = new Uint32Array(faceCount * 3);
-
-  bufferGeometry.setIndex(new BufferAttribute(indexBuffer, 1));
-
-  for (var i = 0, offset = 0; i < faceCount; i++, offset += 3) {
-    var face = faces[i];
-
-    indexBuffer[offset] = face.a;
-    indexBuffer[offset + 1] = face.b;
-    indexBuffer[offset + 2] = face.c;
-  }
-};
-
-// create an attribute 'positions' from a set of vertices
-var createBufferPositionsAttribute = function createBufferPositionsAttribute(bufferGeometry, vertices) {
-  var vertexCount = vertices.length;
-  var positionBuffer = createBufferAttribute(bufferGeometry, 'position', 3, vertexCount).array;
-
-  for (var i = 0, offset = 0; i < vertexCount; i++, offset += 3) {
-    var vertex = vertices[i];
-
-    positionBuffer[offset] = vertex.x;
-    positionBuffer[offset + 1] = vertex.y;
-    positionBuffer[offset + 2] = vertex.z;
-  }
+  return pos;
 };
 
 var loader = void 0;
@@ -55552,21 +55469,6 @@ function Time() {
     this.paused = true;
   };
 }
-
-/**
- * @author qiao / https://github.com/qiao
- * @author mrdoob / http://mrdoob.com
- * @author alteredq / http://alteredqualia.com/
- * @author WestLangley / http://github.com/WestLangley
- * @author erich666 / http://erichaines.com
- */
-
-// This set of controls performs orbiting, dollying (zooming), and panning.
-// Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
-//
-//    Orbit - left mouse / touch: one finger move
-//    Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
-//    Pan - right mouse, or arrow keys / touch: three finger swipe
 
 function OrbitControls(object, domElement) {
 
@@ -56394,11 +56296,6 @@ function OrbitControls(object, domElement) {
 OrbitControls.prototype = Object.create(EventDispatcher.prototype);
 OrbitControls.prototype.constructor = OrbitControls;
 
-/**
- * @author Lewy Blue / https://github.com/looeee
- *
- */
-
 var _canvas = void 0;
 var _scene = void 0;
 var _camera = void 0;
@@ -56685,278 +56582,20 @@ var backgroundVert = "#define GLSLIFY 1\nattribute vec3 position;\nvarying vec2 
 
 var backgroundFrag = "precision mediump float;\n#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 uv;\nvoid main() {\n\tfloat dst = length(uv - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, uv).rgb, 0.08);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( uv, uv ) ), 1.0);\n\tgl_FragColor = col;\n}";
 
-var textVert = "#define GLSLIFY 1\nuniform float uTime;\nuniform vec2 pointer;\nattribute vec2 aAnimation;\nattribute vec3 aEndPosition;\nvarying vec2 screenUV;\nfloat ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\nvoid main() {\n  float d = length( position.xy - pointer );\n  float dist = 1.0 / d;\n  float tDelay = aAnimation.x;\n  float tDuration = aAnimation.y;\n  float tTime = clamp(uTime - tDelay, 0.0, tDuration);\n  float tProgress = ease(tTime, 0.0, 1.0, tDuration);\n \n  vec3 transformed = mix(position, aEndPosition, tProgress);\n  float moveAmount = clamp( dist * 200.0, 0.0, 10.0 );\n  transformed.x = transformed.x + moveAmount;\n  transformed.y = transformed.y + moveAmount;\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n  screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;\n}\n";
+var textVert = "#define GLSLIFY 1\nuniform float uTime;\nuniform vec2 pointer;\nattribute vec2 aAnimation;\nattribute vec3 aEndPosition;\nvarying vec2 screenUV;\nfloat ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\nvoid main() {\n  float d = length( position.xy - pointer );\n  float dist = 1.0 / d;\n  float moveAmount = clamp( dist * 200.0, 0.0, 10.0 ) * 0.002;\n  float tDelay = aAnimation.x;\n  float tDuration = aAnimation.y;\n  float tTime = clamp(uTime - tDelay, 0.0, tDuration);\n  float tProgress = ease(tTime, 0.0, 1.0, tDuration);\n  vec3 transformed = mix(position, aEndPosition, tProgress - moveAmount );\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n  screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;\n}\n";
 
 var textFrag = "#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 screenUV;\nvoid main() {\n\tfloat dst = length(screenUV - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, screenUV).rgb, 0.08);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( screenUV, screenUV ) ), 1.0);\n\tgl_FragColor = col;\n}";
 
-/**
- * Duplicates vertices so each face becomes separate.
- * copied from  THREE.ExplodeModifier.
-   */
-var explodeModifier = function explodeModifier(geometry) {
-      var vertices = [];
+var createBufferAttribute = function createBufferAttribute(bufferGeometry, name, itemSize, count) {
+  var buffer = new Float32Array(count * itemSize);
+  var attribute = new BufferAttribute(buffer, itemSize);
 
-      for (var i = 0, il = geometry.faces.length; i < il; i++) {
-            var n = vertices.length;
-            var face = geometry.faces[i];
+  bufferGeometry.addAttribute(name, attribute);
 
-            var a = face.a;
-            var b = face.b;
-            var c = face.c;
-
-            var va = geometry.vertices[a];
-            var vb = geometry.vertices[b];
-            var vc = geometry.vertices[c];
-
-            vertices.push(va.clone());
-            vertices.push(vb.clone());
-            vertices.push(vc.clone());
-
-            face.a = n;
-            face.b = n + 1;
-            face.c = n + 2;
-      }
-
-      geometry.vertices = vertices;
+  return attribute;
 };
 
-/**
- * Break faces with edges longer than maxEdgeLength.
- * copied from  THREE.TessellateModifier.
-
-*/
-var tesselate = function tesselate(geometry, maxEdgeLength) {
-          var edge = void 0;
-
-          var faces = [];
-          var faceVertexUvs = [];
-          var maxEdgeLengthSquared = maxEdgeLength * maxEdgeLength;
-
-          for (var i = 0, il = geometry.faceVertexUvs.length; i < il; i++) {
-
-                    faceVertexUvs[i] = [];
-          }
-
-          for (var _i = 0, _il = geometry.faces.length; _i < _il; _i++) {
-
-                    var face = geometry.faces[_i];
-
-                    if (face instanceof Face3) {
-
-                              var a = face.a;
-                              var b = face.b;
-                              var c = face.c;
-
-                              var va = geometry.vertices[a];
-                              var vb = geometry.vertices[b];
-                              var vc = geometry.vertices[c];
-
-                              var dab = va.distanceToSquared(vb);
-                              var dbc = vb.distanceToSquared(vc);
-                              var dac = va.distanceToSquared(vc);
-
-                              if (dab > maxEdgeLengthSquared || dbc > maxEdgeLengthSquared || dac > maxEdgeLengthSquared) {
-
-                                        var m = geometry.vertices.length;
-
-                                        var triA = face.clone();
-                                        var triB = face.clone();
-
-                                        var vm = void 0;
-                                        var vnm = void 0;
-                                        var vcm = void 0;
-
-                                        if (dab >= dbc && dab >= dac) {
-
-                                                  vm = va.clone();
-                                                  vm.lerp(vb, 0.5);
-
-                                                  triA.a = a;
-                                                  triA.b = m;
-                                                  triA.c = c;
-
-                                                  triB.a = m;
-                                                  triB.b = b;
-                                                  triB.c = c;
-
-                                                  if (face.vertexNormals.length === 3) {
-
-                                                            vnm = face.vertexNormals[0].clone();
-                                                            vnm.lerp(face.vertexNormals[1], 0.5);
-
-                                                            triA.vertexNormals[1].copy(vnm);
-                                                            triB.vertexNormals[0].copy(vnm);
-                                                  }
-
-                                                  if (face.vertexColors.length === 3) {
-
-                                                            vcm = face.vertexColors[0].clone();
-                                                            vcm.lerp(face.vertexColors[1], 0.5);
-
-                                                            triA.vertexColors[1].copy(vcm);
-                                                            triB.vertexColors[0].copy(vcm);
-                                                  }
-
-                                                  edge = 0;
-                                        } else if (dbc >= dab && dbc >= dac) {
-
-                                                  vm = vb.clone();
-                                                  vm.lerp(vc, 0.5);
-
-                                                  triA.a = a;
-                                                  triA.b = b;
-                                                  triA.c = m;
-
-                                                  triB.a = m;
-                                                  triB.b = c;
-                                                  triB.c = a;
-
-                                                  if (face.vertexNormals.length === 3) {
-
-                                                            vnm = face.vertexNormals[1].clone();
-                                                            vnm.lerp(face.vertexNormals[2], 0.5);
-
-                                                            triA.vertexNormals[2].copy(vnm);
-
-                                                            triB.vertexNormals[0].copy(vnm);
-                                                            triB.vertexNormals[1].copy(face.vertexNormals[2]);
-                                                            triB.vertexNormals[2].copy(face.vertexNormals[0]);
-                                                  }
-
-                                                  if (face.vertexColors.length === 3) {
-
-                                                            vcm = face.vertexColors[1].clone();
-                                                            vcm.lerp(face.vertexColors[2], 0.5);
-
-                                                            triA.vertexColors[2].copy(vcm);
-
-                                                            triB.vertexColors[0].copy(vcm);
-                                                            triB.vertexColors[1].copy(face.vertexColors[2]);
-                                                            triB.vertexColors[2].copy(face.vertexColors[0]);
-                                                  }
-
-                                                  edge = 1;
-                                        } else {
-
-                                                  vm = va.clone();
-                                                  vm.lerp(vc, 0.5);
-
-                                                  triA.a = a;
-                                                  triA.b = b;
-                                                  triA.c = m;
-
-                                                  triB.a = m;
-                                                  triB.b = b;
-                                                  triB.c = c;
-
-                                                  if (face.vertexNormals.length === 3) {
-
-                                                            vnm = face.vertexNormals[0].clone();
-                                                            vnm.lerp(face.vertexNormals[2], 0.5);
-
-                                                            triA.vertexNormals[2].copy(vnm);
-                                                            triB.vertexNormals[0].copy(vnm);
-                                                  }
-
-                                                  if (face.vertexColors.length === 3) {
-
-                                                            vcm = face.vertexColors[0].clone();
-                                                            vcm.lerp(face.vertexColors[2], 0.5);
-
-                                                            triA.vertexColors[2].copy(vcm);
-                                                            triB.vertexColors[0].copy(vcm);
-                                                  }
-
-                                                  edge = 2;
-                                        }
-
-                                        faces.push(triA, triB);
-                                        geometry.vertices.push(vm);
-
-                                        for (var j = 0, jl = geometry.faceVertexUvs.length; j < jl; j++) {
-
-                                                  if (geometry.faceVertexUvs[j].length) {
-
-                                                            var uvs = geometry.faceVertexUvs[j][_i];
-
-                                                            var uvA = uvs[0];
-                                                            var uvB = uvs[1];
-                                                            var uvC = uvs[2];
-
-                                                            // AB
-
-                                                            var uvsTriA = void 0;
-                                                            var uvsTriB = void 0;
-                                                            var uvM = void 0;
-
-                                                            if (edge === 0) {
-
-                                                                      uvM = uvA.clone();
-                                                                      uvM.lerp(uvB, 0.5);
-
-                                                                      uvsTriA = [uvA.clone(), uvM.clone(), uvC.clone()];
-                                                                      uvsTriB = [uvM.clone(), uvB.clone(), uvC.clone()];
-
-                                                                      // BC
-                                                            } else if (edge === 1) {
-
-                                                                      uvM = uvB.clone();
-                                                                      uvM.lerp(uvC, 0.5);
-
-                                                                      uvsTriA = [uvA.clone(), uvB.clone(), uvM.clone()];
-                                                                      uvsTriB = [uvM.clone(), uvC.clone(), uvA.clone()];
-
-                                                                      // AC
-                                                            } else {
-
-                                                                      uvM = uvA.clone();
-                                                                      uvM.lerp(uvC, 0.5);
-
-                                                                      uvsTriA = [uvA.clone(), uvB.clone(), uvM.clone()];
-                                                                      uvsTriB = [uvM.clone(), uvB.clone(), uvC.clone()];
-                                                            }
-
-                                                            faceVertexUvs[j].push(uvsTriA, uvsTriB);
-                                                  }
-                                        }
-                              } else {
-
-                                        faces.push(face);
-
-                                        for (var _j = 0, _jl = geometry.faceVertexUvs.length; _j < _jl; _j++) {
-
-                                                  faceVertexUvs[_j].push(geometry.faceVertexUvs[_j][_i]);
-                                        }
-                              }
-                    }
-          }
-
-          geometry.faces = faces;
-          geometry.faceVertexUvs = faceVertexUvs;
-};
-
-// recursive version of tesselate
-var tessellateRecursive = function tessellateRecursive(geometry, maxEdgeLength, depth) {
-  for (var i = 0; i < depth; i++) {
-    tesselate(geometry, maxEdgeLength);
-  }
-};
-
-var positionTextGeometry = function positionTextGeometry(geometry, anchor) {
-  geometry.computeBoundingBox();
-
-  var size = geometry.boundingBox.getSize();
-  var anchorX = size.x * -anchor.x;
-  var anchorY = size.y * -anchor.y;
-  var anchorZ = size.z * -anchor.z;
-  var matrix = new Matrix4().makeTranslation(anchorX, anchorY, anchorZ);
-
-  geometry.applyMatrix(matrix);
-
-  return geometry;
-};
-
-var v$1 = new Vector3();
+var v = new Vector3();
 
 var randomPointInSphere = function randomPointInSphere(radius) {
   var x = _Math.randFloat(-1, 1);
@@ -56964,11 +56603,11 @@ var randomPointInSphere = function randomPointInSphere(radius) {
   var z = _Math.randFloat(-1, 1);
   var normalizationFactor = 1 / Math.sqrt(x * x + y * y + z * z);
 
-  v$1.x = x * normalizationFactor * radius;
-  v$1.y = y * normalizationFactor * radius;
-  v$1.z = z * normalizationFactor * radius;
+  v.x = x * normalizationFactor * radius;
+  v.y = y * normalizationFactor * radius;
+  v.z = z * normalizationFactor * radius;
 
-  return v$1;
+  return v;
 };
 
 // computed using least squares fit from a few tests
@@ -56977,30 +56616,80 @@ var cameraZPos = function cameraZPos(aspect) {
   return 100;
 };
 
+// saving function taken from three.js editor
+var link = document.createElement('a');
+link.style.display = 'none';
+document.body.appendChild(link); // Firefox workaround, see #6594
+
+function initBufferAnimation(bufferGeometry) {
+
+  var vertexCount = bufferGeometry.attributes.position.count;
+  var faceCount = vertexCount / 3;
+
+  var aAnimation = createBufferAttribute(bufferGeometry, 'aAnimation', 2, vertexCount);
+  var aEndPosition = createBufferAttribute(bufferGeometry, 'aEndPosition', 3, vertexCount);
+
+  var positions = bufferGeometry.attributes.position.array;
+
+  var i = void 0;
+  var i2 = void 0;
+  var i3 = void 0;
+
+  var minDuration = 1.0;
+  var maxDuration = 100.0;
+
+  var lengthFactor = 0.0005;
+
+  var maxLength = 316; // initially calculated from boundingBox.max.length(), hardcoded for speed
+
+  for (i = 0, i2 = 0, i3 = 0; i < faceCount; i++, i2 += 6, i3 += 9) {
+
+    var l = -Math.abs(positions[i3] - positions[i3 + 5]);
+
+    // animation
+    var delay = (maxLength - l) * lengthFactor;
+    var duration = _Math.randFloat(minDuration, maxDuration);
+
+    for (var k = 0; k < 6; k += 2) {
+
+      aAnimation.array[i2 + k] = delay;
+      aAnimation.array[i2 + k + 1] = duration;
+    }
+
+    // end position
+    var point = randomPointInSphere(1200);
+
+    for (var j = 0; j < 9; j += 3) {
+
+      aEndPosition.array[i3 + j] = point.x;
+      aEndPosition.array[i3 + j + 1] = point.y;
+      aEndPosition.array[i3 + j + 2] = point.z;
+    }
+  }
+}
+
 var createTextGeometry = function createTextGeometry(font) {
   var text = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Black Thread Design';
 
-  var textGeometry = new TextGeometry(text, {
+
+  var bufferGeometry = new TextBufferGeometry(text, {
+
     size: 40,
-    height: 3,
+    height: 0,
     font: font,
-    weight: 'normal',
-    style: 'normal',
-    curveSegments: 24,
-    bevelSize: 2,
-    bevelThickness: 2,
-    bevelEnabled: true
+    curveSegments: 12
+    // bevelSize: 1,
+    // bevelThickness: 2,
+    // bevelSegments: 1,
+    // bevelEnabled: true,
   });
 
-  positionTextGeometry(textGeometry, { x: 0.5, y: 0.0, z: 0.0 });
+  bufferGeometry.translate(-316, 0, 0);
 
-  var tessellationLevel = window.innerWidth >= 1300 ? 2 : 1;
+  initBufferAnimation(bufferGeometry);
 
-  tessellateRecursive(textGeometry, 1.0, tessellationLevel);
-
-  explodeModifier(textGeometry);
-
-  return textGeometry;
+  // exportAsJSON( bufferGeometry );
+  return bufferGeometry;
 };
 
 var asyncGenerator = function () {
@@ -57175,13 +56864,13 @@ var SplashCanvas = function () {
         self.offset.set(offsetX, offsetY);
         self.smooth.set(1.0, offsetY);
 
-        var pointer = pointerPosToCanvasCentre(self.app.canvas, 0);
+        var pointer = pointerPosToCanvasCentre(self.app.camera, self.app.canvas);
         self.pointer.set(pointer.x, pointer.y);
       }
     };
 
     var uTime = 1.0;
-    var minTime = 0.1;
+    var minTime = 0.0;
     var animSpeed = 8000;
 
     var updateAnimation = function updateAnimation() {
@@ -57191,16 +56880,18 @@ var SplashCanvas = function () {
 
       // Ignore large values of delta (caused by window not be being focused for a while)
       if (uTime >= minTime && self.app.delta < 100) {
+
         uTime -= self.app.delta / animSpeed;
       }
 
       self.textMat.uniforms.uTime.value = uTime;
 
       // speed up the animation as it progresses
-      animSpeed -= 15;
+      animSpeed -= 5;
     };
 
     this.app.onUpdate = function () {
+
       updateMaterials();
 
       updateAnimation();
@@ -57228,11 +56919,7 @@ var SplashCanvas = function () {
 
       fontLoader('/assets/fonts/json/droid_sans_mono_regular.typeface.json').then(function (font) {
 
-        var textGeometry = createTextGeometry(font);
-
-        var bufferGeometry = new BufferGeometry(textGeometry);
-
-        self.initBufferAnimation(bufferGeometry, textGeometry);
+        var bufferGeometry = createTextGeometry(font);
 
         var textMesh = new Mesh(bufferGeometry, self.textMat);
 
@@ -57240,62 +56927,9 @@ var SplashCanvas = function () {
       });
     }
   }, {
-    key: 'initBufferAnimation',
-    value: function initBufferAnimation(bufferGeometry, geometry) {
-      var faceCount = geometry.faces.length;
-      var vertexCount = geometry.vertices.length;
-
-      setBufferGeometryIndicesFromFaces(bufferGeometry, faceCount, geometry.faces);
-      createBufferPositionsAttribute(bufferGeometry, geometry.vertices);
-
-      var aAnimation = createBufferAttribute(bufferGeometry, 'aAnimation', 2, vertexCount);
-      var aEndPosition = createBufferAttribute(bufferGeometry, 'aEndPosition', 3, vertexCount);
-
-      var i = void 0;
-      var i2 = void 0;
-      var i3 = void 0;
-      // let i4;
-      var v = void 0;
-
-      var maxDelay = 0.0;
-      var minDuration = 1.0;
-      var maxDuration = 100.0;
-
-      var stretch = 0.1;
-      var lengthFactor = 0.0001;
-
-      var maxLength = geometry.boundingBox.max.length();
-
-      this.animationDuration = maxDuration + maxDelay + stretch + lengthFactor * maxLength;
-      this._animationProgress = 0;
-
-      for (i = 0, i2 = 0, i3 = 0; i < faceCount; i++, i2 += 6, i3 += 9) {
-        var face = geometry.faces[i];
-
-        var centroid = computeCentroid(geometry, face);
-
-        // animation
-        var delay = (maxLength - centroid.length()) * lengthFactor;
-        var duration = _Math.randFloat(minDuration, maxDuration);
-
-        for (v = 0; v < 6; v += 2) {
-          aAnimation.array[i2 + v] = delay + stretch * 0.5;
-          aAnimation.array[i2 + v + 1] = duration;
-        }
-
-        // end position
-        var point = randomPointInSphere(1200);
-
-        for (v = 0; v < 9; v += 3) {
-          aEndPosition.array[i3 + v] = point.x;
-          aEndPosition.array[i3 + v + 1] = point.y;
-          aEndPosition.array[i3 + v + 2] = point.z;
-        }
-      }
-    }
-  }, {
     key: 'addBackground',
     value: function addBackground() {
+
       var geometry = new PlaneBufferGeometry(2, 2, 1);
       this.bgMesh = new Mesh(geometry, this.backgroundMat);
       this.app.scene.add(this.bgMesh);
@@ -57303,6 +56937,7 @@ var SplashCanvas = function () {
   }, {
     key: 'initMaterials',
     value: function initMaterials() {
+
       var loader = new TextureLoader();
       var noiseTexture = loader.load('/assets/images/textures/noise-1024.jpg');
       noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
@@ -57333,31 +56968,20 @@ var SplashCanvas = function () {
       });
 
       this.backgroundMat = new RawShaderMaterial({
+
         uniforms: Object.assign({
           color1: { value: colA },
           color2: { value: colB }
         }, uniforms),
         vertexShader: backgroundVert,
         fragmentShader: backgroundFrag
+
       });
     }
-
-    // Pause if the canvas is not onscreen
-    // TODO: Make this a part of App
-    // TODO: Currently only works when scrolling down
-    // pauseWhenOffscreen() {
-    //   window.addEventListener( 'scroll', () => {
-    //     if ( !this.app.isPaused && window.scrollY > ( this.app.canvas.offsetTop + this.app.canvas.clientHeight ) ) {
-    //       this.app.pause();
-    //     } else if ( this.app.isPaused ) {
-    //       this.app.play();
-    //     }
-    //   } );
-    // }
-
   }, {
     key: 'initControls',
     value: function initControls() {
+
       var controls = new OrbitControls(this.app.camera, this.canvas);
 
       controls.enableZoom = false;
@@ -57389,7 +57013,6 @@ var SplashCanvas = function () {
   return SplashCanvas;
 }();
 
-// this needs to be called before any scripts that use hammer.js, as it sets up the global Hammer
 initNav();
 
 var splashHero = new SplashCanvas(false);

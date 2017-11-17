@@ -15,24 +15,24 @@ void main() {
   float d = length( position.xy - pointer );
   float dist = 1.0 / d;
 
+  // offset based on pointer position
+  float moveAmount = clamp( dist * 200.0, 0.0, 10.0 ) * 0.002;
+
   // Set up animation
   float tDelay = aAnimation.x;
   float tDuration = aAnimation.y;
 
   float tTime = clamp(uTime - tDelay, 0.0, tDuration);
+
   float tProgress = ease(tTime, 0.0, 1.0, tDuration);
- 
+
+
   // Mix between initial and final position
-  vec3 transformed = mix(position, aEndPosition, tProgress);
+  vec3 transformed = mix(position, aEndPosition, tProgress - moveAmount );
 
-  // Move this amount based on pointer position
-  float moveAmount = clamp( dist * 200.0, 0.0, 10.0 );
-
-  transformed.x = transformed.x + moveAmount;
-  transformed.y = transformed.y + moveAmount;
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
 
-  // Calculate screenspace UV 
+  // Calculate screenspace UV
   screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;
 }
