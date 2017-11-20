@@ -1,16 +1,16 @@
 import * as THREE from 'three';
 
 import pointerPosToCanvasCentre from 'utilities/three/pointerPosToCanvasCentre.js';
+import pointerPos from 'utilities/pointerPos.js';
+import App from 'App/App.js';
+// import OrbitControls from 'modules/OrbitControls.module.js';
 
 import loaders from './loaders.js';
 
-import pointerPos from 'utilities/pointerPos.js';
-
-import App from 'App/App.js';
-import OrbitControls from 'modules/OrbitControls.module.js';
-
 import backgroundVert from './shaders/background.vert';
 import backgroundFrag from './shaders/background.frag';
+import shapeVert from './shaders/shape.vert';
+import shapeFrag from './shaders/shape.frag';
 import textVert from './shaders/text.vert';
 import textFrag from './shaders/text.frag';
 
@@ -74,15 +74,13 @@ class Main {
     Promise.all( this.loadingPromises ).then(
       () => {
 
-        const textGeo = createTextGeometry( this.font );
-        const textMesh = new THREE.Mesh( textGeo, this.textMat );
-        this.app.scene.add( textMesh );
+        const text = createTextGeometry( this.font, this.textMat );
 
-        const shapeGeo = createShapeGeometries();
-        this.shapeMesh = new THREE.Mesh( shapeGeo, this.textMat );
-        this.shapeMesh.position.set( -150, 150, 0 );
+        this.app.scene.add( text );
 
-        this.app.scene.add( this.shapeMesh );
+        this.shapes = createShapeGeometries( this.shapeMat );
+
+        this.shapes.forEach( ( shape ) => { this.app.scene.add( shape ); } );
 
         this.initAnimation();
 
@@ -146,8 +144,13 @@ class Main {
 
       updateAnimation();
 
-      self.shapeMesh.rotation.x += 0.005;
-      self.shapeMesh.rotation.y += 0.005;
+      self.shapes.forEach( ( shape ) => {
+
+        shape.geometry.rotateX( 0.002 );
+        shape.geometry.rotateY( 0.001 );
+        shape.geometry.rotateZ( 0.001 );
+
+      } );
 
       //   if ( self.controls && self.controls.enableDamping === true ) self.controls.update();
     };
@@ -171,7 +174,7 @@ class Main {
 
     this.offset = new THREE.Vector2( 0, 0 );
     this.smooth = new THREE.Vector2( 1.0, 1.0 );
-    this.pointer = new THREE.Vector2( 100, 100 );
+    this.pointer = new THREE.Vector2( -1000, -1000 );
 
     const colA = new THREE.Color( 0xffffff );
     const colB = new THREE.Color( 0x283844 );
@@ -194,6 +197,18 @@ class Main {
       side: THREE.DoubleSide,
     } );
 
+    this.shapeMat = new THREE.ShaderMaterial( {
+      uniforms: Object.assign( {
+        color1: { value: colB },
+        color2: { value: colA },
+        uTime: { value: 0.0 },
+        pointer: { value: this.pointer },
+      }, uniforms ),
+      vertexShader: shapeVert,
+      fragmentShader: shapeFrag,
+      side: THREE.DoubleSide,
+    } );
+
     this.backgroundMat = new THREE.RawShaderMaterial( {
 
       uniforms: Object.assign( {
@@ -208,36 +223,36 @@ class Main {
   }
 
 
-  initControls() {
+  // initControls() {
 
-    const controls = new OrbitControls( this.app.camera, this.canvas );
+  //   const controls = new OrbitControls( this.app.camera, this.canvas );
 
-    controls.enableZoom = false;
-    controls.enablePan = false;
+  //   controls.enableZoom = false;
+  //   controls.enablePan = false;
 
-    // controls.autoRotate = true;
-    // controls.autoRotateSpeed = -1.0;
+  //   // controls.autoRotate = true;
+  //   // controls.autoRotateSpeed = -1.0;
 
-    // How far you can orbit horizontally, upper and lower limits.
-    // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
-    controls.minAzimuthAngle = -Math.PI / 12; // radians
-    controls.maxAzimuthAngle = Math.PI / 12; // radians
+  //   // How far you can orbit horizontally, upper and lower limits.
+  //   // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
+  //   controls.minAzimuthAngle = -Math.PI / 12; // radians
+  //   controls.maxAzimuthAngle = Math.PI / 12; // radians
 
-    // How far you can orbit vertically, upper and lower limits.
-    // Range is 0 to Math.PI radians.
-    controls.minPolarAngle = Math.PI * 0.25;
-    controls.maxPolarAngle = Math.PI * 0.5;
+  //   // How far you can orbit vertically, upper and lower limits.
+  //   // Range is 0 to Math.PI radians.
+  //   controls.minPolarAngle = Math.PI * 0.25;
+  //   controls.maxPolarAngle = Math.PI * 0.5;
 
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
+  //   controls.enableDamping = true;
+  //   controls.dampingFactor = 0.25;
 
-    controls.enableKeys = false;
+  //   controls.enableKeys = false;
 
-    controls.rotateSpeed = 0.01;
+  //   controls.rotateSpeed = 0.01;
 
-    this.controls = controls;
+  //   this.controls = controls;
 
-  }
+  // }
 
 }
 

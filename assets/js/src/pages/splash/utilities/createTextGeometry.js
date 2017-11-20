@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import createBufferAnimation from './createBufferAnimation.js';
 
-export default function createTextGeometry( font, text = 'Black Thread Design' ) {
+export default function createTextGeometry( font, mat, text = 'Black Thread Design' ) {
 
   const bufferGeometry = new THREE.TextBufferGeometry( text, {
 
@@ -20,6 +20,6 @@ export default function createTextGeometry( font, text = 'Black Thread Design' )
 
   createBufferAnimation( bufferGeometry );
 
-  return bufferGeometry;
+  return new THREE.Mesh( bufferGeometry, mat );
 
 }

@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 
-import loaderCanvas from 'pages/experiments/loader/LoaderCanvas.js';
+import loaderCanvas from 'pages/experiments/loader/main.js';
 import Loaders from './Loaders.js';
-// import HTMLControl from './HTMLControl.js';
 
 const loaders = new Loaders();
 const defaultMat = new THREE.MeshBasicMaterial( { wireframe: true, color: 0x000000 } );

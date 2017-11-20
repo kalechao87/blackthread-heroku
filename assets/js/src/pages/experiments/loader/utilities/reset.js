@@ -23,35 +23,6 @@ const clearChildren = ( object ) => {
     object.remove( child );
     child = null;
 
-    // console.log( child );
-
-    // if ( child.userData.keepOnReset !== true ) {
-
-    //   if ( child.children.length > 0 ) {
-
-    //     clearChildren( child );
-
-    //   }
-
-    //   if ( child.geometry !== undefined ) {
-
-    //     child.geometry.dispose();
-
-    //   }
-    //   if ( child.material !== undefined ) {
-
-    //     // add check for multimaterials array here
-
-    //     // textureDispose( node.material );
-    //     // node.material.dispose();
-
-    //   }
-
-
-    //   object.remove( node );
-
-    // }
-
   }
 
 };

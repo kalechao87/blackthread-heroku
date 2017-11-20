@@ -54,8 +54,6 @@ export default class AnimationControls {
 
   initAnimation( object ) {
 
-    // console.log( object.animations )
-
     // don't do anything if the object has no animations
     if ( !object.animations || object.animations.length === 0 ) return;
 

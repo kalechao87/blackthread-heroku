@@ -18,7 +18,7 @@ import './utilities/fileReader.js';
 // Set up THREE caching
 THREE.Cache.enabled = true;
 
-class LoaderCanvas {
+class Main {
 
   constructor( canvas ) {
 
@@ -157,6 +157,6 @@ class LoaderCanvas {
 
 }
 
-const loaderCanvas = new LoaderCanvas( HTMLControl.canvas );
+const main = new Main( HTMLControl.canvas );
 
-export default loaderCanvas;
+export default main;

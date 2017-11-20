@@ -55292,245 +55292,6 @@ var pointerPosToCanvasCentre = function pointerPosToCanvasCentre(camera, canvas)
   return pos;
 };
 
-var fadeLoader = function fadeLoader() {
-  var loadingOverlay = document.querySelector('#loadingOverlay');
-
-  if (!loadingOverlay) return;
-
-  loadingOverlay.classList.add('fadeOut');
-  window.setTimeout(function () {
-    loadingOverlay.classList.add('hidden');
-  }, 1500);
-};
-
-var initLoader = function initLoader() {
-  // show for at least a few seconds
-  // window.setTimeout( () => {
-  // // If THREE is not being used, fade out straightaway
-  // if ( typeof THREE !== 'object' ) {
-  //   fadeLoader();
-  //   return;
-  // }
-
-  // if we are using the loadingManager, wait for it to finish before
-  // fading out the loader
-  //   if ( useLoadingManager ) {
-  //     THREE.DefaultLoadingManager.onLoad = () => {
-  //       fadeLoader();
-  //     };
-  //   }
-  //   // otherwise fade it out straightaway
-  //   else {
-  //     fadeLoader();
-  //   }
-  // }, 3000 );
-
-};
-
-var loadingOverlay = {
-  init: initLoader,
-  fadeOut: fadeLoader
-};
-
-var loadingManager = new LoadingManager();
-
-// hide the upload form when loading starts so that the progress bar can be shown
-loadingManager.onStart = function () {};
-
-loadingManager.onLoad = function () {
-
-  loadingOverlay.fadeOut();
-};
-
-loadingManager.onProgress = function () {};
-
-loadingManager.onError = function (msg) {
-
-  if (msg instanceof String && msg === '') return;
-
-  console.error('THREE.LoadingManager error: ' + msg);
-};
-
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
-  }
-
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-var fontLoader = null;
-var textureLoader = null;
-
-var defaultReject = function defaultReject(err) {
-  console.log(err);
-};
-
-var promisifyLoader = function promisifyLoader(loader) {
-  return function (url) {
-    return new Promise(function (resolve) {
-      var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultReject;
-
-
-      loader.load(url, resolve, loadingManager.onProgress, reject);
-    });
-  };
-};
-
-var Loaders = function Loaders() {
-  classCallCheck(this, Loaders);
-
-
-  return {
-
-    get textureLoader() {
-      if (textureLoader === null) {
-        textureLoader = promisifyLoader(new TextureLoader(loadingManager));
-      }
-      return textureLoader;
-    },
-
-    get fontLoader() {
-      if (fontLoader === null) {
-        fontLoader = promisifyLoader(new FontLoader(loadingManager));
-      }
-      return fontLoader;
-    }
-
-  };
-};
-
-var loaders = new Loaders();
-
 /**
  * @author Lewy Blue / https://github.com/looeee
  */
@@ -56761,11 +56522,254 @@ function App(canvas) {
   };
 }
 
+var fadeLoader = function fadeLoader() {
+  var loadingOverlay = document.querySelector('#loadingOverlay');
+
+  if (!loadingOverlay) return;
+
+  loadingOverlay.classList.add('fadeOut');
+  window.setTimeout(function () {
+    loadingOverlay.classList.add('hidden');
+  }, 1500);
+};
+
+var initLoader = function initLoader() {
+  // show for at least a few seconds
+  // window.setTimeout( () => {
+  // // If THREE is not being used, fade out straightaway
+  // if ( typeof THREE !== 'object' ) {
+  //   fadeLoader();
+  //   return;
+  // }
+
+  // if we are using the loadingManager, wait for it to finish before
+  // fading out the loader
+  //   if ( useLoadingManager ) {
+  //     THREE.DefaultLoadingManager.onLoad = () => {
+  //       fadeLoader();
+  //     };
+  //   }
+  //   // otherwise fade it out straightaway
+  //   else {
+  //     fadeLoader();
+  //   }
+  // }, 3000 );
+
+};
+
+var loadingOverlay = {
+  init: initLoader,
+  fadeOut: fadeLoader
+};
+
+var loadingManager = new LoadingManager();
+
+// hide the upload form when loading starts so that the progress bar can be shown
+loadingManager.onStart = function () {};
+
+loadingManager.onLoad = function () {
+
+  loadingOverlay.fadeOut();
+};
+
+loadingManager.onProgress = function () {};
+
+loadingManager.onError = function (msg) {
+
+  if (msg instanceof String && msg === '') return;
+
+  console.error('THREE.LoadingManager error: ' + msg);
+};
+
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+var fontLoader = null;
+var textureLoader = null;
+
+var defaultReject = function defaultReject(err) {
+  console.log(err);
+};
+
+var promisifyLoader = function promisifyLoader(loader) {
+  return function (url) {
+    return new Promise(function (resolve) {
+      var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultReject;
+
+
+      loader.load(url, resolve, loadingManager.onProgress, reject);
+    });
+  };
+};
+
+var Loaders = function Loaders() {
+  classCallCheck(this, Loaders);
+
+
+  return {
+
+    get textureLoader() {
+      if (textureLoader === null) {
+        textureLoader = promisifyLoader(new TextureLoader(loadingManager));
+      }
+      return textureLoader;
+    },
+
+    get fontLoader() {
+      if (fontLoader === null) {
+        fontLoader = promisifyLoader(new FontLoader(loadingManager));
+      }
+      return fontLoader;
+    }
+
+  };
+};
+
+var loaders = new Loaders();
+
 var backgroundVert = "#define GLSLIFY 1\nattribute vec3 position;\nvarying vec2 uv;\nvoid main() {\n\tgl_Position = vec4(vec3(position.x, position.y, 1.0), 1.0);\n\tuv = vec2(position.x, position.y) * 0.5;\n}\n";
 
 var backgroundFrag = "precision mediump float;\n#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 uv;\nvoid main() {\n\tfloat dst = length(uv - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, uv).rgb, 0.08);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( uv, uv ) ), 1.0);\n\tgl_FragColor = col;\n}";
 
-var textVert = "#define GLSLIFY 1\nuniform float uTime;\nuniform vec2 pointer;\nattribute vec2 aAnimation;\nattribute vec3 aEndPosition;\nvarying vec2 screenUV;\nfloat ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\nvoid main() {\n  float exploder = 0.001;\n  if( uTime <= 0.01 ) {\n    float d = length( position.xy - pointer );\n    float dist = 200.0 / d;\n    exploder = clamp( dist, 0.0, 20.0 ) * 0.002;\n  }\n  float tDelay = aAnimation.x;\n  float tDuration = aAnimation.y;\n  float tTime = clamp(uTime - tDelay, 0.0, tDuration);\n  float tProgress = ease(tTime, 0.0, 1.0, tDuration);\n  vec3 transformed = mix(position, aEndPosition, tProgress - exploder );\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n  screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;\n}\n";
+var shapeVert = "#define GLSLIFY 1\nuniform float uTime;\nuniform vec2 pointer;\nattribute vec2 aAnimation;\nattribute vec3 aEndPosition;\nvarying vec2 screenUV;\nfloat ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\nvoid main() {\n  float exploder = 0.001;\n  if( uTime <= 0.3 ) {\n    float d = length( position.xy - pointer );\n    float dist = 200.0 / d;\n    exploder = clamp( dist, 0.0, 20.0 ) * 0.002;\n  }\n  float tDelay = aAnimation.x;\n  float tDuration = aAnimation.y;\n  float tTime = clamp(uTime - tDelay, 0.0, tDuration);\n  float tProgress = ease(tTime, 0.0, 1.0, tDuration);\n  vec3 transformed = mix(position, aEndPosition, tProgress - exploder );\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n  screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;\n}\n";
+
+var shapeFrag = "#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 screenUV;\nvoid main() {\n\tfloat dst = length(screenUV - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, screenUV).rgb, 0.2);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( screenUV, screenUV ) ), 1.0);\n\tgl_FragColor = col;\n}";
+
+var textVert = "#define GLSLIFY 1\nuniform float uTime;\nuniform vec2 pointer;\nattribute vec2 aAnimation;\nattribute vec3 aEndPosition;\nvarying vec2 screenUV;\nfloat ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\nvoid main() {\n  float exploder = 0.001;\n  if( uTime <= 0.3 ) {\n    float d = length( position.xy - pointer );\n    float dist = 200.0 / d;\n    exploder = clamp( dist, 0.0, 20.0 ) * 0.002;\n  }\n  float tDelay = aAnimation.x;\n  float tDuration = aAnimation.y;\n  float tTime = clamp(uTime - tDelay, 0.0, tDuration);\n  float tProgress = ease(tTime, 0.0, 1.0, tDuration);\n  vec3 transformed = mix(position, aEndPosition, tProgress - exploder );\n  gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n  screenUV = vec2( gl_Position.xy / gl_Position.z ) * 0.5;\n}\n";
 
 var textFrag = "#define GLSLIFY 1\nuniform vec3 color1;\nuniform vec3 color2;\nuniform vec2 offset;\nuniform vec2 smooth;\nuniform sampler2D noiseTexture;\nvarying vec2 screenUV;\nvoid main() {\n\tfloat dst = length(screenUV - offset);\n\tdst = smoothstep(smooth.x, smooth.y, dst);\n\tvec3 color = mix(color1, color2, dst);\n\tvec3 noise = mix(color, texture2D(noiseTexture, screenUV).rgb, 0.2);\n\tvec4 col = vec4( mix( noise, vec3( -2.6 ), dot( screenUV, screenUV ) ), 1.0);\n\tgl_FragColor = col;\n}";
 
@@ -56848,8 +56852,8 @@ function createBufferAnimation(bufferGeometry) {
   }
 }
 
-function createTextGeometry(font) {
-  var text = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Black Thread Design';
+function createTextGeometry(font, mat) {
+  var text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Black Thread Design';
 
 
   var bufferGeometry = new TextBufferGeometry(text, {
@@ -56868,17 +56872,28 @@ function createTextGeometry(font) {
 
   createBufferAnimation(bufferGeometry);
 
-  return bufferGeometry;
+  return new Mesh(bufferGeometry, mat);
 }
 
-function createShapeGeometries() {
+function createShapeGeometries(mat) {
 
-  var bufferGeometry = new TetrahedronBufferGeometry(50, 1);
-  bufferGeometry.translate(-20, 10, 0);
+  var tetraGeo = new TetrahedronBufferGeometry(50, 1);
 
-  createBufferAnimation(bufferGeometry);
+  createBufferAnimation(tetraGeo);
 
-  return bufferGeometry;
+  tetraGeo.translate(-150, 150, 0);
+  tetraGeo.rotateY(-1.5);
+
+  // const tetraGeo2 = new THREE.OctahedronBufferGeometry( 30, 0 );
+  // createBufferAnimation( tetraGeo2 );
+
+  // tetraGeo2.translate( 150, 150, 0 );
+  // tetraGeo2.rotateY( 0.5 );
+
+  var tetraMesh = new Mesh(tetraGeo, mat);
+  // const tetraMesh2 = new THREE.Mesh( tetraGeo2, mat );
+
+  return [tetraMesh];
 }
 
 var Main = function () {
@@ -56938,15 +56953,15 @@ var Main = function () {
 
       Promise.all(this.loadingPromises).then(function () {
 
-        var textGeo = createTextGeometry(_this2.font);
-        var textMesh = new Mesh(textGeo, _this2.textMat);
-        _this2.app.scene.add(textMesh);
+        var text = createTextGeometry(_this2.font, _this2.textMat);
 
-        var shapeGeo = createShapeGeometries();
-        _this2.shapeMesh = new Mesh(shapeGeo, _this2.textMat);
-        _this2.shapeMesh.position.set(-150, 150, 0);
+        _this2.app.scene.add(text);
 
-        _this2.app.scene.add(_this2.shapeMesh);
+        _this2.shapes = createShapeGeometries(_this2.shapeMat);
+
+        _this2.shapes.forEach(function (shape) {
+          _this2.app.scene.add(shape);
+        });
 
         _this2.initAnimation();
 
@@ -57005,8 +57020,12 @@ var Main = function () {
 
         updateAnimation();
 
-        self.shapeMesh.rotation.x += 0.005;
-        self.shapeMesh.rotation.y += 0.005;
+        self.shapes.forEach(function (shape) {
+
+          shape.geometry.rotateX(0.002);
+          shape.geometry.rotateY(0.001);
+          shape.geometry.rotateZ(0.001);
+        });
 
         //   if ( self.controls && self.controls.enableDamping === true ) self.controls.update();
       };
@@ -57029,7 +57048,7 @@ var Main = function () {
 
       this.offset = new Vector2(0, 0);
       this.smooth = new Vector2(1.0, 1.0);
-      this.pointer = new Vector2(100, 100);
+      this.pointer = new Vector2(-1000, -1000);
 
       var colA = new Color(0xffffff);
       var colB = new Color(0x283844);
@@ -57052,6 +57071,18 @@ var Main = function () {
         side: DoubleSide
       });
 
+      this.shapeMat = new ShaderMaterial({
+        uniforms: Object.assign({
+          color1: { value: colB },
+          color2: { value: colA },
+          uTime: { value: 0.0 },
+          pointer: { value: this.pointer }
+        }, uniforms),
+        vertexShader: shapeVert,
+        fragmentShader: shapeFrag,
+        side: DoubleSide
+      });
+
       this.backgroundMat = new RawShaderMaterial({
 
         uniforms: Object.assign({
@@ -57063,37 +57094,38 @@ var Main = function () {
 
       });
     }
-  }, {
-    key: 'initControls',
-    value: function initControls() {
 
-      var controls = new OrbitControls(this.app.camera, this.canvas);
+    // initControls() {
 
-      controls.enableZoom = false;
-      controls.enablePan = false;
+    //   const controls = new OrbitControls( this.app.camera, this.canvas );
 
-      // controls.autoRotate = true;
-      // controls.autoRotateSpeed = -1.0;
+    //   controls.enableZoom = false;
+    //   controls.enablePan = false;
 
-      // How far you can orbit horizontally, upper and lower limits.
-      // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
-      controls.minAzimuthAngle = -Math.PI / 12; // radians
-      controls.maxAzimuthAngle = Math.PI / 12; // radians
+    //   // controls.autoRotate = true;
+    //   // controls.autoRotateSpeed = -1.0;
 
-      // How far you can orbit vertically, upper and lower limits.
-      // Range is 0 to Math.PI radians.
-      controls.minPolarAngle = Math.PI * 0.25;
-      controls.maxPolarAngle = Math.PI * 0.5;
+    //   // How far you can orbit horizontally, upper and lower limits.
+    //   // If set, must be a sub-interval of the interval [ - Math.PI, Math.PI ].
+    //   controls.minAzimuthAngle = -Math.PI / 12; // radians
+    //   controls.maxAzimuthAngle = Math.PI / 12; // radians
 
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.25;
+    //   // How far you can orbit vertically, upper and lower limits.
+    //   // Range is 0 to Math.PI radians.
+    //   controls.minPolarAngle = Math.PI * 0.25;
+    //   controls.maxPolarAngle = Math.PI * 0.5;
 
-      controls.enableKeys = false;
+    //   controls.enableDamping = true;
+    //   controls.dampingFactor = 0.25;
 
-      controls.rotateSpeed = 0.01;
+    //   controls.enableKeys = false;
 
-      this.controls = controls;
-    }
+    //   controls.rotateSpeed = 0.01;
+
+    //   this.controls = controls;
+
+    // }
+
   }]);
   return Main;
 }();

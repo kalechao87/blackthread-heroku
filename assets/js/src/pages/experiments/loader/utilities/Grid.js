@@ -11,11 +11,11 @@ export default class Grid {
 
     this.gridHelper = new THREE.GridHelper( this.size, this.size );
 
-    this.axisHelper = new THREE.AxisHelper( this.size / 2 );
+    this.axesHelper = new THREE.AxesHelper( this.size / 2 );
 
     this.helpers = new THREE.Group();
 
-    this.helpers.add( this.gridHelper, this.axisHelper );
+    this.helpers.add( this.gridHelper, this.axesHelper );
     this.helpers.visible = false;
 
     this.initSlider();
@@ -63,10 +63,10 @@ export default class Grid {
 
   updateAxes() {
 
-    const axisHelper = new THREE.AxisHelper( this.size / 2 );
-    this.helpers.remove( this.axisHelper );
-    this.axisHelper = axisHelper;
-    this.helpers.add( this.axisHelper );
+    const axesHelper = new THREE.AxesHelper( this.size / 2 );
+    this.helpers.remove( this.axesHelper );
+    this.axesHelper = axesHelper;
+    this.helpers.add( this.axesHelper );
 
   }
 
