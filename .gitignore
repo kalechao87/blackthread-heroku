@@ -47,3 +47,5 @@ jspm_packages
 /TODO-seo.txt
 /_site
 /cert
+/typings
+/.flowconfig

@@ -103,6 +103,10 @@ exclude:
   - "*.pem"
   - node_modules
   - package.json
+  - jsconfig.json
+  - tsconfig.json
+  - typings.json
+  - typings
   - Procfile
   - Rakefile
   - heroku.conf.php
