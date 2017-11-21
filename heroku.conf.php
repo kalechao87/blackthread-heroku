@@ -22,5 +22,11 @@ http {
 
     }
 
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|json|fbx|dds|obj|mtl|glb|gltf)$ {
+      expires 30d;
+      add_header Pragma public;
+      add_header Cache-Control "public";
+    }
+
   }
 }
